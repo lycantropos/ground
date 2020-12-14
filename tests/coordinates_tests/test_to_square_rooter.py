@@ -2,7 +2,7 @@ from hypothesis import given
 
 from ground.coordinates import (Context,
                                 set_context,
-                                to_sqrt)
+                                to_square_rooter)
 from . import strategies
 
 
@@ -10,4 +10,4 @@ from . import strategies
 def test_basic(context: Context) -> None:
     set_context(context)
 
-    assert to_sqrt() is context.sqrt
+    assert to_square_rooter() is context.square_rooter
