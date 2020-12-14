@@ -6,6 +6,16 @@ ground
 [![](https://img.shields.io/github/license/lycantropos/ground.svg)](https://github.com/lycantropos/ground/blob/master/LICENSE "License")
 [![](https://badge.fury.io/py/ground.svg)](https://badge.fury.io/py/ground "PyPI")
 
+Summary
+-------
+
+`ground` is a pure Python library that provides protocols
+for planar computational geometry models & operations
+to unify interaction between different libraries
+and allow customization.
+
+---
+
 In what follows `python` is an alias for `python3.5` or `pypy3.5`
 or any later version (`python3.6`, `pypy3.6` and so on).
 
