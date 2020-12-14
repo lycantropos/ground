@@ -9,11 +9,11 @@ services:
         - IMAGE_VERSION=${CPYTHON_IMAGE_VERSION}
     image: lycantropos/ground-cpython:0.1.0
     volumes:
-      - ./ground/:/opt/ground/ground/
-      - ./tests/:/opt/ground/tests/
-      - ./README.md:/opt/ground/README.md
-      - ./requirements.txt:/opt/ground/requirements.txt
-      - ./requirements-tests.txt:/opt/ground/requirements-tests.txt
-      - ./setup.py:/opt/ground/setup.py
+      - ./ground:/opt/ground/ground
       - ./pytest.ini:/opt/ground/pytest.ini
+      - ./README.md:/opt/ground/README.md
+      - ./requirements-tests.txt:/opt/ground/requirements-tests.txt
+      - ./requirements.txt:/opt/ground/requirements.txt
+      - ./setup.py:/opt/ground/setup.py
+      - ./tests:/opt/ground/tests
     entrypoint: pytest
