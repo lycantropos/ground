@@ -52,7 +52,7 @@ def _rational_sqrt(value: _numbers.Rational) -> _Fraction:
 def _real_robust_divide(dividend: _numbers.Real,
                         divisor: _numbers.Real) -> _numbers.Real:
     return (_Fraction(dividend, divisor)
-            if isinstance(dividend, int)
+            if isinstance(dividend, int) and isinstance(divisor, int)
             else dividend / divisor)
 
 
