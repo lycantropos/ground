@@ -17,16 +17,16 @@ _UnaryOperation = Callable[[_hints.Coordinate], _hints.Coordinate]
 
 
 class Context:
-    __slots__ = '_coordinate_cls', '_divide', '_sqrt'
+    __slots__ = '_coordinate_cls', '_divider', '_square_rooter'
 
     def __init__(self,
                  *,
                  coordinate_cls: Type[_hints.Coordinate],
-                 divide: _BinaryOperation,
-                 sqrt: _UnaryOperation) -> None:
+                 divider: _BinaryOperation,
+                 square_rooter: _UnaryOperation) -> None:
         self._coordinate_cls = coordinate_cls
-        self._divide = divide
-        self._sqrt = sqrt
+        self._divider = divider
+        self._square_rooter = square_rooter
 
     __repr__ = _generate_repr(__init__)
 
@@ -35,12 +35,12 @@ class Context:
         return self._coordinate_cls
 
     @property
-    def divide(self) -> _BinaryOperation:
-        return self._divide
+    def divider(self) -> _BinaryOperation:
+        return self._divider
 
     @property
-    def sqrt(self) -> _UnaryOperation:
-        return self._sqrt
+    def square_rooter(self) -> _UnaryOperation:
+        return self._square_rooter
 
 
 def _rational_sqrt(value: _numbers.Rational) -> _Fraction:
@@ -65,14 +65,14 @@ def _real_sqrt(value: _numbers.Real) -> _Fraction:
 
 
 float_context = Context(coordinate_cls=float,
-                        divide=_operator.truediv,
-                        sqrt=_math.sqrt)
+                        divider=_operator.truediv,
+                        square_rooter=_math.sqrt)
 rational_context = Context(coordinate_cls=_numbers.Rational,
-                           divide=_Fraction,
-                           sqrt=_rational_sqrt)
+                           divider=_Fraction,
+                           square_rooter=_rational_sqrt)
 real_context = Context(coordinate_cls=_numbers.Real,
-                       divide=_real_robust_divide,
-                       sqrt=_real_sqrt)
+                       divider=_real_robust_divide,
+                       square_rooter=_real_sqrt)
 
 _context = _ContextVar('context',
                        default=real_context)
@@ -90,9 +90,9 @@ def to_coordinate_cls() -> Type[_hints.Coordinate]:
     return get_context().coordinate_cls
 
 
-def to_divide() -> _BinaryOperation:
-    return get_context().divide
+def to_divider() -> _BinaryOperation:
+    return get_context().divider
 
 
-def to_sqrt() -> _UnaryOperation:
-    return get_context().sqrt
+def to_square_rooter() -> _UnaryOperation:
+    return get_context().square_rooter
