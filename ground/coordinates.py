@@ -4,16 +4,13 @@ import operator as _operator
 from contextvars import ContextVar as _ContextVar
 from decimal import Decimal as _Decimal
 from fractions import Fraction as _Fraction
-from typing import (Callable,
-                    Type)
+from typing import Type
 
 from reprit.base import generate_repr as _generate_repr
 
 from . import hints as _hints
-
-_BinaryOperation = Callable[[_hints.Coordinate, _hints.Coordinate],
-                            _hints.Coordinate]
-_UnaryOperation = Callable[[_hints.Coordinate], _hints.Coordinate]
+from .core.hints import (BinaryCoordinatesOperation as _BinaryOperation,
+                         UnaryOperation as _UnaryOperation)
 
 
 class Context:
