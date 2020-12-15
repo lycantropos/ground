@@ -4,9 +4,11 @@ from reprit.base import generate_repr as _generate_repr
 
 from . import hints as _hints
 from .core.cocircular import determinant as _determinant
-from .core.hints import QuaternaryPointFunction as _QuaternaryFunction
+from .core.hints import QuaternaryPointFunction as _QuaternaryPointFunction
 from .core.parallelogram import signed_area as _signed_area
 from .core.projection import signed_length as _signed_length
+
+_QuaternaryFunction = _QuaternaryPointFunction[_hints.Coordinate]
 
 
 class Context:
