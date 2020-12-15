@@ -15,10 +15,22 @@ class Point(Protocol[Coordinate]):
     """
     **Point** is a minimal element of the plane
     defined by pair of real numbers (called *point's coordinates*).
+
+    Points considered to be sorted lexicographically,
+    with ``x`` coordinate being compared first.
     """
 
     def __new__(cls, x: Coordinate, y: Coordinate) -> 'Point':
         """Constructs point given its coordinates."""
+
+    def __eq__(self, other: 'Point') -> bool:
+        """Checks if the point is equal to the other."""
+
+    def __lt__(self, other: 'Point') -> bool:
+        """Checks if the point is less than the other."""
+
+    def __le__(self, other: 'Point') -> bool:
+        """Checks if the point is less than or equal to the other."""
 
     @property
     def x(self) -> Coordinate:
