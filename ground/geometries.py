@@ -65,7 +65,7 @@ class Context:
                 *,
                 contour_cls: Optional[Type[_hints.Contour]] = None,
                 multipoint_cls: Optional[Type[_hints.Multipoint]] = None,
-                multipolygon_cls: Optional[Type[_hints.Multipolygon]],
+                multipolygon_cls: Optional[Type[_hints.Multipolygon]] = None,
                 multisegment_cls: Optional[Type[_hints.Multisegment]] = None,
                 point_cls: Optional[Type[_hints.Point]] = None,
                 polygon_cls: Optional[Type[_hints.Polygon]] = None,
