@@ -4,6 +4,7 @@ from typing import (Sequence,
 
 from hypothesis import strategies
 
+from ground.hints import Point
 from .hints import (Domain,
                     Permutation,
                     Strategy)
@@ -31,6 +32,10 @@ def permute(sequence: Sequence[Domain],
 
 def to_pairs(strategy: Strategy[Domain]) -> Strategy[Tuple[Domain, Domain]]:
     return strategies.tuples(strategy, strategy)
+
+
+def to_perpendicular_point(point: Point) -> Point:
+    return type(point)(-point.y, point.x)
 
 
 def to_quadruplets(strategy: Strategy[Domain]
