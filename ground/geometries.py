@@ -88,6 +88,10 @@ def get_context() -> Context:
 
 
 def set_context(context: Context) -> None:
+    assert isinstance(context, Context), ('expected "{expected}" instance, '
+                                          'but got "{actual}".'
+                                          .format(expected=Context,
+                                                  actual=context))
     _context.set(context)
 
 
