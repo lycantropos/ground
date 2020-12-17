@@ -1,8 +1,8 @@
 from hypothesis import given
 
-from ground.coordinates import (Context,
-                                get_context,
-                                set_context)
+from ground.geometries import (Context,
+                               get_context,
+                               set_context)
 from . import strategies
 
 
