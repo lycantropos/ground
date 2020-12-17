@@ -9,26 +9,26 @@ from . import hints as _hints
 
 
 class Context:
-    __slots__ = ('_point_cls', '_multipoint_cls', '_segment_cls',
-                 '_multisegment_cls', '_contour_cls', '_polygon_cls',
-                 '_multipolygon_cls')
+    __slots__ = ('_contour_cls', '_multipoint_cls', '_multipolygon_cls',
+                 '_multisegment_cls', '_point_cls', '_polygon_cls',
+                 '_segment_cls')
 
     def __init__(self,
                  *,
-                 point_cls: Type[_hints.Point],
-                 multipoint_cls: Type[_hints.Multipoint],
-                 segment_cls: Type[_hints.Segment],
-                 multisegment_cls: Type[_hints.Multisegment],
                  contour_cls: Type[_hints.Contour],
+                 multipoint_cls: Type[_hints.Multipoint],
+                 multipolygon_cls: Type[_hints.Multipolygon],
+                 multisegment_cls: Type[_hints.Multisegment],
+                 point_cls: Type[_hints.Point],
                  polygon_cls: Type[_hints.Polygon],
-                 multipolygon_cls: Type[_hints.Multipolygon]) -> None:
-        self._point_cls = point_cls
-        self._multipoint_cls = multipoint_cls
-        self._segment_cls = segment_cls
+                 segment_cls: Type[_hints.Segment]) -> None:
         self._contour_cls = contour_cls
-        self._multisegment_cls = multisegment_cls
-        self._polygon_cls = polygon_cls
+        self._multipoint_cls = multipoint_cls
         self._multipolygon_cls = multipolygon_cls
+        self._multisegment_cls = multisegment_cls
+        self._point_cls = point_cls
+        self._polygon_cls = polygon_cls
+        self._segment_cls = segment_cls
 
     __repr__ = _generate_repr(__init__)
 
