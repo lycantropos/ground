@@ -12,13 +12,13 @@ from .hints import Point as _Point
 SegmentsRelationship = _linear.SegmentsRelationship
 
 
-def to_segment_containment_checker() -> _TernaryPointFunction[bool]:
-    return _partial(_linear.segment_contains_point, _to_cross_producer())
-
-
 def to_connected_segments_intersector() -> _QuaternaryPointFunction[_Point]:
     return _partial(_linear.segments_intersection, _to_cross_producer(),
                     _to_divider(), _to_point_cls())
+
+
+def to_segment_containment_checker() -> _TernaryPointFunction[bool]:
+    return _partial(_linear.segment_contains_point, _to_cross_producer())
 
 
 def to_segments_intersector() -> _QuaternaryPointFunction[Tuple[_Point, ...]]:
