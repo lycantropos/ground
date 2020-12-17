@@ -34,8 +34,8 @@ def test_same_endpoints(cross_producer: CrossProducer,
 
 @given(strategies.cross_producers, strategies.points_quadruplets)
 def test_segments_permutation(cross_producer: CrossProducer,
-                              points_quadruple: PointsQuadruplet) -> None:
-    first_start, first_end, second_start, second_end = points_quadruple
+                              points_quadruplet: PointsQuadruplet) -> None:
+    first_start, first_end, second_start, second_end = points_quadruplet
 
     result = cross_producer(first_start, first_end, second_start, second_end)
 
@@ -45,8 +45,8 @@ def test_segments_permutation(cross_producer: CrossProducer,
 
 @given(strategies.cross_producers, strategies.points_quadruplets)
 def test_endpoints_permutations(cross_producer: CrossProducer,
-                                points_quadruple: PointsQuadruplet) -> None:
-    first_start, first_end, second_start, second_end = points_quadruple
+                                points_quadruplet: PointsQuadruplet) -> None:
+    first_start, first_end, second_start, second_end = points_quadruplet
 
     result = cross_producer(first_start, first_end, second_start, second_end)
 

@@ -37,8 +37,8 @@ def test_perpendicular_endpoints(dot_producer: DotProducer,
 
 @given(strategies.dot_producers, strategies.points_quadruplets)
 def test_segments_permutation(dot_producer: DotProducer,
-                              points_quadruple: PointsQuadruplet) -> None:
-    first_start, first_end, second_start, second_end = points_quadruple
+                              points_quadruplet: PointsQuadruplet) -> None:
+    first_start, first_end, second_start, second_end = points_quadruplet
 
     result = dot_producer(first_start, first_end, second_start, second_end)
 
@@ -48,8 +48,8 @@ def test_segments_permutation(dot_producer: DotProducer,
 
 @given(strategies.dot_producers, strategies.points_quadruplets)
 def test_endpoints_permutations(dot_producer: DotProducer,
-                                points_quadruple: PointsQuadruplet) -> None:
-    first_start, first_end, second_start, second_end = points_quadruple
+                                points_quadruplet: PointsQuadruplet) -> None:
+    first_start, first_end, second_start, second_end = points_quadruplet
 
     result = dot_producer(first_start, first_end, second_start, second_end)
 
