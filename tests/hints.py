@@ -10,7 +10,9 @@ from ground.hints import (Coordinate,
 
 Domain = TypeVar('Domain')
 Strategy = SearchStrategy
-CrossProducer = DotProducer = QuaternaryPointFunction[Coordinate]
+CrossProducer = DotProducer = IncircleDeterminer = (
+    QuaternaryPointFunction[Coordinate])
 PointsPair = Tuple[Point, Point]
 PointsQuadruplet = Tuple[Point, Point, Point, Point]
+PointsTriplet = Tuple[Point, Point, Point]
 Permutation = Sequence[int]

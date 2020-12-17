@@ -4,7 +4,8 @@ from ground.geometries import to_point_cls
 from ground.hints import (Coordinate,
                           Point)
 from tests.hints import Strategy
-from .coordinates import coordinates_strategies
+from .coordinates import (coordinates_strategies,
+                          rational_coordinates_strategies)
 
 
 def coordinates_to_points(coordinates: Strategy[Coordinate]
@@ -13,3 +14,5 @@ def coordinates_to_points(coordinates: Strategy[Coordinate]
 
 
 points_strategies = coordinates_strategies.map(coordinates_to_points)
+rational_points_strategies = (rational_coordinates_strategies
+                              .map(coordinates_to_points))

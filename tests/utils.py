@@ -41,3 +41,8 @@ def to_perpendicular_point(point: Point) -> Point:
 def to_quadruplets(strategy: Strategy[Domain]
                    ) -> Strategy[Tuple[Domain, Domain, Domain, Domain]]:
     return strategies.tuples(strategy, strategy, strategy, strategy)
+
+
+def to_triplets(strategy: Strategy[Domain]
+                ) -> Strategy[Tuple[Domain, Domain, Domain]]:
+    return strategies.tuples(strategy, strategy, strategy)
