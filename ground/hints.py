@@ -26,6 +26,9 @@ class Point(Protocol[Coordinate]):
     def __eq__(self, other: 'Point') -> bool:
         """Checks if the point is equal to the other."""
 
+    def __hash__(self) -> int:
+        """Returns hash value of the point."""
+
     def __lt__(self, other: 'Point') -> bool:
         """Checks if the point is less than the other."""
 
