@@ -4,18 +4,18 @@ from typing import Tuple
 
 def _to_epsilon_and_splitter() -> Tuple[Real, Real]:
     every_other = True
-    epsilon, splitter = 1., 1.
+    epsilon, splitter = 1., 1
     check = 1.
     while True:
         last_check = check
         epsilon /= 2.
         if every_other:
-            splitter *= 2.
+            splitter *= 2
         every_other = not every_other
         check = 1. + epsilon
         if check == 1. or check == last_check:
             break
-    splitter += 1.
+    splitter += 1
     return epsilon, splitter
 
 
