@@ -2,11 +2,11 @@ from numbers import Real
 
 from ground.hints import Coordinate
 from . import bounds
-from .utils import (sum_expansions,
+from .utils import (sum_components,
                     to_cross_product,
                     two_diff_tail,
-                    two_product,
-                    two_two_diff)
+                    two_mul,
+                    two_two_sub)
 
 
 def signed_area(first_start_x: Coordinate,
@@ -68,12 +68,12 @@ def _adjusted_signed_area(first_start_x: Real,
     minuend_multiplier_y = second_end_y - second_start_y
     subtrahend_multiplier_x = second_end_x - second_start_x
     subtrahend_multiplier_y = first_end_y - first_start_y
-    minuend_tail, minuend_head = two_product(minuend_multiplier_x,
-                                             minuend_multiplier_y)
-    subtrahend_tail, subtrahend_head = two_product(subtrahend_multiplier_y,
-                                                   subtrahend_multiplier_x)
-    result_expansion = two_two_diff(minuend_tail, minuend_head,
-                                    subtrahend_tail, subtrahend_head)
+    minuend_tail, minuend_head = two_mul(minuend_multiplier_x,
+                                         minuend_multiplier_y)
+    subtrahend_tail, subtrahend_head = two_mul(subtrahend_multiplier_y,
+                                               subtrahend_multiplier_x)
+    result_expansion = two_two_sub(minuend_tail, minuend_head,
+                                   subtrahend_tail, subtrahend_head)
     result = sum(result_expansion)
     error_bound = bounds.to_signed_measure_second_error(upper_bound)
     if result >= error_bound or -result >= error_bound:
@@ -99,17 +99,17 @@ def _adjusted_signed_area(first_start_x: Real,
                   + subtrahend_multiplier_x * subtrahend_multiplier_y_tail))
     if result >= error_bound or -result >= error_bound:
         return result
-    result_expansion = sum_expansions(
+    result_expansion = sum_components(
             result_expansion, to_cross_product(minuend_multiplier_x_tail,
                                                minuend_multiplier_y,
                                                subtrahend_multiplier_x,
                                                subtrahend_multiplier_y_tail))
-    result_expansion = sum_expansions(
+    result_expansion = sum_components(
             result_expansion, to_cross_product(minuend_multiplier_x,
                                                minuend_multiplier_y_tail,
                                                subtrahend_multiplier_x_tail,
                                                subtrahend_multiplier_y))
-    result_expansion = sum_expansions(
+    result_expansion = sum_components(
             result_expansion, to_cross_product(minuend_multiplier_x_tail,
                                                minuend_multiplier_y_tail,
                                                subtrahend_multiplier_x_tail,

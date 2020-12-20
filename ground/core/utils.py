@@ -2,7 +2,7 @@ from typing import Tuple
 
 from ground.hints import Coordinate
 from . import bounds
-from .hints import Expansion
+from .hints import Components
 
 
 def fast_two_sum(left: Coordinate,
@@ -34,22 +34,8 @@ def split(value: Coordinate,
     return low, high
 
 
-def two_product_presplit(left: Coordinate,
-                         right: Coordinate,
-                         right_low: Coordinate,
-                         right_high: Coordinate
-                         ) -> Tuple[Coordinate, Coordinate]:
-    head = left * right
-    left_low, left_high = split(left)
-    first_error = head - left_high * right_high
-    second_error = first_error - left_low * right_high
-    third_error = second_error - left_high * right_low
-    tail = left_low * right_low - third_error
-    return tail, head
-
-
-def two_product(left: Coordinate,
-                right: Coordinate) -> Tuple[Coordinate, Coordinate]:
+def two_mul(left: Coordinate,
+            right: Coordinate) -> Tuple[Coordinate, Coordinate]:
     head = left * right
     left_low, left_high = split(left)
     right_low, right_high = split(right)
@@ -60,15 +46,27 @@ def two_product(left: Coordinate,
     return tail, head
 
 
-def two_two_diff(left_tail: Coordinate,
-                 left_head: Coordinate,
-                 right_tail: Coordinate,
-                 right_head: Coordinate
-                 ) -> Tuple[Coordinate, Coordinate, Coordinate, Coordinate]:
-    third_tail, mid_tail, mid_head = two_one_diff(left_tail, left_head,
-                                                  right_tail)
-    second_tail, first_tail, head = two_one_diff(mid_tail, mid_head,
-                                                 right_head)
+def two_mul_presplit(left: Coordinate,
+                     right: Coordinate,
+                     right_low: Coordinate,
+                     right_high: Coordinate) -> Tuple[Coordinate, Coordinate]:
+    head = left * right
+    left_low, left_high = split(left)
+    first_error = head - left_high * right_high
+    second_error = first_error - left_low * right_high
+    third_error = second_error - left_high * right_low
+    tail = left_low * right_low - third_error
+    return tail, head
+
+
+def two_two_sub(left_tail: Coordinate,
+                left_head: Coordinate,
+                right_tail: Coordinate,
+                right_head: Coordinate
+                ) -> Tuple[Coordinate, Coordinate, Coordinate, Coordinate]:
+    third_tail, mid_tail, mid_head = two_one_sub(left_tail, left_head,
+                                                 right_tail)
+    second_tail, first_tail, head = two_one_sub(mid_tail, mid_head, right_head)
     return third_tail, second_tail, first_tail, head
 
 
@@ -92,17 +90,17 @@ def two_one_sum(left_tail: Coordinate,
     return second_tail, first_tail, head
 
 
-def two_one_diff(left_tail: Coordinate,
-                 left_head: Coordinate,
-                 right: Coordinate
-                 ) -> Tuple[Coordinate, Coordinate, Coordinate]:
-    second_tail, mid_head = two_diff(left_tail, right)
+def two_one_sub(left_tail: Coordinate,
+                left_head: Coordinate,
+                right: Coordinate
+                ) -> Tuple[Coordinate, Coordinate, Coordinate]:
+    second_tail, mid_head = two_sub(left_tail, right)
     first_tail, head = two_sum(left_head, mid_head)
     return second_tail, first_tail, head
 
 
-def two_diff(left: Coordinate,
-             right: Coordinate) -> Tuple[Coordinate, Coordinate]:
+def two_sub(left: Coordinate,
+            right: Coordinate) -> Tuple[Coordinate, Coordinate]:
     head = left - right
     return two_diff_tail(left, right, head), head
 
@@ -126,49 +124,52 @@ def square(value: Coordinate) -> Tuple[Coordinate, Coordinate]:
     return tail, head
 
 
-def sum_expansions(left: Expansion, right: Expansion) -> Expansion:
+def sum_components(left: Components, right: Components) -> Components:
     """
     Sums two expansions with zero components elimination.
     """
     left_length, right_length = len(left), len(right)
-    left_element, right_element = left[0], right[0]
+    left_component, right_component = left[0], right[0]
     left_index = right_index = 0
-    if (right_element > left_element) is (right_element > -left_element):
-        accumulator = left_element
+    if ((right_component > left_component)
+            is (right_component > -left_component)):
+        accumulator = left_component
         left_index += 1
     else:
-        accumulator = right_element
+        accumulator = right_component
         right_index += 1
     result = []
     if (left_index < left_length) and (right_index < right_length):
-        left_element, right_element = left[left_index], right[right_index]
-        if (right_element > left_element) is (right_element > -left_element):
-            tail, accumulator = fast_two_sum(left_element, accumulator)
+        left_component, right_component = left[left_index], right[right_index]
+        if ((right_component > left_component)
+                is (right_component > -left_component)):
+            tail, accumulator = fast_two_sum(left_component, accumulator)
             left_index += 1
         else:
-            tail, accumulator = fast_two_sum(right_element, accumulator)
+            tail, accumulator = fast_two_sum(right_component, accumulator)
             right_index += 1
         if tail:
             result.append(tail)
         while (left_index < left_length) and (right_index < right_length):
-            left_element, right_element = left[left_index], right[right_index]
-            if ((right_element > left_element)
-                    is (right_element > -left_element)):
-                tail, accumulator = two_sum(accumulator, left_element)
+            left_component, right_component = (left[left_index],
+                                               right[right_index])
+            if ((right_component > left_component)
+                    is (right_component > -left_component)):
+                tail, accumulator = two_sum(accumulator, left_component)
                 left_index += 1
             else:
-                tail, accumulator = two_sum(accumulator, right_element)
+                tail, accumulator = two_sum(accumulator, right_component)
                 right_index += 1
             if tail:
                 result.append(tail)
     for left_index in range(left_index, left_length):
-        left_element = left[left_index]
-        tail, accumulator = two_sum(accumulator, left_element)
+        left_component = left[left_index]
+        tail, accumulator = two_sum(accumulator, left_component)
         if tail:
             result.append(tail)
     for right_index in range(right_index, right_length):
-        right_element = right[right_index]
-        tail, accumulator = two_sum(accumulator, right_element)
+        right_component = right[right_index]
+        tail, accumulator = two_sum(accumulator, right_component)
         if tail:
             result.append(tail)
     if accumulator or not result:
@@ -176,20 +177,20 @@ def sum_expansions(left: Expansion, right: Expansion) -> Expansion:
     return result
 
 
-def scale_expansion(expansion: Expansion, scalar: Coordinate) -> Expansion:
+def scale_components(components: Components, scalar: Coordinate) -> Components:
     """
     Multiplies an expansion by a scalar with zero components elimination.
     """
-    expansion = iter(expansion)
+    components = iter(components)
     scalar_low, scalar_high = split(scalar)
-    tail, accumulator = two_product_presplit(next(expansion), scalar,
-                                             scalar_low, scalar_high)
+    tail, accumulator = two_mul_presplit(next(components), scalar, scalar_low,
+                                         scalar_high)
     result = []
     if tail:
         result.append(tail)
-    for element in expansion:
-        product_tail, product = two_product_presplit(element, scalar,
-                                                     scalar_low, scalar_high)
+    for component in components:
+        product_tail, product = two_mul_presplit(component, scalar, scalar_low,
+                                                 scalar_high)
         tail, interim = two_sum(accumulator, product_tail)
         if tail:
             result.append(tail)
@@ -204,13 +205,13 @@ def scale_expansion(expansion: Expansion, scalar: Coordinate) -> Expansion:
 def to_cross_product(minuend_multiplier_x: Coordinate,
                      minuend_multiplier_y: Coordinate,
                      subtrahend_multiplier_x: Coordinate,
-                     subtrahend_multiplier_y: Coordinate) -> Expansion:
+                     subtrahend_multiplier_y: Coordinate) -> Components:
     """
     Returns expansion of vectors' planar cross product.
     """
-    minuend_tail, minuend_head = two_product(minuend_multiplier_x,
-                                             minuend_multiplier_y)
-    subtrahend_tail, subtrahend_head = two_product(subtrahend_multiplier_y,
-                                                   subtrahend_multiplier_x)
-    return two_two_diff(minuend_tail, minuend_head, subtrahend_tail,
-                        subtrahend_head)
+    minuend_tail, minuend_head = two_mul(minuend_multiplier_x,
+                                         minuend_multiplier_y)
+    subtrahend_tail, subtrahend_head = two_mul(subtrahend_multiplier_y,
+                                               subtrahend_multiplier_x)
+    return two_two_sub(minuend_tail, minuend_head, subtrahend_tail,
+                       subtrahend_head)

@@ -5,7 +5,7 @@ from typing import (Callable,
 from ground.hints import (Coordinate,
                           Point)
 
-Expansion = Sequence[Coordinate]
+Components = Sequence[Coordinate]
 BinaryCoordinatesOperation = Callable[[Coordinate, Coordinate], Coordinate]
 UnaryOperation = Callable[[Coordinate], Coordinate]
 Range = TypeVar('Range')
