@@ -2,11 +2,11 @@ from numbers import Real
 
 from ground.hints import Coordinate
 from . import bounds
-from .utils import (sum_components,
-                    to_cross_product,
-                    two_diff_tail,
-                    two_mul,
-                    two_two_sub)
+from .shewchuk import (sum_components,
+                       to_cross_product,
+                       two_diff_tail,
+                       two_mul,
+                       two_two_sub)
 
 
 def signed_area(first_start_x: Coordinate,
