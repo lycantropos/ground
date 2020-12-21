@@ -1,7 +1,7 @@
 ground
 ======
 
-[![](https://dev.azure.com/lycantropos/ground/_apis/build/status/lycantropos.ground?branchName=master)](https://dev.azure.com/lycantropos/ground/_build/latest?branchName=master "Azure Pipelines")
+[![](https://dev.azure.com/lycantropos/ground/_apis/build/status/lycantropos.ground?branchName=master)](https://dev.azure.com/lycantropos/ground/_build/latest?definitionId=33&branchName=master "Azure Pipelines")
 [![](https://codecov.io/gh/lycantropos/ground/branch/master/graph/badge.svg)](https://codecov.io/gh/lycantropos/ground "Codecov")
 [![](https://img.shields.io/github/license/lycantropos/ground.svg)](https://github.com/lycantropos/ground/blob/master/LICENSE "License")
 [![](https://badge.fury.io/py/ground.svg)](https://badge.fury.io/py/ground "PyPI")
