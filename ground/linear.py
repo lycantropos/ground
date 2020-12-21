@@ -1,7 +1,7 @@
 from functools import partial as _partial
 from typing import Tuple
 
-from .coordinates import to_divider as _to_divider
+from .coordinates import to_rationalizer as _to_rationalizer
 from .core import linear as _linear
 from .core.hints import (QuaternaryPointFunction as _QuaternaryPointFunction,
                          TernaryPointFunction as _TernaryPointFunction)
@@ -14,7 +14,7 @@ SegmentsRelationship = _linear.SegmentsRelationship
 
 def to_connected_segments_intersector() -> _QuaternaryPointFunction[_Point]:
     return _partial(_linear.segments_intersection, _to_cross_producer(),
-                    _to_divider(), _to_point_cls())
+                    _to_rationalizer(), _to_point_cls())
 
 
 def to_segment_containment_checker() -> _TernaryPointFunction[bool]:
@@ -23,7 +23,7 @@ def to_segment_containment_checker() -> _TernaryPointFunction[bool]:
 
 def to_segments_intersector() -> _QuaternaryPointFunction[Tuple[_Point, ...]]:
     return _partial(_linear.segments_intersections, _to_cross_producer(),
-                    _to_divider(), _to_point_cls())
+                    _to_rationalizer(), _to_point_cls())
 
 
 def to_segments_relater() -> _QuaternaryPointFunction[SegmentsRelationship]:

@@ -4,8 +4,8 @@ from typing import (Tuple,
                     Type)
 
 from ground.hints import Point
-from .hints import (BinaryCoordinatesOperation,
-                    QuaternaryPointFunction)
+from .hints import (QuaternaryPointFunction,
+                    UnaryCoordinatesFunction)
 
 
 @unique
@@ -33,7 +33,7 @@ def segment_contains_point(cross_producer: QuaternaryPointFunction,
 
 
 def segments_intersection(cross_producer: QuaternaryPointFunction,
-                          divider: BinaryCoordinatesOperation,
+                          rationalizer: UnaryCoordinatesFunction,
                           point_cls: Type[Point],
                           first_start: Point,
                           first_end: Point,
@@ -68,8 +68,9 @@ def segments_intersection(cross_producer: QuaternaryPointFunction,
                            * second_base_numerator)
         delta_x, delta_y = (abs(second_x_addend) - abs(first_x_addend),
                             abs(second_y_addend) - abs(first_y_addend))
-        denominator_inv = divider(1, cross_producer(first_start, first_end,
-                                                    second_start, second_end))
+        denominator_inv = (rationalizer(1)
+                           / cross_producer(first_start, first_end,
+                                            second_start, second_end))
         return point_cls(
                 first_start_x + first_x_addend * denominator_inv
                 if 0 < delta_x
@@ -88,7 +89,7 @@ def segments_intersection(cross_producer: QuaternaryPointFunction,
 
 
 def segments_intersections(cross_producer: QuaternaryPointFunction,
-                           divider: BinaryCoordinatesOperation,
+                           rationalizer: UnaryCoordinatesFunction,
                            point_cls: Type[Point],
                            first_start: Point,
                            first_end: Point,
@@ -110,7 +111,7 @@ def segments_intersections(cross_producer: QuaternaryPointFunction,
                 if first_end < second_end
                 else second_end)
     else:
-        return segments_intersection(cross_producer, divider, point_cls,
+        return segments_intersection(cross_producer, rationalizer, point_cls,
                                      first_start, first_end, second_start,
                                      second_end),
 

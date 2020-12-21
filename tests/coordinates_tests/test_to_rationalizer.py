@@ -2,7 +2,7 @@ from hypothesis import given
 
 from ground.coordinates import (Context,
                                 set_context,
-                                to_divider)
+                                to_rationalizer)
 from . import strategies
 
 
@@ -10,4 +10,4 @@ from . import strategies
 def test_basic(context: Context) -> None:
     set_context(context)
 
-    assert to_divider() is context.divider
+    assert to_rationalizer() is context.rationalizer

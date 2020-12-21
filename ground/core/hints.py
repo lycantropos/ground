@@ -5,9 +5,9 @@ from typing import (Callable,
 from ground.hints import (Coordinate,
                           Point)
 
-Components = Sequence[Coordinate]
-BinaryCoordinatesOperation = Callable[[Coordinate, Coordinate], Coordinate]
-UnaryOperation = Callable[[Coordinate], Coordinate]
 Range = TypeVar('Range')
-TernaryPointFunction = Callable[[Point, Point, Point], Range]
+Components = Sequence[Coordinate]
 QuaternaryPointFunction = Callable[[Point, Point, Point, Point], Range]
+TernaryPointFunction = Callable[[Point, Point, Point], Range]
+UnaryCoordinatesFunction = Callable[[Coordinate], Range]
+UnaryCoordinatesOperation = Callable[[Coordinate], Coordinate]
