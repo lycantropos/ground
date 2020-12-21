@@ -5,7 +5,7 @@ from typing import (Tuple,
 
 from ground.hints import Point
 from .hints import (QuaternaryPointFunction,
-                    Rationalizer)
+                    UnaryCoordinatesOperation)
 
 
 @unique
@@ -33,7 +33,7 @@ def segment_contains_point(cross_producer: QuaternaryPointFunction,
 
 
 def segments_intersection(cross_producer: QuaternaryPointFunction,
-                          rationalizer: Rationalizer,
+                          rationalizer: UnaryCoordinatesOperation,
                           point_cls: Type[Point],
                           first_start: Point,
                           first_end: Point,
@@ -89,7 +89,7 @@ def segments_intersection(cross_producer: QuaternaryPointFunction,
 
 
 def segments_intersections(cross_producer: QuaternaryPointFunction,
-                           rationalizer: Rationalizer,
+                           rationalizer: UnaryCoordinatesOperation,
                            point_cls: Type[Point],
                            first_start: Point,
                            first_end: Point,
