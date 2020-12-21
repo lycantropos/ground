@@ -9,4 +9,3 @@ Range = TypeVar('Range')
 Components = Sequence[Coordinate]
 QuaternaryPointFunction = Callable[[Point, Point, Point, Point], Range]
 TernaryPointFunction = Callable[[Point, Point, Point], Range]
-UnaryCoordinatesOperation = Callable[[Coordinate], Coordinate]
