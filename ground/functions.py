@@ -1,4 +1,5 @@
 from contextvars import ContextVar as _ContextVar
+from fractions import Fraction as _Fraction
 
 from reprit.base import generate_repr as _generate_repr
 
@@ -35,6 +36,44 @@ class Context:
     @property
     def incircle_determiner(self) -> _QuaternaryFunction:
         return self._incircle_determiner
+
+
+def _to_exact_cross_product(first_start: _hints.Point,
+                            first_end: _hints.Point,
+                            second_start: _hints.Point,
+                            second_end: _hints.Point) -> _hints.Coordinate:
+    return ((_Fraction(first_end.x) - _Fraction(first_start.x))
+            * (_Fraction(second_end.y) - _Fraction(second_start.y))
+            - (_Fraction(first_end.y) - _Fraction(first_start.y))
+            * (_Fraction(second_end.x) - _Fraction(second_start.x)))
+
+
+def _to_exact_dot_product(first_start: _hints.Point,
+                          first_end: _hints.Point,
+                          second_start: _hints.Point,
+                          second_end: _hints.Point) -> _hints.Coordinate:
+    return ((_Fraction(first_end.x) - _Fraction(first_start.x))
+            * (_Fraction(second_end.x) - _Fraction(second_start.x))
+            + (_Fraction(first_end.y) - _Fraction(first_start.y))
+            * (_Fraction(second_end.y) - _Fraction(second_start.y)))
+
+
+def _to_exact_incircle_determinant(first: _hints.Point,
+                                   second: _hints.Point,
+                                   third: _hints.Point,
+                                   fourth: _hints.Point) -> _hints.Coordinate:
+    first_dx, first_dy = (_Fraction(first.x) - _Fraction(fourth.x),
+                          _Fraction(first.y) - _Fraction(fourth.y))
+    second_dx, second_dy = (_Fraction(second.x) - _Fraction(fourth.x),
+                            _Fraction(second.y) - _Fraction(fourth.y))
+    third_dx, third_dy = (_Fraction(third.x) - _Fraction(fourth.x),
+                          _Fraction(third.y) - _Fraction(fourth.y))
+    return ((first_dx * first_dx + first_dy * first_dy)
+            * (second_dx * third_dy - second_dy * third_dx)
+            - (second_dx * second_dx + second_dy * second_dy)
+            * (first_dx * third_dy - first_dy * third_dx)
+            + (third_dx * third_dx + third_dy * third_dy)
+            * (first_dx * second_dy - first_dy * second_dx))
 
 
 def _to_plain_cross_product(first_start: _hints.Point,
@@ -94,6 +133,9 @@ def _to_robust_incircle_determinant(first: _hints.Point,
                         fourth.x, fourth.y)
 
 
+exact_context = Context(cross_producer=_to_exact_cross_product,
+                        dot_producer=_to_exact_dot_product,
+                        incircle_determiner=_to_exact_incircle_determinant)
 plain_context = Context(cross_producer=_to_plain_cross_product,
                         dot_producer=_to_plain_dot_product,
                         incircle_determiner=_to_plain_incircle_determinant)
@@ -102,7 +144,7 @@ robust_context = Context(cross_producer=_to_robust_cross_product,
                          incircle_determiner=_to_robust_incircle_determinant)
 
 _context_factory = _ContextVar('context',
-                               default=robust_context)
+                               default=exact_context)
 
 
 def get_context() -> Context:
