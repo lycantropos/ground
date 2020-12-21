@@ -1,5 +1,5 @@
 from numbers import Real
-from typing import (List,
+from typing import (Sequence,
                     TypeVar)
 
 try:
@@ -49,11 +49,11 @@ class Multipoint(Protocol[Coordinate]):
     **Multipoint** is a non-empty set of unique points.
     """
 
-    def __new__(cls, points: List[Point]) -> 'Multipoint':
+    def __new__(cls, points: Sequence[Point]) -> 'Multipoint':
         """Constructs multipoint given its points."""
 
     @property
-    def points(self) -> List[Point]:
+    def points(self) -> Sequence[Point]:
         """Returns points of the multipoint."""
 
 
@@ -82,11 +82,11 @@ class Multisegment(Protocol[Coordinate]):
     is a non-empty set of non-crossing and non-overlapping segments.
     """
 
-    def __new__(cls, segments: List[Segment]) -> 'Multisegment':
+    def __new__(cls, segments: Sequence[Segment]) -> 'Multisegment':
         """Constructs multisegment given its segments."""
 
     @property
-    def segments(self) -> List[Segment]:
+    def segments(self) -> Sequence[Segment]:
         """Returns segments of the multisegment."""
 
 
@@ -97,7 +97,7 @@ class Contour(Protocol[Coordinate]):
     """
 
     @property
-    def vertices(self) -> List[Point]:
+    def vertices(self) -> Sequence[Point]:
         """Returns coordinates of the contour."""
 
 
@@ -108,7 +108,7 @@ class Polygon(Protocol[Coordinate]):
     (called *polygon's holes*).
     """
 
-    def __new__(cls, border: Contour, holes: List[Contour]) -> 'Polygon':
+    def __new__(cls, border: Contour, holes: Sequence[Contour]) -> 'Polygon':
         """Constructs polygon given its border and holes."""
 
     @property
@@ -116,7 +116,7 @@ class Polygon(Protocol[Coordinate]):
         """Returns border of the polygon."""
 
     @property
-    def holes(self) -> List[Contour]:
+    def holes(self) -> Sequence[Contour]:
         """Returns holes of the polygon."""
 
 
@@ -126,9 +126,9 @@ class Multipolygon(Protocol[Coordinate]):
     intersecting only in discrete set of points.
     """
 
-    def __new__(cls, polygons: List[Polygon]) -> 'Multipolygon':
+    def __new__(cls, polygons: Sequence[Polygon]) -> 'Multipolygon':
         """Constructs multipolygon given its polygons."""
 
     @property
-    def polygons(self) -> List[Polygon]:
+    def polygons(self) -> Sequence[Polygon]:
         """Returns polygons of the multipolygon."""
