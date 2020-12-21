@@ -8,7 +8,7 @@ from typing import Type
 from reprit.base import generate_repr as _generate_repr
 
 from . import hints as _hints
-from .core.hints import (UnaryCoordinatesFunction as _UnaryFunction,
+from .core.hints import (Rationalizer as _Rationalizer,
                          UnaryCoordinatesOperation as _UnaryOperation)
 
 
@@ -18,7 +18,7 @@ class Context:
     def __init__(self,
                  *,
                  coordinate_cls: Type[_hints.Coordinate],
-                 rationalizer: _UnaryFunction[_Fraction],
+                 rationalizer: _Rationalizer,
                  square_rooter: _UnaryOperation) -> None:
         self._coordinate_cls = coordinate_cls
         self._rationalizer = rationalizer
@@ -31,7 +31,7 @@ class Context:
         return self._coordinate_cls
 
     @property
-    def rationalizer(self) -> _UnaryFunction:
+    def rationalizer(self) -> _Rationalizer:
         return self._rationalizer
 
     @property
@@ -83,7 +83,7 @@ def to_coordinate_cls() -> Type[_hints.Coordinate]:
     return get_context().coordinate_cls
 
 
-def to_rationalizer() -> _UnaryFunction:
+def to_rationalizer() -> _Rationalizer:
     return get_context().rationalizer
 
 
