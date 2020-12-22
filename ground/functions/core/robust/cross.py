@@ -87,5 +87,4 @@ def _adjusted_signed_area(first_start_x: Coordinate,
     result_components = sum_components(
             result_components, to_cross_product(first_dx_tail, second_dy_tail,
                                                 second_dx_tail, first_dy_tail))
-    print('BADOOOOM!!!!')
     return result_components[-1]
