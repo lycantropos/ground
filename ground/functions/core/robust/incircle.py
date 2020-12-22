@@ -16,10 +16,10 @@ from .utils import (scale_components,
                     two_two_sum)
 
 
-def determinant(first: Point,
-                second: Point,
-                third: Point,
-                fourth: Point) -> Coordinate:
+def determine(first: Point,
+              second: Point,
+              third: Point,
+              fourth: Point) -> Coordinate:
     first_x, first_y = first.x, first.y
     second_x, second_y = second.x, second.y
     third_x, third_y = third.x, third.y

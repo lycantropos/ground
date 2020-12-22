@@ -4,12 +4,12 @@ from reprit.base import generate_repr as _generate_repr
 
 from ground import hints as _hints
 from ground.hints import QuaternaryPointFunction as _QuaternaryPointFunction
-from .core.plain.cocircular import determinant as _plain_determinant
-from .core.plain.parallelogram import signed_area as _plain_signed_area
-from .core.plain.projection import signed_length as _plain_signed_length
-from .core.robust.cocircular import determinant as _robust_determinant
-from .core.robust.parallelogram import signed_area as _robust_signed_area
-from .core.robust.projection import signed_length as _robust_signed_length
+from .core.plain import (cross as _plain_cross,
+                         dot as _plain_dot,
+                         incircle as _plain_incircle)
+from .core.robust import (cross as _robust_cross,
+                          dot as _robust_dot,
+                          incircle as _robust_incircle)
 
 _QuaternaryFunction = _QuaternaryPointFunction[_hints.Coordinate]
 
@@ -40,12 +40,12 @@ class Context:
         return self._incircle_determiner
 
 
-plain_context = Context(cross_producer=_plain_signed_area,
-                        dot_producer=_plain_signed_length,
-                        incircle_determiner=_plain_determinant)
-robust_context = Context(cross_producer=_robust_signed_area,
-                         dot_producer=_robust_signed_length,
-                         incircle_determiner=_robust_determinant)
+plain_context = Context(cross_producer=_plain_cross.multiply,
+                        dot_producer=_plain_dot.multiply,
+                        incircle_determiner=_plain_incircle.determine)
+robust_context = Context(cross_producer=_robust_cross.multiply,
+                         dot_producer=_robust_dot.multiply,
+                         incircle_determiner=_robust_incircle.determine)
 
 _context_factory = _ContextVar('context',
                                default=plain_context)
