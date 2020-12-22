@@ -1,4 +1,5 @@
-from ground.hints import Coordinate
+from ground.hints import (Coordinate,
+                          Point)
 from . import bounds
 from .utils import (sum_components,
                     to_dot_product,
@@ -7,28 +8,14 @@ from .utils import (sum_components,
                     two_two_sum)
 
 
-def signed_length(first_start_x: Coordinate,
-                  first_start_y: Coordinate,
-                  first_end_x: Coordinate,
-                  first_end_y: Coordinate,
-                  second_start_x: Coordinate,
-                  second_start_y: Coordinate,
-                  second_end_x: Coordinate,
-                  second_end_y: Coordinate) -> Coordinate:
-    """
-    Calculates signed length of projection of one vector onto another.
-
-    Positive sign of result means that angle between vectors is acute,
-    negative -- obtuse,
-    zero -- right.
-
-    >>> signed_length(0, 0, 1, 0, 0, 0, 1, 0)
-    1
-    >>> signed_length(0, 0, 1, 0, 0, 0, 0, 1)
-    0
-    >>> signed_length(0, 0, 1, 0, 1, 0, 0, 0)
-    -1
-    """
+def signed_length(first_start: Point,
+                  first_end: Point,
+                  second_start: Point,
+                  second_end: Point) -> Coordinate:
+    first_start_x, first_start_y = first_start.x, first_start.y
+    first_end_x, first_end_y = first_end.x, first_end.y
+    second_start_x, second_start_y = second_start.x, second_start.y
+    second_end_x, second_end_y = second_end.x, second_end.y
     addend_x = (first_end_x - first_start_x) * (second_end_x - second_start_x)
     addend_y = (first_end_y - first_start_y) * (second_end_y - second_start_y)
     result = addend_x + addend_y

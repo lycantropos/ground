@@ -40,64 +40,12 @@ class Context:
         return self._incircle_determiner
 
 
-def _to_plain_cross_product(first_start: _hints.Point,
-                            first_end: _hints.Point,
-                            second_start: _hints.Point,
-                            second_end: _hints.Point) -> _hints.Coordinate:
-    return _plain_signed_area(first_start.x, first_start.y, first_end.x,
-                              first_end.y, second_start.x, second_start.y,
-                              second_end.x, second_end.y)
-
-
-def _to_plain_dot_product(first_start: _hints.Point,
-                          first_end: _hints.Point,
-                          second_start: _hints.Point,
-                          second_end: _hints.Point) -> _hints.Coordinate:
-    return _plain_signed_length(first_start.x, first_start.y, first_end.x,
-                                first_end.y, second_start.x, second_start.y,
-                                second_end.x, second_end.y)
-
-
-def _to_plain_incircle_determinant(first: _hints.Point,
-                                   second: _hints.Point,
-                                   third: _hints.Point,
-                                   fourth: _hints.Point) -> _hints.Coordinate:
-    return _plain_determinant(first.x, first.y, second.x, second.y, third.x,
-                              third.y, fourth.x, fourth.y)
-
-
-def _to_robust_cross_product(first_start: _hints.Point,
-                             first_end: _hints.Point,
-                             second_start: _hints.Point,
-                             second_end: _hints.Point) -> _hints.Coordinate:
-    return _robust_signed_area(first_start.x, first_start.y, first_end.x,
-                               first_end.y, second_start.x, second_start.y,
-                               second_end.x, second_end.y)
-
-
-def _to_robust_dot_product(first_start: _hints.Point,
-                           first_end: _hints.Point,
-                           second_start: _hints.Point,
-                           second_end: _hints.Point) -> _hints.Coordinate:
-    return _robust_signed_length(first_start.x, first_start.y, first_end.x,
-                                 first_end.y, second_start.x, second_start.y,
-                                 second_end.x, second_end.y)
-
-
-def _to_robust_incircle_determinant(first: _hints.Point,
-                                    second: _hints.Point,
-                                    third: _hints.Point,
-                                    fourth: _hints.Point) -> _hints.Coordinate:
-    return _robust_determinant(first.x, first.y, second.x, second.y, third.x,
-                               third.y, fourth.x, fourth.y)
-
-
-plain_context = Context(cross_producer=_to_plain_cross_product,
-                        dot_producer=_to_plain_dot_product,
-                        incircle_determiner=_to_plain_incircle_determinant)
-robust_context = Context(cross_producer=_to_robust_cross_product,
-                         dot_producer=_to_robust_dot_product,
-                         incircle_determiner=_to_robust_incircle_determinant)
+plain_context = Context(cross_producer=_plain_signed_area,
+                        dot_producer=_plain_signed_length,
+                        incircle_determiner=_plain_determinant)
+robust_context = Context(cross_producer=_robust_signed_area,
+                         dot_producer=_robust_signed_length,
+                         incircle_determiner=_robust_determinant)
 
 _context_factory = _ContextVar('context',
                                default=plain_context)
