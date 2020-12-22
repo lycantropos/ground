@@ -3,13 +3,13 @@ from itertools import (permutations,
 
 from hypothesis import given
 
-from ground.core.angular import to_sign
 from tests.hints import (CrossProducer,
                          PointsPair,
                          PointsQuadruplet)
 from tests.utils import (equivalence,
                          is_even_permutation,
-                         permute)
+                         permute,
+                         to_sign)
 from . import strategies
 
 

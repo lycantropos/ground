@@ -4,10 +4,13 @@ from typing import (Sequence,
 
 from hypothesis import strategies
 
+from ground.angular.core.utils import to_sign
 from ground.hints import Point
 from .hints import (Domain,
                     Permutation,
                     Strategy)
+
+to_sign = to_sign
 
 
 def equivalence(left: bool, right: bool) -> bool:

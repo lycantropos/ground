@@ -2,12 +2,12 @@ from itertools import permutations
 
 from hypothesis import given
 
-from ground.core.angular import to_sign
 from tests.hints import (IncircleDeterminer,
                          PointsQuadruplet,
                          PointsTriplet)
 from tests.utils import (is_even_permutation,
-                         permute)
+                         permute,
+                         to_sign)
 from . import strategies
 
 
