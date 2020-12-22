@@ -1,8 +1,8 @@
 from typing import Tuple
 
+from ground.functions.core.robust import bounds
+from ground.functions.core.robust.hints import Components
 from ground.hints import Coordinate
-from . import bounds
-from .hints import Components
 
 
 def fast_two_sum(left: Coordinate,
@@ -97,6 +97,19 @@ def two_one_sub(left_tail: Coordinate,
     second_tail, mid_head = two_sub(left_tail, right)
     first_tail, head = two_sum(left_head, mid_head)
     return second_tail, first_tail, head
+
+
+def two_one_mul(left_tail: Coordinate,
+                left_head: Coordinate,
+                right: Coordinate
+                ) -> Tuple[Coordinate, Coordinate, Coordinate, Coordinate]:
+    right_low, right_high = split(right)
+    head_tail, head = two_mul_presplit(left_head, right, right_low, right_high)
+    tail_tail, tail_head = two_mul_presplit(left_tail, right, right_low,
+                                            right_high)
+    mid_tail, first_tail = two_sum(head_tail, tail_head)
+    third_tail, second_tail = fast_two_sum(tail_tail, mid_tail)
+    return third_tail, second_tail, first_tail, head
 
 
 def two_sub(left: Coordinate,
@@ -207,11 +220,23 @@ def to_cross_product(minuend_multiplier_x: Coordinate,
                      subtrahend_multiplier_x: Coordinate,
                      subtrahend_multiplier_y: Coordinate) -> Components:
     """
-    Returns expansion of vectors' planar cross product.
+    Returns expansion of vectors' cross product.
     """
     minuend_tail, minuend_head = two_mul(minuend_multiplier_x,
                                          minuend_multiplier_y)
-    subtrahend_tail, subtrahend_head = two_mul(subtrahend_multiplier_y,
-                                               subtrahend_multiplier_x)
+    subtrahend_tail, subtrahend_head = two_mul(subtrahend_multiplier_x,
+                                               subtrahend_multiplier_y)
     return two_two_sub(minuend_tail, minuend_head, subtrahend_tail,
                        subtrahend_head)
+
+
+def to_dot_product(first_multiplier_x: Coordinate,
+                   second_multiplier_x: Coordinate,
+                   first_multiplier_y: Coordinate,
+                   second_multiplier_y: Coordinate) -> Components:
+    """
+    Returns expansion of vectors' dot product.
+    """
+    x_tail, x_head = two_mul(first_multiplier_x, second_multiplier_x)
+    y_tail, y_head = two_mul(first_multiplier_y, second_multiplier_y)
+    return two_two_sum(x_tail, x_head, y_tail, y_head)

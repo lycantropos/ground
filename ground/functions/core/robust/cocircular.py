@@ -5,14 +5,14 @@ from typing import (Iterable,
 from ground.hints import Coordinate
 from . import bounds
 from .hints import Components
-from .shewchuk import (scale_components,
-                       square,
-                       sum_components,
-                       to_cross_product,
-                       two_diff_tail,
-                       two_mul,
-                       two_two_sub,
-                       two_two_sum)
+from .utils import (scale_components,
+                    square,
+                    sum_components,
+                    to_cross_product,
+                    two_diff_tail,
+                    two_mul,
+                    two_two_sub,
+                    two_two_sum)
 
 
 def determinant(first_x: Coordinate,

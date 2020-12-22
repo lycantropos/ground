@@ -3,8 +3,8 @@ from enum import (IntEnum,
 from typing import (Tuple,
                     Type)
 
-from ground.hints import Point
-from .hints import QuaternaryPointFunction
+from ground.hints import (Point,
+                          QuaternaryPointFunction)
 
 
 @unique

@@ -1,5 +1,4 @@
 from ground.hints import Coordinate
-from .parallelogram import signed_area
 
 
 def signed_length(first_start_x: Coordinate,
@@ -24,6 +23,5 @@ def signed_length(first_start_x: Coordinate,
     >>> signed_length(0, 0, 1, 0, 1, 0, 0, 0)
     -1
     """
-    return signed_area(first_start_x, first_start_y, first_end_x, first_end_y,
-                       -second_start_y, second_start_x, -second_end_y,
-                       second_end_x)
+    return ((first_end_x - first_start_x) * (second_end_x - second_start_x)
+            + (first_end_y - first_start_y) * (second_end_y - second_start_y))
