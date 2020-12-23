@@ -1,7 +1,7 @@
-from ground.hints import (Point,
-                          QuaternaryPointFunction)
+from ground.hints import Point
 from .enums import (Kind,
                     Orientation)
+from .hints import QuaternaryPointFunction
 from .utils import to_sign
 
 

@@ -12,9 +12,10 @@ from .core import (angular as _angular,
                    incircle as _incircle,
                    linear as _linear,
                    vector as _vector)
+from .core.hints import QuaternaryPointFunction as _QuaternaryPointFunction
 from .hints import Point
 
-_QuaternaryFunction = _hints.QuaternaryPointFunction[_hints.Coordinate]
+_QuaternaryFunction = _QuaternaryPointFunction[_hints.Coordinate]
 Kind = _enums.Kind
 Orientation = _enums.Orientation
 SegmentsRelationship = _enums.SegmentsRelationship

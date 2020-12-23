@@ -1,9 +1,9 @@
 from typing import (Tuple,
                     Type)
 
-from ground.hints import (Point,
-                          QuaternaryPointFunction)
+from ground.hints import Point
 from .enums import SegmentsRelationship
+from .hints import QuaternaryPointFunction
 
 
 def segment_contains_point(cross_product: QuaternaryPointFunction,

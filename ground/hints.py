@@ -1,6 +1,5 @@
 from numbers import Real
-from typing import (Callable,
-                    Sequence,
+from typing import (Sequence,
                     TypeVar)
 
 try:
@@ -133,8 +132,3 @@ class Multipolygon(Protocol[Coordinate]):
     @property
     def polygons(self) -> Sequence[Polygon]:
         """Returns polygons of the multipolygon."""
-
-
-Range = TypeVar('Range')
-QuaternaryPointFunction = Callable[[Point, Point, Point, Point], Range]
-TernaryPointFunction = Callable[[Point, Point, Point], Range]

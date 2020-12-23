@@ -5,8 +5,8 @@ from typing import (Sequence,
 from hypothesis.strategies import SearchStrategy
 
 from ground.hints import (Coordinate,
-                          Point,
-                          QuaternaryPointFunction)
+                          Point)
+from ground.core.hints import QuaternaryPointFunction
 
 Domain = TypeVar('Domain')
 Strategy = SearchStrategy
