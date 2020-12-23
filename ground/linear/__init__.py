@@ -1,11 +1,11 @@
 from functools import partial as _partial
 from typing import Tuple
 
-from ground.functions import to_cross_producer as _to_cross_producer
-from ground.geometries import to_point_cls as _to_point_cls
+from ground.geometrical import to_point_cls as _to_point_cls
 from ground.hints import (Point as _Point,
                           QuaternaryPointFunction as _QuaternaryPointFunction,
                           TernaryPointFunction as _TernaryPointFunction)
+from ground.vector import to_cross_producer as _to_cross_producer
 from .core import linear as _linear
 
 SegmentsRelationship = _linear.SegmentsRelationship

@@ -1,8 +1,27 @@
 from typing import Tuple
 
-from ground.functions.core.robust import bounds
-from ground.functions.core.robust.hints import Components
+from ground.core.hints import Expansion
 from ground.hints import Coordinate
+
+
+def _to_epsilon_and_splitter() -> Tuple[Coordinate, int]:
+    every_other = True
+    epsilon, splitter = 1., 1
+    check = 1.
+    while True:
+        last_check = check
+        epsilon /= 2.
+        if every_other:
+            splitter *= 2
+        every_other = not every_other
+        check = 1. + epsilon
+        if check == 1. or check == last_check:
+            break
+    splitter += 1
+    return epsilon, splitter
+
+
+epsilon, splitter = _to_epsilon_and_splitter()
 
 
 def fast_two_sum(left: Coordinate,
@@ -26,9 +45,8 @@ def two_sum(left: Coordinate,
 
 def split(value: Coordinate,
           *,
-          splitter: Coordinate = bounds.splitter
-          ) -> Tuple[Coordinate, Coordinate]:
-    base = splitter * value
+          _splitter: Coordinate = splitter) -> Tuple[Coordinate, Coordinate]:
+    base = _splitter * value
     high = base - (base - value)
     low = value - high
     return low, high
@@ -137,9 +155,9 @@ def square(value: Coordinate) -> Tuple[Coordinate, Coordinate]:
     return tail, head
 
 
-def sum_components(left: Components, right: Components) -> Components:
+def sum_expansions(left: Expansion, right: Expansion) -> Expansion:
     """
-    Sums two expansions with zero components elimination.
+    Sums two expansions with zero expansion elimination.
     """
     left_length, right_length = len(left), len(right)
     left_component, right_component = left[0], right[0]
@@ -190,11 +208,11 @@ def sum_components(left: Components, right: Components) -> Components:
     return result
 
 
-def scale_components(components: Components, scalar: Coordinate) -> Components:
+def scale_expansion(expansion: Expansion, scalar: Coordinate) -> Expansion:
     """
-    Multiplies an expansion by a scalar with zero components elimination.
+    Multiplies an expansion by a scalar with zero expansion elimination.
     """
-    components = iter(components)
+    components = iter(expansion)
     scalar_low, scalar_high = split(scalar)
     tail, accumulator = two_mul_presplit(next(components), scalar, scalar_low,
                                          scalar_high)
@@ -218,7 +236,7 @@ def scale_components(components: Components, scalar: Coordinate) -> Components:
 def to_cross_product(minuend_multiplier_x: Coordinate,
                      minuend_multiplier_y: Coordinate,
                      subtrahend_multiplier_x: Coordinate,
-                     subtrahend_multiplier_y: Coordinate) -> Components:
+                     subtrahend_multiplier_y: Coordinate) -> Expansion:
     """
     Returns expansion of vectors' cross product.
     """
@@ -233,7 +251,7 @@ def to_cross_product(minuend_multiplier_x: Coordinate,
 def to_dot_product(first_multiplier_x: Coordinate,
                    second_multiplier_x: Coordinate,
                    first_multiplier_y: Coordinate,
-                   second_multiplier_y: Coordinate) -> Components:
+                   second_multiplier_y: Coordinate) -> Expansion:
     """
     Returns expansion of vectors' dot product.
     """
