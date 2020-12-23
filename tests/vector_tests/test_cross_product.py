@@ -3,63 +3,60 @@ from itertools import (permutations,
 
 from hypothesis import given
 
-from tests.hints import (DotProducer,
+from tests.hints import (CrossProducer,
                          PointsPair,
                          PointsQuadruplet)
 from tests.utils import (equivalence,
                          is_even_permutation,
                          permute,
-                         to_perpendicular_point,
                          to_sign)
 from . import strategies
 
 
-@given(strategies.dot_producers, strategies.points_quadruplets)
-def test_basic(dot_producer: DotProducer,
+@given(strategies.cross_products, strategies.points_quadruplets)
+def test_basic(cross_producer: CrossProducer,
                points_quadruplet: PointsQuadruplet) -> None:
     first_start, first_end, second_start, second_end = points_quadruplet
 
-    result = dot_producer(first_start, first_end, second_start, second_end)
+    result = cross_producer(first_start, first_end, second_start, second_end)
 
     coordinate_cls = type(first_start.x)
     assert isinstance(result, coordinate_cls)
 
 
-@given(strategies.dot_producers, strategies.points_pairs)
-def test_perpendicular_endpoints(dot_producer: DotProducer,
-                                 points_pair: PointsPair) -> None:
+@given(strategies.cross_products, strategies.points_pairs)
+def test_same_endpoints(cross_producer: CrossProducer,
+                        points_pair: PointsPair) -> None:
     first_start, first_end = points_pair
 
-    assert not dot_producer(first_start, first_end,
-                            to_perpendicular_point(first_start),
-                            to_perpendicular_point(first_end))
+    assert not cross_producer(first_start, first_end, first_start, first_end)
 
 
-@given(strategies.dot_producers, strategies.points_quadruplets)
-def test_segments_permutation(dot_producer: DotProducer,
+@given(strategies.cross_products, strategies.points_quadruplets)
+def test_segments_permutation(cross_producer: CrossProducer,
                               points_quadruplet: PointsQuadruplet) -> None:
     first_start, first_end, second_start, second_end = points_quadruplet
 
-    result = dot_producer(first_start, first_end, second_start, second_end)
+    result = cross_producer(first_start, first_end, second_start, second_end)
 
-    assert result == dot_producer(second_start, second_end, first_start,
-                                  first_end)
+    assert result == -cross_producer(second_start, second_end, first_start,
+                                     first_end)
 
 
-@given(strategies.dot_producers, strategies.points_quadruplets)
-def test_endpoints_permutations(dot_producer: DotProducer,
+@given(strategies.cross_products, strategies.points_quadruplets)
+def test_endpoints_permutations(cross_producer: CrossProducer,
                                 points_quadruplet: PointsQuadruplet) -> None:
     first_start, first_end, second_start, second_end = points_quadruplet
 
-    result = dot_producer(first_start, first_end, second_start, second_end)
+    result = cross_producer(first_start, first_end, second_start, second_end)
 
     result_sign = to_sign(result)
     first_endpoints = first_start, first_end
     second_endpoints = second_start, second_end
-    assert all(to_sign(dot_producer(*permute(first_endpoints,
-                                             first_permutation),
-                                    *permute(second_endpoints,
-                                             second_permutation)))
+    assert all(to_sign(cross_producer(*permute(first_endpoints,
+                                               first_permutation),
+                                      *permute(second_endpoints,
+                                               second_permutation)))
                == (result_sign
                    if equivalence(is_even_permutation(first_permutation),
                                   is_even_permutation(second_permutation))
