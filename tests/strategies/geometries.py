@@ -1,6 +1,6 @@
 from hypothesis import strategies
 
-from ground.geometries import to_point_cls
+from ground.geometrical import to_point_cls
 from ground.hints import (Coordinate,
                           Point)
 from tests.hints import Strategy

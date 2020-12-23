@@ -1,8 +1,8 @@
 from hypothesis import given
 
-from ground.geometries import (Context,
-                               set_context,
-                               to_multipolygon_cls)
+from ground.geometrical import (Context,
+                                set_context,
+                                to_multipolygon_cls)
 from . import strategies
 
 

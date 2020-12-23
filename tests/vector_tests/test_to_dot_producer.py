@@ -1,8 +1,8 @@
 from hypothesis import given
 
-from ground.functions import (Context,
-                              set_context,
-                              to_cross_producer)
+from ground.vector import (Context,
+                           set_context,
+                           to_cross_producer)
 from . import strategies
 
 

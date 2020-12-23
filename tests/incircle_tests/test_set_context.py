@@ -1,8 +1,8 @@
 from hypothesis import given
 
-from ground.geometries import (Context,
-                               get_context,
-                               set_context)
+from ground.incircle import (Context,
+                             get_context,
+                             set_context)
 from . import strategies
 
 
