@@ -5,8 +5,7 @@ from typing import (Optional,
 from reprit.base import generate_repr as _generate_repr
 
 from ground import hints as _hints
-from .core import (exact as _exact,
-                   plain as _plain)
+from .core import plain as _plain
 
 
 class Context:
@@ -94,22 +93,14 @@ class Context:
                                     else segment_cls))
 
 
-plain_context = Context(point_cls=_plain.Point,
-                        multipoint_cls=_plain.Multipoint,
-                        segment_cls=_plain.Segment,
-                        multisegment_cls=_plain.Multisegment,
-                        contour_cls=_plain.Contour,
-                        polygon_cls=_plain.Polygon,
-                        multipolygon_cls=_plain.Multipolygon)
-exact_context = Context(point_cls=_exact.Point,
-                        multipoint_cls=_exact.Multipoint,
-                        segment_cls=_exact.Segment,
-                        multisegment_cls=_exact.Multisegment,
-                        contour_cls=_exact.Contour,
-                        polygon_cls=_exact.Polygon,
-                        multipolygon_cls=_exact.Multipolygon)
 _context = ContextVar('context',
-                      default=exact_context)
+                      default=Context(point_cls=_plain.Point,
+                                      multipoint_cls=_plain.Multipoint,
+                                      segment_cls=_plain.Segment,
+                                      multisegment_cls=_plain.Multisegment,
+                                      contour_cls=_plain.Contour,
+                                      polygon_cls=_plain.Polygon,
+                                      multipolygon_cls=_plain.Multipolygon))
 
 
 def get_context() -> Context:
