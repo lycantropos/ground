@@ -1,59 +1,43 @@
-from enum import (IntEnum,
-                  unique)
 from typing import (Tuple,
                     Type)
 
 from ground.hints import (Point,
                           QuaternaryPointFunction)
+from .enums import SegmentsRelationship
 
 
-@unique
-class SegmentsRelationship(IntEnum):
-    """
-    Represents relationship between segments based on their intersection.
-    """
-    #: intersection is empty
-    NONE = 0
-    #: intersection is an endpoint of one of segments
-    TOUCH = 1
-    #: intersection is a point which is not an endpoint of any of segments
-    CROSS = 2
-    #: intersection is a segment itself
-    OVERLAP = 3
-
-
-def segment_contains_point(cross_producer: QuaternaryPointFunction,
+def segment_contains_point(cross_product: QuaternaryPointFunction,
                            start: Point,
                            end: Point,
                            point: Point) -> bool:
     return (point == start or point == end
             or (_bounding_box_contains(start, end, point)
-                and not cross_producer(start, end, start, point)))
+                and not cross_product(start, end, start, point)))
 
 
-def segments_intersection(cross_producer: QuaternaryPointFunction,
+def segments_intersection(cross_product: QuaternaryPointFunction,
                           point_cls: Type[Point],
                           first_start: Point,
                           first_end: Point,
                           second_start: Point,
                           second_end: Point) -> Point:
-    if segment_contains_point(cross_producer, first_start, first_end,
+    if segment_contains_point(cross_product, first_start, first_end,
                               second_start):
         return second_start
-    elif segment_contains_point(cross_producer, first_start, first_end,
+    elif segment_contains_point(cross_product, first_start, first_end,
                                 second_end):
         return second_end
-    elif segment_contains_point(cross_producer, second_start, second_end,
+    elif segment_contains_point(cross_product, second_start, second_end,
                                 first_start):
         return first_start
-    elif segment_contains_point(cross_producer, second_start, second_end,
+    elif segment_contains_point(cross_product, second_start, second_end,
                                 first_end):
         return first_end
     else:
-        first_base_numerator = cross_producer(first_start, second_start,
-                                              second_start, second_end)
-        second_base_numerator = cross_producer(first_start, second_start,
-                                               first_start, first_end)
+        first_base_numerator = cross_product(first_start, second_start,
+                                             second_start, second_end)
+        second_base_numerator = cross_product(first_start, second_start,
+                                              first_start, first_end)
         first_start_x, first_start_y = first_start.x, first_start.y
         first_end_x, first_end_y = first_end.x, first_end.y
         second_start_x, second_start_y = second_start.x, second_start.y
@@ -66,8 +50,8 @@ def segments_intersection(cross_producer: QuaternaryPointFunction,
                            * second_base_numerator)
         delta_x, delta_y = (abs(second_x_addend) - abs(first_x_addend),
                             abs(second_y_addend) - abs(first_y_addend))
-        denominator = cross_producer(first_start, first_end, second_start,
-                                     second_end)
+        denominator = cross_product(first_start, first_end, second_start,
+                                    second_end)
         return point_cls(
                 first_start_x + first_x_addend / denominator
                 if 0 < delta_x
@@ -85,14 +69,14 @@ def segments_intersection(cross_producer: QuaternaryPointFunction,
                             / denominator) / 2))
 
 
-def segments_intersections(cross_producer: QuaternaryPointFunction,
+def segments_intersections(cross_product: QuaternaryPointFunction,
                            point_cls: Type[Point],
                            first_start: Point,
                            first_end: Point,
                            second_start: Point,
                            second_end: Point) -> Tuple[Point, ...]:
-    relationship = segments_relationship(cross_producer, first_start,
-                                         first_end, second_start, second_end)
+    relationship = segments_relationship(cross_product, first_start, first_end,
+                                         second_start, second_end)
     if relationship is SegmentsRelationship.NONE:
         return ()
     elif relationship is SegmentsRelationship.OVERLAP:
@@ -107,11 +91,11 @@ def segments_intersections(cross_producer: QuaternaryPointFunction,
                 if first_end < second_end
                 else second_end)
     else:
-        return segments_intersection(cross_producer, point_cls, first_start,
+        return segments_intersection(cross_product, point_cls, first_start,
                                      first_end, second_start, second_end),
 
 
-def segments_relationship(cross_producer: QuaternaryPointFunction,
+def segments_relationship(cross_product: QuaternaryPointFunction,
                           first_start: Point,
                           first_end: Point,
                           second_start: Point,
@@ -124,19 +108,19 @@ def segments_relationship(cross_producer: QuaternaryPointFunction,
     ends_equal = first_end == second_end
     if starts_equal and ends_equal:
         return SegmentsRelationship.OVERLAP
-    first_start_cross_product = cross_producer(second_end, second_start,
-                                               second_end, first_start)
-    first_end_cross_product = cross_producer(second_end, second_start,
-                                             second_end, first_end)
+    first_start_cross_product = cross_product(second_end, second_start,
+                                              second_end, first_start)
+    first_end_cross_product = cross_product(second_end, second_start,
+                                            second_end, first_end)
     if first_start_cross_product and first_end_cross_product:
         if (first_start_cross_product > 0) is (first_end_cross_product > 0):
             return SegmentsRelationship.NONE
         else:
-            second_start_cross_product = cross_producer(first_start, first_end,
-                                                        first_start,
-                                                        second_start)
-            second_end_cross_product = cross_producer(first_start, first_end,
-                                                      first_start, second_end)
+            second_start_cross_product = cross_product(first_start, first_end,
+                                                       first_start,
+                                                       second_start)
+            second_end_cross_product = cross_product(first_start, first_end,
+                                                     first_start, second_end)
             if second_start_cross_product and second_end_cross_product:
                 return (SegmentsRelationship.NONE
                         if ((second_start_cross_product > 0)

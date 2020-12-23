@@ -27,3 +27,18 @@ class Orientation(IntEnum):
     COLLINEAR = 0
     #: opposite to clockwise
     COUNTERCLOCKWISE = 1
+
+
+@unique
+class SegmentsRelationship(IntEnum):
+    """
+    Represents relationship between segments based on their intersection.
+    """
+    #: intersection is empty
+    NONE = 0
+    #: intersection is an endpoint of one of segments
+    TOUCH = 1
+    #: intersection is a point which is not an endpoint of any of segments
+    CROSS = 2
+    #: intersection is a segment itself
+    OVERLAP = 3

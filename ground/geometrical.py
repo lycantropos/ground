@@ -1,12 +1,9 @@
-import numbers as _numbers
-from contextvars import ContextVar
 from typing import (Optional,
                     Type)
 
 from reprit.base import generate_repr as _generate_repr
 
 from ground import hints as _hints
-from .core import plain as _plain
 
 
 class Context:
@@ -102,58 +99,3 @@ class Context:
                        segment_cls=(self.segment_cls
                                     if segment_cls is None
                                     else segment_cls))
-
-
-_context = ContextVar('context',
-                      default=Context(contour_cls=_plain.Contour,
-                                      coordinate_cls=_numbers.Real,
-                                      multipoint_cls=_plain.Multipoint,
-                                      multipolygon_cls=_plain.Multipolygon,
-                                      multisegment_cls=_plain.Multisegment,
-                                      point_cls=_plain.Point,
-                                      polygon_cls=_plain.Polygon,
-                                      segment_cls=_plain.Segment))
-
-
-def get_context() -> Context:
-    return _context.get()
-
-
-def set_context(context: Context) -> None:
-    assert isinstance(context, Context), ('expected "{expected}" instance, '
-                                          'but got "{actual}".'
-                                          .format(expected=Context,
-                                                  actual=context))
-    _context.set(context)
-
-
-def to_contour_cls() -> Type[_hints.Contour]:
-    return get_context().contour_cls
-
-
-def to_coordinate_cls() -> Type[_hints.Coordinate]:
-    return get_context().coordinate_cls
-
-
-def to_multipoint_cls() -> Type[_hints.Multipoint]:
-    return get_context().multipoint_cls
-
-
-def to_multipolygon_cls() -> Type[_hints.Multipolygon]:
-    return get_context().multipolygon_cls
-
-
-def to_multisegment_cls() -> Type[_hints.Multisegment]:
-    return get_context().multisegment_cls
-
-
-def to_point_cls() -> Type[_hints.Point]:
-    return get_context().point_cls
-
-
-def to_polygon_cls() -> Type[_hints.Polygon]:
-    return get_context().polygon_cls
-
-
-def to_segment_cls() -> Type[_hints.Segment]:
-    return get_context().segment_cls
