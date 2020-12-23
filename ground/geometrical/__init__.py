@@ -1,3 +1,4 @@
+import numbers as _numbers
 from contextvars import ContextVar
 from typing import (Optional,
                     Type)
@@ -9,13 +10,14 @@ from .core import plain as _plain
 
 
 class Context:
-    __slots__ = ('_contour_cls', '_multipoint_cls', '_multipolygon_cls',
-                 '_multisegment_cls', '_point_cls', '_polygon_cls',
-                 '_segment_cls')
+    __slots__ = ('_coordinate_cls', '_contour_cls', '_multipoint_cls',
+                 '_multipolygon_cls', '_multisegment_cls', '_point_cls',
+                 '_polygon_cls', '_segment_cls')
 
     def __init__(self,
                  *,
                  contour_cls: Type[_hints.Contour],
+                 coordinate_cls: Type[_hints.Coordinate],
                  multipoint_cls: Type[_hints.Multipoint],
                  multipolygon_cls: Type[_hints.Multipolygon],
                  multisegment_cls: Type[_hints.Multisegment],
@@ -23,6 +25,7 @@ class Context:
                  polygon_cls: Type[_hints.Polygon],
                  segment_cls: Type[_hints.Segment]) -> None:
         self._contour_cls = contour_cls
+        self._coordinate_cls = coordinate_cls
         self._multipoint_cls = multipoint_cls
         self._multipolygon_cls = multipolygon_cls
         self._multisegment_cls = multisegment_cls
@@ -35,6 +38,10 @@ class Context:
     @property
     def contour_cls(self) -> Type[_hints.Contour]:
         return self._contour_cls
+
+    @property
+    def coordinate_cls(self) -> Type[_hints.Coordinate]:
+        return self._coordinate_cls
 
     @property
     def multipoint_cls(self) -> Type[_hints.Multipoint]:
@@ -63,6 +70,7 @@ class Context:
     def replace(self,
                 *,
                 contour_cls: Optional[Type[_hints.Contour]] = None,
+                coordinate_cls: Optional[Type[_hints.Coordinate]] = None,
                 multipoint_cls: Optional[Type[_hints.Multipoint]] = None,
                 multipolygon_cls: Optional[Type[_hints.Multipolygon]] = None,
                 multisegment_cls: Optional[Type[_hints.Multisegment]] = None,
@@ -73,6 +81,9 @@ class Context:
         return Context(contour_cls=(self.contour_cls
                                     if contour_cls is None
                                     else contour_cls),
+                       coordinate_cls=(self.coordinate_cls
+                                       if coordinate_cls is None
+                                       else coordinate_cls),
                        multipoint_cls=(self.multipoint_cls
                                        if multipoint_cls is None
                                        else multipoint_cls),
@@ -94,13 +105,14 @@ class Context:
 
 
 _context = ContextVar('context',
-                      default=Context(point_cls=_plain.Point,
+                      default=Context(contour_cls=_plain.Contour,
+                                      coordinate_cls=_numbers.Real,
                                       multipoint_cls=_plain.Multipoint,
-                                      segment_cls=_plain.Segment,
+                                      multipolygon_cls=_plain.Multipolygon,
                                       multisegment_cls=_plain.Multisegment,
-                                      contour_cls=_plain.Contour,
+                                      point_cls=_plain.Point,
                                       polygon_cls=_plain.Polygon,
-                                      multipolygon_cls=_plain.Multipolygon))
+                                      segment_cls=_plain.Segment))
 
 
 def get_context() -> Context:
@@ -117,6 +129,10 @@ def set_context(context: Context) -> None:
 
 def to_contour_cls() -> Type[_hints.Contour]:
     return get_context().contour_cls
+
+
+def to_coordinate_cls() -> Type[_hints.Coordinate]:
+    return get_context().coordinate_cls
 
 
 def to_multipoint_cls() -> Type[_hints.Multipoint]:
