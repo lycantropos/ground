@@ -1,7 +1,6 @@
 import numbers as _numbers
 from contextvars import ContextVar
 from fractions import Fraction as _Fraction
-from functools import partial as _partial
 from typing import (Tuple,
                     Type)
 
@@ -56,7 +55,7 @@ class Context:
         self._polygon_cls = polygon_cls
         self._segment_cls = segment_cls
         exact = issubclass(coordinate_cls, _numbers.Rational)
-        self._inverse = (_partial(_Fraction, 1)
+        self._inverse = (_Fraction(1).__truediv__
                          if exact
                          else (1..__truediv__
                                if issubclass(coordinate_cls, float)
