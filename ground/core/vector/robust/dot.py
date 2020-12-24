@@ -19,16 +19,16 @@ def multiply(first_start: Point,
     addend_x = (first_end_x - first_start_x) * (second_end_x - second_start_x)
     addend_y = (first_end_y - first_start_y) * (second_end_y - second_start_y)
     result = addend_x + addend_y
-    if addend_x > 0:
-        if addend_y <= 0:
-            return result
-        else:
+    if 0 < addend_x:
+        if 0 < addend_y:
             upper_bound = addend_x + addend_y
-    elif addend_x < 0:
-        if addend_y >= 0:
-            return result
         else:
+            return result
+    elif addend_x < 0:
+        if addend_y < 0:
             upper_bound = -addend_x - addend_y
+        else:
+            return result
     else:
         return result
     error_bound = bounds.to_multiply_first_error(upper_bound)
