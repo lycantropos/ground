@@ -31,7 +31,7 @@ def multiply(first_start: Point,
             upper_bound = -addend_x - addend_y
     else:
         return result
-    error_bound = bounds.to_signed_measure_first_error(upper_bound)
+    error_bound = bounds.to_multiply_first_error(upper_bound)
     if result >= error_bound or -result >= error_bound:
         return result
     return _adjusted_signed_area(first_start_x, first_start_y, first_end_x,
@@ -57,7 +57,7 @@ def _adjusted_signed_area(first_start_x: Coordinate,
     result_expansion = two_two_sum(addend_x_tail, addend_x_head,
                                    addend_y_tail, addend_y_head)
     result = sum(result_expansion)
-    error_bound = bounds.to_signed_measure_second_error(upper_bound)
+    error_bound = bounds.to_multiply_second_error(upper_bound)
     if result >= error_bound or -result >= error_bound:
         return result
     first_dx_tail = two_diff_tail(first_end_x, first_start_x, first_dx_head)
@@ -69,7 +69,7 @@ def _adjusted_signed_area(first_start_x: Coordinate,
     if not (first_dx_tail or second_dx_tail or second_dy_tail
             or first_dy_tail):
         return result
-    error_bound = (bounds.to_signed_measure_third_error(upper_bound)
+    error_bound = (bounds.to_multiply_third_error(upper_bound)
                    + bounds.to_determinant_error(result))
     result += ((first_dx_head * second_dx_tail
                 + second_dx_head * first_dx_tail)
