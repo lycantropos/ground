@@ -8,7 +8,7 @@ from hypothesis import strategies
 from ground.hints import Coordinate
 from tests.hints import Strategy
 
-MAX_FLOAT = 1.e15
+MAX_FLOAT = 1.e100
 MIN_FLOAT = -MAX_FLOAT
 
 
