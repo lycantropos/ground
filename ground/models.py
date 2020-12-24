@@ -1,5 +1,4 @@
-from typing import (Optional,
-                    Type)
+from typing import Type
 
 from reprit.base import generate_repr as _generate_repr
 
@@ -69,43 +68,3 @@ class Context:
     @property
     def segment_cls(self) -> Type[_hints.Segment]:
         return self._segment_cls
-
-    def replace(self,
-                *,
-                contour_cls: Optional[Type[_hints.Contour]] = None,
-                coordinate_cls: Optional[Type[_hints.Coordinate]] = None,
-                multicontour_cls: Optional[Type[_hints.Multicontour]] = None,
-                multipoint_cls: Optional[Type[_hints.Multipoint]] = None,
-                multipolygon_cls: Optional[Type[_hints.Multipolygon]] = None,
-                multisegment_cls: Optional[Type[_hints.Multisegment]] = None,
-                point_cls: Optional[Type[_hints.Point]] = None,
-                polygon_cls: Optional[Type[_hints.Polygon]] = None,
-                segment_cls: Optional[Type[_hints.Segment]] = None
-                ) -> 'Context':
-        return Context(contour_cls=(self.contour_cls
-                                    if contour_cls is None
-                                    else contour_cls),
-                       coordinate_cls=(self.coordinate_cls
-                                       if coordinate_cls is None
-                                       else coordinate_cls),
-                       multicontour_cls=(self.multicontour_cls
-                                         if multicontour_cls is None
-                                         else multicontour_cls),
-                       multipoint_cls=(self.multipoint_cls
-                                       if multipoint_cls is None
-                                       else multipoint_cls),
-                       multipolygon_cls=(self.multipolygon_cls
-                                         if multipolygon_cls is None
-                                         else multipolygon_cls),
-                       multisegment_cls=(self.multisegment_cls
-                                         if multisegment_cls is None
-                                         else multisegment_cls),
-                       point_cls=(self.point_cls
-                                  if point_cls is None
-                                  else point_cls),
-                       polygon_cls=(self.polygon_cls
-                                    if polygon_cls is None
-                                    else polygon_cls),
-                       segment_cls=(self.segment_cls
-                                    if segment_cls is None
-                                    else segment_cls))
