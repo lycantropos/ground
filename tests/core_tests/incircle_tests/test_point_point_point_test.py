@@ -11,7 +11,7 @@ from tests.utils import (is_even_permutation,
 from . import strategies
 
 
-@given(strategies.point_point_point_determinants,
+@given(strategies.point_point_point_tests,
        strategies.points_quadruplets)
 def test_basic(incircle_determiner: IncircleDeterminer,
                points_quadruplet: PointsQuadruplet) -> None:
@@ -24,7 +24,7 @@ def test_basic(incircle_determiner: IncircleDeterminer,
     assert isinstance(result, coordinate_cls)
 
 
-@given(strategies.point_point_point_determinants, strategies.points_triplets)
+@given(strategies.point_point_point_tests, strategies.points_triplets)
 def test_degenerate_cases(incircle_determiner: IncircleDeterminer,
                           points_triplet: PointsTriplet) -> None:
     first_point, second_point, third_point = points_triplet
@@ -34,7 +34,7 @@ def test_degenerate_cases(incircle_determiner: IncircleDeterminer,
                for point in points_triplet)
 
 
-@given(strategies.point_point_point_determinants,
+@given(strategies.point_point_point_tests,
        strategies.rational_points_quadruplets)
 def test_permutations(incircle_determiner: IncircleDeterminer,
                       points_quadruplet: PointsQuadruplet) -> None:
