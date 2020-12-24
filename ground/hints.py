@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from numbers import Real
 from typing import (Sequence,
                     TypeVar)
@@ -20,26 +21,33 @@ class Point(Protocol[Coordinate]):
     with ``x`` coordinate being compared first.
     """
 
+    @abstractmethod
     def __new__(cls, x: Coordinate, y: Coordinate) -> 'Point':
         """Constructs point given its coordinates."""
 
+    @abstractmethod
     def __eq__(self, other: 'Point') -> bool:
         """Checks if the point is equal to the other."""
 
+    @abstractmethod
     def __hash__(self) -> int:
         """Returns hash value of the point."""
 
+    @abstractmethod
     def __lt__(self, other: 'Point') -> bool:
         """Checks if the point is less than the other."""
 
+    @abstractmethod
     def __le__(self, other: 'Point') -> bool:
         """Checks if the point is less than or equal to the other."""
 
     @property
+    @abstractmethod
     def x(self) -> Coordinate:
         """First coordinate of the point."""
 
     @property
+    @abstractmethod
     def y(self) -> Coordinate:
         """Second coordinate of the point."""
 
@@ -49,10 +57,12 @@ class Multipoint(Protocol[Coordinate]):
     **Multipoint** is a non-empty set of unique points.
     """
 
+    @abstractmethod
     def __new__(cls, points: Sequence[Point]) -> 'Multipoint':
         """Constructs multipoint given its points."""
 
     @property
+    @abstractmethod
     def points(self) -> Sequence[Point]:
         """Returns points of the multipoint."""
 
@@ -64,14 +74,17 @@ class Segment(Protocol[Coordinate]):
     defined by a pair of unequal points (called *segment's endpoints*).
     """
 
+    @abstractmethod
     def __new__(cls, start: Point, end: Point) -> 'Segment':
         """Constructs segment given its endpoints."""
 
     @property
+    @abstractmethod
     def start(self) -> Point:
         """Returns start endpoint of the segment."""
 
     @property
+    @abstractmethod
     def end(self) -> Point:
         """Returns start endpoint of the segment."""
 
@@ -82,10 +95,12 @@ class Multisegment(Protocol[Coordinate]):
     is a non-empty set of non-crossing and non-overlapping segments.
     """
 
+    @abstractmethod
     def __new__(cls, segments: Sequence[Segment]) -> 'Multisegment':
         """Constructs multisegment given its segments."""
 
     @property
+    @abstractmethod
     def segments(self) -> Sequence[Segment]:
         """Returns segments of the multisegment."""
 
@@ -100,6 +115,7 @@ class Contour(Protocol[Coordinate]):
         """Constructs contour given its vertices."""
 
     @property
+    @abstractmethod
     def vertices(self) -> Sequence[Point]:
         """Returns coordinates of the contour."""
 
@@ -111,6 +127,7 @@ class Multicontour(Protocol[Coordinate]):
     """
 
     @property
+    @abstractmethod
     def contours(self) -> Sequence[Contour]:
         """Returns contours of the multicontour."""
 
@@ -122,14 +139,17 @@ class Polygon(Protocol[Coordinate]):
     (called *polygon's holes*).
     """
 
+    @abstractmethod
     def __new__(cls, border: Contour, holes: Sequence[Contour]) -> 'Polygon':
         """Constructs polygon given its border and holes."""
 
     @property
+    @abstractmethod
     def border(self) -> Contour:
         """Returns border of the polygon."""
 
     @property
+    @abstractmethod
     def holes(self) -> Sequence[Contour]:
         """Returns holes of the polygon."""
 
@@ -140,9 +160,11 @@ class Multipolygon(Protocol[Coordinate]):
     intersecting only in discrete set of points.
     """
 
+    @abstractmethod
     def __new__(cls, polygons: Sequence[Polygon]) -> 'Multipolygon':
         """Constructs multipolygon given its polygons."""
 
     @property
+    @abstractmethod
     def polygons(self) -> Sequence[Polygon]:
         """Returns polygons of the multipolygon."""
