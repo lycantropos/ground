@@ -169,7 +169,8 @@ class Context:
                               first_start: _hints.Point,
                               first_end: _hints.Point,
                               second_start: _hints.Point,
-                              second_end: _hints.Point) -> SegmentsRelationship:
+                              second_end: _hints.Point
+                              ) -> SegmentsRelationship:
         return _linear.segments_relationship(self.cross_product, first_start,
                                              first_end, second_start,
                                              second_end)
