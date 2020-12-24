@@ -60,3 +60,10 @@ coordinates_strategies = strategies.sampled_from(
 rational_coordinates_strategies = strategies.sampled_from(
         [factory()
          for factory in rational_coordinates_strategies_factories.values()])
+coordinates_types_with_strategies = strategies.sampled_from(
+        [(type_, factory())
+         for type_, factory in coordinates_strategies_factories.items()])
+rational_coordinates_types_with_strategies = strategies.sampled_from(
+        [(type_, factory())
+         for type_, factory
+         in rational_coordinates_strategies_factories.items()])
