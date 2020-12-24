@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from hypothesis import given
 
 from ground.base import (Context,
@@ -7,8 +9,10 @@ from tests.hints import (PointsPair,
 from . import strategies
 
 
-@given(strategies.contexts, strategies.points_triplets)
-def test_basic(context: Context, points_triplet: PointsTriplet) -> None:
+@given(strategies.contexts_with_points_triplets)
+def test_basic(context_with_points_triplet: Tuple[Context, PointsTriplet]
+               ) -> None:
+    context, points_triplet = context_with_points_triplet
     vertex, first_ray_point, second_ray_point = points_triplet
 
     result = context.kind(vertex, first_ray_point, second_ray_point)
@@ -16,8 +20,10 @@ def test_basic(context: Context, points_triplet: PointsTriplet) -> None:
     assert isinstance(result, Kind)
 
 
-@given(strategies.contexts, strategies.points_pairs)
-def test_same_endpoints(context: Context, points_pair: PointsPair) -> None:
+@given(strategies.contexts_with_points_pairs)
+def test_same_endpoints(context_with_points_pair: Tuple[Context, PointsPair]
+                        ) -> None:
+    context, points_pair = context_with_points_pair
     start, end = points_pair
 
     assert context.kind(end, start, start) is (Kind.RIGHT
@@ -25,9 +31,10 @@ def test_same_endpoints(context: Context, points_pair: PointsPair) -> None:
                                                else Kind.ACUTE)
 
 
-@given(strategies.contexts, strategies.points_triplets)
-def test_endpoints_permutations(context: Context,
-                                points_triplet: PointsTriplet) -> None:
+@given(strategies.contexts_with_points_triplets)
+def test_endpoints_permutations(context_with_points_triplet
+                                : Tuple[Context, PointsTriplet]) -> None:
+    context, points_triplet = context_with_points_triplet
     vertex, first_ray_point, second_ray_point = points_triplet
 
     result = context.kind(vertex, first_ray_point, second_ray_point)

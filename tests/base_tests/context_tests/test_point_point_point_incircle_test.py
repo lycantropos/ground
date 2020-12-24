@@ -1,4 +1,5 @@
 from itertools import permutations
+from typing import Tuple
 
 from hypothesis import given
 
@@ -11,9 +12,10 @@ from tests.utils import (is_even_permutation,
 from . import strategies
 
 
-@given(strategies.contexts, strategies.points_quadruplets)
-def test_basic(context: Context,
-               points_quadruplet: PointsQuadruplet) -> None:
+@given(strategies.contexts_with_points_quadruplets)
+def test_basic(context_with_points_quadruplet: Tuple[Context, PointsQuadruplet]
+               ) -> None:
+    context, points_quadruplet = context_with_points_quadruplet
     first_point, second_point, third_point, fourth_point = points_quadruplet
 
     result = context.point_point_point_incircle_test(first_point, second_point,
@@ -24,9 +26,10 @@ def test_basic(context: Context,
     assert isinstance(result, coordinate_cls)
 
 
-@given(strategies.contexts, strategies.points_triplets)
-def test_degenerate_cases(context: Context,
-                          points_triplet: PointsTriplet) -> None:
+@given(strategies.contexts_with_points_triplets)
+def test_degenerate_cases(context_with_points_triplet
+                          : Tuple[Context, PointsTriplet]) -> None:
+    context, points_triplet = context_with_points_triplet
     first_point, second_point, third_point = points_triplet
 
     assert all(
@@ -35,9 +38,10 @@ def test_degenerate_cases(context: Context,
             for point in points_triplet)
 
 
-@given(strategies.contexts, strategies.points_quadruplets)
-def test_permutations(context: Context,
-                      points_quadruplet: PointsQuadruplet) -> None:
+@given(strategies.contexts_with_points_quadruplets)
+def test_permutations(context_with_points_quadruplet
+                      : Tuple[Context, PointsQuadruplet]) -> None:
+    context, points_quadruplet = context_with_points_quadruplet
     first_point, second_point, third_point, fourth_point = points_quadruplet
 
     result = context.point_point_point_incircle_test(first_point, second_point,

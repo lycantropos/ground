@@ -1,5 +1,6 @@
 from itertools import (permutations,
                        product)
+from typing import Tuple
 
 from hypothesis import given
 
@@ -14,9 +15,10 @@ from tests.utils import (equivalence,
 from . import strategies
 
 
-@given(strategies.contexts, strategies.points_quadruplets)
-def test_basic(context: Context,
-               points_quadruplet: PointsQuadruplet) -> None:
+@given(strategies.contexts_with_points_quadruplets)
+def test_basic(context_with_points_quadruplet: Tuple[Context, PointsQuadruplet]
+               ) -> None:
+    context, points_quadruplet = context_with_points_quadruplet
     first_start, first_end, second_start, second_end = points_quadruplet
 
     result = context.dot_product(first_start, first_end, second_start,
@@ -26,9 +28,10 @@ def test_basic(context: Context,
     assert isinstance(result, coordinate_cls)
 
 
-@given(strategies.contexts, strategies.points_pairs)
-def test_perpendicular_endpoints(context: Context,
-                                 points_pair: PointsPair) -> None:
+@given(strategies.contexts_with_points_pairs)
+def test_perpendicular_endpoints(context_with_points_pair
+                                 : Tuple[Context, PointsPair]) -> None:
+    context, points_pair = context_with_points_pair
     first_start, first_end = points_pair
 
     assert not context.dot_product(first_start, first_end,
@@ -36,9 +39,10 @@ def test_perpendicular_endpoints(context: Context,
                                    to_perpendicular_point(first_end))
 
 
-@given(strategies.contexts, strategies.points_quadruplets)
-def test_segments_permutation(context: Context,
-                              points_quadruplet: PointsQuadruplet) -> None:
+@given(strategies.contexts_with_points_quadruplets)
+def test_segments_permutation(context_with_points_quadruplet
+                              : Tuple[Context, PointsQuadruplet]) -> None:
+    context, points_quadruplet = context_with_points_quadruplet
     first_start, first_end, second_start, second_end = points_quadruplet
 
     result = context.dot_product(first_start, first_end, second_start,
@@ -48,9 +52,10 @@ def test_segments_permutation(context: Context,
                                          first_end)
 
 
-@given(strategies.contexts, strategies.points_quadruplets)
-def test_endpoints_permutations(context: Context,
-                                points_quadruplet: PointsQuadruplet) -> None:
+@given(strategies.contexts_with_points_quadruplets)
+def test_endpoints_permutations(context_with_points_quadruplet
+                                : Tuple[Context, PointsQuadruplet]) -> None:
+    context, points_quadruplet = context_with_points_quadruplet
     first_start, first_end, second_start, second_end = points_quadruplet
 
     result = context.dot_product(first_start, first_end, second_start,

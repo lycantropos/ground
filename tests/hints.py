@@ -9,6 +9,7 @@ from ground.hints import (Coordinate,
                           Point)
 
 Domain = TypeVar('Domain')
+Range = TypeVar('Range')
 Strategy = SearchStrategy
 CrossProducer = DotProducer = IncircleDeterminer = (
     QuaternaryPointFunction[Coordinate])

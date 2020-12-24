@@ -1,5 +1,8 @@
+from functools import partial
 from operator import itemgetter
-from typing import (Sequence,
+from typing import (Callable,
+                    Iterable,
+                    Sequence,
                     Tuple)
 
 from hypothesis import strategies
@@ -8,6 +11,7 @@ from ground.base import get_context
 from ground.core.utils import to_sign
 from .hints import (Domain,
                     Permutation,
+                    Range,
                     Strategy)
 
 context = get_context()
@@ -15,8 +19,37 @@ Point = context.point_cls
 to_sign = to_sign
 
 
+def apply(function: Callable[..., Range], args: Iterable[Domain]) -> Range:
+    return function(*args)
+
+
+def compose(*functions: Callable[..., Range]) -> Callable[..., Range]:
+    *rest_functions, first_function = functions
+    reversed_rest_functions = rest_functions[::-1]
+
+    def composed(*args: Domain, **kwargs: Domain) -> Range:
+        result = first_function(*args, **kwargs)
+        for function in reversed_rest_functions:
+            result = function(result)
+        return result
+
+    return composed
+
+
+def combine(*functions: Callable[[Domain], Range]
+            ) -> Callable[[Tuple[Domain, ...]], Tuple[Range, ...]]:
+    def combined(args: Tuple[Domain, ...]) -> Tuple[Range, ...]:
+        return tuple(function(arg) for function, arg in zip(functions, args))
+
+    return combined
+
+
 def equivalence(left: bool, right: bool) -> bool:
     return left is right
+
+
+def identity(value: Domain) -> Domain:
+    return value
 
 
 def is_even_permutation(permutation: Permutation) -> bool:
@@ -30,9 +63,21 @@ def is_even_permutation(permutation: Permutation) -> bool:
     return not (transitions_count % 2)
 
 
+is_point = Point.__instancecheck__
+
+
+def pack(function: Callable[..., Range]
+         ) -> Callable[[Iterable[Domain]], Range]:
+    return partial(apply, function)
+
+
 def permute(sequence: Sequence[Domain],
             permutation: Permutation) -> Sequence[Domain]:
     return itemgetter(*permutation)(sequence)
+
+
+def reverse_point_coordinates(point: Point) -> Point:
+    return Point(point.y, point.x)
 
 
 def to_pairs(strategy: Strategy[Domain]) -> Strategy[Tuple[Domain, Domain]]:

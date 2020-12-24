@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from hypothesis import given
 
 from ground.base import (Context,
@@ -7,9 +9,11 @@ from tests.hints import (PointsPair,
 from . import strategies
 
 
-@given(strategies.contexts, strategies.segments_pairs_endpoints)
-def test_basic(context: Context, 
-               segments_pair_endpoints: PointsQuadruplet) -> None:
+@given(strategies.contexts_with_segments_pairs_endpoints)
+def test_basic(context_with_segments_pair_endpoints
+               : Tuple[Context, PointsQuadruplet]) -> None:
+    context, segments_pair_endpoints = context_with_segments_pair_endpoints
+
     first_start, first_end, second_start, second_end = segments_pair_endpoints
 
     result = context.segments_relationship(first_start, first_end,
@@ -18,9 +22,10 @@ def test_basic(context: Context,
     assert isinstance(result, SegmentsRelationship)
 
 
-@given(strategies.contexts, strategies.segments_pairs_endpoints)
-def test_permutations(context: Context,
-                      segments_pair_endpoints: PointsQuadruplet) -> None:
+@given(strategies.contexts_with_segments_pairs_endpoints)
+def test_permutations(context_with_segments_pair_endpoints
+                      : Tuple[Context, PointsQuadruplet]) -> None:
+    context, segments_pair_endpoints = context_with_segments_pair_endpoints
     first_start, first_end, second_start, second_end = segments_pair_endpoints
 
     result = context.segments_relationship(first_start, first_end,
@@ -36,8 +41,10 @@ def test_permutations(context: Context,
                                              second_end, second_start))
 
 
-@given(strategies.contexts, strategies.segments_endpoints)
-def test_self(context: Context, segment_endpoints: PointsPair) -> None:
+@given(strategies.contexts_with_segments_endpoints)
+def test_self(context_with_segment_endpoints: Tuple[Context, PointsPair]
+              ) -> None:
+    context, segment_endpoints = context_with_segment_endpoints
     start, end = segment_endpoints
 
     result = context.segments_relationship(start, end, start, end)
