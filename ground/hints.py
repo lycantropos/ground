@@ -96,6 +96,9 @@ class Contour(Protocol[Coordinate]):
     (called *contour's vertices*).
     """
 
+    def __new__(cls, vertices: Sequence[Point]) -> 'Contour':
+        """Constructs contour given its vertices."""
+
     @property
     def vertices(self) -> Sequence[Point]:
         """Returns coordinates of the contour."""
