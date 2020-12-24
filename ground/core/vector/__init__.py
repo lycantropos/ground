@@ -2,10 +2,10 @@ from reprit.base import generate_repr as _generate_repr
 
 from ground import hints as _hints
 from ground.core.hints import QuaternaryPointFunction
-from .core.plain import (cross as _plain_cross,
-                         dot as _plain_dot)
-from .core.robust import (cross as _robust_cross,
-                          dot as _robust_dot)
+from .plain import (cross as _plain_cross,
+                    dot as _plain_dot)
+from .robust import (cross as _robust_cross,
+                     dot as _robust_dot)
 
 QuaternaryFunction = QuaternaryPointFunction[_hints.Coordinate]
 

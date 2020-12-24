@@ -2,8 +2,8 @@ from reprit.base import generate_repr as _generate_repr
 
 from ground import hints as _hints
 from ground.core.hints import QuaternaryPointFunction
-from .core.plain import point_point_point as _plain_point_point_point
-from .core.robust import point_point_point as _robust_point_point_point
+from .plain import point_point_point as _plain_point_point_point
+from .robust import point_point_point as _robust_point_point_point
 
 PointPointPointTest = QuaternaryPointFunction[_hints.Coordinate]
 
