@@ -3,13 +3,12 @@ from typing import Sequence
 from reprit.base import generate_repr
 
 from ground import hints
-from ground.hints import Coordinate
 
 
 class Point:
     __slots__ = '_x', '_y'
 
-    def __init__(self, x: Coordinate, y: Coordinate) -> None:
+    def __init__(self, x: hints.Coordinate, y: hints.Coordinate) -> None:
         self._x, self._y = x, y
 
     __repr__ = generate_repr(__init__)
@@ -33,11 +32,11 @@ class Point:
                 else NotImplemented)
 
     @property
-    def x(self) -> Coordinate:
+    def x(self) -> hints.Coordinate:
         return self._x
 
     @property
-    def y(self) -> Coordinate:
+    def y(self) -> hints.Coordinate:
         return self._y
 
 
