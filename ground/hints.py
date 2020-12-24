@@ -104,6 +104,17 @@ class Contour(Protocol[Coordinate]):
         """Returns coordinates of the contour."""
 
 
+class Multicontour(Protocol[Coordinate]):
+    """
+    **Multicontour**
+    is a non-empty set of non-overlapping and non-crossing contours.
+    """
+
+    @property
+    def contours(self) -> Sequence[Contour]:
+        """Returns contours of the multicontour."""
+
+
 class Polygon(Protocol[Coordinate]):
     """
     **Polygon** is a limited closed region defined by the pair of outer contour
