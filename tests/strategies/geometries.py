@@ -10,8 +10,7 @@ from .coordinates import (coordinates_strategies,
 
 def coordinates_to_points(coordinates: Strategy[Coordinate]
                           ) -> Strategy[Point]:
-    return strategies.builds(get_context().geometries.point_cls, coordinates,
-                             coordinates)
+    return strategies.builds(get_context().point_cls, coordinates, coordinates)
 
 
 points_strategies = coordinates_strategies.map(coordinates_to_points)
