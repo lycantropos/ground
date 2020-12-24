@@ -1,5 +1,4 @@
 from functools import partial
-from operator import itemgetter
 from typing import (Callable,
                     Iterable,
                     Sequence,
@@ -15,6 +14,7 @@ from .hints import (Domain,
                     Strategy)
 
 context = get_context()
+Multipoint = context.multipoint_cls
 Point = context.point_cls
 to_sign = to_sign
 
@@ -73,7 +73,12 @@ def pack(function: Callable[..., Range]
 
 def permute(sequence: Sequence[Domain],
             permutation: Permutation) -> Sequence[Domain]:
-    return itemgetter(*permutation)(sequence)
+    return [sequence[index] for index in permutation]
+
+
+def permute_multipoint(multipoint: Multipoint,
+                       permutation: Permutation) -> Multipoint:
+    return Multipoint(permute(multipoint.points, permutation))
 
 
 def reverse_point_coordinates(point: Point) -> Point:

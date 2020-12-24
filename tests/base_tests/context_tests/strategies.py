@@ -11,7 +11,8 @@ from ground.hints import (Coordinate,
 from tests.hints import (PointsPair,
                          Strategy)
 from tests.strategies.coordinates import coordinates_types_with_strategies
-from tests.strategies.geometries import coordinates_to_points
+from tests.strategies.geometries import (coordinates_to_multipoints,
+                                         coordinates_to_points)
 from tests.utils import (combine,
                          compose,
                          identity,
@@ -67,3 +68,7 @@ contexts_with_segments_pairs_endpoints = (
      .map(combine(identity, compose(to_pairs, points_to_segments_endpoints)))
      .flatmap(pack(strategies.tuples))
      .map(combine(identity, pack(add)))))
+contexts_with_multipoints = (contexts_with_coordinates_strategies
+                             .map(combine(identity,
+                                          coordinates_to_multipoints))
+                             .flatmap(pack(strategies.tuples)))
