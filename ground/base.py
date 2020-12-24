@@ -140,6 +140,13 @@ class Context:
         return _angular.orientation(self.dot_product, vertex, first_ray_point,
                                     second_ray_point)
 
+    def segment_contains_point(self,
+                               start: _hints.Point,
+                               end: _hints.Point,
+                               point: _hints.Point) -> bool:
+        return _linear.segment_contains_point(self.cross_product, start, end,
+                                              point)
+
     def segments_intersection(self,
                               first_start: _hints.Point,
                               first_end: _hints.Point,
