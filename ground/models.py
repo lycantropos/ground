@@ -31,7 +31,8 @@ class Context:
         self._polygon_cls = polygon_cls
         self._segment_cls = segment_cls
 
-    __repr__ = _generate_repr(__init__)
+    __repr__ = _generate_repr(__init__,
+                              with_module_name=True)
 
     @property
     def contour_cls(self) -> Type[_hints.Contour]:
