@@ -4,12 +4,14 @@ from typing import (Sequence,
 
 from hypothesis import strategies
 
+from ground.base import get_context
 from ground.core.utils import to_sign
-from ground.hints import Point
 from .hints import (Domain,
                     Permutation,
                     Strategy)
 
+context = get_context()
+Point = context.point_cls
 to_sign = to_sign
 
 
@@ -38,7 +40,7 @@ def to_pairs(strategy: Strategy[Domain]) -> Strategy[Tuple[Domain, Domain]]:
 
 
 def to_perpendicular_point(point: Point) -> Point:
-    return type(point)(-point.y, point.x)
+    return Point(-point.y, point.x)
 
 
 def to_quadruplets(strategy: Strategy[Domain]
