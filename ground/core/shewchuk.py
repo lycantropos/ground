@@ -210,7 +210,7 @@ def sum_expansions(left: Expansion, right: Expansion) -> Expansion:
 
 def scale_expansion(expansion: Expansion, scalar: Coordinate) -> Expansion:
     """
-    Multiplies an expansion by a scalar with zero components elimination.
+    Multiplies the expansion by given scalar with zero components elimination.
     """
     components = iter(expansion)
     scalar_low, scalar_high = split(scalar)
