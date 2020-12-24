@@ -14,6 +14,21 @@ class Point:
 
     __repr__ = generate_repr(__init__)
 
+    def __eq__(self, other: 'Point') -> bool:
+        return (self.x == other.x and self.y == other.y
+                if isinstance(other, Point)
+                else NotImplemented)
+
+    def __le__(self, other: 'Point') -> bool:
+        return (self.x < other.x or self.x == other.x and self.y <= other.y
+                if isinstance(other, Point)
+                else NotImplemented)
+
+    def __lt__(self, other: 'Point') -> bool:
+        return (self.x < other.x or self.x == other.x and self.y < other.y
+                if isinstance(other, Point)
+                else NotImplemented)
+
     @property
     def x(self) -> Coordinate:
         return self._x
