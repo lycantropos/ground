@@ -30,7 +30,19 @@ class Context:
                  '_vector')
 
     def __init__(self, geometries: _geometrical.Context) -> None:
-        self.geometries = geometries
+        self._geometries = geometries
+        exact = issubclass(geometries.coordinate_cls, _numbers.Rational)
+        self._inverse = (_partial(_Fraction, 1)
+                         if exact
+                         else (1..__truediv__
+                               if issubclass(geometries.coordinate_cls, float)
+                               else _robust_inverse))
+        self._centroidal, self._incircle, self._vector = (
+            (_centroidal.plain_context, _incircle.plain_context,
+             _vector.plain_context)
+            if exact
+            else (_centroidal.robust_context, _incircle.robust_context,
+                  _vector.robust_context))
 
     __repr__ = generate_repr(__init__)
 
@@ -49,22 +61,6 @@ class Context:
     @property
     def geometries(self) -> _geometrical.Context:
         return self._geometries
-
-    @geometries.setter
-    def geometries(self, value: _geometrical.Context) -> None:
-        self._geometries = value
-        exact = issubclass(value.coordinate_cls, _numbers.Rational)
-        self._inverse = (_partial(_Fraction, 1)
-                         if exact
-                         else (1..__truediv__
-                               if issubclass(value.coordinate_cls, float)
-                               else _robust_inverse))
-        self._centroidal, self._incircle, self._vector = (
-            (_centroidal.plain_context, _incircle.plain_context,
-             _vector.plain_context)
-            if exact
-            else (_centroidal.robust_context, _incircle.robust_context,
-                  _vector.robust_context))
 
     @property
     def point_cls(self) -> Type[_hints.Point]:
