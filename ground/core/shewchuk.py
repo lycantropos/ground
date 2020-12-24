@@ -133,12 +133,12 @@ def two_one_mul(left_tail: Coordinate,
 def two_sub(left: Coordinate,
             right: Coordinate) -> Tuple[Coordinate, Coordinate]:
     head = left - right
-    return two_diff_tail(left, right, head), head
+    return two_sub_tail(left, right, head), head
 
 
-def two_diff_tail(left: Coordinate,
-                  right: Coordinate,
-                  head: Coordinate) -> Coordinate:
+def two_sub_tail(left: Coordinate,
+                 right: Coordinate,
+                 head: Coordinate) -> Coordinate:
     right_virtual = left - head
     left_virtual = head + right_virtual
     right_error = right_virtual - right

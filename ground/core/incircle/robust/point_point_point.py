@@ -7,8 +7,8 @@ from ground.core.shewchuk import (scale_expansion,
                                   square,
                                   sum_expansions,
                                   to_cross_product,
-                                  two_diff_tail,
                                   two_mul,
+                                  two_sub_tail,
                                   two_two_sub,
                                   two_two_sum)
 from ground.hints import (Coordinate,
@@ -86,12 +86,12 @@ def _adjusted_determinant(first_x: Coordinate,
     error_bound = bounds.to_point_point_point_second_error(upper_bound)
     if result >= error_bound or -result >= error_bound:
         return result
-    first_dx_tail = two_diff_tail(first_x, fourth_x, first_dx_head)
-    first_dy_tail = two_diff_tail(first_y, fourth_y, first_dy_head)
-    second_dx_tail = two_diff_tail(second_x, fourth_x, second_dx_head)
-    second_dy_tail = two_diff_tail(second_y, fourth_y, second_dy_head)
-    third_dx_tail = two_diff_tail(third_x, fourth_x, third_dx_head)
-    third_dy_tail = two_diff_tail(third_y, fourth_y, third_dy_head)
+    first_dx_tail = two_sub_tail(first_x, fourth_x, first_dx_head)
+    first_dy_tail = two_sub_tail(first_y, fourth_y, first_dy_head)
+    second_dx_tail = two_sub_tail(second_x, fourth_x, second_dx_head)
+    second_dy_tail = two_sub_tail(second_y, fourth_y, second_dy_head)
+    third_dx_tail = two_sub_tail(third_x, fourth_x, third_dx_head)
+    third_dy_tail = two_sub_tail(third_y, fourth_y, third_dy_head)
     if not (first_dx_tail or first_dy_tail or second_dx_tail or second_dy_tail
             or third_dx_tail or third_dy_tail):
         return result

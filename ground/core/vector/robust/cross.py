@@ -1,7 +1,7 @@
 from ground.core.shewchuk import (sum_expansions,
                                   to_cross_product,
-                                  two_diff_tail,
                                   two_mul,
+                                  two_sub_tail,
                                   two_two_sub)
 from ground.hints import (Coordinate,
                           Point)
@@ -61,12 +61,10 @@ def _adjusted_signed_area(first_start_x: Coordinate,
     error_bound = bounds.to_multiply_second_error(upper_bound)
     if result >= error_bound or -result >= error_bound:
         return result
-    first_dx_tail = two_diff_tail(first_end_x, first_start_x, first_dx_head)
-    first_dy_tail = two_diff_tail(first_end_y, first_start_y, first_dy_head)
-    second_dx_tail = two_diff_tail(second_end_x, second_start_x,
-                                   second_dx_head)
-    second_dy_tail = two_diff_tail(second_end_y, second_start_y,
-                                   second_dy_head)
+    first_dx_tail = two_sub_tail(first_end_x, first_start_x, first_dx_head)
+    first_dy_tail = two_sub_tail(first_end_y, first_start_y, first_dy_head)
+    second_dx_tail = two_sub_tail(second_end_x, second_start_x, second_dx_head)
+    second_dy_tail = two_sub_tail(second_end_y, second_start_y, second_dy_head)
     if not (first_dx_tail or first_dy_tail or second_dx_tail
             or second_dy_tail):
         return result
