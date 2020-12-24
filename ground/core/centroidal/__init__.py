@@ -26,7 +26,8 @@ class Context:
         self._contour_centroid = contour_centroid
         self._multipoint_centroid = multipoint_centroid
 
-    __repr__ = generate_repr(__init__)
+    __repr__ = generate_repr(__init__,
+                             with_module_name=True)
 
     @property
     def contour_centroid(self) -> ContourCentroid:

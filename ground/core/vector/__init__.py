@@ -18,7 +18,8 @@ class Context:
                  dot_product: QuaternaryFunction) -> None:
         self._cross_product, self._dot_product = cross_product, dot_product
 
-    __repr__ = generate_repr(__init__)
+    __repr__ = generate_repr(__init__,
+                             with_module_name=True)
 
     @property
     def cross_product(self) -> QuaternaryFunction:

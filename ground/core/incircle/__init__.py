@@ -14,7 +14,8 @@ class Context:
     def __init__(self, point_point_point_test: PointPointPointTest) -> None:
         self._point_point_point_test = point_point_point_test
 
-    __repr__ = generate_repr(__init__)
+    __repr__ = generate_repr(__init__,
+                             with_module_name=True)
 
     @property
     def point_point_point_test(self) -> PointPointPointTest:
