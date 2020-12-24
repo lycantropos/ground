@@ -7,14 +7,15 @@ from ground import hints as _hints
 
 
 class Context:
-    __slots__ = ('_coordinate_cls', '_contour_cls', '_multipoint_cls',
-                 '_multipolygon_cls', '_multisegment_cls', '_point_cls',
-                 '_polygon_cls', '_segment_cls')
+    __slots__ = ('_contour_cls', '_coordinate_cls', '_multicontour_cls',
+                 '_multipoint_cls', '_multipolygon_cls', '_multisegment_cls',
+                 '_point_cls', '_polygon_cls', '_segment_cls')
 
     def __init__(self,
                  *,
                  contour_cls: Type[_hints.Contour],
                  coordinate_cls: Type[_hints.Coordinate],
+                 multicontour_cls: Type[_hints.Multicontour],
                  multipoint_cls: Type[_hints.Multipoint],
                  multipolygon_cls: Type[_hints.Multipolygon],
                  multisegment_cls: Type[_hints.Multisegment],
@@ -23,6 +24,7 @@ class Context:
                  segment_cls: Type[_hints.Segment]) -> None:
         self._contour_cls = contour_cls
         self._coordinate_cls = coordinate_cls
+        self._multicontour_cls = multicontour_cls
         self._multipoint_cls = multipoint_cls
         self._multipolygon_cls = multipolygon_cls
         self._multisegment_cls = multisegment_cls
@@ -39,6 +41,10 @@ class Context:
     @property
     def coordinate_cls(self) -> Type[_hints.Coordinate]:
         return self._coordinate_cls
+
+    @property
+    def multicontour_cls(self) -> Type[_hints.Multicontour]:
+        return self._multicontour_cls
 
     @property
     def multipoint_cls(self) -> Type[_hints.Multipoint]:
@@ -68,6 +74,7 @@ class Context:
                 *,
                 contour_cls: Optional[Type[_hints.Contour]] = None,
                 coordinate_cls: Optional[Type[_hints.Coordinate]] = None,
+                multicontour_cls: Optional[Type[_hints.Multicontour]] = None,
                 multipoint_cls: Optional[Type[_hints.Multipoint]] = None,
                 multipolygon_cls: Optional[Type[_hints.Multipolygon]] = None,
                 multisegment_cls: Optional[Type[_hints.Multisegment]] = None,
@@ -81,6 +88,9 @@ class Context:
                        coordinate_cls=(self.coordinate_cls
                                        if coordinate_cls is None
                                        else coordinate_cls),
+                       multicontour_cls=(self.multicontour_cls
+                                         if multicontour_cls is None
+                                         else multicontour_cls),
                        multipoint_cls=(self.multipoint_cls
                                        if multipoint_cls is None
                                        else multipoint_cls),

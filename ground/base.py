@@ -129,6 +129,7 @@ _context = ContextVar('context',
                       default=Context(_geometrical.Context(
                               contour_cls=_geometries.Contour,
                               coordinate_cls=_numbers.Real,
+                              multicontour_cls=_geometries.Multicontour,
                               multipoint_cls=_geometries.Multipoint,
                               multipolygon_cls=_geometries.Multipolygon,
                               multisegment_cls=_geometries.Multisegment,

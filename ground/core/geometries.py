@@ -64,19 +64,6 @@ class Multisegment:
         return self._segments
 
 
-class Multipolygon:
-    __slots__ = '_polygons',
-
-    def __init__(self, polygons: Sequence[hints.Polygon]) -> None:
-        self._polygons = polygons
-
-    __repr__ = generate_repr(__init__)
-
-    @property
-    def polygons(self) -> Sequence[hints.Polygon]:
-        return self._polygons
-
-
 class Contour:
     __slots__ = '_vertices',
 
@@ -88,6 +75,19 @@ class Contour:
     @property
     def vertices(self) -> Sequence[hints.Polygon]:
         return self._vertices
+
+
+class Multicontour:
+    __slots__ = '_contours',
+
+    def __init__(self, contours: Sequence[hints.Contour]) -> None:
+        self._contours = contours
+
+    __repr__ = generate_repr(__init__)
+
+    @property
+    def contours(self) -> Sequence[hints.Contour]:
+        return self._contours
 
 
 class Polygon:
@@ -106,3 +106,16 @@ class Polygon:
     @property
     def holes(self) -> Sequence[hints.Contour]:
         return self._holes
+
+
+class Multipolygon:
+    __slots__ = '_polygons',
+
+    def __init__(self, polygons: Sequence[hints.Polygon]) -> None:
+        self._polygons = polygons
+
+    __repr__ = generate_repr(__init__)
+
+    @property
+    def polygons(self) -> Sequence[hints.Polygon]:
+        return self._polygons
