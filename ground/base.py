@@ -7,8 +7,8 @@ from typing import (Tuple,
 
 from reprit.base import generate_repr
 
-from ground import geometrical as _geometrical
-from . import hints as _hints
+from . import (hints as _hints,
+               models as _models)
 from .core import (angular as _angular,
                    centroidal as _centroidal,
                    enums as _enums,
@@ -26,16 +26,16 @@ SegmentsRelationship = _enums.SegmentsRelationship
 
 
 class Context:
-    __slots__ = ('_centroidal', '_geometries', '_incircle', '_inverse',
+    __slots__ = ('_centroidal', '_incircle', '_inverse', '_models',
                  '_vector')
 
-    def __init__(self, geometries: _geometrical.Context) -> None:
-        self._geometries = geometries
-        exact = issubclass(geometries.coordinate_cls, _numbers.Rational)
+    def __init__(self, models: _models.Context) -> None:
+        self._models = models
+        exact = issubclass(models.coordinate_cls, _numbers.Rational)
         self._inverse = (_partial(_Fraction, 1)
                          if exact
                          else (1..__truediv__
-                               if issubclass(geometries.coordinate_cls, float)
+                               if issubclass(models.coordinate_cls, float)
                                else _robust_inverse))
         self._centroidal, self._incircle, self._vector = (
             (_centroidal.plain_context, _incircle.plain_context,
@@ -63,8 +63,8 @@ class Context:
         return self._vector.dot_product
 
     @property
-    def geometries(self) -> _geometrical.Context:
-        return self._geometries
+    def geometries(self) -> _models.Context:
+        return self._models
 
     @property
     def point_cls(self) -> Type[_hints.Point]:
@@ -126,7 +126,7 @@ class Context:
 
 
 _context = ContextVar('context',
-                      default=Context(_geometrical.Context(
+                      default=Context(_models.Context(
                               contour_cls=_geometries.Contour,
                               coordinate_cls=_numbers.Real,
                               multicontour_cls=_geometries.Multicontour,
