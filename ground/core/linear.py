@@ -84,16 +84,9 @@ def segments_intersections(cross_product: QuaternaryPointFunction,
     if relationship is SegmentsRelationship.NONE:
         return ()
     elif relationship is SegmentsRelationship.OVERLAP:
-        if first_start < first_end:
-            first_start, first_end = first_end, first_start
-        if second_start < second_end:
-            second_start, second_end = second_end, second_start
-        return (first_start
-                if first_start < second_start
-                else second_start,
-                first_end
-                if first_end < second_end
-                else second_end)
+        _, first_point, second_point, _ = sorted((first_start, first_end,
+                                                  second_start, second_end))
+        return first_point, second_point
     else:
         return segments_intersection(cross_product, inverse, point_cls,
                                      first_start, first_end, second_start,
