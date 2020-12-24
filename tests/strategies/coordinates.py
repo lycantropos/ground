@@ -1,26 +1,22 @@
 import sys
 from decimal import Decimal
 from fractions import Fraction
-from typing import Optional
 
 from hypothesis import strategies
 
 from ground.hints import Coordinate
 from tests.hints import Strategy
 
-MAX_FLOAT = 1.e100
-MIN_FLOAT = -MAX_FLOAT
+MAX_COORDINATE = 10 ** 10
+MIN_COORDINATE = -MAX_COORDINATE
 
 
-def to_floats(min_value: Optional[Coordinate] = MIN_FLOAT,
-              max_value: Optional[Coordinate] = MAX_FLOAT,
-              *,
-              allow_nan: bool = False,
-              allow_infinity: bool = False) -> Strategy:
+def to_floats(min_value: Coordinate,
+              max_value: Coordinate) -> Strategy:
     return (strategies.floats(min_value=min_value,
                               max_value=max_value,
-                              allow_nan=allow_nan,
-                              allow_infinity=allow_infinity)
+                              allow_nan=False,
+                              allow_infinity=False)
             .map(to_digits_count))
 
 
@@ -56,7 +52,12 @@ coordinates_strategies_factories = {
     **rational_coordinates_strategies_factories,
     float: to_floats}
 coordinates_strategies = strategies.sampled_from(
-        [factory() for factory in coordinates_strategies_factories.values()])
+        [factory(MIN_COORDINATE, MAX_COORDINATE)
+         for factory in coordinates_strategies_factories.values()])
 coordinates_types_with_strategies = strategies.sampled_from(
-        [(type_, factory())
+        [(type_, factory(MIN_COORDINATE, MAX_COORDINATE))
          for type_, factory in coordinates_strategies_factories.items()])
+rational_coordinates_types_with_strategies = strategies.sampled_from(
+        [(type_, factory(MIN_COORDINATE, MAX_COORDINATE))
+         for type_, factory
+         in rational_coordinates_strategies_factories.items()])

@@ -10,7 +10,9 @@ from ground.hints import (Coordinate,
                           Point)
 from tests.hints import (PointsPair,
                          Strategy)
-from tests.strategies.coordinates import coordinates_types_with_strategies
+from tests.strategies.coordinates import (
+    coordinates_types_with_strategies,
+    rational_coordinates_types_with_strategies)
 from tests.strategies.geometries import (coordinates_to_multipoints,
                                          coordinates_to_points)
 from tests.utils import (combine,
@@ -36,6 +38,9 @@ def to_context_with_coordinates(coordinate_type_with_strategy
 
 contexts_with_coordinates_strategies = (coordinates_types_with_strategies
                                         .map(to_context_with_coordinates))
+contexts_with_rational_coordinates_strategies = (
+    (rational_coordinates_types_with_strategies
+     .map(to_context_with_coordinates)))
 contexts_with_points_strategies = (contexts_with_coordinates_strategies
                                    .map(combine(identity,
                                                 coordinates_to_points)))
@@ -72,3 +77,7 @@ contexts_with_multipoints = (contexts_with_coordinates_strategies
                              .map(combine(identity,
                                           coordinates_to_multipoints))
                              .flatmap(pack(strategies.tuples)))
+contexts_with_rational_multipoints = (
+    (contexts_with_rational_coordinates_strategies
+     .map(combine(identity, coordinates_to_multipoints))
+     .flatmap(pack(strategies.tuples))))

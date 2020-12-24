@@ -19,7 +19,7 @@ def test_basic(context_with_multipoint: Tuple[Context, Multipoint]) -> None:
     assert is_point(result)
 
 
-@given(strategies.contexts_with_multipoints)
+@given(strategies.contexts_with_rational_multipoints)
 def test_permutations(context_with_multipoint: Tuple[Context, Multipoint]
                       ) -> None:
     context, multipoint = context_with_multipoint
