@@ -5,6 +5,7 @@ from functools import partial as _partial
 from typing import (Tuple,
                     Type)
 
+from reprit import seekers
 from reprit.base import generate_repr
 
 from . import (hints as _hints,
@@ -44,15 +45,17 @@ class Context:
             else (_centroidal.robust_context, _incircle.robust_context,
                   _vector.robust_context))
 
-    __repr__ = generate_repr(__init__)
+    __repr__ = generate_repr(__init__,
+                             field_seeker=seekers.complex_,
+                             with_module_name=True)
 
     @property
     def contour_cls(self) -> Type[_hints.Contour]:
-        return self.geometries.contour_cls
+        return self._models.contour_cls
 
     @property
     def coordinate_cls(self) -> Type[_hints.Coordinate]:
-        return self.geometries.coordinate_cls
+        return self._models.coordinate_cls
 
     @property
     def cross_product(self) -> _QuaternaryFunction:
@@ -63,12 +66,8 @@ class Context:
         return self._vector.dot_product
 
     @property
-    def geometries(self) -> _models.Context:
-        return self._models
-
-    @property
     def point_cls(self) -> Type[_hints.Point]:
-        return self.geometries.point_cls
+        return self._models.point_cls
 
     @property
     def point_point_point_incircle_test(self) -> _QuaternaryFunction:
