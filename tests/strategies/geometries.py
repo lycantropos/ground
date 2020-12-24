@@ -24,7 +24,7 @@ def coordinates_to_multipoints(coordinates: Strategy[Coordinate]
                                ) -> Strategy[Multipoint]:
     return (strategies.lists(coordinates_to_points(coordinates),
                              min_size=1,
-                             max_size=10,
+                             max_size=5,
                              unique=True)
             .map(Multipoint))
 
@@ -33,7 +33,7 @@ def coordinates_to_contours(coordinates: Strategy[Coordinate]
                             ) -> Strategy[Contour]:
     return (strategies.lists(coordinates_to_points(coordinates),
                              min_size=3,
-                             max_size=10,
+                             max_size=5,
                              unique=True)
             .filter(are_points_non_collinear)
             .map(Contour))
