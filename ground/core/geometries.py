@@ -60,6 +60,8 @@ class Segment:
     def __init__(self, start: hints.Point, end: hints.Point) -> None:
         self._start, self._end = start, end
 
+    __repr__ = generate_repr(__init__)
+
     @property
     def start(self) -> hints.Point:
         return self._start
