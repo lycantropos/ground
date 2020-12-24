@@ -2,7 +2,8 @@ import numbers as _numbers
 from contextvars import ContextVar
 from fractions import Fraction as _Fraction
 from functools import partial as _partial
-from typing import Tuple
+from typing import (Tuple,
+                    Type)
 
 from reprit.base import generate_repr
 
@@ -58,6 +59,9 @@ class Context:
             (_incircle.plain_context, _vector.plain_context)
             if exact
             else (_incircle.robust_context, _vector.robust_context))
+    @property
+    def point_cls(self) -> Type[Point]:
+        return self.geometries.point_cls
 
     @property
     def point_point_point_incircle_test(self) -> _QuaternaryFunction:
@@ -83,8 +87,8 @@ class Context:
                               second_start: Point,
                               second_end: Point) -> Point:
         return _linear.segments_intersection(
-                self.cross_product, self._inverse, self.geometries.point_cls,
-                first_start, first_end, second_start, second_end)
+                self.cross_product, self._inverse, self.point_cls, first_start,
+                first_end, second_start, second_end)
 
     def segments_intersections(self,
                                first_start: Point,
@@ -92,8 +96,8 @@ class Context:
                                second_start: Point,
                                second_end: Point) -> Tuple[Point, ...]:
         return _linear.segments_intersections(
-                self.cross_product, self._inverse, self.geometries.point_cls,
-                first_start, first_end, second_start, second_end)
+                self.cross_product, self._inverse, self.point_cls, first_start,
+                first_end, second_start, second_end)
 
     def segments_relationship(self,
                               first_start: Point,
