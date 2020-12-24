@@ -1,16 +1,14 @@
-from typing import Tuple
-
 from hypothesis import given
 
 from ground.base import (Context,
                          Kind)
-from ground.hints import Point
+from tests.hints import (PointsPair,
+                         PointsTriplet)
 from . import strategies
 
 
 @given(strategies.contexts, strategies.points_triplets)
-def test_basic(context: Context,
-               points_triplet: Tuple[Point, Point, Point]) -> None:
+def test_basic(context: Context, points_triplet: PointsTriplet) -> None:
     vertex, first_ray_point, second_ray_point = points_triplet
 
     result = context.kind(vertex, first_ray_point, second_ray_point)
@@ -19,8 +17,7 @@ def test_basic(context: Context,
 
 
 @given(strategies.contexts, strategies.points_pairs)
-def test_same_endpoints(context: Context,
-                        points_pair: Tuple[Point, Point]) -> None:
+def test_same_endpoints(context: Context, points_pair: PointsPair) -> None:
     start, end = points_pair
 
     assert context.kind(end, start, start) is (Kind.RIGHT
@@ -30,8 +27,7 @@ def test_same_endpoints(context: Context,
 
 @given(strategies.contexts, strategies.points_triplets)
 def test_endpoints_permutations(context: Context,
-                                points_triplet: Tuple[Point, Point, Point]
-                                ) -> None:
+                                points_triplet: PointsTriplet) -> None:
     vertex, first_ray_point, second_ray_point = points_triplet
 
     result = context.kind(vertex, first_ray_point, second_ray_point)

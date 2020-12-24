@@ -1,12 +1,12 @@
 from itertools import (permutations,
                        product)
-from typing import Tuple
 
 from hypothesis import given
 
 from ground.base import (Context,
                          Orientation)
-from ground.hints import Point
+from tests.hints import (PointsPair,
+                         PointsTriplet)
 from tests.utils import (is_even_permutation,
                          permute)
 from . import strategies
@@ -14,7 +14,7 @@ from . import strategies
 
 @given(strategies.contexts, strategies.points_triplets)
 def test_basic(context: Context,
-               points_triplet: Tuple[Point, Point, Point]) -> None:
+               points_triplet: PointsTriplet) -> None:
     vertex, first_ray_point, second_ray_point = points_triplet
 
     result = context.orientation(vertex, first_ray_point, second_ray_point)
@@ -24,7 +24,7 @@ def test_basic(context: Context,
 
 @given(strategies.contexts, strategies.points_pairs)
 def test_same_endpoints(context: Context,
-                        points_pair: Tuple[Point, Point]) -> None:
+                        points_pair: PointsPair) -> None:
     assert all((context.orientation(vertex, first_ray_point, second_ray_point)
                 is Orientation.COLLINEAR)
                for vertex, first_ray_point, second_ray_point
@@ -34,7 +34,7 @@ def test_same_endpoints(context: Context,
 
 @given(strategies.contexts, strategies.points_triplets)
 def test_permutations(context: Context,
-                      points_triplet: Tuple[Point, Point, Point]) -> None:
+                      points_triplet: PointsTriplet) -> None:
     vertex, first_ray_point, second_ray_point = points_triplet
 
     result = context.orientation(vertex, first_ray_point, second_ray_point)
