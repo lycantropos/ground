@@ -63,8 +63,10 @@ def test_connection_with_segments_relationship(
     relationship = context.segments_relationship(first_start, first_end,
                                                  second_start, second_end)
     assert (len(result)
-            == (0 if relationship is SegmentsRelationship.NONE
-                else (2 if relationship is SegmentsRelationship.OVERLAP
+            == (0
+                if relationship is SegmentsRelationship.NONE
+                else (2
+                      if relationship is SegmentsRelationship.OVERLAP
                       else 1)))
 
 
