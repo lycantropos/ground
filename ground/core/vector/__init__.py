@@ -1,13 +1,13 @@
-from reprit.base import generate_repr as _generate_repr
+from reprit.base import generate_repr
 
-from ground import hints as _hints
 from ground.core.hints import QuaternaryPointFunction
-from .plain import (cross as _plain_cross,
-                    dot as _plain_dot)
-from .robust import (cross as _robust_cross,
-                     dot as _robust_dot)
+from ground.hints import Coordinate
+from .plain import (cross as plain_cross,
+                    dot as plain_dot)
+from .robust import (cross as robust_cross,
+                     dot as robust_dot)
 
-QuaternaryFunction = QuaternaryPointFunction[_hints.Coordinate]
+QuaternaryFunction = QuaternaryPointFunction[Coordinate]
 
 
 class Context:
@@ -18,7 +18,7 @@ class Context:
                  dot_product: QuaternaryFunction) -> None:
         self._cross_product, self._dot_product = cross_product, dot_product
 
-    __repr__ = _generate_repr(__init__)
+    __repr__ = generate_repr(__init__)
 
     @property
     def cross_product(self) -> QuaternaryFunction:
@@ -29,7 +29,7 @@ class Context:
         return self._dot_product
 
 
-plain_context = Context(cross_product=_plain_cross.multiply,
-                        dot_product=_plain_dot.multiply)
-robust_context = Context(cross_product=_robust_cross.multiply,
-                         dot_product=_robust_dot.multiply)
+plain_context = Context(cross_product=plain_cross.multiply,
+                        dot_product=plain_dot.multiply)
+robust_context = Context(cross_product=robust_cross.multiply,
+                         dot_product=robust_dot.multiply)
