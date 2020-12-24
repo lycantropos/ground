@@ -137,8 +137,8 @@ class Context:
                     vertex: _hints.Point,
                     first_ray_point: _hints.Point,
                     second_ray_point: _hints.Point) -> Orientation:
-        return _angular.orientation(self.cross_product, vertex, first_ray_point,
-                                    second_ray_point)
+        return _angular.orientation(self.cross_product, vertex,
+                                    first_ray_point, second_ray_point)
 
     def segment_contains_point(self,
                                start: _hints.Point,
