@@ -17,7 +17,6 @@ from .core import (angular as _angular,
                    vector as _vector)
 from .core.hints import QuaternaryPointFunction as _QuaternaryPointFunction
 from .core.utils import robust_inverse as _robust_inverse
-from .hints import Point
 
 _QuaternaryFunction = _QuaternaryPointFunction[_hints.Coordinate]
 Kind = _enums.Kind
@@ -60,7 +59,7 @@ class Context:
             if exact
             else (_incircle.robust_context, _vector.robust_context))
     @property
-    def point_cls(self) -> Type[Point]:
+    def point_cls(self) -> Type[_hints.Point]:
         return self.geometries.point_cls
 
     @property
@@ -68,42 +67,43 @@ class Context:
         return self._incircle.point_point_point_test
 
     def kind(self,
-             vertex: Point,
-             first_ray_point: Point,
-             second_ray_point: Point) -> Kind:
+             vertex: _hints.Point,
+             first_ray_point: _hints.Point,
+             second_ray_point: _hints.Point) -> Kind:
         return _angular.kind(self.dot_product, vertex, first_ray_point,
                              second_ray_point)
 
     def orientation(self,
-                    vertex: Point,
-                    first_ray_point: Point,
-                    second_ray_point: Point) -> Orientation:
+                    vertex: _hints.Point,
+                    first_ray_point: _hints.Point,
+                    second_ray_point: _hints.Point) -> Orientation:
         return _angular.orientation(self.dot_product, vertex, first_ray_point,
                                     second_ray_point)
 
     def segments_intersection(self,
-                              first_start: Point,
-                              first_end: Point,
-                              second_start: Point,
-                              second_end: Point) -> Point:
+                              first_start: _hints.Point,
+                              first_end: _hints.Point,
+                              second_start: _hints.Point,
+                              second_end: _hints.Point) -> _hints.Point:
         return _linear.segments_intersection(
                 self.cross_product, self._inverse, self.point_cls, first_start,
                 first_end, second_start, second_end)
 
     def segments_intersections(self,
-                               first_start: Point,
-                               first_end: Point,
-                               second_start: Point,
-                               second_end: Point) -> Tuple[Point, ...]:
+                               first_start: _hints.Point,
+                               first_end: _hints.Point,
+                               second_start: _hints.Point,
+                               second_end: _hints.Point
+                               ) -> Tuple[_hints.Point, ...]:
         return _linear.segments_intersections(
                 self.cross_product, self._inverse, self.point_cls, first_start,
                 first_end, second_start, second_end)
 
     def segments_relationship(self,
-                              first_start: Point,
-                              first_end: Point,
-                              second_start: Point,
-                              second_end: Point) -> SegmentsRelationship:
+                              first_start: _hints.Point,
+                              first_end: _hints.Point,
+                              second_start: _hints.Point,
+                              second_end: _hints.Point) -> SegmentsRelationship:
         return _linear.segments_relationship(self.cross_product, first_start,
                                              first_end, second_start,
                                              second_end)
