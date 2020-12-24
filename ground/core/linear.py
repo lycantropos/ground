@@ -161,11 +161,6 @@ def segments_relationship(cross_product: QuaternaryPointFunction,
 def _bounding_box_contains(start: Point, end: Point, point: Point) -> bool:
     start_x, start_y = start.x, start.y
     end_x, end_y = end.x, end.y
-    left_x, right_x = ((start_x, end_x)
-                       if start_x < end_x
-                       else (end_x, start_x))
-    bottom_y, top_y = ((start_y, end_y)
-                       if start_y < end_y
-                       else (end_y, start_y))
-    point_x, point_y = point
-    return left_x <= point_x <= right_x and bottom_y <= point_y <= top_y
+    x_min, x_max = (start_x, end_x) if start_x < end_x else (end_x, start_x)
+    y_min, y_max = (start_y, end_y) if start_y < end_y else (end_y, start_y)
+    return x_min <= point.x <= x_max and y_min <= point.y <= y_max
