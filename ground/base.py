@@ -5,11 +5,9 @@ from functools import partial as _partial
 from typing import (Tuple,
                     Type)
 
-from reprit import seekers
 from reprit.base import generate_repr
 
-from . import (hints as _hints,
-               models as _models)
+from . import hints as _hints
 from .core import (angular as _angular,
                    centroidal as _centroidal,
                    enums as _enums,
@@ -27,16 +25,41 @@ SegmentsRelationship = _enums.SegmentsRelationship
 
 
 class Context:
-    __slots__ = ('_centroidal', '_incircle', '_inverse', '_models',
-                 '_vector')
+    __slots__ = ('_centroidal', '_contour_cls', '_coordinate_cls',
+                 '_incircle', '_inverse', '_multicontour_cls',
+                 '_multipoint_cls', '_multipolygon_cls', '_multisegment_cls',
+                 '_point_cls', '_polygon_cls', '_segment_cls', '_vector')
 
-    def __init__(self, models: _models.Context) -> None:
-        self._models = models
-        exact = issubclass(models.coordinate_cls, _numbers.Rational)
+    def __init__(self,
+                 *,
+                 contour_cls: Type[_hints.Contour] = _geometries.Contour,
+                 coordinate_cls: Type[_hints.Coordinate] = _numbers.Real,
+                 multicontour_cls: Type[_hints.Multicontour]
+                 = _geometries.Multicontour,
+                 multipoint_cls: Type[_hints.Multipoint]
+                 = _geometries.Multipoint,
+                 multipolygon_cls: Type[_hints.Multipolygon]
+                 = _geometries.Multipolygon,
+                 multisegment_cls: Type[_hints.Multisegment]
+                 = _geometries.Multisegment,
+                 point_cls: Type[_hints.Point] = _geometries.Point,
+                 polygon_cls: Type[_hints.Polygon] = _geometries.Polygon,
+                 segment_cls: Type[_hints.Segment] = _geometries.Segment
+                 ) -> None:
+        self._contour_cls = contour_cls
+        self._coordinate_cls = coordinate_cls
+        self._multicontour_cls = multicontour_cls
+        self._multipoint_cls = multipoint_cls
+        self._multipolygon_cls = multipolygon_cls
+        self._multisegment_cls = multisegment_cls
+        self._point_cls = point_cls
+        self._polygon_cls = polygon_cls
+        self._segment_cls = segment_cls
+        exact = issubclass(coordinate_cls, _numbers.Rational)
         self._inverse = (_partial(_Fraction, 1)
                          if exact
                          else (1..__truediv__
-                               if issubclass(models.coordinate_cls, float)
+                               if issubclass(coordinate_cls, float)
                                else _robust_inverse))
         self._centroidal, self._incircle, self._vector = (
             (_centroidal.plain_context, _incircle.plain_context,
@@ -45,17 +68,15 @@ class Context:
             else (_centroidal.robust_context, _incircle.robust_context,
                   _vector.robust_context))
 
-    __repr__ = generate_repr(__init__,
-                             field_seeker=seekers.complex_,
-                             with_module_name=True)
+    __repr__ = generate_repr(__init__)
 
     @property
     def contour_cls(self) -> Type[_hints.Contour]:
-        return self._models.contour_cls
+        return self._contour_cls
 
     @property
     def coordinate_cls(self) -> Type[_hints.Coordinate]:
-        return self._models.coordinate_cls
+        return self._coordinate_cls
 
     @property
     def cross_product(self) -> _QuaternaryFunction:
@@ -66,12 +87,36 @@ class Context:
         return self._vector.dot_product
 
     @property
+    def multicontour_cls(self) -> Type[_hints.Multicontour]:
+        return self._multicontour_cls
+
+    @property
+    def multipoint_cls(self) -> Type[_hints.Multipoint]:
+        return self._multipoint_cls
+
+    @property
+    def multipolygon_cls(self) -> Type[_hints.Multipolygon]:
+        return self._multipolygon_cls
+
+    @property
+    def multisegment_cls(self) -> Type[_hints.Multisegment]:
+        return self._multisegment_cls
+
+    @property
     def point_cls(self) -> Type[_hints.Point]:
-        return self._models.point_cls
+        return self._point_cls
 
     @property
     def point_point_point_incircle_test(self) -> _QuaternaryFunction:
         return self._incircle.point_point_point_test
+
+    @property
+    def polygon_cls(self) -> Type[_hints.Polygon]:
+        return self._polygon_cls
+
+    @property
+    def segment_cls(self) -> Type[_hints.Segment]:
+        return self._segment_cls
 
     def contour_centroid(self, contour: _hints.Contour) -> _hints.Point:
         return self._centroidal.contour_centroid(self._inverse, self.point_cls,
@@ -125,16 +170,7 @@ class Context:
 
 
 _context = ContextVar('context',
-                      default=Context(_models.Context(
-                              contour_cls=_geometries.Contour,
-                              coordinate_cls=_numbers.Real,
-                              multicontour_cls=_geometries.Multicontour,
-                              multipoint_cls=_geometries.Multipoint,
-                              multipolygon_cls=_geometries.Multipolygon,
-                              multisegment_cls=_geometries.Multisegment,
-                              point_cls=_geometries.Point,
-                              polygon_cls=_geometries.Polygon,
-                              segment_cls=_geometries.Segment)))
+                      default=Context())
 
 
 def get_context() -> Context:
