@@ -50,8 +50,8 @@ class Context:
             else (_incircle.robust_context, _vector.robust_context))
 
     @property
-    def point_point_point_incircle_determinant(self) -> _QuaternaryFunction:
-        return self._incircle.point_point_point_determinant
+    def point_point_point_incircle_test(self) -> _QuaternaryFunction:
+        return self._incircle.point_point_point_test
 
     def kind(self,
              vertex: Point,
