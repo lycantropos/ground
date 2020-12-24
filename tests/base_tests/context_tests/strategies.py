@@ -11,6 +11,7 @@ from tests.hints import Strategy
 from tests.strategies.coordinates import coordinates_types_with_strategies
 from tests.strategies.geometries import coordinates_to_points
 from tests.utils import (to_pairs,
+                         to_quadruplets,
                          to_triplets)
 
 contexts = strategies.builds(get_context)
@@ -29,3 +30,4 @@ set_coordinates_strategies = (coordinates_types_with_strategies
 points_strategies = set_coordinates_strategies.map(coordinates_to_points)
 points_pairs = points_strategies.flatmap(to_pairs)
 points_triplets = points_strategies.flatmap(to_triplets)
+points_quadruplets = points_strategies.flatmap(to_quadruplets)
