@@ -33,6 +33,10 @@ class Context:
     __repr__ = generate_repr(__init__)
 
     @property
+    def coordinate_cls(self) -> Type[_hints.Coordinate]:
+        return self.geometries.coordinate_cls
+
+    @property
     def cross_product(self) -> _QuaternaryFunction:
         return self._vector.cross_product
 
