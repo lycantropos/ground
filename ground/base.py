@@ -10,6 +10,7 @@ from reprit.base import generate_repr
 from ground import geometrical as _geometrical
 from . import hints as _hints
 from .core import (angular as _angular,
+                   centroidal as _centroidal,
                    enums as _enums,
                    geometries as _geometries,
                    incircle as _incircle,
@@ -25,7 +26,8 @@ SegmentsRelationship = _enums.SegmentsRelationship
 
 
 class Context:
-    __slots__ = '_geometries', '_incircle', '_inverse', '_vector'
+    __slots__ = ('_centroidal', '_geometries', '_incircle', '_inverse',
+                 '_vector')
 
     def __init__(self, geometries: _geometrical.Context) -> None:
         self.geometries = geometries
@@ -51,17 +53,19 @@ class Context:
     @geometries.setter
     def geometries(self, value: _geometrical.Context) -> None:
         self._geometries = value
-        exact = issubclass(self._geometries.coordinate_cls, _numbers.Rational)
+        exact = issubclass(value.coordinate_cls, _numbers.Rational)
         self._inverse = (_partial(_Fraction, 1)
                          if exact
                          else (1..__truediv__
-                               if issubclass(self._geometries.coordinate_cls,
-                                             float)
+                               if issubclass(value.coordinate_cls, float)
                                else _robust_inverse))
-        self._incircle, self._vector = (
-            (_incircle.plain_context, _vector.plain_context)
+        self._centroidal, self._incircle, self._vector = (
+            (_centroidal.plain_context, _incircle.plain_context,
+             _vector.plain_context)
             if exact
-            else (_incircle.robust_context, _vector.robust_context))
+            else (_centroidal.robust_context, _incircle.robust_context,
+                  _vector.robust_context))
+
     @property
     def point_cls(self) -> Type[_hints.Point]:
         return self.geometries.point_cls
@@ -70,12 +74,20 @@ class Context:
     def point_point_point_incircle_test(self) -> _QuaternaryFunction:
         return self._incircle.point_point_point_test
 
+    def contour_centroid(self, contour: _hints.Contour) -> _hints.Point:
+        return self._centroidal.contour_centroid(self._inverse, self.point_cls,
+                                                 contour)
+
     def kind(self,
              vertex: _hints.Point,
              first_ray_point: _hints.Point,
              second_ray_point: _hints.Point) -> Kind:
         return _angular.kind(self.dot_product, vertex, first_ray_point,
                              second_ray_point)
+
+    def multipoint_centroid(self,
+                            multipoint: _hints.Multipoint) -> _hints.Point:
+        return self._centroidal.multipoint_centroid(self.point_cls, multipoint)
 
     def orientation(self,
                     vertex: _hints.Point,

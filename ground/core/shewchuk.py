@@ -155,6 +155,21 @@ def square(value: Coordinate) -> Tuple[Coordinate, Coordinate]:
     return tail, head
 
 
+def add_to_expansion(expansion: Expansion, value: Coordinate) -> Expansion:
+    """
+    Adds given value to the expansion with zero components elimination.
+    """
+    result = []
+    accumulator = value
+    for index, component in enumerate(expansion):
+        tail, accumulator = two_sum(accumulator, component)
+        if tail:
+            result.append(tail)
+    if accumulator or not result:
+        result.append(accumulator)
+    return result
+
+
 def sum_expansions(left: Expansion, right: Expansion) -> Expansion:
     """
     Sums two expansions with zero components elimination.
