@@ -67,15 +67,12 @@ def _adjusted_determinant(first_x: Coordinate,
     first_dx_head, first_dy_head = first_x - fourth_x, first_y - fourth_y
     second_dx_head, second_dy_head = second_x - fourth_x, second_y - fourth_y
     third_dx_head, third_dy_head = third_x - fourth_x, third_y - fourth_y
-    second_third_cross_product = to_cross_product(second_dx_head,
-                                                  third_dy_head, third_dx_head,
-                                                  second_dy_head)
-    third_first_cross_product = to_cross_product(third_dx_head, first_dy_head,
-                                                 first_dx_head, third_dy_head)
-    first_second_cross_product = to_cross_product(first_dx_head,
-                                                  second_dy_head,
-                                                  second_dx_head,
-                                                  first_dy_head)
+    first_second_cross_product = to_cross_product(
+            first_dx_head, first_dy_head, second_dx_head, second_dy_head)
+    second_third_cross_product = to_cross_product(
+            second_dx_head, second_dy_head, third_dx_head, third_dy_head)
+    third_first_cross_product = to_cross_product(third_dx_head, third_dy_head,
+                                                 first_dx_head, first_dy_head)
     result_expansion = sum_expansions(
             sum_expansions(
                     _multiply_by_squared_length(second_third_cross_product,

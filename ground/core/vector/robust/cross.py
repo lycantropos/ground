@@ -1,11 +1,11 @@
-from ground.hints import (Coordinate,
-                          Point)
-from . import bounds
 from ground.core.shewchuk import (sum_expansions,
                                   to_cross_product,
                                   two_diff_tail,
                                   two_mul,
                                   two_two_sub)
+from ground.hints import (Coordinate,
+                          Point)
+from . import bounds
 
 
 def multiply(first_start: Point,
@@ -79,12 +79,12 @@ def _adjusted_signed_area(first_start_x: Coordinate,
     if result >= error_bound or -result >= error_bound:
         return result
     result_expansion = sum_expansions(
-            result_expansion, to_cross_product(first_dx_tail, second_dy_head,
-                                               second_dx_head, first_dy_tail))
+            result_expansion, to_cross_product(first_dx_tail, first_dy_tail,
+                                               second_dx_head, second_dy_head))
     result_expansion = sum_expansions(
-            result_expansion, to_cross_product(first_dx_head, second_dy_tail,
-                                               second_dx_tail, first_dy_head))
+            result_expansion, to_cross_product(first_dx_head, first_dy_head,
+                                               second_dx_tail, second_dy_tail))
     result_expansion = sum_expansions(
-            result_expansion, to_cross_product(first_dx_tail, second_dy_tail,
-                                               second_dx_tail, first_dy_tail))
+            result_expansion, to_cross_product(first_dx_tail, first_dy_tail,
+                                               second_dx_tail, second_dy_tail))
     return result_expansion[-1]

@@ -233,28 +233,24 @@ def scale_expansion(expansion: Expansion, scalar: Coordinate) -> Expansion:
     return result
 
 
-def to_cross_product(minuend_multiplier_x: Coordinate,
-                     minuend_multiplier_y: Coordinate,
-                     subtrahend_multiplier_x: Coordinate,
-                     subtrahend_multiplier_y: Coordinate) -> Expansion:
+def to_cross_product(first_x: Coordinate,
+                     first_y: Coordinate,
+                     second_x: Coordinate,
+                     second_y: Coordinate) -> Expansion:
     """
     Returns expansion of vectors' cross product.
     """
-    minuend_tail, minuend_head = two_mul(minuend_multiplier_x,
-                                         minuend_multiplier_y)
-    subtrahend_tail, subtrahend_head = two_mul(subtrahend_multiplier_x,
-                                               subtrahend_multiplier_y)
+    minuend_tail, minuend_head = two_mul(first_x, second_y)
+    subtrahend_tail, subtrahend_head = two_mul(second_x, first_y)
     return two_two_sub(minuend_tail, minuend_head, subtrahend_tail,
                        subtrahend_head)
 
 
-def to_dot_product(first_multiplier_x: Coordinate,
-                   second_multiplier_x: Coordinate,
-                   first_multiplier_y: Coordinate,
-                   second_multiplier_y: Coordinate) -> Expansion:
+def to_dot_product(first_x: Coordinate, first_y: Coordinate,
+                   second_x: Coordinate, second_y: Coordinate) -> Expansion:
     """
     Returns expansion of vectors' dot product.
     """
-    x_tail, x_head = two_mul(first_multiplier_x, second_multiplier_x)
-    y_tail, y_head = two_mul(first_multiplier_y, second_multiplier_y)
+    x_tail, x_head = two_mul(first_x, second_x)
+    y_tail, y_head = two_mul(first_y, second_y)
     return two_two_sum(x_tail, x_head, y_tail, y_head)
