@@ -1,5 +1,7 @@
 import numbers as _numbers
 from contextvars import ContextVar
+from fractions import Fraction as _Fraction
+from functools import partial as _partial
 from typing import Tuple
 
 from reprit.base import generate_repr
@@ -13,6 +15,7 @@ from .core import (angular as _angular,
                    linear as _linear,
                    vector as _vector)
 from .core.hints import QuaternaryPointFunction as _QuaternaryPointFunction
+from .core.utils import robust_inverse as _robust_inverse
 from .hints import Point
 
 _QuaternaryFunction = _QuaternaryPointFunction[_hints.Coordinate]
@@ -22,7 +25,7 @@ SegmentsRelationship = _enums.SegmentsRelationship
 
 
 class Context:
-    __slots__ = '_geometries', '_incircle', '_vector'
+    __slots__ = '_geometries', '_incircle', '_inverse', '_vector'
 
     def __init__(self, geometries: _geometrical.Context) -> None:
         self.geometries = geometries
@@ -44,9 +47,16 @@ class Context:
     @geometries.setter
     def geometries(self, value: _geometrical.Context) -> None:
         self._geometries = value
+        exact = issubclass(self._geometries.coordinate_cls, _numbers.Rational)
+        self._inverse = (_partial(_Fraction, 1)
+                         if exact
+                         else (1..__truediv__
+                               if issubclass(self._geometries.coordinate_cls,
+                                             float)
+                               else _robust_inverse))
         self._incircle, self._vector = (
             (_incircle.plain_context, _vector.plain_context)
-            if issubclass(self._geometries.coordinate_cls, _numbers.Rational)
+            if exact
             else (_incircle.robust_context, _vector.robust_context))
 
     @property
@@ -73,8 +83,8 @@ class Context:
                               second_start: Point,
                               second_end: Point) -> Point:
         return _linear.segments_intersection(
-                self.cross_product, self.geometries.point_cls, first_start,
-                first_end, second_start, second_end)
+                self.cross_product, self._inverse, self.geometries.point_cls,
+                first_start, first_end, second_start, second_end)
 
     def segments_intersections(self,
                                first_start: Point,
@@ -82,8 +92,8 @@ class Context:
                                second_start: Point,
                                second_end: Point) -> Tuple[Point, ...]:
         return _linear.segments_intersections(
-                self.cross_product, self.geometries.point_cls, first_start,
-                first_end, second_start, second_end)
+                self.cross_product, self._inverse, self.geometries.point_cls,
+                first_start, first_end, second_start, second_end)
 
     def segments_relationship(self,
                               first_start: Point,

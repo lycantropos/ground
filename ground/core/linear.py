@@ -1,7 +1,9 @@
-from typing import (Tuple,
+from typing import (Callable,
+                    Tuple,
                     Type)
 
-from ground.hints import Point
+from ground.hints import (Coordinate,
+                          Point)
 from .enums import SegmentsRelationship
 from .hints import QuaternaryPointFunction
 
@@ -16,6 +18,7 @@ def segment_contains_point(cross_product: QuaternaryPointFunction,
 
 
 def segments_intersection(cross_product: QuaternaryPointFunction,
+                          inverse: Callable[[Coordinate], Coordinate],
                           point_cls: Type[Point],
                           first_start: Point,
                           first_end: Point,
@@ -50,26 +53,27 @@ def segments_intersection(cross_product: QuaternaryPointFunction,
                            * second_base_numerator)
         delta_x, delta_y = (abs(second_x_addend) - abs(first_x_addend),
                             abs(second_y_addend) - abs(first_y_addend))
-        denominator = cross_product(first_start, first_end, second_start,
-                                    second_end)
+        inverted_denominator = inverse(cross_product(first_start, first_end,
+                                                     second_start, second_end))
         return point_cls(
-                first_start_x + first_x_addend / denominator
+                first_start_x + first_x_addend * inverted_denominator
                 if 0 < delta_x
-                else (second_start_x + second_x_addend / denominator
+                else (second_start_x + second_x_addend * inverted_denominator
                       if delta_x < 0
                       else (first_start_x + second_start_x
                             + (first_x_addend + second_x_addend)
-                            / denominator) / 2),
-                first_start_y + first_y_addend / denominator
+                            * inverted_denominator) / 2),
+                first_start_y + first_y_addend * inverted_denominator
                 if 0 < delta_y
-                else (second_start_y + second_y_addend / denominator
+                else (second_start_y + second_y_addend * inverted_denominator
                       if delta_y < 0
                       else (first_start_y + second_start_y
                             + (first_y_addend + second_y_addend)
-                            / denominator) / 2))
+                            * inverted_denominator) / 2))
 
 
 def segments_intersections(cross_product: QuaternaryPointFunction,
+                           inverse: Callable[[Coordinate], Coordinate],
                            point_cls: Type[Point],
                            first_start: Point,
                            first_end: Point,
@@ -91,8 +95,9 @@ def segments_intersections(cross_product: QuaternaryPointFunction,
                 if first_end < second_end
                 else second_end)
     else:
-        return segments_intersection(cross_product, point_cls, first_start,
-                                     first_end, second_start, second_end),
+        return segments_intersection(cross_product, inverse, point_cls,
+                                     first_start, first_end, second_start,
+                                     second_end),
 
 
 def segments_relationship(cross_product: QuaternaryPointFunction,
