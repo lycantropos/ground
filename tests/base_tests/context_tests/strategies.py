@@ -13,7 +13,8 @@ from tests.hints import (PointsPair,
 from tests.strategies.coordinates import (
     coordinates_types_with_strategies,
     rational_coordinates_types_with_strategies)
-from tests.strategies.geometries import (coordinates_to_multipoints,
+from tests.strategies.geometries import (coordinates_to_contours,
+                                         coordinates_to_multipoints,
                                          coordinates_to_points)
 from tests.utils import (combine,
                          compose,
@@ -80,4 +81,11 @@ contexts_with_multipoints = (contexts_with_coordinates_strategies
 contexts_with_rational_multipoints = (
     (contexts_with_rational_coordinates_strategies
      .map(combine(identity, coordinates_to_multipoints))
+     .flatmap(pack(strategies.tuples))))
+contexts_with_contours = (contexts_with_coordinates_strategies
+                          .map(combine(identity, coordinates_to_contours))
+                          .flatmap(pack(strategies.tuples)))
+contexts_with_rational_contours = (
+    (contexts_with_rational_coordinates_strategies
+     .map(combine(identity, coordinates_to_contours))
      .flatmap(pack(strategies.tuples))))

@@ -14,6 +14,7 @@ from .hints import (Domain,
                     Strategy)
 
 context = get_context()
+Contour = context.contour_cls
 Multipoint = context.multipoint_cls
 Point = context.point_cls
 to_sign = to_sign
@@ -83,6 +84,12 @@ def permute_multipoint(multipoint: Multipoint,
 
 def reverse_point_coordinates(point: Point) -> Point:
     return Point(point.y, point.x)
+
+
+def rotate_contour(contour: Contour, offset: int) -> Contour:
+    return (Contour(contour.vertices[offset:] + contour.vertices[:offset])
+            if offset
+            else contour)
 
 
 def to_pairs(strategy: Strategy[Domain]) -> Strategy[Tuple[Domain, Domain]]:
