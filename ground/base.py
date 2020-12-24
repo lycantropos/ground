@@ -47,6 +47,10 @@ class Context:
     __repr__ = generate_repr(__init__)
 
     @property
+    def contour_cls(self) -> Type[_hints.Contour]:
+        return self.geometries.contour_cls
+
+    @property
     def coordinate_cls(self) -> Type[_hints.Coordinate]:
         return self.geometries.coordinate_cls
 
