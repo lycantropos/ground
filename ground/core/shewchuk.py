@@ -157,7 +157,7 @@ def square(value: Coordinate) -> Tuple[Coordinate, Coordinate]:
 
 def sum_expansions(left: Expansion, right: Expansion) -> Expansion:
     """
-    Sums two expansions with zero expansion elimination.
+    Sums two expansions with zero components elimination.
     """
     left_length, right_length = len(left), len(right)
     left_component, right_component = left[0], right[0]
@@ -210,7 +210,7 @@ def sum_expansions(left: Expansion, right: Expansion) -> Expansion:
 
 def scale_expansion(expansion: Expansion, scalar: Coordinate) -> Expansion:
     """
-    Multiplies an expansion by a scalar with zero expansion elimination.
+    Multiplies an expansion by a scalar with zero components elimination.
     """
     components = iter(expansion)
     scalar_low, scalar_high = split(scalar)
