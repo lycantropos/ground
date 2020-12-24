@@ -20,16 +20,16 @@ def multiply(first_start: Point,
     subtrahend = ((first_end_y - first_start_y)
                   * (second_end_x - second_start_x))
     result = minuend - subtrahend
-    if minuend > 0:
-        if subtrahend <= 0:
-            return result
-        else:
+    if 0 < minuend:
+        if 0 < subtrahend:
             upper_bound = minuend + subtrahend
-    elif minuend < 0:
-        if subtrahend >= 0:
-            return result
         else:
+            return result
+    elif minuend < 0:
+        if subtrahend < 0:
             upper_bound = -minuend - subtrahend
+        else:
+            return result
     else:
         return result
     error_bound = bounds.to_multiply_first_error(upper_bound)
