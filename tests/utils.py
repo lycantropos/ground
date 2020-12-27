@@ -6,17 +6,21 @@ from typing import (Callable,
 
 from hypothesis import strategies
 
-from ground.base import get_context
+from ground.base import (Context,
+                         Orientation,
+                         get_context)
 from ground.core.utils import to_sign
 from .hints import (Domain,
                     Permutation,
                     Range,
                     Strategy)
 
-context = get_context()
-Contour = context.contour_cls
-Multipoint = context.multipoint_cls
-Point = context.point_cls
+MAX_SEQUENCE_SIZE = 5
+
+_context = get_context()
+Contour = _context.contour_cls
+Multipoint = _context.multipoint_cls
+Point = _context.point_cls
 to_sign = to_sign
 
 
@@ -90,6 +94,16 @@ def rotate_contour(contour: Contour, offset: int) -> Contour:
     return (Contour(contour.vertices[offset:] + contour.vertices[:offset])
             if offset
             else contour)
+
+
+def to_contour_vertices_orientation(vertices: Sequence[Point],
+                                    context: Context) -> Orientation:
+    if len(vertices) < 3:
+        return Orientation.COLLINEAR
+    index = min(range(len(vertices)),
+                key=vertices.__getitem__)
+    return context.orientation(vertices[index - 1], vertices[index],
+                               vertices[(index + 1) % len(vertices)])
 
 
 def to_pairs(strategy: Strategy[Domain]) -> Strategy[Tuple[Domain, Domain]]:

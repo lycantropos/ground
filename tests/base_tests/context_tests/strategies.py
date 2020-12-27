@@ -1,22 +1,24 @@
+from functools import partial
 from operator import add
 from typing import (Tuple,
                     Type)
 
 from hypothesis import strategies
 
-from ground.base import (Context,
-                         get_context)
+from ground.base import Context
 from ground.hints import (Coordinate,
                           Point)
 from tests.hints import (PointsPair,
                          Strategy)
 from tests.strategies.coordinates import (
+    coordinates_types,
     coordinates_types_with_strategies,
     rational_coordinates_types_with_strategies)
-from tests.strategies.geometries import (coordinates_to_contours,
+from tests.strategies.geometries import (context_with_coordinates_to_contours,
                                          coordinates_to_multipoints,
                                          coordinates_to_points)
-from tests.utils import (combine,
+from tests.utils import (MAX_SEQUENCE_SIZE,
+                         combine,
                          compose,
                          identity,
                          pack,
@@ -24,7 +26,10 @@ from tests.utils import (combine,
                          to_quadruplets,
                          to_triplets)
 
-contexts = strategies.builds(get_context)
+contexts = strategies.builds(Context,
+                             coordinate_cls=coordinates_types)
+contexts_with_empty_lists = strategies.tuples(contexts,
+                                              strategies.builds(list))
 
 
 def to_context_with_coordinates(coordinate_type_with_strategy
@@ -48,6 +53,17 @@ contexts_with_points_strategies = (contexts_with_coordinates_strategies
 contexts_with_points_pairs = (contexts_with_points_strategies
                               .map(combine(identity, to_pairs))
                               .flatmap(pack(strategies.tuples)))
+contexts_with_points_lists = (
+    (contexts_with_points_strategies
+     .map(combine(identity, partial(strategies.lists,
+                                    max_size=MAX_SEQUENCE_SIZE)))
+     .flatmap(pack(strategies.tuples))))
+contexts_with_non_empty_points_lists = (
+    (contexts_with_points_strategies
+     .map(combine(identity, partial(strategies.lists,
+                                    min_size=1,
+                                    max_size=MAX_SEQUENCE_SIZE)))
+     .flatmap(pack(strategies.tuples))))
 contexts_with_points_triplets = (contexts_with_points_strategies
                                  .map(combine(identity, to_triplets))
                                  .flatmap(pack(strategies.tuples)))
@@ -83,9 +99,9 @@ contexts_with_rational_multipoints = (
      .map(combine(identity, coordinates_to_multipoints))
      .flatmap(pack(strategies.tuples))))
 contexts_with_contours = (contexts_with_coordinates_strategies
-                          .map(combine(identity, coordinates_to_contours))
+                          .map(context_with_coordinates_to_contours)
                           .flatmap(pack(strategies.tuples)))
 contexts_with_rational_contours = (
     (contexts_with_rational_coordinates_strategies
-     .map(combine(identity, coordinates_to_contours))
+     .map(context_with_coordinates_to_contours)
      .flatmap(pack(strategies.tuples))))
