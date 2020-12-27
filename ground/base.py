@@ -1,7 +1,8 @@
 import numbers as _numbers
 from contextvars import ContextVar
 from fractions import Fraction as _Fraction
-from typing import (Tuple,
+from typing import (Sequence,
+                    Tuple,
                     Type)
 
 from reprit.base import generate_repr
@@ -9,6 +10,7 @@ from reprit.base import generate_repr
 from . import hints as _hints
 from .core import (angular as _angular,
                    centroidal as _centroidal,
+                   discrete as _discrete,
                    enums as _enums,
                    geometries as _geometries,
                    incircle as _incircle,
@@ -16,6 +18,7 @@ from .core import (angular as _angular,
                    vector as _vector)
 from .core.hints import QuaternaryPointFunction as _QuaternaryPointFunction
 from .core.utils import robust_inverse as _robust_inverse
+from .hints import Point
 
 _QuaternaryFunction = _QuaternaryPointFunction[_hints.Coordinate]
 Kind = _enums.Kind
@@ -138,6 +141,9 @@ class Context:
                     second_ray_point: _hints.Point) -> Orientation:
         return _angular.orientation(self.cross_product, vertex,
                                     first_ray_point, second_ray_point)
+
+    def points_convex_hull(self, points: Sequence[Point]) -> Sequence[Point]:
+        return _discrete.to_convex_hull(self.orientation, points)
 
     def segment_contains_point(self,
                                start: _hints.Point,
