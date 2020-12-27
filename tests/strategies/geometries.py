@@ -5,7 +5,6 @@ from hypothesis import strategies
 
 from ground.base import (Context,
                          Orientation)
-from ground.core.hints import TernaryPointFunction
 from ground.hints import Coordinate
 from tests.hints import Strategy
 from tests.utils import (MAX_SEQUENCE_SIZE,
@@ -32,23 +31,33 @@ def coordinates_to_multipoints(coordinates: Strategy[Coordinate]
             .map(Multipoint))
 
 
-def context_with_coordinates_to_contours(
-        context_with_coordinates: Tuple[Context, Strategy[Coordinate]]
-) -> Strategy[Contour]:
-    context, coordinates = context_with_coordinates
+def contexts_with_coordinates_to_contexts_with_contours(
+        contexts_with_coordinates: Tuple[Strategy[Context],
+                                         Strategy[Coordinate]]
+) -> Strategy[Tuple[Context, Contour]]:
+    contexts, coordinates = contexts_with_coordinates
 
-    def are_points_non_collinear(points: Sequence[Point],
-                                 to_orientation
-                                 : TernaryPointFunction[Orientation]
-                                 = context.orientation) -> bool:
-        return any(to_orientation(points[index - 2], points[index - 1],
-                                  points[index]) is not Orientation.COLLINEAR
-                   for index in range(len(points)))
+    def are_points_non_collinear(context_with_points_list
+                                 : Tuple[Context, Sequence[Point]]) -> bool:
+        context, points_list = context_with_points_list
+        return any(context.orientation(points_list[index - 2],
+                                       points_list[index - 1],
+                                       points_list[index])
+                   is not Orientation.COLLINEAR
+                   for index in range(len(points_list)))
 
-    return (strategies.lists(coordinates_to_points(coordinates),
+    def to_context_with_points_convex_hull(context_with_points_list
+                                           : Tuple[Context, Sequence[Point]]
+                                           ) -> Tuple[Context,
+                                                      Sequence[Point]]:
+        context, points_list = context_with_points_list
+        return context, Contour(context.points_convex_hull(points_list))
+
+    return (strategies.tuples(
+            contexts,
+            strategies.lists(coordinates_to_points(coordinates),
                              min_size=3,
                              max_size=MAX_SEQUENCE_SIZE,
-                             unique=True)
+                             unique=True))
             .filter(are_points_non_collinear)
-            .map(context.points_convex_hull)
-            .map(Contour))
+            .map(to_context_with_points_convex_hull))

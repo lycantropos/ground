@@ -14,9 +14,10 @@ from tests.strategies.coordinates import (
     coordinates_types,
     coordinates_types_with_strategies,
     rational_coordinates_types_with_strategies)
-from tests.strategies.geometries import (context_with_coordinates_to_contours,
-                                         coordinates_to_multipoints,
-                                         coordinates_to_points)
+from tests.strategies.geometries import (
+    contexts_with_coordinates_to_contexts_with_contours,
+    coordinates_to_multipoints,
+    coordinates_to_points)
 from tests.utils import (MAX_SEQUENCE_SIZE,
                          combine,
                          compose,
@@ -98,10 +99,9 @@ contexts_with_rational_multipoints = (
     (contexts_with_rational_coordinates_strategies
      .map(combine(identity, coordinates_to_multipoints))
      .flatmap(pack(strategies.tuples))))
-contexts_with_contours = (contexts_with_coordinates_strategies
-                          .map(context_with_coordinates_to_contours)
-                          .flatmap(pack(strategies.tuples)))
+contexts_with_contours = (
+    (contexts_with_coordinates_strategies
+     .flatmap(contexts_with_coordinates_to_contexts_with_contours)))
 contexts_with_rational_contours = (
     (contexts_with_rational_coordinates_strategies
-     .map(context_with_coordinates_to_contours)
-     .flatmap(pack(strategies.tuples))))
+     .flatmap(contexts_with_coordinates_to_contexts_with_contours)))
