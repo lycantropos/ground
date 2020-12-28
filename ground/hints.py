@@ -117,6 +117,10 @@ class Segment(Protocol[Coordinate]):
     def __new__(cls, start: Point, end: Point) -> 'Segment':
         """Constructs segment given its endpoints."""
 
+    @abstractmethod
+    def __eq__(self, other: 'Segment') -> bool:
+        """Checks if the segment is equal to the other."""
+
     @property
     @abstractmethod
     def start(self) -> Point:
