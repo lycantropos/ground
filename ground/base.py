@@ -18,7 +18,6 @@ from .core import (angular as _angular,
                    linear as _linear,
                    vector as _vector)
 from .core.hints import QuaternaryPointFunction as _QuaternaryPointFunction
-from .core.utils import robust_inverse as _robust_inverse
 from .hints import Point
 
 _QuaternaryFunction = _QuaternaryPointFunction[_hints.Coordinate]
@@ -60,16 +59,13 @@ class Context:
         self._point_cls = point_cls
         self._polygon_cls = polygon_cls
         self._segment_cls = segment_cls
-        exact = issubclass(coordinate_cls, _numbers.Rational)
-        self._inverse = (_Fraction(1).__truediv__
-                         if exact
-                         else (1..__truediv__
-                               if issubclass(coordinate_cls, float)
-                               else _robust_inverse))
+        self._inverse = (1.
+                         if issubclass(coordinate_cls, float)
+                         else _Fraction(1)).__truediv__
         self._centroidal, self._incircle, self._vector = (
             (_centroidal.plain_context, _incircle.plain_context,
              _vector.plain_context)
-            if exact
+            if issubclass(coordinate_cls, _numbers.Rational)
             else (_centroidal.robust_context, _incircle.robust_context,
                   _vector.robust_context))
 
