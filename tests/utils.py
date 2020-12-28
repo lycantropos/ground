@@ -9,7 +9,7 @@ from hypothesis import strategies
 from ground.base import (Context,
                          Orientation,
                          get_context)
-from ground.core.utils import to_sign
+from ground.core.angular import to_sign
 from .hints import (Domain,
                     Permutation,
                     Range,

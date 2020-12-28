@@ -1,8 +1,8 @@
-from ground.hints import Point
+from ground.hints import (Coordinate,
+                          Point)
 from .enums import (Kind,
                     Orientation)
 from .hints import QuaternaryPointFunction
-from .utils import to_sign
 
 
 def kind(dot_producer: QuaternaryPointFunction,
@@ -19,3 +19,7 @@ def orientation(cross_producer: QuaternaryPointFunction,
                 second_ray_point: Point) -> Orientation:
     return Orientation(to_sign(cross_producer(vertex, first_ray_point, vertex,
                                               second_ray_point)))
+
+
+def to_sign(value: Coordinate) -> int:
+    return (1 if value > 0 else -1) if value else 0
