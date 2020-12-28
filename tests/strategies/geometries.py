@@ -1,3 +1,4 @@
+from operator import add
 from typing import (Sequence,
                     Tuple)
 
@@ -8,10 +9,24 @@ from ground.base import (Context,
 from ground.hints import Coordinate
 from tests.hints import Strategy
 from tests.utils import (MAX_SEQUENCE_SIZE,
+                         Box,
                          Contour,
                          Multipoint,
-                         Point)
+                         Point,
+                         pack,
+                         to_pairs)
 from .coordinates import coordinates_strategies
+
+
+def coordinates_to_boxes(coordinates: Strategy[Coordinate]
+                         ) -> Strategy[Box]:
+    return (to_pairs(strategies.lists(coordinates,
+                                      unique=True,
+                                      min_size=2,
+                                      max_size=2)
+                     .map(sorted))
+            .map(pack(add))
+            .map(pack(Box)))
 
 
 def coordinates_to_points(coordinates: Strategy[Coordinate]

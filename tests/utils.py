@@ -18,6 +18,7 @@ from .hints import (Domain,
 MAX_SEQUENCE_SIZE = 5
 
 _context = get_context()
+Box = _context.box_cls
 Contour = _context.contour_cls
 Multipoint = _context.multipoint_cls
 Point = _context.point_cls
@@ -55,6 +56,9 @@ def equivalence(left: bool, right: bool) -> bool:
 
 def identity(value: Domain) -> Domain:
     return value
+
+
+is_box = Box.__instancecheck__
 
 
 def is_even_permutation(permutation: Permutation) -> bool:

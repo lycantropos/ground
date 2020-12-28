@@ -16,6 +16,7 @@ from tests.strategies.coordinates import (
     rational_coordinates_types_with_strategies)
 from tests.strategies.geometries import (
     contexts_with_coordinates_to_contexts_with_contours,
+    coordinates_to_boxes,
     coordinates_to_multipoints,
     coordinates_to_points)
 from tests.utils import (MAX_SEQUENCE_SIZE,
@@ -48,6 +49,19 @@ contexts_with_coordinates_strategies = (coordinates_types_with_strategies
 contexts_with_rational_coordinates_strategies = (
     (rational_coordinates_types_with_strategies
      .map(to_context_with_coordinates)))
+contexts_with_boxes = (contexts_with_coordinates_strategies
+                       .map(combine(identity, coordinates_to_boxes))
+                       .flatmap(pack(strategies.tuples)))
+contexts_with_boxes_pairs = (contexts_with_coordinates_strategies
+                             .map(combine(identity,
+                                          compose(to_pairs,
+                                                  coordinates_to_boxes)))
+                             .flatmap(pack(strategies.tuples)))
+contexts_with_boxes_triplets = (contexts_with_coordinates_strategies
+                                .map(combine(identity,
+                                             compose(to_triplets,
+                                                     coordinates_to_boxes)))
+                                .flatmap(pack(strategies.tuples)))
 contexts_with_points_strategies = (contexts_with_coordinates_strategies
                                    .map(combine(identity,
                                                 coordinates_to_points)))
