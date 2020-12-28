@@ -61,6 +61,12 @@ class Segment:
 
     __repr__ = generate_repr(__init__)
 
+    def __eq__(self, other: 'Segment') -> bool:
+        return (self.start == other.start and self.end == other.end
+                or self.start == other.end and self.end == other.start
+                if isinstance(other, Segment)
+                else NotImplemented)
+
     @property
     def start(self) -> hints.Point:
         return self._start
