@@ -9,6 +9,7 @@ from reprit.base import generate_repr
 
 from . import hints as _hints
 from .core import (angular as _angular,
+                   boxed as _boxed,
                    centroidal as _centroidal,
                    discrete as _discrete,
                    enums as _enums,
@@ -143,6 +144,10 @@ class Context:
     def contour_centroid(self, contour: _hints.Contour) -> _hints.Point:
         return self._centroidal.contour_centroid(self._inverse, self.point_cls,
                                                  contour)
+
+    def merged_box(self, first_box: _hints.Box, second_box: _hints.Box
+                   ) -> _hints.Box:
+        return _boxed.merge(self.box_cls, first_box, second_box)
 
     def multipoint_centroid(self,
                             multipoint: _hints.Multipoint) -> _hints.Point:
