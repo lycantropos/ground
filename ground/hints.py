@@ -66,6 +66,10 @@ class Box(Protocol[Coordinate]):
                 max_y: Coordinate) -> 'Box':
         """Constructs box given its coordinates limits."""
 
+    @abstractmethod
+    def __eq__(self, other: 'Box') -> bool:
+        """Checks if the box is equal to the other."""
+
     @property
     @abstractmethod
     def max_x(self) -> Coordinate:
