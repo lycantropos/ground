@@ -52,6 +52,41 @@ class Point(Protocol[Coordinate]):
         """Second coordinate of the point."""
 
 
+class Box(Protocol[Coordinate]):
+    """
+    **Box** is a limited closed region
+    defined by axis-aligned rectangular contour.
+    """
+
+    @abstractmethod
+    def __new__(cls,
+                min_x: Coordinate,
+                max_x: Coordinate,
+                min_y: Coordinate,
+                max_y: Coordinate) -> 'Box':
+        """Constructs box given its coordinates limits."""
+
+    @property
+    @abstractmethod
+    def max_x(self) -> Coordinate:
+        """Returns maximum ``x``-coordinate of the box."""
+
+    @property
+    @abstractmethod
+    def max_y(self) -> Coordinate:
+        """Returns maximum ``y``-coordinate of the box."""
+
+    @property
+    @abstractmethod
+    def min_x(self) -> Coordinate:
+        """Returns minimum ``x``-coordinate of the box."""
+
+    @property
+    @abstractmethod
+    def min_y(self) -> Coordinate:
+        """Returns minimum ``y``-coordinate of the box."""
+
+
 class Multipoint(Protocol[Coordinate]):
     """
     **Multipoint** is a non-empty set of unique points.
