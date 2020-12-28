@@ -40,9 +40,9 @@ def contexts_with_coordinates_to_contexts_with_contours(
     def are_points_non_collinear(context_with_points_list
                                  : Tuple[Context, Sequence[Point]]) -> bool:
         context, points_list = context_with_points_list
-        return any(context.orientation(points_list[index - 2],
-                                       points_list[index - 1],
-                                       points_list[index])
+        return any(context.angle_orientation(points_list[index - 2],
+                                             points_list[index - 1],
+                                             points_list[index])
                    is not Orientation.COLLINEAR
                    for index in range(len(points_list)))
 

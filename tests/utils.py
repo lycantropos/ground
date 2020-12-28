@@ -102,8 +102,8 @@ def to_contour_vertices_orientation(vertices: Sequence[Point],
         return Orientation.COLLINEAR
     index = min(range(len(vertices)),
                 key=vertices.__getitem__)
-    return context.orientation(vertices[index - 1], vertices[index],
-                               vertices[(index + 1) % len(vertices)])
+    return context.angle_orientation(vertices[index - 1], vertices[index],
+                                     vertices[(index + 1) % len(vertices)])
 
 
 def to_pairs(strategy: Strategy[Domain]) -> Strategy[Tuple[Domain, Domain]]:

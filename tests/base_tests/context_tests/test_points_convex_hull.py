@@ -66,8 +66,8 @@ def test_step(context_with_points_sequence: Tuple[Context, Sequence[Point]]
                                                        point)
                         for index in range(len(result))))
             or (len(result) > 2
-                and all(context.orientation(result[index - 1], result[index],
-                                            point)
+                and all(context.angle_orientation(result[index - 1],
+                                                  result[index], point)
                         is result_orientation
                         for index in range(len(result)))),
             next_result == result)
