@@ -120,6 +120,8 @@ class Box:
         self._min_x, self._max_x, self._min_y, self._max_y = (min_x, max_x,
                                                               min_y, max_y)
 
+    __repr__ = generate_repr(__init__)
+
     @property
     def max_x(self) -> hints.Coordinate:
         return self._max_x
