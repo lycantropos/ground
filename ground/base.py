@@ -120,30 +120,30 @@ class Context:
     def segment_cls(self) -> Type[_hints.Segment]:
         return self._segment_cls
 
+    def angle_kind(self,
+                   vertex: _hints.Point,
+                   first_ray_point: _hints.Point,
+                   second_ray_point: _hints.Point) -> Kind:
+        return _angular.kind(self.dot_product, vertex, first_ray_point,
+                             second_ray_point)
+
+    def angle_orientation(self,
+                          vertex: _hints.Point,
+                          first_ray_point: _hints.Point,
+                          second_ray_point: _hints.Point) -> Orientation:
+        return _angular.orientation(self.cross_product, vertex,
+                                    first_ray_point, second_ray_point)
+
     def contour_centroid(self, contour: _hints.Contour) -> _hints.Point:
         return self._centroidal.contour_centroid(self._inverse, self.point_cls,
                                                  contour)
-
-    def kind(self,
-             vertex: _hints.Point,
-             first_ray_point: _hints.Point,
-             second_ray_point: _hints.Point) -> Kind:
-        return _angular.kind(self.dot_product, vertex, first_ray_point,
-                             second_ray_point)
 
     def multipoint_centroid(self,
                             multipoint: _hints.Multipoint) -> _hints.Point:
         return self._centroidal.multipoint_centroid(self.point_cls, multipoint)
 
-    def orientation(self,
-                    vertex: _hints.Point,
-                    first_ray_point: _hints.Point,
-                    second_ray_point: _hints.Point) -> Orientation:
-        return _angular.orientation(self.cross_product, vertex,
-                                    first_ray_point, second_ray_point)
-
     def points_convex_hull(self, points: Sequence[Point]) -> Sequence[Point]:
-        return _discrete.to_convex_hull(self.orientation, points)
+        return _discrete.to_convex_hull(self.angle_orientation, points)
 
     def segment_contains_point(self,
                                start: _hints.Point,
