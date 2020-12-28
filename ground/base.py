@@ -27,7 +27,7 @@ SegmentsRelationship = _enums.SegmentsRelationship
 
 
 class Context:
-    __slots__ = ('_centroidal', '_contour_cls', '_coordinate_cls',
+    __slots__ = ('_box_cls', '_centroidal', '_contour_cls', '_coordinate_cls',
                  '_incircle', '_inverse', '_multicontour_cls',
                  '_multipoint_cls', '_multipolygon_cls', '_multisegment_cls',
                  '_point_cls', '_polygon_cls', '_segment_cls', '_vector')
@@ -49,6 +49,7 @@ class Context:
                  polygon_cls: Type[_hints.Polygon] = _geometries.Polygon,
                  segment_cls: Type[_hints.Segment] = _geometries.Segment
                  ) -> None:
+        self._box_cls = box_cls
         self._contour_cls = contour_cls
         self._coordinate_cls = coordinate_cls
         self._multicontour_cls = multicontour_cls
@@ -72,6 +73,10 @@ class Context:
                   _vector.robust_context))
 
     __repr__ = generate_repr(__init__)
+
+    @property
+    def box_cls(self) -> Type[_hints.Box]:
+        return self._box_cls
 
     @property
     def contour_cls(self) -> Type[_hints.Contour]:
