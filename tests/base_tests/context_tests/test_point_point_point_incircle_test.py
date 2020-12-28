@@ -19,8 +19,7 @@ def test_basic(context_with_points_quadruplet: Tuple[Context, PointsQuadruplet]
     first_point, second_point, third_point, fourth_point = points_quadruplet
 
     result = context.point_point_point_incircle_test(first_point, second_point,
-                                                     third_point,
-                                                     fourth_point)
+                                                     third_point, fourth_point)
 
     coordinate_cls = type(first_point.x)
     assert isinstance(result, coordinate_cls)
@@ -32,10 +31,10 @@ def test_degenerate_cases(context_with_points_triplet
     context, points_triplet = context_with_points_triplet
     first_point, second_point, third_point = points_triplet
 
-    assert all(
-            not context.point_point_point_incircle_test(
-                    first_point, second_point, third_point, point)
-            for point in points_triplet)
+    assert all(not context.point_point_point_incircle_test(first_point,
+                                                           second_point,
+                                                           third_point, point)
+               for point in points_triplet)
 
 
 @given(strategies.contexts_with_points_quadruplets)
