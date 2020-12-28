@@ -34,6 +34,7 @@ class Context:
 
     def __init__(self,
                  *,
+                 box_cls: Type[_hints.Box] = _geometries.Contour,
                  contour_cls: Type[_hints.Contour] = _geometries.Contour,
                  coordinate_cls: Type[_hints.Coordinate] = _numbers.Real,
                  multicontour_cls: Type[_hints.Multicontour]

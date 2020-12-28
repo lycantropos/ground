@@ -109,6 +109,34 @@ class Multicontour:
         return self._contours
 
 
+class Box:
+    __slots__ = '_min_x', '_max_x', '_min_y', '_max_y'
+
+    def __init__(self,
+                 min_x: hints.Coordinate,
+                 max_x: hints.Coordinate,
+                 min_y: hints.Coordinate,
+                 max_y: hints.Coordinate) -> None:
+        self._min_x, self._max_x, self._min_y, self._max_y = (min_x, max_x,
+                                                              min_y, max_y)
+
+    @property
+    def max_x(self) -> hints.Coordinate:
+        return self._max_x
+
+    @property
+    def max_y(self) -> hints.Coordinate:
+        return self._max_y
+
+    @property
+    def min_x(self) -> hints.Coordinate:
+        return self._min_x
+
+    @property
+    def min_y(self) -> hints.Coordinate:
+        return self._min_y
+
+
 class Polygon:
     __slots__ = '_border', '_holes'
 
