@@ -122,6 +122,12 @@ class Box:
 
     __repr__ = generate_repr(__init__)
 
+    def __eq__(self, other: 'Box') -> bool:
+        return (self.min_x == other.min_x and self.max_x == other.max_x
+                and self.min_y == other.min_y and self.max_y == other.max_y
+                if isinstance(other, Box)
+                else NotImplemented)
+
     @property
     def max_x(self) -> hints.Coordinate:
         return self._max_x
