@@ -18,7 +18,6 @@ from .core import (angular as _angular,
                    linear as _linear,
                    vector as _vector)
 from .core.hints import QuaternaryPointFunction as _QuaternaryPointFunction
-from .hints import Point
 
 _QuaternaryFunction = _QuaternaryPointFunction[_hints.Coordinate]
 Kind = _enums.Kind
@@ -150,7 +149,9 @@ class Context:
                             points: Sequence[_hints.Point]) -> _hints.Point:
         return self._centroidal.multipoint_centroid(self.point_cls, points)
 
-    def points_convex_hull(self, points: Sequence[Point]) -> Sequence[Point]:
+    def points_convex_hull(self,
+                           points: Sequence[_hints.Point]
+                           ) -> Sequence[_hints.Point]:
         return _discrete.to_convex_hull(self.angle_orientation, points)
 
     def segment_contains_point(self,
