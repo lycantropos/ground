@@ -161,6 +161,20 @@ class Context:
 
     def multipoint_centroid(self,
                             points: Sequence[_hints.Point]) -> _hints.Point:
+        """
+        Constructs centroid of a multipoint given its points.
+
+        Time complexity:
+            ``O(len(points))``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Point = context.point_cls
+        >>> context.multipoint_centroid([Point(0, 0), Point(2, 0), Point(2, 2),
+        ...                              Point(0, 2)]) == Point(1, 1)
+        True
+        """
         return self._centroidal.multipoint_centroid(self.point_cls, points)
 
     def points_convex_hull(self,
