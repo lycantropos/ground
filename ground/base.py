@@ -137,17 +137,18 @@ class Context:
         return _angular.orientation(self.cross_product, vertex,
                                     first_ray_point, second_ray_point)
 
-    def contour_centroid(self, contour: _hints.Contour) -> _hints.Point:
+    def contour_centroid(self,
+                         vertices: Sequence[_hints.Point]) -> _hints.Point:
         return self._centroidal.contour_centroid(self._inverse, self.point_cls,
-                                                 contour)
+                                                 vertices)
 
     def merged_box(self, first_box: _hints.Box, second_box: _hints.Box
                    ) -> _hints.Box:
         return _boxed.merge(self.box_cls, first_box, second_box)
 
     def multipoint_centroid(self,
-                            multipoint: _hints.Multipoint) -> _hints.Point:
-        return self._centroidal.multipoint_centroid(self.point_cls, multipoint)
+                            points: Sequence[_hints.Point]) -> _hints.Point:
+        return self._centroidal.multipoint_centroid(self.point_cls, points)
 
     def points_convex_hull(self, points: Sequence[Point]) -> Sequence[Point]:
         return _discrete.to_convex_hull(self.angle_orientation, points)

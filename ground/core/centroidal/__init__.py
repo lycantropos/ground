@@ -1,20 +1,19 @@
 from typing import (Callable,
+                    Sequence,
                     Type)
 
 from reprit.base import generate_repr
 
 from ground.core.hints import UnaryCoordinateOperation
-from ground.hints import (Contour,
-                          Multipoint,
-                          Point)
+from ground.hints import Point
 from .plain import (contour as plain_contour,
                     multipoint as plain_multipoint)
 from .robust import (contour as robust_contour,
                      multipoint as robust_multipoint)
 
-MultipointCentroid = Callable[[Type[Point], Multipoint], Point]
-ContourCentroid = Callable[[UnaryCoordinateOperation, Type[Point], Contour],
-                           Point]
+MultipointCentroid = Callable[[Type[Point], Sequence[Point]], Point]
+ContourCentroid = Callable[[UnaryCoordinateOperation, Type[Point],
+                            Sequence[Point]], Point]
 
 
 class Context:

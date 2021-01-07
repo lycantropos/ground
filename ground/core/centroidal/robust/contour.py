@@ -1,18 +1,17 @@
-from typing import Type
+from typing import (Sequence,
+                    Type)
 
 from ground.core.hints import UnaryCoordinateOperation
 from ground.core.shewchuk import (scale_expansion,
                                   sum_expansions,
                                   to_cross_product)
-from ground.hints import (Contour,
-                          Point)
+from ground.hints import Point
 
 
 def centroid(inverse: UnaryCoordinateOperation,
              point_cls: Type[Point],
-             contour: Contour) -> Point:
+             vertices: Sequence[Point]) -> Point:
     double_area = x_numerator = y_numerator = (0,)
-    vertices = contour.vertices
     prev = vertices[-1]
     prev_x, prev_y = prev.x, prev.y
     for vertex in vertices:
