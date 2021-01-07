@@ -138,6 +138,20 @@ class Context:
 
     def contour_centroid(self,
                          vertices: Sequence[_hints.Point]) -> _hints.Point:
+        """
+        Constructs centroid of a contour given its vertices.
+
+        Time complexity:
+            ``O(len(vertices))``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Point = context.point_cls
+        >>> context.contour_centroid([Point(0, 0), Point(2, 0), Point(2, 2),
+        ...                           Point(0, 2)]) == Point(1, 1)
+        True
+        """
         return self._centroidal.contour_centroid(self._inverse, self.point_cls,
                                                  vertices)
 
