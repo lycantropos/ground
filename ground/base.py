@@ -202,6 +202,35 @@ class Context:
                                start: _hints.Point,
                                end: _hints.Point,
                                point: _hints.Point) -> bool:
+        """
+        Checks if a segment given by its endpoints contains given point.
+
+        Time complexity:
+            ``O(1)``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Point = context.point_cls
+        >>> context.segment_contains_point(Point(0, 0), Point(2, 0),
+        ...                                Point(0, 0))
+        True
+        >>> context.segment_contains_point(Point(0, 0), Point(2, 0),
+        ...                                Point(0, 2))
+        False
+        >>> context.segment_contains_point(Point(0, 0), Point(2, 0),
+        ...                                Point(1, 0))
+        True
+        >>> context.segment_contains_point(Point(0, 0), Point(2, 0),
+        ...                                Point(1, 1))
+        False
+        >>> context.segment_contains_point(Point(0, 0), Point(2, 0),
+        ...                                Point(2, 0))
+        True
+        >>> context.segment_contains_point(Point(0, 0), Point(2, 0),
+        ...                                Point(3, 0))
+        False
+        """
         return _linear.segment_contains_point(self.cross_product, start, end,
                                               point)
 
