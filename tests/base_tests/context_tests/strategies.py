@@ -15,10 +15,10 @@ from tests.strategies.coordinates import (
     coordinates_types_with_strategies,
     rational_coordinates_types_with_strategies)
 from tests.strategies.geometries import (
-    contexts_with_coordinates_to_contexts_with_contours,
+    contexts_with_coordinates_to_contexts_with_vertices,
     coordinates_to_boxes,
-    coordinates_to_multipoints,
-    coordinates_to_points)
+    coordinates_to_points,
+    coordinates_to_points_sequences)
 from tests.utils import (MAX_SEQUENCE_SIZE,
                          combine,
                          compose,
@@ -105,17 +105,17 @@ contexts_with_segments_pairs_endpoints = (
      .map(combine(identity, compose(to_pairs, points_to_segments_endpoints)))
      .flatmap(pack(strategies.tuples))
      .map(combine(identity, pack(add)))))
-contexts_with_multipoints = (contexts_with_coordinates_strategies
-                             .map(combine(identity,
-                                          coordinates_to_multipoints))
-                             .flatmap(pack(strategies.tuples)))
-contexts_with_rational_multipoints = (
-    (contexts_with_rational_coordinates_strategies
-     .map(combine(identity, coordinates_to_multipoints))
-     .flatmap(pack(strategies.tuples))))
-contexts_with_contours = (
+contexts_with_points = (contexts_with_coordinates_strategies
+                        .map(combine(identity,
+                                     coordinates_to_points_sequences))
+                        .flatmap(pack(strategies.tuples)))
+contexts_with_rational_points = (contexts_with_rational_coordinates_strategies
+                                 .map(combine(identity,
+                                              coordinates_to_points_sequences))
+                                 .flatmap(pack(strategies.tuples)))
+contexts_with_vertices = (
     (contexts_with_coordinates_strategies
-     .flatmap(contexts_with_coordinates_to_contexts_with_contours)))
-contexts_with_rational_contours = (
+     .flatmap(contexts_with_coordinates_to_contexts_with_vertices)))
+contexts_with_rational_vertices = (
     (contexts_with_rational_coordinates_strategies
-     .flatmap(contexts_with_coordinates_to_contexts_with_contours)))
+     .flatmap(contexts_with_coordinates_to_contexts_with_vertices)))

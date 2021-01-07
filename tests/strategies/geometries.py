@@ -10,8 +10,6 @@ from ground.hints import Coordinate
 from tests.hints import Strategy
 from tests.utils import (MAX_SEQUENCE_SIZE,
                          Box,
-                         Contour,
-                         Multipoint,
                          Point,
                          pack,
                          to_pairs)
@@ -37,19 +35,18 @@ def coordinates_to_points(coordinates: Strategy[Coordinate]
 points_strategies = coordinates_strategies.map(coordinates_to_points)
 
 
-def coordinates_to_multipoints(coordinates: Strategy[Coordinate]
-                               ) -> Strategy[Multipoint]:
-    return (strategies.lists(coordinates_to_points(coordinates),
-                             min_size=1,
-                             max_size=MAX_SEQUENCE_SIZE,
-                             unique=True)
-            .map(Multipoint))
+def coordinates_to_points_sequences(coordinates: Strategy[Coordinate]
+                                    ) -> Strategy[Sequence[Point]]:
+    return strategies.lists(coordinates_to_points(coordinates),
+                            min_size=1,
+                            max_size=MAX_SEQUENCE_SIZE,
+                            unique=True)
 
 
-def contexts_with_coordinates_to_contexts_with_contours(
+def contexts_with_coordinates_to_contexts_with_vertices(
         contexts_with_coordinates: Tuple[Strategy[Context],
                                          Strategy[Coordinate]]
-) -> Strategy[Tuple[Context, Contour]]:
+) -> Strategy[Tuple[Context, Sequence[Point]]]:
     contexts, coordinates = contexts_with_coordinates
 
     def are_points_non_collinear(context_with_points_list
@@ -66,7 +63,7 @@ def contexts_with_coordinates_to_contexts_with_contours(
                                            ) -> Tuple[Context,
                                                       Sequence[Point]]:
         context, points_list = context_with_points_list
-        return context, Contour(context.points_convex_hull(points_list))
+        return context, context.points_convex_hull(points_list)
 
     return (strategies.tuples(
             contexts,

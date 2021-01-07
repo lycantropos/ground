@@ -85,19 +85,14 @@ def permute(sequence: Sequence[Domain],
     return [sequence[index] for index in permutation]
 
 
-def permute_multipoint(multipoint: Multipoint,
-                       permutation: Permutation) -> Multipoint:
-    return Multipoint(permute(multipoint.points, permutation))
-
-
 def reverse_point_coordinates(point: Point) -> Point:
     return Point(point.y, point.x)
 
 
-def rotate_contour(contour: Contour, offset: int) -> Contour:
-    return (Contour(contour.vertices[offset:] + contour.vertices[:offset])
+def rotate_sequence(vertices: Sequence[Point], offset: int) -> Contour:
+    return (vertices[offset:] + vertices[:offset]
             if offset
-            else contour)
+            else vertices)
 
 
 def to_contour_vertices_orientation(vertices: Sequence[Point],
