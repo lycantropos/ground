@@ -180,6 +180,22 @@ class Context:
     def points_convex_hull(self,
                            points: Sequence[_hints.Point]
                            ) -> Sequence[_hints.Point]:
+        """
+        Constructs convex hull of points.
+
+        Time complexity:
+            ``O(points_count * log(points_count))``
+        Memory complexity:
+            ``O(points_count)``
+        where ``points_count = len(points)``.
+
+        >>> context = get_context()
+        >>> Point = context.point_cls
+        >>> (context.points_convex_hull([Point(0, 0), Point(2, 0), Point(2, 2),
+        ...                              Point(0, 2)])
+        ...  == [Point(0, 0), Point(0, 2), Point(2, 2), Point(2, 0)])
+        True
+        """
         return _discrete.to_convex_hull(self.angle_orientation, points)
 
     def segment_contains_point(self,
