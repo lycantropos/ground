@@ -5,10 +5,13 @@ from typing import (Tuple,
 
 from hypothesis import strategies
 
-from ground.base import Context
+from ground.base import (Context,
+                         Orientation)
 from ground.hints import (Coordinate,
                           Point)
 from tests.hints import (PointsPair,
+                         PointsQuadruplet,
+                         PointsTriplet,
                          Strategy)
 from tests.strategies.coordinates import (
     coordinates_types,
@@ -96,6 +99,74 @@ def points_to_segments_endpoints(points: Strategy[Point]
             .map(tuple))
 
 
+def to_contexts_with_touching_segments_endpoints(
+        contexts_with_points: Strategy[Tuple[Strategy[Context],
+                                             Strategy[Point]]]
+) -> Strategy[Tuple[Context, PointsQuadruplet]]:
+    def to_context_with_segments_pairs_endpoints(
+            context_with_angle_points: Tuple[Context, PointsTriplet]
+    ) -> Tuple[Context, PointsQuadruplet]:
+        context, angle_points = context_with_angle_points
+        vertex, first_ray_point, second_ray_point = angle_points
+        return context, (vertex, first_ray_point, vertex, second_ray_point)
+
+    return (to_context_with_non_overlapping_angles(contexts_with_points)
+            .map(to_context_with_segments_pairs_endpoints))
+
+
+def to_contexts_with_crossing_segments_pairs_endpoints(
+        contexts_with_points: Strategy[Tuple[Strategy[Context],
+                                             Strategy[Point]]]
+) -> Strategy[Tuple[Context, PointsQuadruplet]]:
+    def to_context_with_segments_pairs_endpoints(
+            context_with_angle_points: Tuple[Context, PointsTriplet],
+            first_scale: int,
+            second_scale: int) -> Tuple[Context, PointsQuadruplet]:
+        context, angle_points = context_with_angle_points
+        vertex, first_ray_point, second_ray_point = angle_points
+        return context, (to_scaled_segment_end(context, first_ray_point,
+                                               vertex, first_scale),
+                         first_ray_point,
+                         to_scaled_segment_end(context, second_ray_point,
+                                               vertex, second_scale),
+                         second_ray_point)
+
+    def to_scaled_segment_end(context: Context,
+                              start: Point,
+                              end: Point,
+                              scale: int) -> Point:
+        return context.point_cls(end.x + scale * (end.x - start.x),
+                                 end.y + scale * (end.y - start.y))
+
+    scales = strategies.integers(1, 100)
+    return strategies.builds(
+            to_context_with_segments_pairs_endpoints,
+            to_context_with_non_overlapping_angles(contexts_with_points),
+            scales, scales)
+
+
+def to_context_with_non_overlapping_angles(
+        contexts_with_points: Strategy[Tuple[Strategy[Context],
+                                             Strategy[Point]]]
+) -> Strategy[Tuple[Context, PointsTriplet]]:
+    def angle_rays_do_not_overlap(context_with_angle_points
+                                  : Tuple[Context, PointsTriplet]) -> bool:
+        context, angle_points = context_with_angle_points
+        vertex, first_ray_point, second_ray_point = angle_points
+        return (second_ray_point < min(vertex, first_ray_point)
+                or (context.angle_orientation(vertex, first_ray_point,
+                                              second_ray_point)
+                    is not Orientation.COLLINEAR))
+
+    return (contexts_with_points
+            .map(combine(identity, partial(strategies.lists,
+                                           min_size=3,
+                                           max_size=3,
+                                           unique=True)))
+            .flatmap(pack(strategies.tuples))
+            .filter(angle_rays_do_not_overlap))
+
+
 contexts_with_segments_endpoints = (
     (contexts_with_points_strategies
      .map(combine(identity, points_to_segments_endpoints))
@@ -105,6 +176,12 @@ contexts_with_segments_pairs_endpoints = (
      .map(combine(identity, compose(to_pairs, points_to_segments_endpoints)))
      .flatmap(pack(strategies.tuples))
      .map(combine(identity, pack(add)))))
+contexts_with_crossing_or_touching_segments_pairs_endpoints = (
+        to_contexts_with_crossing_segments_pairs_endpoints(
+                contexts_with_points_strategies)
+        |
+        to_contexts_with_touching_segments_endpoints(
+                contexts_with_points_strategies))
 contexts_with_points_sequences = (
     (contexts_with_coordinates_strategies
      .map(combine(identity, coordinates_to_points_sequences))
