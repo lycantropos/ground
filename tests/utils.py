@@ -8,6 +8,7 @@ from hypothesis import strategies
 
 from ground.base import (Context,
                          Orientation,
+                         Relation,
                          get_context)
 from ground.core.angular import to_sign
 from .hints import (Domain,
@@ -16,6 +17,11 @@ from .hints import (Domain,
                     Strategy)
 
 MAX_SEQUENCE_SIZE = 5
+
+ASYMMETRIC_LINEAR_RELATIONS = (Relation.COMPONENT, Relation.COMPOSITE)
+SYMMETRIC_LINEAR_RELATIONS = (Relation.CROSS, Relation.DISJOINT,
+                              Relation.EQUAL, Relation.OVERLAP, Relation.TOUCH)
+LINEAR_RELATIONS = ASYMMETRIC_LINEAR_RELATIONS + SYMMETRIC_LINEAR_RELATIONS
 
 _context = get_context()
 Box = _context.box_cls
