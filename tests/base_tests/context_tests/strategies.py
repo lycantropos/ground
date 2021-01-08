@@ -110,7 +110,7 @@ def to_contexts_with_touching_segments_endpoints(
         vertex, first_ray_point, second_ray_point = angle_points
         return context, (vertex, first_ray_point, vertex, second_ray_point)
 
-    return (to_context_with_non_overlapping_angles(contexts_with_points)
+    return (to_context_with_non_zero_angles(contexts_with_points)
             .map(to_context_with_segments_pairs_endpoints))
 
 
@@ -141,16 +141,16 @@ def to_contexts_with_crossing_segments_pairs_endpoints(
     scales = strategies.integers(1, 100)
     return strategies.builds(
             to_context_with_segments_pairs_endpoints,
-            to_context_with_non_overlapping_angles(contexts_with_points),
+            to_context_with_non_zero_sine_angles(contexts_with_points),
             scales, scales)
 
 
-def to_context_with_non_overlapping_angles(
+def to_context_with_non_zero_angles(
         contexts_with_points: Strategy[Tuple[Strategy[Context],
                                              Strategy[Point]]]
 ) -> Strategy[Tuple[Context, PointsTriplet]]:
-    def angle_rays_do_not_overlap(context_with_angle_points
-                                  : Tuple[Context, PointsTriplet]) -> bool:
+    def is_non_zero_angle(context_with_angle_points
+                          : Tuple[Context, PointsTriplet]) -> bool:
         context, angle_points = context_with_angle_points
         vertex, first_ray_point, second_ray_point = angle_points
         return (second_ray_point < min(vertex, first_ray_point)
@@ -164,7 +164,28 @@ def to_context_with_non_overlapping_angles(
                                            max_size=3,
                                            unique=True)))
             .flatmap(pack(strategies.tuples))
-            .filter(angle_rays_do_not_overlap))
+            .filter(is_non_zero_angle))
+
+
+def to_context_with_non_zero_sine_angles(
+        contexts_with_points: Strategy[Tuple[Strategy[Context],
+                                             Strategy[Point]]]
+) -> Strategy[Tuple[Context, PointsTriplet]]:
+    def is_non_zero_sine_angle(context_with_angle_points
+                               : Tuple[Context, PointsTriplet]) -> bool:
+        context, angle_points = context_with_angle_points
+        vertex, first_ray_point, second_ray_point = angle_points
+        return (context.angle_orientation(vertex, first_ray_point,
+                                          second_ray_point)
+                is not Orientation.COLLINEAR)
+
+    return (contexts_with_points
+            .map(combine(identity, partial(strategies.lists,
+                                           min_size=3,
+                                           max_size=3,
+                                           unique=True)))
+            .flatmap(pack(strategies.tuples))
+            .filter(is_non_zero_sine_angle))
 
 
 contexts_with_segments_endpoints = (
@@ -177,11 +198,12 @@ contexts_with_segments_pairs_endpoints = (
      .flatmap(pack(strategies.tuples))
      .map(combine(identity, pack(add)))))
 contexts_with_crossing_or_touching_segments_pairs_endpoints = (
-        to_contexts_with_crossing_segments_pairs_endpoints(
-                contexts_with_points_strategies)
-        |
-        to_contexts_with_touching_segments_endpoints(
-                contexts_with_points_strategies))
+    to_contexts_with_crossing_segments_pairs_endpoints(
+            contexts_with_points_strategies)
+    # |
+    # to_contexts_with_touching_segments_endpoints(
+    #         contexts_with_points_strategies)
+)
 contexts_with_points_sequences = (
     (contexts_with_coordinates_strategies
      .map(combine(identity, coordinates_to_points_sequences))
