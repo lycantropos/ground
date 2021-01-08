@@ -102,19 +102,6 @@ class Contour:
         return self._vertices
 
 
-class Multicontour:
-    __slots__ = '_contours',
-
-    def __init__(self, contours: Sequence[hints.Contour]) -> None:
-        self._contours = contours
-
-    __repr__ = generate_repr(__init__)
-
-    @property
-    def contours(self) -> Sequence[hints.Contour]:
-        return self._contours
-
-
 class Box:
     __slots__ = '_min_x', '_max_x', '_min_y', '_max_y'
 

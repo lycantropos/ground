@@ -26,17 +26,15 @@ Relation = _enums.Relation
 
 class Context:
     __slots__ = ('_box_cls', '_centroidal', '_contour_cls', '_coordinate_cls',
-                 '_incircle', '_inverse', '_linear', '_multicontour_cls',
-                 '_multipoint_cls', '_multipolygon_cls', '_multisegment_cls',
-                 '_point_cls', '_polygon_cls', '_segment_cls', '_vector')
+                 '_incircle', '_inverse', '_linear', '_multipoint_cls',
+                 '_multipolygon_cls', '_multisegment_cls', '_point_cls',
+                 '_polygon_cls', '_segment_cls', '_vector')
 
     def __init__(self,
                  *,
                  box_cls: Type[_hints.Box] = _geometries.Box,
                  contour_cls: Type[_hints.Contour] = _geometries.Contour,
                  coordinate_cls: Type[_hints.Coordinate] = _numbers.Real,
-                 multicontour_cls: Type[_hints.Multicontour]
-                 = _geometries.Multicontour,
                  multipoint_cls: Type[_hints.Multipoint]
                  = _geometries.Multipoint,
                  multipolygon_cls: Type[_hints.Multipolygon]
@@ -50,7 +48,6 @@ class Context:
         self._box_cls = box_cls
         self._contour_cls = contour_cls
         self._coordinate_cls = coordinate_cls
-        self._multicontour_cls = multicontour_cls
         self._multipoint_cls = multipoint_cls
         self._multipolygon_cls = multipolygon_cls
         self._multisegment_cls = multisegment_cls
@@ -88,10 +85,6 @@ class Context:
     @property
     def dot_product(self) -> _QuaternaryFunction:
         return self._vector.dot_product
-
-    @property
-    def multicontour_cls(self) -> Type[_hints.Multicontour]:
-        return self._multicontour_cls
 
     @property
     def multipoint_cls(self) -> Type[_hints.Multipoint]:
