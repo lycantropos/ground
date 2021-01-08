@@ -1,5 +1,4 @@
 from typing import (Callable,
-                    Tuple,
                     Type)
 
 from ground.hints import (Coordinate,
@@ -70,27 +69,6 @@ def segments_intersection(cross_product: QuaternaryPointFunction,
                       else (first_start_y + second_start_y
                             + (first_y_addend + second_y_addend)
                             * inverted_denominator) / 2))
-
-
-def segments_intersections(cross_product: QuaternaryPointFunction,
-                           inverse: Callable[[Coordinate], Coordinate],
-                           point_cls: Type[Point],
-                           first_start: Point,
-                           first_end: Point,
-                           second_start: Point,
-                           second_end: Point) -> Tuple[Point, ...]:
-    relationship = segments_relationship(cross_product, first_start, first_end,
-                                         second_start, second_end)
-    if relationship is SegmentsRelationship.NONE:
-        return ()
-    elif relationship is SegmentsRelationship.OVERLAP:
-        _, first_point, second_point, _ = sorted((first_start, first_end,
-                                                  second_start, second_end))
-        return first_point, second_point
-    else:
-        return segments_intersection(cross_product, inverse, point_cls,
-                                     first_start, first_end, second_start,
-                                     second_end),
 
 
 def segments_relationship(cross_product: QuaternaryPointFunction,

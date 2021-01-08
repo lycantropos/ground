@@ -2,7 +2,6 @@ import numbers as _numbers
 from contextvars import ContextVar
 from fractions import Fraction as _Fraction
 from typing import (Sequence,
-                    Tuple,
                     Type)
 
 from reprit.base import generate_repr
@@ -240,16 +239,6 @@ class Context:
                               second_start: _hints.Point,
                               second_end: _hints.Point) -> _hints.Point:
         return _linear.segments_intersection(
-                self.cross_product, self._inverse, self.point_cls, first_start,
-                first_end, second_start, second_end)
-
-    def segments_intersections(self,
-                               first_start: _hints.Point,
-                               first_end: _hints.Point,
-                               second_start: _hints.Point,
-                               second_end: _hints.Point
-                               ) -> Tuple[_hints.Point, ...]:
-        return _linear.segments_intersections(
                 self.cross_product, self._inverse, self.point_cls, first_start,
                 first_end, second_start, second_end)
 
