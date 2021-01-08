@@ -3,7 +3,7 @@ from typing import (Callable,
 
 from ground.hints import (Coordinate,
                           Point)
-from .enums import SegmentsRelationship
+from .enums import Relation
 from .hints import QuaternaryPointFunction
 
 
@@ -71,11 +71,11 @@ def segments_intersection(cross_product: QuaternaryPointFunction,
                             * inverted_denominator) / 2))
 
 
-def segments_relationship(cross_product: QuaternaryPointFunction,
-                          first_start: Point,
-                          first_end: Point,
-                          second_start: Point,
-                          second_end: Point) -> SegmentsRelationship:
+def segments_relation(cross_product: QuaternaryPointFunction,
+                      first_start: Point,
+                      first_end: Point,
+                      second_start: Point,
+                      second_end: Point) -> Relation:
     if first_start > first_end:
         first_start, first_end = first_end, first_start
     if second_start > second_end:
@@ -83,14 +83,14 @@ def segments_relationship(cross_product: QuaternaryPointFunction,
     starts_equal = first_start == second_start
     ends_equal = first_end == second_end
     if starts_equal and ends_equal:
-        return SegmentsRelationship.OVERLAP
+        return Relation.EQUAL
     first_start_cross_product = cross_product(second_end, second_start,
                                               second_end, first_start)
     first_end_cross_product = cross_product(second_end, second_start,
                                             second_end, first_end)
     if first_start_cross_product and first_end_cross_product:
         if (first_start_cross_product > 0) is (first_end_cross_product > 0):
-            return SegmentsRelationship.NONE
+            return Relation.DISJOINT
         else:
             second_start_cross_product = cross_product(first_start, first_end,
                                                        first_start,
@@ -98,35 +98,41 @@ def segments_relationship(cross_product: QuaternaryPointFunction,
             second_end_cross_product = cross_product(first_start, first_end,
                                                      first_start, second_end)
             if second_start_cross_product and second_end_cross_product:
-                return (SegmentsRelationship.NONE
+                return (Relation.DISJOINT
                         if ((second_start_cross_product > 0)
                             is (second_end_cross_product > 0))
-                        else SegmentsRelationship.CROSS)
+                        else Relation.CROSS)
             elif second_start_cross_product:
-                return (SegmentsRelationship.TOUCH
+                return (Relation.TOUCH
                         if first_start < second_end < first_end
-                        else SegmentsRelationship.NONE)
+                        else Relation.DISJOINT)
             elif second_end_cross_product:
-                return (SegmentsRelationship.TOUCH
+                return (Relation.TOUCH
                         if first_start < second_start < first_end
-                        else SegmentsRelationship.NONE)
+                        else Relation.DISJOINT)
     elif first_start_cross_product:
-        return (SegmentsRelationship.TOUCH
+        return (Relation.TOUCH
                 if second_start <= first_end <= second_end
-                else SegmentsRelationship.NONE)
+                else Relation.DISJOINT)
     elif first_end_cross_product:
-        return (SegmentsRelationship.TOUCH
+        return (Relation.TOUCH
                 if second_start <= first_start <= second_end
-                else SegmentsRelationship.NONE)
-    elif starts_equal or ends_equal:
-        return SegmentsRelationship.OVERLAP
+                else Relation.DISJOINT)
+    elif starts_equal:
+        return (Relation.COMPOSITE
+                if first_end < second_end
+                else Relation.COMPONENT)
+    elif ends_equal:
+        return (Relation.COMPOSITE
+                if first_start < second_start
+                else Relation.COMPONENT)
     elif first_start == second_end or first_end == second_start:
-        return SegmentsRelationship.TOUCH
+        return Relation.TOUCH
     elif (second_start < first_start < second_end
           or first_start < second_start < first_end):
-        return SegmentsRelationship.OVERLAP
+        return Relation.OVERLAP
     else:
-        return SegmentsRelationship.NONE
+        return Relation.DISJOINT
 
 
 def _bounding_box_contains(start: Point, end: Point, point: Point) -> bool:

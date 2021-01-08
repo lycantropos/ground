@@ -21,7 +21,7 @@ from .core.hints import QuaternaryPointFunction as _QuaternaryPointFunction
 _QuaternaryFunction = _QuaternaryPointFunction[_hints.Coordinate]
 Kind = _enums.Kind
 Orientation = _enums.Orientation
-SegmentsRelationship = _enums.SegmentsRelationship
+Relation = _enums.Relation
 
 
 class Context:
@@ -242,15 +242,13 @@ class Context:
                 self.cross_product, self._inverse, self.point_cls, first_start,
                 first_end, second_start, second_end)
 
-    def segments_relationship(self,
-                              first_start: _hints.Point,
-                              first_end: _hints.Point,
-                              second_start: _hints.Point,
-                              second_end: _hints.Point
-                              ) -> SegmentsRelationship:
-        return _linear.segments_relationship(self.cross_product, first_start,
-                                             first_end, second_start,
-                                             second_end)
+    def segments_relation(self,
+                          first_start: _hints.Point,
+                          first_end: _hints.Point,
+                          second_start: _hints.Point,
+                          second_end: _hints.Point) -> Relation:
+        return _linear.segments_relation(self.cross_product, first_start,
+                                         first_end, second_start, second_end)
 
 
 _context = ContextVar('context',
