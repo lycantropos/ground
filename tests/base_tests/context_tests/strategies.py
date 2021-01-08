@@ -105,14 +105,14 @@ contexts_with_segments_pairs_endpoints = (
      .map(combine(identity, compose(to_pairs, points_to_segments_endpoints)))
      .flatmap(pack(strategies.tuples))
      .map(combine(identity, pack(add)))))
-contexts_with_points = (contexts_with_coordinates_strategies
-                        .map(combine(identity,
-                                     coordinates_to_points_sequences))
-                        .flatmap(pack(strategies.tuples)))
-contexts_with_rational_points = (contexts_with_rational_coordinates_strategies
-                                 .map(combine(identity,
-                                              coordinates_to_points_sequences))
-                                 .flatmap(pack(strategies.tuples)))
+contexts_with_points_sequences = (
+    (contexts_with_coordinates_strategies
+     .map(combine(identity, coordinates_to_points_sequences))
+     .flatmap(pack(strategies.tuples))))
+contexts_with_rational_points_sequences = (
+    (contexts_with_rational_coordinates_strategies
+     .map(combine(identity, coordinates_to_points_sequences))
+     .flatmap(pack(strategies.tuples))))
 contexts_with_vertices = (
     (contexts_with_coordinates_strategies
      .flatmap(contexts_with_coordinates_to_contexts_with_vertices)))
