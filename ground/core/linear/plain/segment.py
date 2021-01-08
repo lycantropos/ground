@@ -1,81 +1,51 @@
+from fractions import Fraction
 from typing import (Callable,
                     Type)
 
+from ground.core.enums import Relation
+from ground.core.hints import QuaternaryPointFunction
 from ground.hints import (Coordinate,
                           Point)
-from .enums import Relation
-from .hints import QuaternaryPointFunction
 
 
-def segment_contains_point(cross_product: QuaternaryPointFunction,
-                           start: Point,
-                           end: Point,
-                           point: Point) -> bool:
+def contains_point(cross_product: QuaternaryPointFunction,
+                   start: Point,
+                   end: Point,
+                   point: Point) -> bool:
     return (point == start or point == end
             or (_bounding_box_contains(start, end, point)
                 and not cross_product(start, end, start, point)))
 
 
-def segments_intersection(cross_product: QuaternaryPointFunction,
-                          inverse: Callable[[Coordinate], Coordinate],
-                          point_cls: Type[Point],
-                          first_start: Point,
-                          first_end: Point,
-                          second_start: Point,
-                          second_end: Point) -> Point:
-    if segment_contains_point(cross_product, first_start, first_end,
-                              second_start):
+def intersect(cross_product: QuaternaryPointFunction,
+              point_cls: Type[Point],
+              first_start: Point,
+              first_end: Point,
+              second_start: Point,
+              second_end: Point) -> Point:
+    if contains_point(cross_product, first_start, first_end, second_start):
         return second_start
-    elif segment_contains_point(cross_product, first_start, first_end,
-                                second_end):
+    elif contains_point(cross_product, first_start, first_end, second_end):
         return second_end
-    elif segment_contains_point(cross_product, second_start, second_end,
-                                first_start):
+    elif contains_point(cross_product, second_start, second_end, first_start):
         return first_start
-    elif segment_contains_point(cross_product, second_start, second_end,
-                                first_end):
+    elif contains_point(cross_product, second_start, second_end, first_end):
         return first_end
     else:
-        first_base_numerator = cross_product(first_start, second_start,
-                                             second_start, second_end)
-        second_base_numerator = cross_product(first_start, second_start,
-                                              first_start, first_end)
-        first_start_x, first_start_y = first_start.x, first_start.y
-        first_end_x, first_end_y = first_end.x, first_end.y
-        second_start_x, second_start_y = second_start.x, second_start.y
-        second_end_x, second_end_y = second_end.x, second_end.y
-        first_x_addend = (first_end_x - first_start_x) * first_base_numerator
-        first_y_addend = (first_end_y - first_start_y) * first_base_numerator
-        second_x_addend = ((second_end_x - second_start_x)
-                           * second_base_numerator)
-        second_y_addend = ((second_end_y - second_start_y)
-                           * second_base_numerator)
-        delta_x, delta_y = (abs(second_x_addend) - abs(first_x_addend),
-                            abs(second_y_addend) - abs(first_y_addend))
-        inverted_denominator = inverse(cross_product(first_start, first_end,
-                                                     second_start, second_end))
-        return point_cls(
-                first_start_x + first_x_addend * inverted_denominator
-                if 0 < delta_x
-                else (second_start_x + second_x_addend * inverted_denominator
-                      if delta_x < 0
-                      else (first_start_x + second_start_x
-                            + (first_x_addend + second_x_addend)
-                            * inverted_denominator) / 2),
-                first_start_y + first_y_addend * inverted_denominator
-                if 0 < delta_y
-                else (second_start_y + second_y_addend * inverted_denominator
-                      if delta_y < 0
-                      else (first_start_y + second_start_y
-                            + (first_y_addend + second_y_addend)
-                            * inverted_denominator) / 2))
+        scale = (cross_product(first_start, second_start, second_start,
+                               second_end)
+                 * (Fraction(1)
+                    / cross_product(first_start, first_end, second_start,
+                                    second_end)))
+        return point_cls(first_start.x + (first_end.x - first_start.x) * scale,
+                         first_start.y + (first_end.y - first_start.y) * scale)
 
 
-def segments_relation(cross_product: QuaternaryPointFunction,
-                      first_start: Point,
-                      first_end: Point,
-                      second_start: Point,
-                      second_end: Point) -> Relation:
+def relate(cross_product: QuaternaryPointFunction,
+           first_start: Point,
+           first_end: Point,
+           second_start: Point,
+           second_end: Point) -> Relation:
     if first_start > first_end:
         first_start, first_end = first_end, first_start
     if second_start > second_end:

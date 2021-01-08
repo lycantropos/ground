@@ -26,7 +26,7 @@ Relation = _enums.Relation
 
 class Context:
     __slots__ = ('_box_cls', '_centroidal', '_contour_cls', '_coordinate_cls',
-                 '_incircle', '_inverse', '_multicontour_cls',
+                 '_incircle', '_inverse', '_linear', '_multicontour_cls',
                  '_multipoint_cls', '_multipolygon_cls', '_multisegment_cls',
                  '_point_cls', '_polygon_cls', '_segment_cls', '_vector')
 
@@ -60,12 +60,12 @@ class Context:
         self._inverse = (1.
                          if issubclass(coordinate_cls, float)
                          else _Fraction(1)).__truediv__
-        self._centroidal, self._incircle, self._vector = (
+        self._centroidal, self._incircle, self._linear, self._vector = (
             (_centroidal.plain_context, _incircle.plain_context,
-             _vector.plain_context)
+             _linear.plain_context, _vector.plain_context)
             if issubclass(coordinate_cls, _numbers.Rational)
             else (_centroidal.robust_context, _incircle.robust_context,
-                  _vector.robust_context))
+                  _linear.robust_context, _vector.robust_context))
 
     __repr__ = generate_repr(__init__)
 
@@ -230,25 +230,25 @@ class Context:
         ...                                Point(3, 0))
         False
         """
-        return _linear.segment_contains_point(self.cross_product, start, end,
-                                              point)
+        return self._linear.containment_checker(self.cross_product, start, end,
+                                                point)
 
     def segments_intersection(self,
                               first_start: _hints.Point,
                               first_end: _hints.Point,
                               second_start: _hints.Point,
                               second_end: _hints.Point) -> _hints.Point:
-        return _linear.segments_intersection(
-                self.cross_product, self._inverse, self.point_cls, first_start,
-                first_end, second_start, second_end)
+        return self._linear.intersector(
+                self.cross_product, self.point_cls, first_start, first_end,
+                second_start, second_end)
 
     def segments_relation(self,
                           first_start: _hints.Point,
                           first_end: _hints.Point,
                           second_start: _hints.Point,
                           second_end: _hints.Point) -> Relation:
-        return _linear.segments_relation(self.cross_product, first_start,
-                                         first_end, second_start, second_end)
+        return self._linear.relater(self.cross_product, first_start, first_end,
+                                    second_start, second_end)
 
 
 _context = ContextVar('context',
