@@ -29,7 +29,7 @@ def _to_sub_hull(orientation: TernaryPointFunction[Orientation],
     result = []
     for point in points:
         while len(result) >= 2:
-            if (orientation(result[-1], result[-2], point)
+            if (orientation(result[-2], result[-1], point)
                     is not Orientation.COUNTERCLOCKWISE):
                 del result[-1]
             else:

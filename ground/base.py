@@ -185,7 +185,7 @@ class Context:
         >>> Point = context.point_cls
         >>> (context.points_convex_hull([Point(0, 0), Point(2, 0), Point(2, 2),
         ...                              Point(0, 2)])
-        ...  == [Point(0, 0), Point(0, 2), Point(2, 2), Point(2, 0)])
+        ...  == [Point(0, 0), Point(2, 0), Point(2, 2), Point(0, 2)])
         True
         """
         return _discrete.to_convex_hull(self.angle_orientation, points)
