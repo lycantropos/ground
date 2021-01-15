@@ -40,64 +40,63 @@ def intersect(cross_product: QuaternaryPointFunction,
 
 
 def relate(cross_product: QuaternaryPointFunction,
-           first_start: Point,
-           first_end: Point,
-           second_start: Point,
-           second_end: Point) -> Relation:
-    if first_start > first_end:
-        first_start, first_end = first_end, first_start
-    if second_start > second_end:
-        second_start, second_end = second_end, second_start
-    starts_equal = first_start == second_start
-    ends_equal = first_end == second_end
+           test_start: Point,
+           test_end: Point,
+           goal_start: Point,
+           goal_end: Point) -> Relation:
+    if test_start > test_end:
+        test_start, test_end = test_end, test_start
+    if goal_start > goal_end:
+        goal_start, goal_end = goal_end, goal_start
+    starts_equal = test_start == goal_start
+    ends_equal = test_end == goal_end
     if starts_equal and ends_equal:
         return Relation.EQUAL
-    first_start_cross_product = cross_product(second_end, second_start,
-                                              second_end, first_start)
-    first_end_cross_product = cross_product(second_end, second_start,
-                                            second_end, first_end)
-    if first_start_cross_product and first_end_cross_product:
-        if (first_start_cross_product > 0) is (first_end_cross_product > 0):
+    test_start_cross_product = cross_product(goal_end, goal_start, goal_end,
+                                             test_start)
+    test_end_cross_product = cross_product(goal_end, goal_start, goal_end,
+                                           test_end)
+    if test_start_cross_product and test_end_cross_product:
+        if (test_start_cross_product > 0) is (test_end_cross_product > 0):
             return Relation.DISJOINT
         else:
-            second_start_cross_product = cross_product(first_start, first_end,
-                                                       first_start,
-                                                       second_start)
-            second_end_cross_product = cross_product(first_start, first_end,
-                                                     first_start, second_end)
-            if second_start_cross_product and second_end_cross_product:
+            goal_start_cross_product = cross_product(test_start, test_end,
+                                                     test_start, goal_start)
+            goal_end_cross_product = cross_product(test_start, test_end,
+                                                   test_start, goal_end)
+            if goal_start_cross_product and goal_end_cross_product:
                 return (Relation.DISJOINT
-                        if ((second_start_cross_product > 0)
-                            is (second_end_cross_product > 0))
+                        if ((goal_start_cross_product > 0)
+                            is (goal_end_cross_product > 0))
                         else Relation.CROSS)
-            elif second_start_cross_product:
+            elif goal_start_cross_product:
                 return (Relation.TOUCH
-                        if first_start < second_end < first_end
+                        if test_start < goal_end < test_end
                         else Relation.DISJOINT)
-            elif second_end_cross_product:
+            elif goal_end_cross_product:
                 return (Relation.TOUCH
-                        if first_start < second_start < first_end
+                        if test_start < goal_start < test_end
                         else Relation.DISJOINT)
-    elif first_start_cross_product:
+    elif test_start_cross_product:
         return (Relation.TOUCH
-                if second_start <= first_end <= second_end
+                if goal_start <= test_end <= goal_end
                 else Relation.DISJOINT)
-    elif first_end_cross_product:
+    elif test_end_cross_product:
         return (Relation.TOUCH
-                if second_start <= first_start <= second_end
+                if goal_start <= test_start <= goal_end
                 else Relation.DISJOINT)
     elif starts_equal:
-        return (Relation.COMPOSITE
-                if first_end < second_end
-                else Relation.COMPONENT)
+        return (Relation.COMPONENT
+                if test_end < goal_end
+                else Relation.COMPOSITE)
     elif ends_equal:
-        return (Relation.COMPOSITE
-                if first_start < second_start
-                else Relation.COMPONENT)
-    elif first_start == second_end or first_end == second_start:
+        return (Relation.COMPONENT
+                if test_start < goal_start
+                else Relation.COMPOSITE)
+    elif test_start == goal_end or test_end == goal_start:
         return Relation.TOUCH
-    elif (second_start < first_start < second_end
-          or first_start < second_start < first_end):
+    elif (goal_start < test_start < goal_end
+          or test_start < goal_start < test_end):
         return Relation.OVERLAP
     else:
         return Relation.DISJOINT

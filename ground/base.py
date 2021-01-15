@@ -236,12 +236,12 @@ class Context:
                 second_start, second_end)
 
     def segments_relation(self,
-                          first_start: _hints.Point,
-                          first_end: _hints.Point,
-                          second_start: _hints.Point,
-                          second_end: _hints.Point) -> Relation:
-        return self._linear.relater(self.cross_product, first_start, first_end,
-                                    second_start, second_end)
+                          test_start: _hints.Point,
+                          test_end: _hints.Point,
+                          goal_start: _hints.Point,
+                          goal_end: _hints.Point) -> Relation:
+        return self._linear.relater(self.cross_product, test_start, test_end,
+                                    goal_start, goal_end)
 
 
 _context = ContextVar('context',
