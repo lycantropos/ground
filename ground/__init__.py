@@ -1,3 +1,3 @@
 """Basis of computational geometry."""
 
-__version__ = '2.0.4-alpha'
+__version__ = '2.0.4'
