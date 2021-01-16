@@ -95,9 +95,14 @@ def relate(cross_product: QuaternaryPointFunction,
                 else Relation.COMPONENT)
     elif test_start == goal_end or test_end == goal_start:
         return Relation.TOUCH
-    elif (goal_start < test_start < goal_end
-          or test_start < goal_start < test_end):
-        return Relation.OVERLAP
+    elif goal_start < test_start < goal_end:
+        return (Relation.COMPONENT
+                if test_end < goal_end
+                else Relation.OVERLAP)
+    elif test_start < goal_start < test_end:
+        return (Relation.COMPOSITE
+                if goal_end < test_end
+                else Relation.OVERLAP)
     else:
         return Relation.DISJOINT
 
