@@ -7,7 +7,7 @@ services:
       args:
         - IMAGE_NAME=${PYPY_IMAGE_NAME}
         - IMAGE_VERSION=${PYPY_IMAGE_VERSION}
-    image: lycantropos/ground-pypy:2.0.5-alpha
+    image: lycantropos/ground-pypy:2.0.5
     volumes:
       - ./ground:/opt/ground/ground
       - ./pytest.ini:/opt/ground/pytest.ini
