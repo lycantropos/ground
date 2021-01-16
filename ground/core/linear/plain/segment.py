@@ -90,9 +90,9 @@ def relate(cross_product: QuaternaryPointFunction,
                 if test_end < goal_end
                 else Relation.COMPOSITE)
     elif ends_equal:
-        return (Relation.COMPONENT
+        return (Relation.COMPOSITE
                 if test_start < goal_start
-                else Relation.COMPOSITE)
+                else Relation.COMPONENT)
     elif test_start == goal_end or test_end == goal_start:
         return Relation.TOUCH
     elif (goal_start < test_start < goal_end
