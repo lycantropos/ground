@@ -1,10 +1,10 @@
 import numbers as _numbers
-from contextvars import ContextVar
+from contextvars import ContextVar as _ContextVar
 from fractions import Fraction as _Fraction
-from typing import (Sequence,
-                    Type)
+from typing import (Sequence as _Sequence,
+                    Type as _Type)
 
-from reprit.base import generate_repr
+from reprit.base import generate_repr as _generate_repr
 
 from . import hints as _hints
 from .core import (angular as _angular,
@@ -32,18 +32,18 @@ class Context:
 
     def __init__(self,
                  *,
-                 box_cls: Type[_hints.Box] = _geometries.Box,
-                 contour_cls: Type[_hints.Contour] = _geometries.Contour,
-                 coordinate_cls: Type[_hints.Coordinate] = _numbers.Real,
-                 multipoint_cls: Type[_hints.Multipoint]
+                 box_cls: _Type[_hints.Box] = _geometries.Box,
+                 contour_cls: _Type[_hints.Contour] = _geometries.Contour,
+                 coordinate_cls: _Type[_hints.Coordinate] = _numbers.Real,
+                 multipoint_cls: _Type[_hints.Multipoint]
                  = _geometries.Multipoint,
-                 multipolygon_cls: Type[_hints.Multipolygon]
+                 multipolygon_cls: _Type[_hints.Multipolygon]
                  = _geometries.Multipolygon,
-                 multisegment_cls: Type[_hints.Multisegment]
+                 multisegment_cls: _Type[_hints.Multisegment]
                  = _geometries.Multisegment,
-                 point_cls: Type[_hints.Point] = _geometries.Point,
-                 polygon_cls: Type[_hints.Polygon] = _geometries.Polygon,
-                 segment_cls: Type[_hints.Segment] = _geometries.Segment
+                 point_cls: _Type[_hints.Point] = _geometries.Point,
+                 polygon_cls: _Type[_hints.Polygon] = _geometries.Polygon,
+                 segment_cls: _Type[_hints.Segment] = _geometries.Segment
                  ) -> None:
         self._box_cls = box_cls
         self._contour_cls = contour_cls
@@ -64,18 +64,18 @@ class Context:
             else (_centroidal.robust_context, _incircle.robust_context,
                   _linear.robust_context, _vector.robust_context))
 
-    __repr__ = generate_repr(__init__)
+    __repr__ = _generate_repr(__init__)
 
     @property
-    def box_cls(self) -> Type[_hints.Box]:
+    def box_cls(self) -> _Type[_hints.Box]:
         return self._box_cls
 
     @property
-    def contour_cls(self) -> Type[_hints.Contour]:
+    def contour_cls(self) -> _Type[_hints.Contour]:
         return self._contour_cls
 
     @property
-    def coordinate_cls(self) -> Type[_hints.Coordinate]:
+    def coordinate_cls(self) -> _Type[_hints.Coordinate]:
         return self._coordinate_cls
 
     @property
@@ -87,19 +87,19 @@ class Context:
         return self._vector.dot_product
 
     @property
-    def multipoint_cls(self) -> Type[_hints.Multipoint]:
+    def multipoint_cls(self) -> _Type[_hints.Multipoint]:
         return self._multipoint_cls
 
     @property
-    def multipolygon_cls(self) -> Type[_hints.Multipolygon]:
+    def multipolygon_cls(self) -> _Type[_hints.Multipolygon]:
         return self._multipolygon_cls
 
     @property
-    def multisegment_cls(self) -> Type[_hints.Multisegment]:
+    def multisegment_cls(self) -> _Type[_hints.Multisegment]:
         return self._multisegment_cls
 
     @property
-    def point_cls(self) -> Type[_hints.Point]:
+    def point_cls(self) -> _Type[_hints.Point]:
         return self._point_cls
 
     @property
@@ -107,11 +107,11 @@ class Context:
         return self._incircle.point_point_point_test
 
     @property
-    def polygon_cls(self) -> Type[_hints.Polygon]:
+    def polygon_cls(self) -> _Type[_hints.Polygon]:
         return self._polygon_cls
 
     @property
-    def segment_cls(self) -> Type[_hints.Segment]:
+    def segment_cls(self) -> _Type[_hints.Segment]:
         return self._segment_cls
 
     def angle_kind(self,
@@ -129,7 +129,7 @@ class Context:
                                     first_ray_point, second_ray_point)
 
     def contour_centroid(self,
-                         vertices: Sequence[_hints.Point]) -> _hints.Point:
+                         vertices: _Sequence[_hints.Point]) -> _hints.Point:
         """
         Constructs centroid of a contour given its vertices.
 
@@ -152,7 +152,7 @@ class Context:
         return _boxed.merge(self.box_cls, first_box, second_box)
 
     def multipoint_centroid(self,
-                            points: Sequence[_hints.Point]) -> _hints.Point:
+                            points: _Sequence[_hints.Point]) -> _hints.Point:
         """
         Constructs centroid of a multipoint given its points.
 
@@ -170,8 +170,8 @@ class Context:
         return self._centroidal.multipoint_centroid(self.point_cls, points)
 
     def points_convex_hull(self,
-                           points: Sequence[_hints.Point]
-                           ) -> Sequence[_hints.Point]:
+                           points: _Sequence[_hints.Point]
+                           ) -> _Sequence[_hints.Point]:
         """
         Constructs convex hull of points.
 
@@ -244,8 +244,8 @@ class Context:
                                     goal_start, goal_end)
 
 
-_context = ContextVar('context',
-                      default=Context())
+_context = _ContextVar('context',
+                       default=Context())
 
 
 def get_context() -> Context:
