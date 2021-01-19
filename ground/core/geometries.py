@@ -50,6 +50,9 @@ class Multipoint:
 
     __repr__ = generate_repr(__init__)
 
+    def __eq__(self, other: 'Multipoint') -> bool:
+        return are_sequences_equivalent(self.points, other.points)
+
     @property
     def points(self) -> Sequence[hints.Point]:
         return self._points
