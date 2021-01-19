@@ -100,6 +100,10 @@ class Multipoint(Protocol[Coordinate]):
     def __new__(cls, points: Sequence[Point]) -> 'Multipoint':
         """Constructs multipoint given its points."""
 
+    @abstractmethod
+    def __eq__(self, other: 'Multipoint') -> bool:
+        """Checks if the multipoint is equal to the other."""
+
     @property
     @abstractmethod
     def points(self) -> Sequence[Point]:
@@ -142,6 +146,10 @@ class Multisegment(Protocol[Coordinate]):
     def __new__(cls, segments: Sequence[Segment]) -> 'Multisegment':
         """Constructs multisegment given its segments."""
 
+    @abstractmethod
+    def __eq__(self, other: 'Multisegment') -> bool:
+        """Checks if the multisegment is equal to the other."""
+
     @property
     @abstractmethod
     def segments(self) -> Sequence[Segment]:
@@ -154,8 +162,13 @@ class Contour(Protocol[Coordinate]):
     (called *contour's vertices*).
     """
 
+    @abstractmethod
     def __new__(cls, vertices: Sequence[Point]) -> 'Contour':
         """Constructs contour given its vertices."""
+
+    @abstractmethod
+    def __eq__(self, other: 'Contour') -> bool:
+        """Checks if the contour is equal to the other."""
 
     @property
     @abstractmethod
@@ -173,6 +186,10 @@ class Polygon(Protocol[Coordinate]):
     @abstractmethod
     def __new__(cls, border: Contour, holes: Sequence[Contour]) -> 'Polygon':
         """Constructs polygon given its border and holes."""
+
+    @abstractmethod
+    def __eq__(self, other: 'Polygon') -> bool:
+        """Checks if the polygon is equal to the other."""
 
     @property
     @abstractmethod
@@ -194,6 +211,10 @@ class Multipolygon(Protocol[Coordinate]):
     @abstractmethod
     def __new__(cls, polygons: Sequence[Polygon]) -> 'Multipolygon':
         """Constructs multipolygon given its polygons."""
+
+    @abstractmethod
+    def __eq__(self, other: 'Multipolygon') -> bool:
+        """Checks if the multipolygon is equal to the other."""
 
     @property
     @abstractmethod
