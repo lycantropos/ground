@@ -1,8 +1,10 @@
+from operator import eq
 from typing import Sequence
 
 from reprit.base import generate_repr
 
 from ground import hints
+from .hints import Domain
 
 
 class Point:
@@ -84,6 +86,9 @@ class Multisegment:
 
     __repr__ = generate_repr(__init__)
 
+    def __eq__(self, other: 'Multisegment') -> bool:
+        return are_sequences_equivalent(self.segments, other.segments)
+
     @property
     def segments(self) -> Sequence[hints.Segment]:
         return self._segments
@@ -96,6 +101,9 @@ class Contour:
         self._vertices = vertices
 
     __repr__ = generate_repr(__init__)
+
+    def __eq__(self, other: 'Contour') -> bool:
+        return are_sequences_equivalent(self.vertices, other.vertices)
 
     @property
     def vertices(self) -> Sequence[hints.Polygon]:
@@ -147,6 +155,10 @@ class Polygon:
 
     __repr__ = generate_repr(__init__)
 
+    def __eq__(self, other: 'Polygon') -> bool:
+        return (self.border == other.border
+                and are_sequences_equivalent(self.holes, other.holes))
+
     @property
     def border(self) -> hints.Contour:
         return self._border
@@ -164,6 +176,14 @@ class Multipolygon:
 
     __repr__ = generate_repr(__init__)
 
+    def __eq__(self, other: 'Multipolygon') -> bool:
+        return are_sequences_equivalent(self.polygons, other.polygons)
+
     @property
     def polygons(self) -> Sequence[hints.Polygon]:
         return self._polygons
+
+
+def are_sequences_equivalent(left: Sequence[Domain],
+                             right: Sequence[Domain]) -> bool:
+    return len(left) == len(right) and all(map(eq, left, right))
