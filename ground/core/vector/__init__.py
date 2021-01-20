@@ -2,6 +2,8 @@ from reprit.base import generate_repr
 
 from ground.core.hints import QuaternaryPointFunction
 from ground.hints import Coordinate
+from .exact import (cross as exact_cross,
+                    dot as exact_dot)
 from .plain import (cross as plain_cross,
                     dot as plain_dot)
 from .robust import (cross as robust_cross,
@@ -30,6 +32,8 @@ class Context:
         return self._dot_product
 
 
+exact_context = Context(cross_product=exact_cross.multiply,
+                        dot_product=exact_dot.multiply)
 plain_context = Context(cross_product=plain_cross.multiply,
                         dot_product=plain_dot.multiply)
 robust_context = Context(cross_product=robust_cross.multiply,

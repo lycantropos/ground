@@ -4,16 +4,16 @@ from typing import (Callable,
 
 from reprit.base import generate_repr
 
-from ground.core.hints import UnaryCoordinateOperation
 from ground.hints import Point
+from .exact import (contour as exact_contour,
+                    multipoint as exact_multipoint)
 from .plain import (contour as plain_contour,
                     multipoint as plain_multipoint)
 from .robust import (contour as robust_contour,
                      multipoint as robust_multipoint)
 
-MultipointCentroid = Callable[[Type[Point], Sequence[Point]], Point]
-ContourCentroid = Callable[[UnaryCoordinateOperation, Type[Point],
-                            Sequence[Point]], Point]
+ContourCentroid = MultipointCentroid = Callable[[Type[Point], Sequence[Point]],
+                                                Point]
 
 
 class Context:
@@ -37,6 +37,8 @@ class Context:
         return self._multipoint_centroid
 
 
+exact_context = Context(contour_centroid=exact_contour.centroid,
+                        multipoint_centroid=exact_multipoint.centroid)
 plain_context = Context(contour_centroid=plain_contour.centroid,
                         multipoint_centroid=plain_multipoint.centroid)
 robust_context = Context(contour_centroid=robust_contour.centroid,

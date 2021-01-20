@@ -1,6 +1,6 @@
+import enum as _enum
 import numbers as _numbers
 from contextvars import ContextVar as _ContextVar
-from fractions import Fraction as _Fraction
 from typing import (Sequence as _Sequence,
                     Type as _Type)
 
@@ -24,9 +24,16 @@ Orientation = _enums.Orientation
 Relation = _enums.Relation
 
 
+@_enum.unique
+class Mode(_enum.IntEnum):
+    EXACT = 0
+    PLAIN = 1
+    ROBUST = 2
+
+
 class Context:
     __slots__ = ('_box_cls', '_centroidal', '_contour_cls', '_coordinate_cls',
-                 '_incircle', '_inverse', '_linear', '_multipoint_cls',
+                 '_incircle', '_linear', '_mode', '_multipoint_cls',
                  '_multipolygon_cls', '_multisegment_cls', '_point_cls',
                  '_polygon_cls', '_segment_cls', '_vector')
 
@@ -43,8 +50,8 @@ class Context:
                  = _geometries.Multisegment,
                  point_cls: _Type[_hints.Point] = _geometries.Point,
                  polygon_cls: _Type[_hints.Polygon] = _geometries.Polygon,
-                 segment_cls: _Type[_hints.Segment] = _geometries.Segment
-                 ) -> None:
+                 segment_cls: _Type[_hints.Segment] = _geometries.Segment,
+                 mode: Mode = Mode.EXACT) -> None:
         self._box_cls = box_cls
         self._contour_cls = contour_cls
         self._coordinate_cls = coordinate_cls
@@ -54,15 +61,16 @@ class Context:
         self._point_cls = point_cls
         self._polygon_cls = polygon_cls
         self._segment_cls = segment_cls
-        self._inverse = (1.
-                         if issubclass(coordinate_cls, float)
-                         else _Fraction(1)).__truediv__
+        self._mode = mode
         self._centroidal, self._incircle, self._linear, self._vector = (
-            (_centroidal.plain_context, _incircle.plain_context,
-             _linear.plain_context, _vector.plain_context)
-            if issubclass(coordinate_cls, _numbers.Rational)
-            else (_centroidal.robust_context, _incircle.robust_context,
-                  _linear.robust_context, _vector.robust_context))
+            (_centroidal.exact_context, _incircle.exact_context,
+             _linear.exact_context, _vector.exact_context)
+            if mode is Mode.EXACT
+            else ((_centroidal.plain_context, _incircle.plain_context,
+                   _linear.plain_context, _vector.plain_context)
+                  if mode is Mode.PLAIN
+                  else (_centroidal.robust_context, _incircle.robust_context,
+                        _linear.exact_context, _vector.robust_context)))
 
     __repr__ = _generate_repr(__init__)
 
@@ -85,6 +93,10 @@ class Context:
     @property
     def dot_product(self) -> _QuaternaryFunction:
         return self._vector.dot_product
+
+    @property
+    def mode(self) -> Mode:
+        return self._mode
 
     @property
     def multipoint_cls(self) -> _Type[_hints.Multipoint]:
@@ -144,8 +156,7 @@ class Context:
         ...                           Point(0, 2)]) == Point(1, 1)
         True
         """
-        return self._centroidal.contour_centroid(self._inverse, self.point_cls,
-                                                 vertices)
+        return self._centroidal.contour_centroid(self.point_cls, vertices)
 
     def merged_box(self, first_box: _hints.Box, second_box: _hints.Box
                    ) -> _hints.Box:

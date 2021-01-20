@@ -1,16 +1,18 @@
-from typing import (Sequence,
+from fractions import Fraction
+from typing import (Callable,
+                    Sequence,
                     Type)
 
-from ground.core.hints import UnaryCoordinateOperation
 from ground.core.shewchuk import (scale_expansion,
                                   sum_expansions,
                                   to_cross_product)
 from ground.hints import Point
 
 
-def centroid(inverse: UnaryCoordinateOperation,
-             point_cls: Type[Point],
-             vertices: Sequence[Point]) -> Point:
+def centroid(point_cls: Type[Point],
+             vertices: Sequence[Point],
+             inverse: Callable[[int], Fraction] = Fraction(1).__truediv__
+             ) -> Point:
     double_area = x_numerator = y_numerator = (0,)
     prev = vertices[-1]
     prev_x, prev_y = prev.x, prev.y
