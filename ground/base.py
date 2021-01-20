@@ -1,5 +1,4 @@
 import enum as _enum
-import numbers as _numbers
 from contextvars import ContextVar as _ContextVar
 from typing import (Sequence as _Sequence,
                     Type as _Type)
@@ -32,16 +31,15 @@ class Mode(_enum.IntEnum):
 
 
 class Context:
-    __slots__ = ('_box_cls', '_centroidal', '_contour_cls', '_coordinate_cls',
-                 '_incircle', '_linear', '_mode', '_multipoint_cls',
-                 '_multipolygon_cls', '_multisegment_cls', '_point_cls',
-                 '_polygon_cls', '_segment_cls', '_vector')
+    __slots__ = ('_box_cls', '_centroidal', '_contour_cls', '_incircle',
+                 '_linear', '_mode', '_multipoint_cls', '_multipolygon_cls',
+                 '_multisegment_cls', '_point_cls', '_polygon_cls',
+                 '_segment_cls', '_vector')
 
     def __init__(self,
                  *,
                  box_cls: _Type[_hints.Box] = _geometries.Box,
                  contour_cls: _Type[_hints.Contour] = _geometries.Contour,
-                 coordinate_cls: _Type[_hints.Coordinate] = _numbers.Real,
                  multipoint_cls: _Type[_hints.Multipoint]
                  = _geometries.Multipoint,
                  multipolygon_cls: _Type[_hints.Multipolygon]
@@ -54,7 +52,6 @@ class Context:
                  mode: Mode = Mode.EXACT) -> None:
         self._box_cls = box_cls
         self._contour_cls = contour_cls
-        self._coordinate_cls = coordinate_cls
         self._multipoint_cls = multipoint_cls
         self._multipolygon_cls = multipolygon_cls
         self._multisegment_cls = multisegment_cls
