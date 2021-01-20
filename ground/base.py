@@ -83,10 +83,6 @@ class Context:
         return self._contour_cls
 
     @property
-    def coordinate_cls(self) -> _Type[_hints.Coordinate]:
-        return self._coordinate_cls
-
-    @property
     def cross_product(self) -> _QuaternaryFunction:
         return self._vector.cross_product
 

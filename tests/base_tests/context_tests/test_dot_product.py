@@ -7,7 +7,8 @@ from hypothesis import given
 from ground.base import Context
 from tests.hints import (PointsPair,
                          PointsQuadruplet)
-from tests.utils import (equivalence,
+from tests.utils import (context_to_output_coordinate_cls,
+                         equivalence,
                          is_even_permutation,
                          permute,
                          to_perpendicular_point,
@@ -24,8 +25,7 @@ def test_basic(context_with_points_quadruplet: Tuple[Context, PointsQuadruplet]
     result = context.dot_product(first_start, first_end, second_start,
                                  second_end)
 
-    coordinate_cls = type(first_start.x)
-    assert isinstance(result, coordinate_cls)
+    assert isinstance(result, context_to_output_coordinate_cls(context))
 
 
 @given(strategies.contexts_with_points_pairs)

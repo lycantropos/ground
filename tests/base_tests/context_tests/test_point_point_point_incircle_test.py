@@ -6,7 +6,8 @@ from hypothesis import given
 from ground.base import Context
 from tests.hints import (PointsQuadruplet,
                          PointsTriplet)
-from tests.utils import (is_even_permutation,
+from tests.utils import (context_to_output_coordinate_cls,
+                         is_even_permutation,
                          permute,
                          to_sign)
 from . import strategies
@@ -21,8 +22,7 @@ def test_basic(context_with_points_quadruplet: Tuple[Context, PointsQuadruplet]
     result = context.point_point_point_incircle_test(first_point, second_point,
                                                      third_point, fourth_point)
 
-    coordinate_cls = type(first_point.x)
-    assert isinstance(result, coordinate_cls)
+    assert isinstance(result, context_to_output_coordinate_cls(context))
 
 
 @given(strategies.contexts_with_points_triplets)

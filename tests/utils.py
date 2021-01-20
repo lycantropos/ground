@@ -1,16 +1,21 @@
 from functools import partial
+from numbers import (Rational,
+                     Real)
 from typing import (Callable,
                     Iterable,
                     Sequence,
-                    Tuple)
+                    Tuple,
+                    Type)
 
 from hypothesis import strategies
 
 from ground.base import (Context,
+                         Mode,
                          Orientation,
                          Relation,
                          get_context)
 from ground.core.angular import to_sign
+from ground.hints import Coordinate
 from .hints import (Domain,
                     Permutation,
                     Range,
@@ -127,3 +132,7 @@ def to_quadruplets(strategy: Strategy[Domain]
 def to_triplets(strategy: Strategy[Domain]
                 ) -> Strategy[Tuple[Domain, Domain, Domain]]:
     return strategies.tuples(strategy, strategy, strategy)
+
+
+def context_to_output_coordinate_cls(context: Context) -> Type[Coordinate]:
+    return Rational if context.mode is Mode.EXACT else Real
