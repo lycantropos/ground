@@ -1,4 +1,5 @@
 from functools import partial
+from numbers import Rational
 from operator import add
 from typing import (Tuple,
                     Type)
@@ -6,7 +7,7 @@ from typing import (Tuple,
 from hypothesis import strategies
 
 from ground.base import (Context,
-                         Orientation)
+                         Mode, Orientation)
 from ground.hints import (Coordinate,
                           Point)
 from tests.hints import (PointsPair,
@@ -14,7 +15,6 @@ from tests.hints import (PointsPair,
                          PointsTriplet,
                          Strategy)
 from tests.strategies.coordinates import (
-    coordinates_types,
     coordinates_types_with_strategies,
     rational_coordinates_types_with_strategies)
 from tests.strategies.geometries import (
@@ -32,7 +32,7 @@ from tests.utils import (MAX_SEQUENCE_SIZE,
                          to_triplets)
 
 contexts = strategies.builds(Context,
-                             coordinate_cls=coordinates_types)
+                             mode=strategies.sampled_from(list(Mode)))
 contexts_with_empty_lists = strategies.tuples(contexts,
                                               strategies.builds(list))
 
@@ -43,7 +43,10 @@ def to_context_with_coordinates(coordinate_type_with_strategy
                                            Strategy[Coordinate]]:
     coordinate_type, strategy = coordinate_type_with_strategy
     return (strategies.builds(Context,
-                              coordinate_cls=strategies.just(coordinate_type)),
+                              mode=strategies.sampled_from(
+                                      list(Mode)
+                                      if issubclass(coordinate_type, Rational)
+                                      else [Mode.EXACT, Mode.ROBUST])),
             strategy)
 
 

@@ -51,8 +51,6 @@ rational_coordinates_strategies_factories = {Fraction: strategies.fractions,
 coordinates_strategies_factories = {
     **rational_coordinates_strategies_factories,
     float: to_floats}
-coordinates_types = strategies.sampled_from(
-        list(coordinates_strategies_factories.keys()))
 coordinates_strategies = strategies.sampled_from(
         [factory(MIN_COORDINATE, MAX_COORDINATE)
          for factory in coordinates_strategies_factories.values()])
