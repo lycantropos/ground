@@ -93,6 +93,7 @@ class Context:
 
     @property
     def mode(self) -> Mode:
+        """Returns mode of the context."""
         return self._mode
 
     @property
