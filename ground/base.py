@@ -95,6 +95,12 @@ class Context:
 
         >>> context = get_context()
         >>> Point = context.point_cls
+        >>> context.cross_product(Point(0, 0), Point(0, 1), Point(0, 0),
+        ...                       Point(1, 0)) == -1
+        True
+        >>> context.cross_product(Point(0, 0), Point(1, 0), Point(0, 0),
+        ...                       Point(1, 0)) == 0
+        True
         >>> context.cross_product(Point(0, 0), Point(1, 0), Point(0, 0),
         ...                       Point(0, 1)) == 1
         True
