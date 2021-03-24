@@ -363,6 +363,29 @@ class Context:
                               first_end: _hints.Point,
                               second_start: _hints.Point,
                               second_end: _hints.Point) -> _hints.Point:
+        """
+        Returns intersection point of two segments.
+
+        Time complexity:
+            ``O(1)``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Point = context.point_cls
+        >>> (context.segments_intersection(Point(0, 0), Point(2, 0),
+        ...                                Point(0, 0), Point(0, 1))
+        ...  == Point(0, 0))
+        True
+        >>> (context.segments_intersection(Point(0, 0), Point(2, 0),
+        ...                                Point(1, 0), Point(1, 1))
+        ...  == Point(1, 0))
+        True
+        >>> (context.segments_intersection(Point(0, 0), Point(2, 0),
+        ...                                Point(2, 0), Point(3, 0))
+        ...  == Point(2, 0))
+        True
+        """
         return self._linear.intersector(
                 self.cross_product, self.point_cls, first_start, first_end,
                 second_start, second_end)
