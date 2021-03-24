@@ -23,6 +23,7 @@ class Point(_Protocol[Coordinate]):
     Points considered to be sorted lexicographically,
     with ``x`` coordinate being compared first.
     """
+    __slots__ = ()
 
     @_abstractmethod
     def __new__(cls, x: Coordinate, y: Coordinate) -> 'Point':
@@ -61,6 +62,7 @@ class Box(_Protocol[Coordinate]):
     **Box** is a limited closed region
     defined by axis-aligned rectangular contour.
     """
+    __slots__ = ()
 
     @_abstractmethod
     def __new__(cls,
@@ -100,6 +102,7 @@ class Multipoint(_Protocol[Coordinate]):
     """
     **Multipoint** is a non-empty set of unique points.
     """
+    __slots__ = ()
 
     @_abstractmethod
     def __new__(cls, points: _Sequence[Point]) -> 'Multipoint':
@@ -122,6 +125,7 @@ class Segment(_Protocol[Coordinate]):
     is a limited continuous part of the line containing more than one point
     defined by a pair of unequal points (called *segment's endpoints*).
     """
+    __slots__ = ()
 
     @_abstractmethod
     def __new__(cls, start: Point, end: Point) -> 'Segment':
@@ -148,6 +152,7 @@ class Multisegment(_Protocol[Coordinate]):
     **Multisegment**
     is a non-empty set of non-crossing and non-overlapping segments.
     """
+    __slots__ = ()
 
     @_abstractmethod
     def __new__(cls, segments: _Sequence[Segment]) -> 'Multisegment':
@@ -169,6 +174,7 @@ class Contour(_Protocol[Coordinate]):
     **Contour** is a closed simple polyline defined by a sequence of points
     (called *contour's vertices*).
     """
+    __slots__ = ()
 
     @_abstractmethod
     def __new__(cls, vertices: _Sequence[Point]) -> 'Contour':
@@ -191,6 +197,7 @@ class Polygon(_Protocol[Coordinate]):
     (called *polygon's border*) and possibly empty sequence of inner contours
     (called *polygon's holes*).
     """
+    __slots__ = ()
 
     @_abstractmethod
     def __new__(cls, border: Contour, holes: _Sequence[Contour]) -> 'Polygon':
@@ -217,6 +224,7 @@ class Multipolygon(_Protocol[Coordinate]):
     **Multipolygon** is a non-empty set of non-overlapping polygons
     intersecting only in discrete set of points.
     """
+    __slots__ = ()
 
     @_abstractmethod
     def __new__(cls, polygons: _Sequence[Polygon]) -> 'Multipolygon':
