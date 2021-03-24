@@ -32,6 +32,7 @@ class Mode(_enum.IntEnum):
 
 
 class Context:
+    """Represents common language for computational geometry."""
     __slots__ = ('_box_cls', '_centroidal', '_contour_cls', '_incircle',
                  '_linear', '_mode', '_multipoint_cls', '_multipolygon_cls',
                  '_multisegment_cls', '_point_cls', '_polygon_cls',
