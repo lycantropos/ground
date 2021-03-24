@@ -85,6 +85,20 @@ class Context:
 
     @property
     def cross_product(self) -> _QuaternaryFunction:
+        """
+        Returns cross product of the segments.
+
+        Time complexity:
+            ``O(1)``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Point = context.point_cls
+        >>> context.cross_product(Point(0, 0), Point(1, 0), Point(0, 0),
+        ...                       Point(0, 1)) == 1
+        True
+        """
         return self._vector.cross_product
 
     @property
