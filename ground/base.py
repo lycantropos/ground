@@ -218,6 +218,26 @@ class Context:
                           vertex: _hints.Point,
                           first_ray_point: _hints.Point,
                           second_ray_point: _hints.Point) -> Orientation:
+        """
+        Returns angle orientation.
+
+        Time complexity:
+            ``O(1)``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Point = context.point_cls
+        >>> (context.angle_orientation(Point(0, 0), Point(0, 1), Point(1, 0))
+        ...  is Orientation.CLOCKWISE)
+        True
+        >>> (context.angle_orientation(Point(0, 0), Point(1, 0), Point(1, 0))
+        ...  is Orientation.COLLINEAR)
+        True
+        >>> (context.angle_orientation(Point(0, 0), Point(1, 0), Point(0, 1))
+        ...  is Orientation.COUNTERCLOCKWISE)
+        True
+        """
         return _angular.orientation(self.cross_product, vertex,
                                     first_ray_point, second_ray_point)
 
