@@ -108,6 +108,7 @@ class Context:
 
     @property
     def multisegment_cls(self) -> _Type[_hints.Multisegment]:
+        """Returns type for multisegments."""
         return self._multisegment_cls
 
     @property
