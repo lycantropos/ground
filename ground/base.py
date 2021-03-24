@@ -114,7 +114,13 @@ class Context:
         >>> context = get_context()
         >>> Point = context.point_cls
         >>> context.dot_product(Point(0, 0), Point(1, 0), Point(0, 0),
+        ...                     Point(-1, 0)) == -1
+        True
+        >>> context.dot_product(Point(0, 0), Point(1, 0), Point(0, 0),
         ...                     Point(0, 1)) == 0
+        True
+        >>> context.dot_product(Point(0, 0), Point(1, 0), Point(0, 0),
+        ...                     Point(1, 0)) == 1
         True
         """
         return self._vector.dot_product
