@@ -441,6 +441,7 @@ def get_context() -> Context:
 
 
 def set_context(context: Context) -> None:
+    """Sets current context."""
     assert isinstance(context, Context), ('Expected "{expected}" instance, '
                                           'but got "{actual}".'
                                           .format(expected=Context,
