@@ -25,6 +25,7 @@ Relation = _enums.Relation
 
 @_enum.unique
 class Mode(_enum.IntEnum):
+    """Represents possible context modes."""
     EXACT = 0
     PLAIN = 1
     ROBUST = 2
