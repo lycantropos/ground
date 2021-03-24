@@ -75,6 +75,7 @@ class Context:
 
     @property
     def box_cls(self) -> _Type[_hints.Box]:
+        """Returns type for boxes."""
         return self._box_cls
 
     @property
