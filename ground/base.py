@@ -436,6 +436,7 @@ _context = _ContextVar('context',
 
 
 def get_context() -> Context:
+    """Returns current context."""
     return _context.get()
 
 
