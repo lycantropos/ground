@@ -146,6 +146,29 @@ class Context:
 
     @property
     def point_point_point_incircle_test(self) -> _QuaternaryFunction:
+        """
+        Returns result of "incircle test" for point-point-point case.
+
+        Time complexity:
+            ``O(1)``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Point = context.point_cls
+        >>> (context.point_point_point_incircle_test(Point(0, 0), Point(2, 0),
+        ...                                          Point(0, 2), Point(1, 1))
+        ...  > 0)
+        True
+        >>> (context.point_point_point_incircle_test(Point(0, 0), Point(2, 0),
+        ...                                          Point(0, 2), Point(2, 2))
+        ...  == 0)
+        True
+        >>> (context.point_point_point_incircle_test(Point(0, 0), Point(2, 0),
+        ...                                          Point(0, 2), Point(3, 3))
+        ...  < 0)
+        True
+        """
         return self._incircle.point_point_point_test
 
     @property
