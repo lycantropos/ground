@@ -122,6 +122,7 @@ class Context:
 
     @property
     def polygon_cls(self) -> _Type[_hints.Polygon]:
+        """Returns type for polygons."""
         return self._polygon_cls
 
     @property
