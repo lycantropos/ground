@@ -80,6 +80,7 @@ class Context:
 
     @property
     def contour_cls(self) -> _Type[_hints.Contour]:
+        """Returns type for contours."""
         return self._contour_cls
 
     @property
