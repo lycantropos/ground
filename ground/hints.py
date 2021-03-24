@@ -4,14 +4,17 @@ from typing import (Sequence as _Sequence,
                     TypeVar as _TypeVar)
 
 try:
-    from typing import Protocol as _Protocol
+    from typing import (Protocol as _Protocol,
+                        runtime_checkable as _runtime_checkable)
 except ImportError:
-    from typing_extensions import Protocol as _Protocol
+    from typing_extensions import (Protocol as _Protocol,
+                                   runtime_checkable as _runtime_checkable)
 
 Coordinate = _TypeVar('Coordinate',
                       bound=_Real)
 
 
+@_runtime_checkable
 class Point(_Protocol[Coordinate]):
     """
     **Point** is a minimal element of the plane
@@ -52,6 +55,7 @@ class Point(_Protocol[Coordinate]):
         """Second coordinate of the point."""
 
 
+@_runtime_checkable
 class Box(_Protocol[Coordinate]):
     """
     **Box** is a limited closed region
@@ -91,6 +95,7 @@ class Box(_Protocol[Coordinate]):
         """Returns minimum ``y``-coordinate of the box."""
 
 
+@_runtime_checkable
 class Multipoint(_Protocol[Coordinate]):
     """
     **Multipoint** is a non-empty set of unique points.
@@ -110,6 +115,7 @@ class Multipoint(_Protocol[Coordinate]):
         """Returns points of the multipoint."""
 
 
+@_runtime_checkable
 class Segment(_Protocol[Coordinate]):
     """
     **Segment** (or **line segment**)
@@ -136,6 +142,7 @@ class Segment(_Protocol[Coordinate]):
         """Returns start endpoint of the segment."""
 
 
+@_runtime_checkable
 class Multisegment(_Protocol[Coordinate]):
     """
     **Multisegment**
@@ -156,6 +163,7 @@ class Multisegment(_Protocol[Coordinate]):
         """Returns segments of the multisegment."""
 
 
+@_runtime_checkable
 class Contour(_Protocol[Coordinate]):
     """
     **Contour** is a closed simple polyline defined by a sequence of points
@@ -176,6 +184,7 @@ class Contour(_Protocol[Coordinate]):
         """Returns coordinates of the contour."""
 
 
+@_runtime_checkable
 class Polygon(_Protocol[Coordinate]):
     """
     **Polygon** is a limited closed region defined by the pair of outer contour
@@ -202,6 +211,7 @@ class Polygon(_Protocol[Coordinate]):
         """Returns holes of the polygon."""
 
 
+@_runtime_checkable
 class Multipolygon(_Protocol[Coordinate]):
     """
     **Multipolygon** is a non-empty set of non-overlapping polygons
