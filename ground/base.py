@@ -103,6 +103,7 @@ class Context:
 
     @property
     def multipolygon_cls(self) -> _Type[_hints.Multipolygon]:
+        """Returns type for multipolygons."""
         return self._multipolygon_cls
 
     @property
