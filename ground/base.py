@@ -191,6 +191,26 @@ class Context:
                    vertex: _hints.Point,
                    first_ray_point: _hints.Point,
                    second_ray_point: _hints.Point) -> Kind:
+        """
+        Returns angle kind.
+
+        Time complexity:
+            ``O(1)``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Point = context.point_cls
+        >>> (context.angle_kind(Point(0, 0), Point(1, 0), Point(-1, 0))
+        ...  is Kind.OBTUSE)
+        True
+        >>> (context.angle_kind(Point(0, 0), Point(1, 0), Point(0, 1))
+        ...  is Kind.RIGHT)
+        True
+        >>> (context.angle_kind(Point(0, 0), Point(1, 0), Point(1, 0))
+        ...  is Kind.ACUTE)
+        True
+        """
         return _angular.kind(self.dot_product, vertex, first_ray_point,
                              second_ray_point)
 
