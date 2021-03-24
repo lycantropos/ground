@@ -98,6 +98,7 @@ class Context:
 
     @property
     def multipoint_cls(self) -> _Type[_hints.Multipoint]:
+        """Returns type for multipoints."""
         return self._multipoint_cls
 
     @property
