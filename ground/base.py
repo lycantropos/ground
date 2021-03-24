@@ -127,6 +127,7 @@ class Context:
 
     @property
     def segment_cls(self) -> _Type[_hints.Segment]:
+        """Returns type for segments."""
         return self._segment_cls
 
     def angle_kind(self,
