@@ -153,6 +153,20 @@ class Context:
 
     def merged_box(self, first_box: _hints.Box, second_box: _hints.Box
                    ) -> _hints.Box:
+        """
+        Merges two boxes.
+
+        Time complexity:
+            ``O(1)``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Box = context.box_cls
+        >>> (context.merged_box(Box(0, 1, 0, 1), Box(1, 2, 1, 2))
+        ...  == Box(0, 2, 0, 2))
+        True
+        """
         return _boxed.merge(self.box_cls, first_box, second_box)
 
     def multipoint_centroid(self,
