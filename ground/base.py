@@ -113,6 +113,7 @@ class Context:
 
     @property
     def point_cls(self) -> _Type[_hints.Point]:
+        """Returns type for points."""
         return self._point_cls
 
     @property
