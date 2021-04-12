@@ -130,6 +130,22 @@ def two_one_mul(left_tail: Coordinate,
     return third_tail, second_tail, first_tail, head
 
 
+def two_square(tail: Coordinate,
+               head: Coordinate) -> Tuple[Coordinate, Coordinate, Coordinate,
+                                          Coordinate, Coordinate, Coordinate]:
+    first_tail_accumulator, head = square(head)
+    second_tail_accumulator, first_head_accumulator = two_mul(tail,
+                                                              head + head)
+    third_tail_accumulator, second_head_accumulator, first_tail = two_one_sum(
+            second_tail_accumulator, first_head_accumulator,
+            first_tail_accumulator)
+    first_tail_accumulator, first_head_accumulator = square(tail)
+    fifth_tail, fourth_tail, third_tail, second_tail = two_two_sum(
+            first_tail_accumulator, first_head_accumulator,
+            third_tail_accumulator, second_head_accumulator)
+    return fifth_tail, fourth_tail, third_tail, second_tail, first_tail, head
+
+
 def two_sub(left: Coordinate,
             right: Coordinate) -> Tuple[Coordinate, Coordinate]:
     head = left - right
@@ -269,3 +285,13 @@ def to_dot_product(first_x: Coordinate, first_y: Coordinate,
     x_tail, x_head = two_mul(first_x, second_x)
     y_tail, y_head = two_mul(first_y, second_y)
     return two_two_sum(x_tail, x_head, y_tail, y_head)
+
+
+def to_squared_points_distance(first_x: Coordinate,
+                               first_y: Coordinate,
+                               second_x: Coordinate,
+                               second_y: Coordinate) -> Expansion:
+    dy_tail, dy_head = two_sub(first_y, second_y)
+    dx_tail, dx_head = two_sub(first_x, second_x)
+    return sum_expansions(two_square(dx_tail, dx_head),
+                          two_square(dy_tail, dy_head))

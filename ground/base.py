@@ -1,9 +1,10 @@
 import enum as _enum
-from contextvars import ContextVar as _ContextVar
 from typing import (Sequence as _Sequence,
                     Type as _Type)
 
+from contextvars import ContextVar as _ContextVar
 from reprit.base import generate_repr as _generate_repr
+from symba.base import sqrt as _sqrt
 
 from . import hints as _hints
 from .core import (angular as _angular,
@@ -36,7 +37,7 @@ class Context:
     __slots__ = ('_box_cls', '_centroidal', '_contour_cls', '_incircle',
                  '_linear', '_mode', '_multipoint_cls', '_multipolygon_cls',
                  '_multisegment_cls', '_point_cls', '_polygon_cls',
-                 '_segment_cls', '_vector')
+                 '_segment_cls', '_sqrt', '_vector')
 
     def __init__(self,
                  *,
@@ -61,6 +62,7 @@ class Context:
         self._polygon_cls = polygon_cls
         self._segment_cls = segment_cls
         self._mode = mode
+        self._sqrt = _sqrt
         self._centroidal, self._incircle, self._linear, self._vector = (
             (_centroidal.exact_context, _incircle.exact_context,
              _linear.exact_context, _vector.exact_context)
@@ -263,7 +265,8 @@ class Context:
         ...                           Point(0, 2)]) == Point(1, 1)
         True
         """
-        return self._centroidal.contour_centroid(self.point_cls, vertices)
+        return self._centroidal.contour_centroid(self.point_cls, vertices,
+                                                 self._sqrt)
 
     def merged_box(self, first_box: _hints.Box, second_box: _hints.Box
                    ) -> _hints.Box:

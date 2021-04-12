@@ -7,7 +7,7 @@ from typing import (Callable,
 from ground.core.hints import (Contour,
                                Coordinate,
                                Point)
-from .contour import centroid_components as contour_centroid_components
+from .region import centroid_components as region_centroid_components
 
 
 def centroid(point_cls: Type[Point],
@@ -24,11 +24,11 @@ def centroid(point_cls: Type[Point],
 def centroid_components(border: Contour,
                         holes: Sequence[Contour]
                         ) -> Tuple[Coordinate, Coordinate, Coordinate]:
-    x_numerator, y_numerator, double_area = contour_centroid_components(
+    x_numerator, y_numerator, double_area = region_centroid_components(
             border.vertices)
     for hole in holes:
         (hole_x_numerator, hole_y_numerator,
-         hole_double_area) = contour_centroid_components(hole.vertices)
+         hole_double_area) = region_centroid_components(hole.vertices)
         x_numerator += hole_x_numerator
         y_numerator += hole_y_numerator
         double_area += hole_double_area

@@ -1,40 +1,26 @@
-from fractions import Fraction
 from typing import (Callable,
                     Sequence,
-                    Tuple,
                     Type)
 
-from ground.core.hints import (Expansion,
+from ground.core.hints import (Coordinate,
                                Point)
-from ground.core.shewchuk import (scale_expansion,
-                                  sum_expansions,
-                                  to_cross_product)
+from ground.core.shewchuk import to_squared_points_distance
 
 
 def centroid(point_cls: Type[Point],
              vertices: Sequence[Point],
-             inverse: Callable[[int], Fraction] = Fraction(1).__truediv__
-             ) -> Point:
-    x_numerator, y_numerator, double_area = centroid_components(vertices)
-    inverted_denominator = inverse(3 * double_area[-1])
-    return point_cls(x_numerator[-1] * inverted_denominator,
-                     y_numerator[-1] * inverted_denominator)
-
-
-def centroid_components(vertices: Sequence[Point]
-                        ) -> Tuple[Expansion, Expansion, Expansion]:
-    double_area = x_numerator = y_numerator = (0,)
-    prev = vertices[-1]
-    prev_x, prev_y = prev.x, prev.y
+             sqrt: Callable[[Coordinate], Coordinate]) -> Point:
+    accumulated_x = accumulated_y = accumulated_length = 0
+    vertex = vertices[-1]
+    start_x, start_y = vertex.x, vertex.y
     for vertex in vertices:
-        x, y = vertex.x, vertex.y
-        area_component = to_cross_product(prev_x, prev_y, x, y)
-        double_area = sum_expansions(double_area, area_component)
-        x_numerator = sum_expansions(x_numerator,
-                                     scale_expansion(area_component,
-                                                     prev_x + x))
-        y_numerator = sum_expansions(y_numerator,
-                                     scale_expansion(area_component,
-                                                     prev_y + y))
-        prev_x, prev_y = x, y
-    return x_numerator, y_numerator, double_area
+        end_x, end_y = vertex.x, vertex.y
+        length = sqrt(sum(to_squared_points_distance(end_x, end_y, start_x,
+                                                     start_y)))
+        accumulated_x += (start_x + end_x) * length
+        accumulated_y += (start_y + end_y) * length
+        accumulated_length += length
+        start_x, start_y = end_x, end_y
+    inverted_divisor = 1 / (2 * accumulated_length)
+    return point_cls(accumulated_x * inverted_divisor,
+                     accumulated_y * inverted_divisor)
