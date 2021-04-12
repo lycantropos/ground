@@ -1,8 +1,8 @@
 import enum as _enum
+from contextvars import ContextVar as _ContextVar
 from typing import (Sequence as _Sequence,
                     Type as _Type)
 
-from contextvars import ContextVar as _ContextVar
 from reprit.base import generate_repr as _generate_repr
 from symba.base import sqrt as _sqrt
 
