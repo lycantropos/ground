@@ -7,7 +7,8 @@ from typing import (Tuple,
 from hypothesis import strategies
 
 from ground.base import (Context,
-                         Mode, Orientation)
+                         Mode,
+                         Orientation)
 from ground.hints import (Coordinate,
                           Point)
 from tests.hints import (PointsPair,
