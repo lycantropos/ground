@@ -1,18 +1,28 @@
 from fractions import Fraction
 from typing import (Callable,
                     Sequence,
+                    Tuple,
                     Type)
 
+from ground.core.hints import (Expansion,
+                               Point)
 from ground.core.shewchuk import (scale_expansion,
                                   sum_expansions,
                                   to_cross_product)
-from ground.hints import Point
 
 
 def centroid(point_cls: Type[Point],
              vertices: Sequence[Point],
              inverse: Callable[[int], Fraction] = Fraction(1).__truediv__
              ) -> Point:
+    x_numerator, y_numerator, double_area = centroid_components(vertices)
+    inverted_denominator = inverse(3 * double_area[-1])
+    return point_cls(x_numerator[-1] * inverted_denominator,
+                     y_numerator[-1] * inverted_denominator)
+
+
+def centroid_components(vertices: Sequence[Point]
+                        ) -> Tuple[Expansion, Expansion, Expansion]:
     double_area = x_numerator = y_numerator = (0,)
     prev = vertices[-1]
     prev_x, prev_y = prev.x, prev.y
@@ -27,6 +37,4 @@ def centroid(point_cls: Type[Point],
                                      scale_expansion(area_component,
                                                      prev_y + y))
         prev_x, prev_y = x, y
-    inverted_denominator = inverse(3 * double_area[-1])
-    return point_cls(x_numerator[-1] * inverted_denominator,
-                     y_numerator[-1] * inverted_denominator)
+    return x_numerator, y_numerator, double_area

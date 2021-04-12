@@ -4,26 +4,34 @@ from typing import (Callable,
 
 from reprit.base import generate_repr
 
-from ground.hints import Point
+from ground.core.hints import (Contour,
+                               Point)
 from .exact import (contour as exact_contour,
-                    multipoint as exact_multipoint)
+                    multipoint as exact_multipoint,
+                    polygon as exact_polygon)
 from .plain import (contour as plain_contour,
-                    multipoint as plain_multipoint)
+                    multipoint as plain_multipoint,
+                    polygon as plain_polygon)
 from .robust import (contour as robust_contour,
-                     multipoint as robust_multipoint)
+                     multipoint as robust_multipoint,
+                     polygon as robust_polygon)
 
 ContourCentroid = MultipointCentroid = Callable[[Type[Point], Sequence[Point]],
                                                 Point]
+PolygonCentroid = Callable[[Type[Point], Contour, Sequence[Contour]], Point]
 
 
 class Context:
-    __slots__ = '_contour_centroid', '_multipoint_centroid'
+    __slots__ = ('_contour_centroid', '_multipoint_centroid',
+                 '_polygon_centroid')
 
     def __init__(self,
                  contour_centroid: ContourCentroid,
-                 multipoint_centroid: MultipointCentroid) -> None:
+                 multipoint_centroid: MultipointCentroid,
+                 polygon_centroid: PolygonCentroid) -> None:
         self._contour_centroid = contour_centroid
         self._multipoint_centroid = multipoint_centroid
+        self._polygon_centroid = polygon_centroid
 
     __repr__ = generate_repr(__init__,
                              with_module_name=True)
@@ -36,10 +44,17 @@ class Context:
     def multipoint_centroid(self) -> MultipointCentroid:
         return self._multipoint_centroid
 
+    @property
+    def polygon_centroid(self) -> PolygonCentroid:
+        return self._polygon_centroid
+
 
 exact_context = Context(contour_centroid=exact_contour.centroid,
-                        multipoint_centroid=exact_multipoint.centroid)
+                        multipoint_centroid=exact_multipoint.centroid,
+                        polygon_centroid=exact_polygon.centroid)
 plain_context = Context(contour_centroid=plain_contour.centroid,
-                        multipoint_centroid=plain_multipoint.centroid)
+                        multipoint_centroid=plain_multipoint.centroid,
+                        polygon_centroid=plain_polygon.centroid)
 robust_context = Context(contour_centroid=robust_contour.centroid,
-                         multipoint_centroid=robust_multipoint.centroid)
+                         multipoint_centroid=robust_multipoint.centroid,
+                         polygon_centroid=robust_polygon.centroid)

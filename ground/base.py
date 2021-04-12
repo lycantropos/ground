@@ -322,6 +322,31 @@ class Context:
         """
         return _discrete.to_convex_hull(self.angle_orientation, points)
 
+    def polygon_centroid(self,
+                         border: _hints.Contour,
+                         holes: _Sequence[_hints.Contour]) -> _hints.Point:
+        """
+        Constructs centroid of a polygon given its border & holes.
+
+        Time complexity:
+            ``O(vertices_count)``
+        Memory complexity:
+            ``O(1)``
+
+        where ``vertices_count = len(border.vertices)\
+ + sum(len(hole.vertices) for hole in holes)``.
+
+        >>> context = get_context()
+        >>> Contour, Point = context.contour_cls, context.point_cls
+        >>> (context.polygon_centroid(Contour([Point(0, 0), Point(4, 0),
+        ...                                    Point(4, 4), Point(0, 4)]),
+        ...                           [Contour([Point(1, 1), Point(1, 3),
+        ...                                     Point(3, 3), Point(3, 1)])])
+        ...  == Point(2, 2))
+        True
+        """
+        return self._centroidal.polygon_centroid(self.point_cls, border, holes)
+
     def segment_contains_point(self,
                                start: _hints.Point,
                                end: _hints.Point,
