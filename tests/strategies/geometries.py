@@ -6,7 +6,8 @@ from hypothesis import strategies
 
 from ground.base import (Context,
                          Orientation)
-from ground.hints import Coordinate
+from ground.hints import (Contour,
+                          Coordinate)
 from tests.hints import Strategy
 from tests.utils import (MAX_SEQUENCE_SIZE,
                          Box,
@@ -43,7 +44,7 @@ def coordinates_to_points_sequences(coordinates: Strategy[Coordinate]
                             unique=True)
 
 
-def contexts_with_coordinates_to_contexts_with_vertices(
+def to_contexts_with_vertices_sequences(
         contexts_with_coordinates: Tuple[Strategy[Context],
                                          Strategy[Coordinate]]
 ) -> Strategy[Tuple[Context, Sequence[Point]]]:
@@ -73,3 +74,18 @@ def contexts_with_coordinates_to_contexts_with_vertices(
                              unique=True))
             .filter(are_points_non_collinear)
             .map(to_context_with_points_convex_hull))
+
+
+def to_contexts_with_borders_and_holes_sequences(
+        contexts_with_coordinates: Tuple[Strategy[Context],
+                                         Strategy[Coordinate]]
+) -> Strategy[Tuple[Context, Contour, Sequence[Contour]]]:
+    def to_context_with_border_and_holes(context_with_vertices
+                                         : Tuple[Context, Sequence[Point]]
+                                         ) -> Tuple[Context, Contour,
+                                                    Sequence[Contour]]:
+        context, vertices = context_with_vertices
+        return context, context.contour_cls(vertices), []
+
+    return (to_contexts_with_vertices_sequences(contexts_with_coordinates)
+            .map(to_context_with_border_and_holes))

@@ -18,11 +18,11 @@ from tests.hints import (PointsPair,
 from tests.strategies.coordinates import (
     coordinates_types_with_strategies,
     rational_coordinates_types_with_strategies)
-from tests.strategies.geometries import (
-    contexts_with_coordinates_to_contexts_with_vertices,
-    coordinates_to_boxes,
-    coordinates_to_points,
-    coordinates_to_points_sequences)
+from tests.strategies.geometries import (coordinates_to_boxes,
+                                         coordinates_to_points,
+                                         coordinates_to_points_sequences,
+                                         to_contexts_with_borders_and_holes_sequences,
+                                         to_contexts_with_vertices_sequences)
 from tests.utils import (MAX_SEQUENCE_SIZE,
                          combine,
                          compose,
@@ -217,7 +217,13 @@ contexts_with_rational_points_sequences = (
      .flatmap(pack(strategies.tuples))))
 contexts_with_vertices = (
     (contexts_with_coordinates_strategies
-     .flatmap(contexts_with_coordinates_to_contexts_with_vertices)))
+     .flatmap(to_contexts_with_vertices_sequences)))
 contexts_with_rational_vertices = (
     (contexts_with_rational_coordinates_strategies
-     .flatmap(contexts_with_coordinates_to_contexts_with_vertices)))
+     .flatmap(to_contexts_with_vertices_sequences)))
+contexts_with_borders_and_holes_sequences = (
+    (contexts_with_coordinates_strategies
+     .flatmap(to_contexts_with_borders_and_holes_sequences)))
+contexts_with_rational_borders_and_holes_sequences = (
+    (contexts_with_rational_coordinates_strategies
+     .flatmap(to_contexts_with_borders_and_holes_sequences)))
