@@ -1,6 +1,6 @@
 from typing import Type
 
-from ground.hints import Box
+from .hints import Box
 
 
 def merge(box_cls: Type[Box], first_box: Box, second_box: Box) -> Box:
