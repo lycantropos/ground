@@ -4,6 +4,8 @@ from typing import (Callable,
                     Sequence,
                     TypeVar)
 
+from symba.base import Expression
+
 try:
     from typing import (Protocol,
                         runtime_checkable)
@@ -11,8 +13,7 @@ except ImportError:
     from typing_extensions import (Protocol,
                                    runtime_checkable)
 
-Coordinate = TypeVar('Coordinate',
-                     bound=Real)
+Coordinate = TypeVar('Coordinate', Expression, Real)
 Expansion = Sequence[Coordinate]
 
 
