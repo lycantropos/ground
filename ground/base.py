@@ -15,6 +15,7 @@ from .core import (angular as _angular,
                    geometries as _geometries,
                    incircle as _incircle,
                    linear as _linear,
+                   metric as _metric,
                    vector as _vector)
 from .core.hints import QuaternaryPointFunction as _QuaternaryPointFunction
 
@@ -35,9 +36,9 @@ class Mode(_enum.IntEnum):
 class Context:
     """Represents common language for computational geometry."""
     __slots__ = ('_box_cls', '_centroidal', '_contour_cls', '_incircle',
-                 '_linear', '_mode', '_multipoint_cls', '_multipolygon_cls',
-                 '_multisegment_cls', '_point_cls', '_polygon_cls',
-                 '_segment_cls', '_sqrt', '_vector')
+                 '_linear', '_metric', '_mode', '_multipoint_cls',
+                 '_multipolygon_cls', '_multisegment_cls', '_point_cls',
+                 '_polygon_cls', '_segment_cls', '_sqrt', '_vector')
 
     def __init__(self,
                  *,
@@ -63,15 +64,19 @@ class Context:
         self._segment_cls = segment_cls
         self._mode = mode
         self._sqrt = _sqrt
-        self._centroidal, self._incircle, self._linear, self._vector = (
+        (self._centroidal, self._incircle, self._linear, self._metric,
+         self._vector) = (
             (_centroidal.exact_context, _incircle.exact_context,
-             _linear.exact_context, _vector.exact_context)
+             _linear.exact_context, _metric.exact_context,
+             _vector.exact_context)
             if mode is Mode.EXACT
             else ((_centroidal.plain_context, _incircle.plain_context,
-                   _linear.plain_context, _vector.plain_context)
+                   _linear.plain_context, _metric.plain_context,
+                   _vector.plain_context)
                   if mode is Mode.PLAIN
                   else (_centroidal.robust_context, _incircle.robust_context,
-                        _linear.exact_context, _vector.robust_context)))
+                        _linear.exact_context, _metric.robust_context,
+                        _vector.robust_context)))
 
     __repr__ = _generate_repr(__init__)
 
@@ -184,6 +189,30 @@ class Context:
         True
         """
         return self._incircle.point_point_point_test
+
+    @property
+    def point_point_squared_distance(self) -> _metric.PointPointMetric:
+        """
+        Returns squared Euclidean distance between two points.
+
+        Time complexity:
+            ``O(1)``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Point = context.point_cls
+        >>> (context.point_point_squared_distance(Point(0, 0), Point(0, 0))
+        ...  == 0)
+        True
+        >>> (context.point_point_squared_distance(Point(0, 0), Point(1, 0))
+        ...  == 1)
+        True
+        >>> (context.point_point_squared_distance(Point(0, 1), Point(1, 0))
+        ...  == 2)
+        True
+        """
+        return self._metric.point_point_squared_metric
 
     @property
     def polygon_cls(self) -> _Type[_hints.Polygon]:
