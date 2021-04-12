@@ -13,8 +13,8 @@ def centroid(point_cls: Type[Point],
              ) -> Point:
     result_x = result_y = (0,)
     for point in points:
-        result_x = add_to_expansion(result_x, point.x)
-        result_y = add_to_expansion(result_y, point.y)
+        result_x, result_y = (add_to_expansion(result_x, point.x),
+                              add_to_expansion(result_y, point.y))
     inverted_points_count = inverse(len(points))
     return point_cls(result_x[-1] * inverted_points_count,
                      result_y[-1] * inverted_points_count)
