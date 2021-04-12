@@ -1,10 +1,10 @@
 from operator import eq
-from typing import Sequence
+from typing import (Sequence,
+                    TypeVar)
 
 from reprit.base import generate_repr
 
-from ground import hints
-from .hints import Domain
+from . import hints
 
 
 class Point:
@@ -187,6 +187,8 @@ class Multipolygon:
         return self._polygons
 
 
-def are_sequences_equivalent(left: Sequence[Domain],
-                             right: Sequence[Domain]) -> bool:
+_T = TypeVar('_T')
+
+
+def are_sequences_equivalent(left: Sequence[_T], right: Sequence[_T]) -> bool:
     return len(left) == len(right) and all(map(eq, left, right))

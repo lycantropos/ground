@@ -1,11 +1,11 @@
 from itertools import groupby
 from typing import (Iterable,
                     List,
-                    Sequence)
+                    Sequence,
+                    TypeVar)
 
-from ground.hints import Point
 from .enums import Orientation
-from .hints import (Domain,
+from .hints import (Point,
                     TernaryPointFunction)
 
 
@@ -17,16 +17,19 @@ def to_convex_hull(orientation: TernaryPointFunction[Orientation],
     return lower[:-1] + upper[:-1] or points
 
 
-def _to_unique_just_seen(iterable: Iterable[Domain]) -> Sequence[Domain]:
+_T = TypeVar('_T')
+
+
+def _to_unique_just_seen(iterable: Iterable[_T]) -> Sequence[_T]:
     return [key for key, _ in groupby(iterable)]
 
 
-def _to_sub_hull(orientation: TernaryPointFunction[Orientation],
+def _to_sub_hull(orienteer: TernaryPointFunction[Orientation],
                  points: Iterable[Point]) -> List[Point]:
     result = []
     for point in points:
         while len(result) >= 2:
-            if (orientation(result[-2], result[-1], point)
+            if (orienteer(result[-2], result[-1], point)
                     is not Orientation.COUNTERCLOCKWISE):
                 del result[-1]
             else:
