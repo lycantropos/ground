@@ -1,11 +1,11 @@
-from ground.hints import (Coordinate,
-                          Point)
 from .enums import (Kind,
                     Orientation)
-from .hints import QuaternaryPointFunction
+from .hints import (Coordinate,
+                    Point,
+                    QuaternaryPointFunction)
 
 
-def kind(dot_producer: QuaternaryPointFunction,
+def kind(dot_producer: QuaternaryPointFunction[Coordinate],
          vertex: Point,
          first_ray_point: Point,
          second_ray_point: Point) -> Kind:
@@ -13,7 +13,7 @@ def kind(dot_producer: QuaternaryPointFunction,
                                      second_ray_point)))
 
 
-def orientation(cross_producer: QuaternaryPointFunction,
+def orientation(cross_producer: QuaternaryPointFunction[Coordinate],
                 vertex: Point,
                 first_ray_point: Point,
                 second_ray_point: Point) -> Orientation:
