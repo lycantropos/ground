@@ -5,7 +5,8 @@ from typing import (Callable,
                     Iterable,
                     Sequence,
                     Tuple,
-                    Type)
+                    Type,
+                    TypeVar)
 
 from hypothesis import strategies
 
@@ -16,10 +17,11 @@ from ground.base import (Context,
                          get_context)
 from ground.core.angular import to_sign
 from ground.hints import Coordinate
-from .hints import (Domain,
-                    Permutation,
-                    Range,
+from .hints import (Permutation,
                     Strategy)
+
+_T1 = TypeVar('_T1')
+_T2 = TypeVar('_T2')
 
 MAX_SEQUENCE_SIZE = 5
 
@@ -36,15 +38,15 @@ Point = _context.point_cls
 to_sign = to_sign
 
 
-def apply(function: Callable[..., Range], args: Iterable[Domain]) -> Range:
+def apply(function: Callable[..., _T2], args: Iterable[_T1]) -> _T2:
     return function(*args)
 
 
-def compose(*functions: Callable[..., Range]) -> Callable[..., Range]:
+def compose(*functions: Callable[..., _T2]) -> Callable[..., _T2]:
     *rest_functions, first_function = functions
     reversed_rest_functions = rest_functions[::-1]
 
-    def composed(*args: Domain, **kwargs: Domain) -> Range:
+    def composed(*args: _T1, **kwargs: _T1) -> _T2:
         result = first_function(*args, **kwargs)
         for function in reversed_rest_functions:
             result = function(result)
@@ -53,9 +55,9 @@ def compose(*functions: Callable[..., Range]) -> Callable[..., Range]:
     return composed
 
 
-def combine(*functions: Callable[[Domain], Range]
-            ) -> Callable[[Tuple[Domain, ...]], Tuple[Range, ...]]:
-    def combined(args: Tuple[Domain, ...]) -> Tuple[Range, ...]:
+def combine(*functions: Callable[[_T1], _T2]
+            ) -> Callable[[Tuple[_T1, ...]], Tuple[_T2, ...]]:
+    def combined(args: Tuple[_T1, ...]) -> Tuple[_T2, ...]:
         return tuple(function(arg) for function, arg in zip(functions, args))
 
     return combined
@@ -65,7 +67,7 @@ def equivalence(left: bool, right: bool) -> bool:
     return left is right
 
 
-def identity(value: Domain) -> Domain:
+def identity(value: _T1) -> _T1:
     return value
 
 
@@ -86,13 +88,12 @@ def is_even_permutation(permutation: Permutation) -> bool:
 is_point = Point.__instancecheck__
 
 
-def pack(function: Callable[..., Range]
-         ) -> Callable[[Iterable[Domain]], Range]:
+def pack(function: Callable[..., _T2]) -> Callable[[Iterable[_T1]], _T2]:
     return partial(apply, function)
 
 
-def permute(sequence: Sequence[Domain],
-            permutation: Permutation) -> Sequence[Domain]:
+def permute(sequence: Sequence[_T1],
+            permutation: Permutation) -> Sequence[_T1]:
     return [sequence[index] for index in permutation]
 
 
@@ -100,7 +101,7 @@ def reverse_point_coordinates(point: Point) -> Point:
     return Point(point.y, point.x)
 
 
-def rotate_sequence(vertices: Sequence[Point], offset: int) -> Contour:
+def rotate_sequence(vertices: Sequence[_T1], offset: int) -> Sequence[_T1]:
     return (vertices[offset:] + vertices[:offset]
             if offset
             else vertices)
@@ -116,7 +117,7 @@ def to_contour_vertices_orientation(vertices: Sequence[Point],
                                      vertices[(index + 1) % len(vertices)])
 
 
-def to_pairs(strategy: Strategy[Domain]) -> Strategy[Tuple[Domain, Domain]]:
+def to_pairs(strategy: Strategy[_T1]) -> Strategy[Tuple[_T1, _T1]]:
     return strategies.tuples(strategy, strategy)
 
 
@@ -124,13 +125,12 @@ def to_perpendicular_point(point: Point) -> Point:
     return Point(-point.y, point.x)
 
 
-def to_quadruplets(strategy: Strategy[Domain]
-                   ) -> Strategy[Tuple[Domain, Domain, Domain, Domain]]:
+def to_quadruplets(strategy: Strategy[_T1]
+                   ) -> Strategy[Tuple[_T1, _T1, _T1, _T1]]:
     return strategies.tuples(strategy, strategy, strategy, strategy)
 
 
-def to_triplets(strategy: Strategy[Domain]
-                ) -> Strategy[Tuple[Domain, Domain, Domain]]:
+def to_triplets(strategy: Strategy[_T1]) -> Strategy[Tuple[_T1, _T1, _T1]]:
     return strategies.tuples(strategy, strategy, strategy)
 
 

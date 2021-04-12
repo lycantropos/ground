@@ -1,13 +1,10 @@
 from typing import (Sequence,
-                    Tuple,
-                    TypeVar)
+                    Tuple)
 
 from hypothesis.strategies import SearchStrategy
 
 from ground.hints import Point
 
-Domain = TypeVar('Domain')
-Range = TypeVar('Range')
 Strategy = SearchStrategy
 PointsPair = Tuple[Point, Point]
 PointsQuadruplet = Tuple[Point, Point, Point, Point]
