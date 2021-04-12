@@ -1,7 +1,7 @@
 from typing import Tuple
 
-from ground.hints import Coordinate
-from .hints import Expansion
+from .hints import (Coordinate,
+                    Expansion)
 
 
 def _to_epsilon_and_splitter() -> Tuple[Coordinate, int]:
