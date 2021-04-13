@@ -1,8 +1,10 @@
 from fractions import Fraction
-from typing import Type
+from typing import (Callable,
+                    Type)
 
 from ground.core.enums import Relation
-from ground.core.hints import (Point,
+from ground.core.hints import (Coordinate,
+                               Point,
                                QuaternaryPointFunction)
 
 
@@ -20,7 +22,9 @@ def intersect(cross_product: QuaternaryPointFunction,
               first_start: Point,
               first_end: Point,
               second_start: Point,
-              second_end: Point) -> Point:
+              second_end: Point,
+              invert: Callable[[Coordinate], Coordinate]
+              = Fraction(1).__truediv__) -> Point:
     if contains_point(cross_product, first_start, first_end, second_start):
         return second_start
     elif contains_point(cross_product, first_start, first_end, second_end):
@@ -32,9 +36,8 @@ def intersect(cross_product: QuaternaryPointFunction,
     else:
         scale = (cross_product(first_start, second_start, second_start,
                                second_end)
-                 * (Fraction(1)
-                    / cross_product(first_start, first_end, second_start,
-                                    second_end)))
+                 * invert(cross_product(first_start, first_end, second_start,
+                                        second_end)))
         return point_cls(first_start.x + (first_end.x - first_start.x) * scale,
                          first_start.y + (first_end.y - first_start.y) * scale)
 
