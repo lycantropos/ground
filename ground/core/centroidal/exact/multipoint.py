@@ -3,7 +3,7 @@ from typing import (Callable,
                     Sequence,
                     Type)
 
-from ground.hints import Point
+from ground.core.hints import Point
 
 
 def centroid(point_cls: Type[Point],

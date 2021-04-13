@@ -1,7 +1,7 @@
 from fractions import Fraction
 
-from ground.hints import (Coordinate,
-                          Point)
+from ground.core.hints import (Coordinate,
+                               Point)
 
 
 def multiply(first_start: Point,

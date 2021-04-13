@@ -2,8 +2,8 @@ from fractions import Fraction
 from typing import Type
 
 from ground.core.enums import Relation
-from ground.core.hints import QuaternaryPointFunction
-from ground.hints import Point
+from ground.core.hints import (Point,
+                               QuaternaryPointFunction)
 
 
 def contains_point(cross_product: QuaternaryPointFunction,

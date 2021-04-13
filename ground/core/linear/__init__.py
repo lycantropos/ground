@@ -4,8 +4,8 @@ from typing import (Callable,
 from reprit.base import generate_repr
 
 from ground.core.enums import Relation
-from ground.core.hints import QuaternaryPointFunction
-from ground.hints import Point
+from ground.core.hints import (Point,
+                               QuaternaryPointFunction)
 from .exact import segment as exact_segment
 from .plain import segment as plain_segment
 

@@ -1,10 +1,10 @@
+from ground.core.hints import (Coordinate,
+                               Point)
 from ground.core.shewchuk import (sum_expansions,
                                   to_dot_product,
                                   two_mul,
                                   two_sub_tail,
                                   two_two_sum)
-from ground.hints import (Coordinate,
-                          Point)
 from . import bounds
 
 

@@ -2,7 +2,9 @@ from functools import reduce
 from typing import (Iterable,
                     Tuple)
 
-from ground.core.hints import Expansion
+from ground.core.hints import (Coordinate,
+                               Expansion,
+                               Point)
 from ground.core.shewchuk import (scale_expansion,
                                   square,
                                   sum_expansions,
@@ -11,8 +13,6 @@ from ground.core.shewchuk import (scale_expansion,
                                   two_sub_tail,
                                   two_two_sub,
                                   two_two_sum)
-from ground.hints import (Coordinate,
-                          Point)
 from . import bounds
 
 

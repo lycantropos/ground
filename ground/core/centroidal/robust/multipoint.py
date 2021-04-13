@@ -3,8 +3,8 @@ from typing import (Callable,
                     Sequence,
                     Type)
 
+from ground.core.hints import Point
 from ground.core.shewchuk import add_to_expansion
-from ground.hints import Point
 
 
 def centroid(point_cls: Type[Point],

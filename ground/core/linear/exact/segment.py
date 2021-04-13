@@ -1,10 +1,10 @@
 from fractions import Fraction
 from typing import Type
 
-from ground.core.hints import QuaternaryPointFunction
+from ground.core.hints import (Point,
+                               QuaternaryPointFunction)
 from ground.core.linear.plain import segment as plain_segment
 from ground.core.vector.plain.cross import multiply as plain_cross_product
-from ground.hints import Point
 
 contains_point = plain_segment.contains_point
 
