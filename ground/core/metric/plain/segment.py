@@ -34,8 +34,7 @@ def segment_squared_distance(first_start: Point,
                              first_end: Point,
                              second_start: Point,
                              second_end: Point,
-                             dot_producer
-                             : QuaternaryPointFunction[Coordinate],
+                             dot_producer: QuaternaryPointFunction[Coordinate],
                              segments_relater
                              : QuaternaryPointFunction[Relation],
                              point_cls: Type[Point]) -> Coordinate:
