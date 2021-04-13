@@ -37,17 +37,15 @@ def segment_squared_distance(box: Box,
             else
             ((segment_point_squared_distance(segment_start, segment_end,
                                              point_cls(min_x, min_y),
-                                             dot_producer, point_cls)
+                                             dot_producer)
               if min_y == max_y
               else segment_segment_squared_distance(
                     segment_start, segment_end, point_cls(min_x, min_y),
-                    point_cls(min_x, max_y), dot_producer, segments_relater,
-                    point_cls))
+                    point_cls(min_x, max_y), dot_producer, segments_relater))
              if min_x == max_x
              else (segment_segment_squared_distance(
                     segment_start, segment_end, point_cls(min_x, min_y),
-                    point_cls(max_x, min_y), dot_producer, segments_relater,
-                    point_cls)
+                    point_cls(max_x, min_y), dot_producer, segments_relater)
                    if min_y == max_y
                    else _non_degenerate_segment_squared_distance(
                     max_x, max_y, min_x, min_y, segment_start, segment_end,
