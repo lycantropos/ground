@@ -68,9 +68,6 @@ contexts_with_boxes_and_points = (contexts_with_coordinates_strategies
 contexts_with_boxes_and_segments_endpoints = (
     (contexts_with_coordinates_strategies
      .flatmap(to_contexts_with_boxes_and_segments_endpoints)))
-contexts_with_rational_boxes_and_segments_endpoints = (
-    (contexts_with_rational_coordinates_strategies
-     .flatmap(to_contexts_with_boxes_and_segments_endpoints)))
 contexts_with_boxes_pairs = (contexts_with_coordinates_strategies
                              .map(combine(identity,
                                           compose(to_pairs,
@@ -213,12 +210,6 @@ contexts_with_segments_pairs_endpoints = (
 contexts_with_segments_endpoints_and_points = (
     (contexts_with_points_strategies
      .flatmap(to_contexts_with_segments_endpoints_and_points)))
-contexts_with_rational_segments_endpoints_and_points = (
-    (contexts_with_rational_points_strategies
-     .flatmap(to_contexts_with_segments_endpoints_and_points)))
-contexts_with_rational_segments_pairs_endpoints = (
-    (contexts_with_rational_points_strategies
-     .flatmap(to_contexts_with_segments_pairs_endpoints)))
 contexts_with_crossing_or_touching_segments_pairs_endpoints = (
         to_contexts_with_crossing_segments_pairs_endpoints(
                 contexts_with_points_strategies)

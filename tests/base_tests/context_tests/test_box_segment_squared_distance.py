@@ -18,7 +18,7 @@ def test_basic(context_with_boxes_pair: Tuple[Context, Box, Point]) -> None:
     assert is_coordinate(result)
 
 
-@given(strategies.contexts_with_rational_boxes_and_segments_endpoints)
+@given(strategies.contexts_with_boxes_and_segments_endpoints)
 def test_endpoints_symmetry(context_with_boxes_pair: Tuple[Context, Box, Point]
                             ) -> None:
     context, box, (start, end) = context_with_boxes_pair

@@ -21,7 +21,7 @@ def test_basic(context_with_segments_pair_endpoints
     assert is_coordinate(result)
 
 
-@given(strategies.contexts_with_rational_segments_pairs_endpoints)
+@given(strategies.contexts_with_segments_pairs_endpoints)
 def test_endpoints_symmetry(context_with_segments_pair_endpoints
                             : Tuple[Context, PointsQuadruplet]) -> None:
     context, segments_pair_endpoints = context_with_segments_pair_endpoints
