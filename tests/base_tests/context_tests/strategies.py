@@ -208,12 +208,6 @@ contexts_with_crossing_or_touching_segments_pairs_endpoints = (
         |
         to_contexts_with_touching_segments_endpoints(
                 contexts_with_points_strategies))
-contexts_with_rational_crossing_or_touching_segments_pairs_endpoints = (
-        to_contexts_with_crossing_segments_pairs_endpoints(
-                contexts_with_rational_points_strategies)
-        |
-        to_contexts_with_touching_segments_endpoints(
-                contexts_with_rational_points_strategies))
 contexts_with_points_sequences = (
     (contexts_with_coordinates_strategies
      .map(combine(identity, coordinates_to_points_sequences))
