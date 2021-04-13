@@ -1,10 +1,8 @@
-from fractions import Fraction
-from typing import (Callable,
-                    Type)
+from typing import Type
 
+from ground.core.arithmetic import robust_divide
 from ground.core.enums import Relation
-from ground.core.hints import (Coordinate,
-                               Point,
+from ground.core.hints import (Point,
                                QuaternaryPointFunction)
 
 
@@ -22,9 +20,7 @@ def intersect(first_start: Point,
               second_start: Point,
               second_end: Point,
               cross_product: QuaternaryPointFunction,
-              point_cls: Type[Point],
-              invert: Callable[[Coordinate], Coordinate]
-              = Fraction(1).__truediv__) -> Point:
+              point_cls: Type[Point]) -> Point:
     if contains_point(first_start, first_end, second_start, cross_product):
         return second_start
     elif contains_point(first_start, first_end, second_end, cross_product):
@@ -34,10 +30,10 @@ def intersect(first_start: Point,
     elif contains_point(second_start, second_end, first_end, cross_product):
         return first_end
     else:
-        scale = (cross_product(first_start, second_start, second_start,
-                               second_end)
-                 * invert(cross_product(first_start, first_end, second_start,
-                                        second_end)))
+        scale = robust_divide(cross_product(first_start, second_start,
+                                            second_start, second_end),
+                              cross_product(first_start, first_end,
+                                            second_start, second_end))
         return point_cls(first_start.x + (first_end.x - first_start.x) * scale,
                          first_start.y + (first_end.y - first_start.y) * scale)
 
