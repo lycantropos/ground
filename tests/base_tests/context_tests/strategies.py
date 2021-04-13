@@ -76,9 +76,14 @@ contexts_with_points_strategies = (contexts_with_coordinates_strategies
 contexts_with_rational_points_strategies = (
     (contexts_with_rational_coordinates_strategies
      .map(combine(identity, coordinates_to_points))))
+contexts_with_points = (contexts_with_points_strategies
+                        .flatmap(pack(strategies.tuples)))
 contexts_with_points_pairs = (contexts_with_points_strategies
                               .map(combine(identity, to_pairs))
                               .flatmap(pack(strategies.tuples)))
+contexts_with_rational_points_pairs = (contexts_with_rational_points_strategies
+                                       .map(combine(identity, to_pairs))
+                                       .flatmap(pack(strategies.tuples)))
 contexts_with_points_lists = (
     (contexts_with_points_strategies
      .map(combine(identity, partial(strategies.lists,
