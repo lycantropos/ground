@@ -22,6 +22,7 @@ from tests.strategies.geometries import (
     coordinates_to_points_sequences,
     points_to_segments_endpoints,
     to_contexts_with_borders_and_holes_sequences,
+    to_contexts_with_segments_endpoints_and_points,
     to_contexts_with_segments_pairs_endpoints,
     to_contexts_with_vertices_sequences)
 from tests.utils import (MAX_SEQUENCE_SIZE,
@@ -199,6 +200,12 @@ contexts_with_segments_endpoints = (
 contexts_with_segments_pairs_endpoints = (
     (contexts_with_points_strategies
      .flatmap(to_contexts_with_segments_pairs_endpoints)))
+contexts_with_segments_endpoints_and_points = (
+    (contexts_with_points_strategies
+     .flatmap(to_contexts_with_segments_endpoints_and_points)))
+contexts_with_rational_segments_endpoints_and_points = (
+    (contexts_with_rational_points_strategies
+     .flatmap(to_contexts_with_segments_endpoints_and_points)))
 contexts_with_rational_segments_pairs_endpoints = (
     (contexts_with_rational_points_strategies
      .flatmap(to_contexts_with_segments_pairs_endpoints)))

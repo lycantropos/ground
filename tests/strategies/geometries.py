@@ -103,6 +103,14 @@ def to_contexts_with_borders_and_holes_sequences(
             .map(to_context_with_border_and_holes))
 
 
+def to_contexts_with_segments_endpoints_and_points(
+        contexts_with_points: Tuple[Strategy[Context], Strategy[Point]]
+) -> Strategy[Tuple[Context, PointsPair, Point]]:
+    contexts, points = contexts_with_points
+    return strategies.tuples(contexts, points_to_segments_endpoints(points),
+                             points)
+
+
 def to_contexts_with_segments_pairs_endpoints(
         contexts_with_points: Tuple[Strategy[Context], Strategy[Point]]
 ) -> Strategy[Tuple[Context, PointsQuadruplet]]:
