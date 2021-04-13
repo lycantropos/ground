@@ -1,4 +1,6 @@
-from typing import Type
+from fractions import Fraction
+from typing import (Callable,
+                    Type)
 
 from ground.core.enums import Relation
 from ground.core.hints import (Coordinate,
@@ -11,12 +13,14 @@ def point_squared_distance(segment_start: Point,
                            segment_end: Point,
                            point: Point,
                            dot_producer: QuaternaryPointFunction[Coordinate],
-                           point_cls: Type[Point]) -> Coordinate:
+                           point_cls: Type[Point],
+                           inverse: Callable[[Coordinate], Coordinate]
+                           = Fraction(1).__truediv__) -> Coordinate:
     end_factor = max(0, min(1,
                             dot_producer(segment_start, point, segment_start,
                                          segment_end)
-                            / point_point_squared_distance(segment_start,
-                                                           segment_end)))
+                            * inverse(point_point_squared_distance(
+                                    segment_start, segment_end))))
     start_factor = 1 - end_factor
     return point_point_squared_distance(
             point_cls(start_factor * segment_start.x
