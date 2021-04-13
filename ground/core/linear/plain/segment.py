@@ -25,13 +25,13 @@ def intersect(first_start: Point,
               point_cls: Type[Point],
               invert: Callable[[Coordinate], Coordinate]
               = Fraction(1).__truediv__) -> Point:
-    if contains_point(cross_product, first_start, first_end, second_start):
+    if contains_point(first_start, first_end, second_start, cross_product):
         return second_start
-    elif contains_point(cross_product, first_start, first_end, second_end):
+    elif contains_point(first_start, first_end, second_end, cross_product):
         return second_end
-    elif contains_point(cross_product, second_start, second_end, first_start):
+    elif contains_point(second_start, second_end, first_start, cross_product):
         return first_start
-    elif contains_point(cross_product, second_start, second_end, first_end):
+    elif contains_point(second_start, second_end, first_end, cross_product):
         return first_end
     else:
         scale = (cross_product(first_start, second_start, second_start,
