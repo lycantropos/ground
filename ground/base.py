@@ -299,6 +299,35 @@ class Context:
         return _angular.orientation(self.cross_product, vertex,
                                     first_ray_point, second_ray_point)
 
+    def box_segment_squared_distance(self,
+                                     box: _hints.Box,
+                                     start: _hints.Point,
+                                     end: _hints.Point) -> _hints.Coordinate:
+        """
+        Returns squared Euclidean distance between box and a segment
+        given its endpoints.
+
+        Time complexity:
+            ``O(1)``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Box, Point = context.box_cls, context.point_cls
+        >>> context.box_segment_squared_distance(Box(0, 1, 0, 1), Point(0, 0),
+        ...                                      Point(1, 1)) == 0
+        True
+        >>> context.box_segment_squared_distance(Box(0, 1, 0, 1), Point(2, 0),
+        ...                                      Point(2, 1)) == 1
+        True
+        >>> context.box_segment_squared_distance(Box(0, 1, 0, 1), Point(2, 2),
+        ...                                      Point(3, 2)) == 2
+        True
+        """
+        return self._metric.box_segment_squared_metric(
+                box, start, end, self.dot_product, self.segments_relation,
+                self.point_cls)
+
     def contour_centroid(self,
                          vertices: _Sequence[_hints.Point]) -> _hints.Point:
         """
