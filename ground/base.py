@@ -191,7 +191,7 @@ class Context:
         return self._incircle.point_point_point_test
 
     @property
-    def point_point_squared_distance(self) -> _metric.PointPointMetric:
+    def points_squared_distance(self) -> _metric.PointPointMetric:
         """
         Returns squared Euclidean distance between two points.
 
@@ -202,14 +202,11 @@ class Context:
 
         >>> context = get_context()
         >>> Point = context.point_cls
-        >>> (context.point_point_squared_distance(Point(0, 0), Point(0, 0))
-        ...  == 0)
+        >>> context.points_squared_distance(Point(0, 0), Point(0, 0)) == 0
         True
-        >>> (context.point_point_squared_distance(Point(0, 0), Point(1, 0))
-        ...  == 1)
+        >>> context.points_squared_distance(Point(0, 0), Point(1, 0)) == 1
         True
-        >>> (context.point_point_squared_distance(Point(0, 1), Point(1, 0))
-        ...  == 2)
+        >>> context.points_squared_distance(Point(0, 1), Point(1, 0)) == 2
         True
         """
         return self._metric.point_point_squared_metric
