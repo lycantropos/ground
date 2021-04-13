@@ -3,10 +3,13 @@ from typing import Type
 from ground.core.enums import Relation
 from ground.core.hints import (Box,
                                Coordinate,
-                               Expansion, Point,
+                               Expansion,
+                               Point,
                                QuaternaryPointFunction)
-from ground.core.shewchuk import sum_expansions, two_square, two_sub
-from .segment import (point_squared_distance as point_point_squared_distance,
+from ground.core.shewchuk import (sum_expansions,
+                                  two_square,
+                                  two_sub)
+from .segment import (point_squared_distance as segment_point_squared_distance,
                       segment_squared_distance
                       as segment_segment_squared_distance)
 
@@ -32,9 +35,9 @@ def segment_squared_distance(box: Box,
                 or (min_x <= segment_end.x <= max_x
                     and min_y <= segment_end.y <= max_y))
             else
-            ((point_point_squared_distance(segment_start, segment_end,
-                                           point_cls(min_x, min_y),
-                                           dot_producer, point_cls)
+            ((segment_point_squared_distance(segment_start, segment_end,
+                                             point_cls(min_x, min_y),
+                                             dot_producer, point_cls)
               if min_y == max_y
               else segment_segment_squared_distance(
                     segment_start, segment_end, point_cls(min_x, min_y),
