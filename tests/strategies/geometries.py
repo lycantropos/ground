@@ -7,8 +7,11 @@ from hypothesis import strategies
 from ground.base import (Context,
                          Orientation)
 from ground.hints import (Contour,
-                          Coordinate)
-from tests.hints import Strategy
+                          Coordinate,
+                          Point)
+from tests.hints import (PointsPair,
+                         PointsQuadruplet,
+                         Strategy)
 from tests.utils import (MAX_SEQUENCE_SIZE,
                          Box,
                          Point,
@@ -34,6 +37,15 @@ def coordinates_to_points(coordinates: Strategy[Coordinate]
 
 
 points_strategies = coordinates_strategies.map(coordinates_to_points)
+
+
+def points_to_segments_endpoints(points: Strategy[Point]
+                                 ) -> Strategy[PointsPair]:
+    return (strategies.lists(points,
+                             min_size=2,
+                             max_size=2,
+                             unique=True)
+            .map(tuple))
 
 
 def coordinates_to_points_sequences(coordinates: Strategy[Coordinate]
@@ -89,3 +101,12 @@ def to_contexts_with_borders_and_holes_sequences(
 
     return (to_contexts_with_vertices_sequences(contexts_with_coordinates)
             .map(to_context_with_border_and_holes))
+
+
+def to_contexts_with_segments_pairs_endpoints(
+        contexts_with_points: Tuple[Strategy[Context], Strategy[Point]]
+) -> Strategy[Tuple[Context, PointsQuadruplet]]:
+    contexts, points = contexts_with_points
+    return strategies.tuples(contexts,
+                             to_pairs(points_to_segments_endpoints(points))
+                             .map(pack(add)))

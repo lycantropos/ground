@@ -1,7 +1,8 @@
 from functools import partial
 from numbers import (Rational,
                      Real)
-from typing import (Callable,
+from typing import (Any,
+                    Callable,
                     Iterable,
                     Sequence,
                     Tuple,
@@ -72,6 +73,10 @@ def identity(value: _T1) -> _T1:
 
 
 is_box = Box.__instancecheck__
+
+
+def is_coordinate(object_: Any) -> bool:
+    return isinstance(object_, Coordinate.__constraints__)
 
 
 def is_even_permutation(permutation: Permutation) -> bool:

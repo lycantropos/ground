@@ -1,6 +1,5 @@
 from functools import partial
 from numbers import Rational
-from operator import add
 from typing import (Tuple,
                     Type)
 
@@ -11,18 +10,20 @@ from ground.base import (Context,
                          Orientation)
 from ground.hints import (Coordinate,
                           Point)
-from tests.hints import (PointsPair,
-                         PointsQuadruplet,
+from tests.hints import (PointsQuadruplet,
                          PointsTriplet,
                          Strategy)
 from tests.strategies.coordinates import (
     coordinates_types_with_strategies,
     rational_coordinates_types_with_strategies)
-from tests.strategies.geometries import (coordinates_to_boxes,
-                                         coordinates_to_points,
-                                         coordinates_to_points_sequences,
-                                         to_contexts_with_borders_and_holes_sequences,
-                                         to_contexts_with_vertices_sequences)
+from tests.strategies.geometries import (
+    coordinates_to_boxes,
+    coordinates_to_points,
+    coordinates_to_points_sequences,
+    points_to_segments_endpoints,
+    to_contexts_with_borders_and_holes_sequences,
+    to_contexts_with_segments_pairs_endpoints,
+    to_contexts_with_vertices_sequences)
 from tests.utils import (MAX_SEQUENCE_SIZE,
                          combine,
                          compose,
@@ -72,6 +73,9 @@ contexts_with_boxes_triplets = (contexts_with_coordinates_strategies
 contexts_with_points_strategies = (contexts_with_coordinates_strategies
                                    .map(combine(identity,
                                                 coordinates_to_points)))
+contexts_with_rational_points_strategies = (
+    (contexts_with_rational_coordinates_strategies
+     .map(combine(identity, coordinates_to_points))))
 contexts_with_points_pairs = (contexts_with_points_strategies
                               .map(combine(identity, to_pairs))
                               .flatmap(pack(strategies.tuples)))
@@ -92,15 +96,6 @@ contexts_with_points_triplets = (contexts_with_points_strategies
 contexts_with_points_quadruplets = (contexts_with_points_strategies
                                     .map(combine(identity, to_quadruplets))
                                     .flatmap(pack(strategies.tuples)))
-
-
-def points_to_segments_endpoints(points: Strategy[Point]
-                                 ) -> Strategy[PointsPair]:
-    return (strategies.lists(points,
-                             min_size=2,
-                             max_size=2,
-                             unique=True)
-            .map(tuple))
 
 
 def to_contexts_with_touching_segments_endpoints(
@@ -198,9 +193,10 @@ contexts_with_segments_endpoints = (
      .flatmap(pack(strategies.tuples))))
 contexts_with_segments_pairs_endpoints = (
     (contexts_with_points_strategies
-     .map(combine(identity, compose(to_pairs, points_to_segments_endpoints)))
-     .flatmap(pack(strategies.tuples))
-     .map(combine(identity, pack(add)))))
+     .flatmap(to_contexts_with_segments_pairs_endpoints)))
+contexts_with_rational_segments_pairs_endpoints = (
+    (contexts_with_rational_points_strategies
+     .flatmap(to_contexts_with_segments_pairs_endpoints)))
 contexts_with_crossing_or_touching_segments_pairs_endpoints = (
         to_contexts_with_crossing_segments_pairs_endpoints(
                 contexts_with_points_strategies)
