@@ -443,6 +443,35 @@ class Context:
         return self._linear.containment_checker(self.cross_product, start, end,
                                                 point)
 
+    def segment_point_squared_distance(self,
+                                       start: _hints.Point,
+                                       end: _hints.Point,
+                                       point: _hints.Point
+                                       ) -> _hints.Coordinate:
+        """
+        Returns squared Euclidean distance between segment given its endpoints
+        and a point.
+
+        Time complexity:
+            ``O(1)``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Point = context.point_cls
+        >>> context.segment_point_squared_distance(Point(0, 0), Point(1, 0),
+        ...                                        Point(0, 0)) == 0
+        True
+        >>> context.segment_point_squared_distance(Point(0, 0), Point(1, 0),
+        ...                                        Point(0, 1)) == 1
+        True
+        >>> context.segment_point_squared_distance(Point(0, 0), Point(1, 0),
+        ...                                        Point(0, 2)) == 4
+        True
+        """
+        return self._metric.segment_point_squared_metric(
+                start, end, point, self.dot_product, self.point_cls)
+
     def segments_intersection(self,
                               first_start: _hints.Point,
                               first_end: _hints.Point,
