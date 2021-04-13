@@ -430,7 +430,7 @@ class Context:
         ...  == [Point(0, 0), Point(2, 0), Point(2, 2), Point(0, 2)])
         True
         """
-        return _discrete.to_convex_hull(self.angle_orientation, points)
+        return _discrete.to_convex_hull(points, self.angle_orientation)
 
     def polygon_centroid(self,
                          border: _hints.Contour,
