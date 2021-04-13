@@ -6,7 +6,7 @@ from hypothesis import strategies
 
 from ground.base import (Context,
                          Orientation)
-from ground.hints import (Contour,
+from ground.hints import (Box, Contour,
                           Coordinate,
                           Point)
 from tests.hints import (PointsPair,
@@ -101,6 +101,15 @@ def to_contexts_with_borders_and_holes_sequences(
 
     return (to_contexts_with_vertices_sequences(contexts_with_coordinates)
             .map(to_context_with_border_and_holes))
+
+
+def to_contexts_with_boxes_and_points(
+        contexts_with_coordinates
+        : Tuple[Strategy[Context], Strategy[Coordinate]]
+) -> Strategy[Tuple[Context, Box, Point]]:
+    contexts, coordinates = contexts_with_coordinates
+    return strategies.tuples(contexts, coordinates_to_boxes(coordinates),
+                             coordinates_to_points(coordinates))
 
 
 def to_contexts_with_segments_endpoints_and_points(
