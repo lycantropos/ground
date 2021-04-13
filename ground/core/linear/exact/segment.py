@@ -3,7 +3,7 @@ from typing import Type
 from ground.core.hints import (Point,
                                QuaternaryPointFunction)
 from ground.core.linear.plain import segment as plain_segment
-from ground.core.utils import to_rational_point
+from ground.core.primitive import to_rational_point
 
 contains_point = plain_segment.contains_point
 
