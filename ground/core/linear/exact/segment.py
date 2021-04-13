@@ -4,6 +4,7 @@ from ground.core.hints import (Point,
                                QuaternaryPointFunction)
 from ground.core.linear.plain import segment as plain_segment
 from ground.core.primitive import to_rational_point
+from ground.core.vector.plain.cross import multiply as plain_cross_product
 
 contains_point = plain_segment.contains_point
 
@@ -25,10 +26,12 @@ def intersect(first_start: Point,
     else:
         first_start, first_end = (to_rational_point(first_start, point_cls),
                                   to_rational_point(first_end, point_cls))
-        scale = (cross_product(first_start, second_start, second_start,
-                               second_end)
-                 / cross_product(first_start, first_end, second_start,
-                                 second_end))
+        second_start, second_end = (to_rational_point(second_start, point_cls),
+                                    to_rational_point(second_end, point_cls))
+        scale = (plain_cross_product(first_start, second_start, second_start,
+                                     second_end)
+                 / plain_cross_product(first_start, first_end, second_start,
+                                       second_end))
         return point_cls(first_start.x + (first_end.x - first_start.x) * scale,
                          first_start.y + (first_end.y - first_start.y) * scale)
 
