@@ -1,48 +1,49 @@
 from fractions import Fraction
-from typing import Callable
+from functools import reduce
 
 from ground.core.enums import Relation
 from ground.core.hints import (Coordinate,
+                               Expansion,
                                Point,
                                QuaternaryPointFunction)
-from ground.core.shewchuk import (scale_expansion,
+from ground.core.shewchuk import (add_to_expansion,
+                                  scale_expansion,
                                   sum_expansions,
                                   two_mul,
                                   two_one_mul,
-                                  two_square,
                                   two_sub)
 
 
-def point_squared_distance(segment_start: Point,
-                           segment_end: Point,
+def point_squared_distance(start: Point,
+                           end: Point,
                            point: Point,
-                           dot_producer: QuaternaryPointFunction[Coordinate],
-                           inverse: Callable[[Coordinate], Coordinate]
-                           = Fraction(1).__truediv__) -> Coordinate:
-    segment_squared_norm = dot_producer(segment_start, segment_end,
-                                        segment_start, segment_end)
+                           dot_producer: QuaternaryPointFunction[Coordinate]
+                           ) -> Coordinate:
+    if end < start:
+        start, end = end, start
+    segment_squared_norm = dot_producer(start, end, start, end)
     end_factor_numerator = max(0, min(segment_squared_norm,
-                                      dot_producer(segment_start, point,
-                                                   segment_start,
-                                                   segment_end)))
-    start_factor_numerator_tail, start_factor_numerator_head = two_sub(
-            segment_squared_norm, end_factor_numerator)
-    dx, dy = (
-        sum_expansions(sum_expansions(two_one_mul(start_factor_numerator_tail,
-                                                  start_factor_numerator_head,
-                                                  segment_start.x),
-                                      two_mul(end_factor_numerator,
-                                              segment_end.x)),
-                       two_mul(point.x, -segment_squared_norm)),
-        sum_expansions(sum_expansions(two_one_mul(start_factor_numerator_tail,
-                                                  start_factor_numerator_head,
-                                                  segment_start.y),
-                                      two_mul(end_factor_numerator,
-                                              segment_end.y)),
-                       two_mul(point.y, -segment_squared_norm)))
-    return scale_expansion(sum_expansions(two_square(sum(dx[:-1]), dx[-1]),
-                                          two_square(sum(dy[:-1]), dy[-1])),
-                           inverse(segment_squared_norm))[-1]
+                                      dot_producer(start, point, start, end)))
+    end_factor = robust_divide(end_factor_numerator, segment_squared_norm)
+    start_factor_tail, start_factor_head = two_sub(1, end_factor)
+    return sum_expansions(
+            square_expansion(add_to_expansion(sum_expansions(
+                    two_one_mul(start_factor_tail, start_factor_head, start.x),
+                    two_mul(end_factor, end.x)), -point.x)),
+            square_expansion(add_to_expansion(sum_expansions(
+                    two_one_mul(start_factor_tail, start_factor_head, start.y),
+                    two_mul(end_factor, end.y)), -point.y)))[-1]
+
+
+def robust_divide(dividend: Coordinate, divisor: Coordinate) -> Coordinate:
+    return (dividend / Fraction(divisor)
+            if isinstance(divisor, int)
+            else dividend / divisor)
+
+
+def square_expansion(expansion: Expansion) -> Expansion:
+    return reduce(sum_expansions, [scale_expansion(expansion, component)
+                                   for component in expansion])
 
 
 def segment_squared_distance(first_start: Point,
