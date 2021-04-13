@@ -8,22 +8,19 @@ from ground.core.hints import (Coordinate,
 from .point import point_squared_distance as point_point_squared_distance
 
 
-def point_squared_distance(segment_start: Point,
-                           segment_end: Point,
+def point_squared_distance(start: Point,
+                           end: Point,
                            point: Point,
                            dot_producer: QuaternaryPointFunction[Coordinate],
                            inverse: Callable[[Coordinate], Coordinate]
                            = Fraction(1).__truediv__) -> Coordinate:
     end_factor = max(0, min(1,
-                            dot_producer(segment_start, point, segment_start,
-                                         segment_end)
-                            * inverse(point_point_squared_distance(
-                                    segment_start, segment_end))))
+                            dot_producer(start, point, start, end)
+                            * inverse(point_point_squared_distance(start,
+                                                                   end))))
     start_factor = 1 - end_factor
-    return ((start_factor * segment_start.x
-             + end_factor * segment_end.x - point.x) ** 2
-            + (start_factor * segment_start.y
-               + end_factor * segment_end.y - point.y) ** 2)
+    return ((start_factor * start.x + end_factor * end.x - point.x) ** 2
+            + (start_factor * start.y + end_factor * end.y - point.y) ** 2)
 
 
 def segment_squared_distance(first_start: Point,
