@@ -9,11 +9,11 @@ from ground.core.hints import (Point,
 from .exact import segment as exact_segment
 from .plain import segment as plain_segment
 
-ContainmentChecker = Callable[[QuaternaryPointFunction, Point, Point, Point],
+ContainmentChecker = Callable[[Point, Point, Point, QuaternaryPointFunction],
                               bool]
-Intersector = Callable[[QuaternaryPointFunction, Type[Point], Point, Point,
-                        Point, Point], Point]
-Relater = Callable[[QuaternaryPointFunction, Point, Point, Point, Point],
+Intersector = Callable[[Point, Point, Point, Point, QuaternaryPointFunction,
+                        Type[Point]], Point]
+Relater = Callable[[Point, Point, Point, Point, QuaternaryPointFunction],
                    Relation]
 
 

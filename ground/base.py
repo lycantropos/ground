@@ -437,8 +437,8 @@ class Context:
         ...                                Point(3, 0))
         False
         """
-        return self._linear.containment_checker(self.cross_product, start, end,
-                                                point)
+        return self._linear.containment_checker(start, end, point,
+                                                self.cross_product)
 
     def segment_point_squared_distance(self,
                                        start: _hints.Point,
@@ -498,8 +498,8 @@ class Context:
         True
         """
         return self._linear.intersector(
-                self.cross_product, self.point_cls, first_start, first_end,
-                second_start, second_end)
+                first_start, first_end, second_start, second_end,
+                self.cross_product, self.point_cls)
 
     def segments_relation(self,
                           test_start: _hints.Point,
@@ -538,8 +538,8 @@ class Context:
         ...                           Point(3, 3)) is Relation.OVERLAP
         True
         """
-        return self._linear.relater(self.cross_product, test_start, test_end,
-                                    goal_start, goal_end)
+        return self._linear.relater(test_start, test_end, goal_start, goal_end,
+                                    self.cross_product)
 
     def segments_squared_distance(self,
                                   first_start: _hints.Point,

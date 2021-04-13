@@ -8,21 +8,21 @@ from ground.core.hints import (Coordinate,
                                QuaternaryPointFunction)
 
 
-def contains_point(cross_product: QuaternaryPointFunction,
-                   start: Point,
+def contains_point(start: Point,
                    end: Point,
-                   point: Point) -> bool:
+                   point: Point,
+                   cross_product: QuaternaryPointFunction) -> bool:
     return (point == start or point == end
             or (_bounding_box_contains(start, end, point)
                 and not cross_product(start, end, start, point)))
 
 
-def intersect(cross_product: QuaternaryPointFunction,
-              point_cls: Type[Point],
-              first_start: Point,
+def intersect(first_start: Point,
               first_end: Point,
               second_start: Point,
               second_end: Point,
+              cross_product: QuaternaryPointFunction,
+              point_cls: Type[Point],
               invert: Callable[[Coordinate], Coordinate]
               = Fraction(1).__truediv__) -> Point:
     if contains_point(cross_product, first_start, first_end, second_start):
@@ -42,11 +42,11 @@ def intersect(cross_product: QuaternaryPointFunction,
                          first_start.y + (first_end.y - first_start.y) * scale)
 
 
-def relate(cross_product: QuaternaryPointFunction,
-           test_start: Point,
+def relate(test_start: Point,
            test_end: Point,
            goal_start: Point,
-           goal_end: Point) -> Relation:
+           goal_end: Point,
+           cross_product: QuaternaryPointFunction) -> Relation:
     if test_start > test_end:
         test_start, test_end = test_end, test_start
     if goal_start > goal_end:
