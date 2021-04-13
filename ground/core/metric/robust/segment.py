@@ -1,6 +1,6 @@
-from fractions import Fraction
 from functools import reduce
 
+from ground.core.arithmetic import robust_divide
 from ground.core.enums import Relation
 from ground.core.hints import (Coordinate,
                                Expansion,
@@ -33,12 +33,6 @@ def point_squared_distance(start: Point,
             square_expansion(add_to_expansion(sum_expansions(
                     two_one_mul(start_factor_tail, start_factor_head, start.y),
                     two_mul(end_factor, end.y)), -point.y)))[-1]
-
-
-def robust_divide(dividend: Coordinate, divisor: Coordinate) -> Coordinate:
-    return (dividend / Fraction(divisor)
-            if isinstance(divisor, int)
-            else dividend / divisor)
 
 
 def square_expansion(expansion: Expansion) -> Expansion:
