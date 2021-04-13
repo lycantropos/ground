@@ -3,6 +3,7 @@ from typing import Type
 from ground.core.hints import (Point,
                                QuaternaryPointFunction)
 from ground.core.linear.plain import segment as plain_segment
+from ground.core.utils import to_rational_point
 
 contains_point = plain_segment.contains_point
 
@@ -22,6 +23,8 @@ def intersect(first_start: Point,
     elif contains_point(second_start, second_end, first_end, cross_product):
         return first_end
     else:
+        first_start, first_end = (to_rational_point(first_start, point_cls),
+                                  to_rational_point(first_end, point_cls))
         scale = (cross_product(first_start, second_start, second_start,
                                second_end)
                  / cross_product(first_start, first_end, second_start,
