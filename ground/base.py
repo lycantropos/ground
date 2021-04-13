@@ -86,6 +86,30 @@ class Context:
         return self._box_cls
 
     @property
+    def box_point_squared_distance(self) -> _metric.BoxPointMetric:
+        """
+        Returns squared Euclidean distance between box and a point.
+
+        Time complexity:
+            ``O(1)``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Box, Point = context.box_cls, context.point_cls
+        >>> context.box_point_squared_distance(Box(0, 1, 0, 1),
+        ...                                    Point(1, 1)) == 0
+        True
+        >>> context.box_point_squared_distance(Box(0, 1, 0, 1),
+        ...                                    Point(2, 1)) == 1
+        True
+        >>> context.box_point_squared_distance(Box(0, 1, 0, 1),
+        ...                                    Point(2, 2)) == 2
+        True
+        """
+        return self._metric.box_point_squared_metric
+
+    @property
     def contour_cls(self) -> _Type[_hints.Contour]:
         """Returns type for contours."""
         return self._contour_cls
