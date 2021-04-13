@@ -78,24 +78,24 @@ def _non_degenerate_segment_squared_distance(
                                  point_cls(max_x, min_y))
     bottom_side_distance = segment_segment_squared_distance(
             segment_start, segment_end, bottom_left, bottom_right,
-            dot_producer, segments_relater, point_cls)
+            dot_producer, segments_relater)
     if not bottom_side_distance:
         return bottom_side_distance
     top_right = point_cls(max_x, max_y)
     right_side_distance = segment_segment_squared_distance(
             segment_start, segment_end, bottom_right, top_right, dot_producer,
-            segments_relater, point_cls)
+            segments_relater)
     if not right_side_distance:
         return right_side_distance
     top_left = point_cls(min_x, max_y)
     top_side_distance = segment_segment_squared_distance(
             segment_start, segment_end, top_left, top_right, dot_producer,
-            segments_relater, point_cls)
+            segments_relater)
     if not top_side_distance:
         return top_side_distance
     left_side_distance = segment_segment_squared_distance(
             segment_start, segment_end, bottom_left, top_left, dot_producer,
-            segments_relater, point_cls)
+            segments_relater)
     return (left_side_distance
             and min(bottom_side_distance, right_side_distance,
                     top_side_distance, left_side_distance))

@@ -1,6 +1,5 @@
 from fractions import Fraction
-from typing import (Callable,
-                    Type)
+from typing import Callable
 
 from ground.core.enums import Relation
 from ground.core.hints import (Coordinate,
@@ -13,7 +12,6 @@ def point_squared_distance(segment_start: Point,
                            segment_end: Point,
                            point: Point,
                            dot_producer: QuaternaryPointFunction[Coordinate],
-                           point_cls: Type[Point],
                            inverse: Callable[[Coordinate], Coordinate]
                            = Fraction(1).__truediv__) -> Coordinate:
     end_factor = max(0, min(1,
@@ -22,12 +20,10 @@ def point_squared_distance(segment_start: Point,
                             * inverse(point_point_squared_distance(
                                     segment_start, segment_end))))
     start_factor = 1 - end_factor
-    return point_point_squared_distance(
-            point_cls(start_factor * segment_start.x
-                      + end_factor * segment_end.x,
-                      start_factor * segment_start.y
-                      + end_factor * segment_end.y),
-            point)
+    return ((start_factor * segment_start.x
+             + end_factor * segment_end.x - point.x) ** 2
+            + (start_factor * segment_start.y
+               + end_factor * segment_end.y - point.y) ** 2)
 
 
 def segment_squared_distance(first_start: Point,
@@ -36,16 +32,16 @@ def segment_squared_distance(first_start: Point,
                              second_end: Point,
                              dot_producer: QuaternaryPointFunction[Coordinate],
                              segments_relater
-                             : QuaternaryPointFunction[Relation],
-                             point_cls: Type[Point]) -> Coordinate:
+                             : QuaternaryPointFunction[Relation]
+                             ) -> Coordinate:
     return (min(point_squared_distance(first_start, first_end, second_start,
-                                       dot_producer, point_cls),
+                                       dot_producer),
                 point_squared_distance(first_start, first_end, second_end,
-                                       dot_producer, point_cls),
+                                       dot_producer),
                 point_squared_distance(second_start, second_end, first_start,
-                                       dot_producer, point_cls),
+                                       dot_producer),
                 point_squared_distance(second_start, second_end, first_end,
-                                       dot_producer, point_cls))
+                                       dot_producer))
             if segments_relater(first_start, first_end, second_start,
                                 second_end) is Relation.DISJOINT
             else 0)

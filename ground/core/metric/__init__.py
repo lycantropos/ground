@@ -25,12 +25,12 @@ BoxSegmentMetric = Callable[[Box, Point, Point,
                             Coordinate]
 PointPointMetric = Callable[[Point, Point], Coordinate]
 SegmentPointMetric = Callable[[Point, Point, Point,
-                               QuaternaryPointFunction[Coordinate],
-                               Type[Point]], Coordinate]
+                               QuaternaryPointFunction[Coordinate]],
+                              Coordinate]
 SegmentSegmentMetric = Callable[[Point, Point, Point, Point,
                                  QuaternaryPointFunction[Coordinate],
-                                 QuaternaryPointFunction[Relation],
-                                 Type[Point]], Coordinate]
+                                 QuaternaryPointFunction[Relation]],
+                                Coordinate]
 
 
 class Context:

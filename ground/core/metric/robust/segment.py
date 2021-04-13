@@ -1,6 +1,5 @@
 from fractions import Fraction
-from typing import (Callable,
-                    Type)
+from typing import Callable
 
 from ground.core.enums import Relation
 from ground.core.hints import (Coordinate,
@@ -18,7 +17,6 @@ def point_squared_distance(segment_start: Point,
                            segment_end: Point,
                            point: Point,
                            dot_producer: QuaternaryPointFunction[Coordinate],
-                           point_cls: Type[Point],
                            inverse: Callable[[Coordinate], Coordinate]
                            = Fraction(1).__truediv__) -> Coordinate:
     segment_squared_norm = dot_producer(segment_start, segment_end,
@@ -53,16 +51,16 @@ def segment_squared_distance(first_start: Point,
                              second_end: Point,
                              dot_producer: QuaternaryPointFunction[Coordinate],
                              segments_relater
-                             : QuaternaryPointFunction[Relation],
-                             point_cls: Type[Point]) -> Coordinate:
+                             : QuaternaryPointFunction[Relation]
+                             ) -> Coordinate:
     return (min(point_squared_distance(first_start, first_end, second_start,
-                                       dot_producer, point_cls),
+                                       dot_producer),
                 point_squared_distance(first_start, first_end, second_end,
-                                       dot_producer, point_cls),
+                                       dot_producer),
                 point_squared_distance(second_start, second_end, first_start,
-                                       dot_producer, point_cls),
+                                       dot_producer),
                 point_squared_distance(second_start, second_end, first_end,
-                                       dot_producer, point_cls))
+                                       dot_producer))
             if segments_relater(first_start, first_end, second_start,
                                 second_end) is Relation.DISJOINT
             else 0)

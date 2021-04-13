@@ -466,8 +466,8 @@ class Context:
         ...                                        Point(2, 1)) == 2
         True
         """
-        return self._metric.segment_point_squared_metric(
-                start, end, point, self.dot_product, self.point_cls)
+        return self._metric.segment_point_squared_metric(start, end, point,
+                                                         self.dot_product)
 
     def segments_intersection(self,
                               first_start: _hints.Point,
@@ -570,7 +570,7 @@ class Context:
         """
         return self._metric.segment_segment_squared_metric(
                 first_start, first_end, second_start, second_end,
-                self.dot_product, self.segments_relation, self.point_cls)
+                self.dot_product, self.segments_relation)
 
 
 _context = _ContextVar('context',
