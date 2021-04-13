@@ -12,11 +12,7 @@ from ground.hints import (Box, Contour,
 from tests.hints import (PointsPair,
                          PointsQuadruplet,
                          Strategy)
-from tests.utils import (MAX_SEQUENCE_SIZE,
-                         Box,
-                         Point,
-                         pack,
-                         to_pairs)
+from tests.utils import (Box, MAX_SEQUENCE_SIZE, Point, pack, to_pairs)
 from .coordinates import coordinates_strategies
 
 
@@ -110,6 +106,16 @@ def to_contexts_with_boxes_and_points(
     contexts, coordinates = contexts_with_coordinates
     return strategies.tuples(contexts, coordinates_to_boxes(coordinates),
                              coordinates_to_points(coordinates))
+
+
+def to_contexts_with_boxes_and_segments_endpoints(
+        contexts_with_coordinates
+        : Tuple[Strategy[Context], Strategy[Coordinate]]
+) -> Strategy[Tuple[Context, Box, PointsPair]]:
+    contexts, coordinates = contexts_with_coordinates
+    points = coordinates_to_points(coordinates)
+    return strategies.tuples(contexts, coordinates_to_boxes(coordinates),
+                             points_to_segments_endpoints(points))
 
 
 def to_contexts_with_segments_endpoints_and_points(
