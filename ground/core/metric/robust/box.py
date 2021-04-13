@@ -1,9 +1,9 @@
-from typing import Type
+from typing import (Tuple,
+                    Type)
 
 from ground.core.enums import Relation
 from ground.core.hints import (Box,
                                Coordinate,
-                               Expansion,
                                Point,
                                QuaternaryPointFunction)
 from ground.core.shewchuk import (sum_expansions,
@@ -54,7 +54,8 @@ def segment_squared_distance(box: Box,
 
 def _linear_interval_distance(min_coordinate: Coordinate,
                               max_coordinate: Coordinate,
-                              coordinate: Coordinate) -> Expansion:
+                              coordinate: Coordinate
+                              ) -> Tuple[Coordinate, Coordinate]:
     return (two_sub(min_coordinate, coordinate)
             if coordinate < min_coordinate
             else (two_sub(coordinate, max_coordinate)
