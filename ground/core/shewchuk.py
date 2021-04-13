@@ -291,7 +291,7 @@ def to_squared_points_distance(first_x: Coordinate,
                                first_y: Coordinate,
                                second_x: Coordinate,
                                second_y: Coordinate) -> Expansion:
-    dy_tail, dy_head = two_sub(first_y, second_y)
     dx_tail, dx_head = two_sub(first_x, second_x)
+    dy_tail, dy_head = two_sub(first_y, second_y)
     return sum_expansions(two_square(dx_tail, dx_head),
                           two_square(dy_tail, dy_head))
