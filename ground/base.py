@@ -463,7 +463,7 @@ class Context:
         ...                                        Point(0, 1)) == 1
         True
         >>> context.segment_point_squared_distance(Point(0, 0), Point(1, 0),
-        ...                                        Point(0, 2)) == 4
+        ...                                        Point(2, 1)) == 2
         True
         """
         return self._metric.segment_point_squared_metric(
