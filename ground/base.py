@@ -472,40 +472,6 @@ class Context:
         return self._metric.segment_point_squared_metric(
                 start, end, point, self.dot_product, self.point_cls)
 
-    def segment_segment_squared_distance(self,
-                                         first_start: _hints.Point,
-                                         first_end: _hints.Point,
-                                         second_start: _hints.Point,
-                                         second_end: _hints.Point
-                                         ) -> _hints.Coordinate:
-        """
-        Returns squared Euclidean distance between two segments
-        given their endpoints.
-
-        Time complexity:
-            ``O(1)``
-        Memory complexity:
-            ``O(1)``
-
-        >>> context = get_context()
-        >>> Point = context.point_cls
-        >>> (context.segment_segment_squared_distance(Point(0, 0), Point(1, 0),
-        ...                                           Point(0, 0), Point(0, 1))
-        ...  == 0)
-        True
-        >>> (context.segment_segment_squared_distance(Point(0, 0), Point(1, 0),
-        ...                                           Point(0, 1), Point(1, 1))
-        ...  == 1)
-        True
-        >>> (context.segment_segment_squared_distance(Point(0, 0), Point(1, 0),
-        ...                                           Point(0, 2), Point(0, 3))
-        ...  == 4)
-        True
-        """
-        return self._metric.segment_segment_squared_metric(
-                first_start, first_end, second_start, second_end,
-                self.dot_product, self.segments_relation, self.point_cls)
-
     def segments_intersection(self,
                               first_start: _hints.Point,
                               first_end: _hints.Point,
@@ -577,6 +543,37 @@ class Context:
         """
         return self._linear.relater(self.cross_product, test_start, test_end,
                                     goal_start, goal_end)
+
+    def segments_squared_distance(self,
+                                  first_start: _hints.Point,
+                                  first_end: _hints.Point,
+                                  second_start: _hints.Point,
+                                  second_end: _hints.Point
+                                  ) -> _hints.Coordinate:
+        """
+        Returns squared Euclidean distance between two segments
+        given their endpoints.
+
+        Time complexity:
+            ``O(1)``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Point = context.point_cls
+        >>> context.segments_squared_distance(Point(0, 0), Point(1, 0),
+        ...                                   Point(0, 0), Point(0, 1)) == 0
+        True
+        >>> context.segments_squared_distance(Point(0, 0), Point(1, 0),
+        ...                                   Point(0, 1), Point(1, 1)) == 1
+        True
+        >>> context.segments_squared_distance(Point(0, 0), Point(1, 0),
+        ...                                   Point(2, 1), Point(2, 2)) == 2
+        True
+        """
+        return self._metric.segment_segment_squared_metric(
+                first_start, first_end, second_start, second_end,
+                self.dot_product, self.segments_relation, self.point_cls)
 
 
 _context = _ContextVar('context',
