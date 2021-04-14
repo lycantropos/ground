@@ -7,8 +7,7 @@ from ground.core.hints import (Coordinate,
                                Point)
 
 
-def centroid(point_cls: Type[Point],
-             vertices: Sequence[Point]) -> Point:
+def centroid(vertices: Sequence[Point], point_cls: Type[Point]) -> Point:
     x_numerator, y_numerator, double_area = centroid_components(vertices)
     inverted_divisor = 1 / (3 * double_area)
     return point_cls(x_numerator * inverted_divisor,

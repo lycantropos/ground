@@ -344,7 +344,7 @@ class Context:
         ...                           Point(0, 2)]) == Point(1, 1)
         True
         """
-        return self._centroidal.contour_centroid(self.point_cls, vertices,
+        return self._centroidal.contour_centroid(vertices, self.point_cls,
                                                  self._sqrt)
 
     def region_centroid(self,
@@ -363,7 +363,7 @@ class Context:
         ...                          Point(0, 2)]) == Point(1, 1)
         True
         """
-        return self._centroidal.region_centroid(self.point_cls, vertices)
+        return self._centroidal.region_centroid(vertices, self.point_cls)
 
     def merged_box(self, first_box: _hints.Box, second_box: _hints.Box
                    ) -> _hints.Box:
@@ -399,7 +399,7 @@ class Context:
         ...                              Point(0, 2)]) == Point(1, 1)
         True
         """
-        return self._centroidal.multipoint_centroid(self.point_cls, points)
+        return self._centroidal.multipoint_centroid(points, self.point_cls)
 
     def multipolygon_centroid(self,
                               polygons: _Sequence[_hints.Polygon]
@@ -427,7 +427,7 @@ class Context:
         ...  == Point(1, 1))
         True
         """
-        return self._centroidal.multipolygon_centroid(self.point_cls, polygons)
+        return self._centroidal.multipolygon_centroid(polygons, self.point_cls)
 
     def points_convex_hull(self,
                            points: _Sequence[_hints.Point]
@@ -473,7 +473,7 @@ class Context:
         ...  == Point(2, 2))
         True
         """
-        return self._centroidal.polygon_centroid(self.point_cls, border, holes)
+        return self._centroidal.polygon_centroid(border, holes, self.point_cls)
 
     def segment_contains_point(self,
                                start: _hints.Point,

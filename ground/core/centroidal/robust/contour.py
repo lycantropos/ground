@@ -7,8 +7,8 @@ from ground.core.hints import (Coordinate,
 from ground.core.shewchuk import to_squared_points_distance
 
 
-def centroid(point_cls: Type[Point],
-             vertices: Sequence[Point],
+def centroid(vertices: Sequence[Point],
+             point_cls: Type[Point],
              sqrt: Callable[[Coordinate], Coordinate]) -> Point:
     accumulated_x = accumulated_y = accumulated_length = 0
     vertex = vertices[-1]

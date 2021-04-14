@@ -8,9 +8,9 @@ from ground.core.hints import (Contour,
 from .region import centroid_components as region_centroid_components
 
 
-def centroid(point_cls: Type[Point],
-             border: Contour,
-             holes: Sequence[Contour]) -> Point:
+def centroid(border: Contour,
+             holes: Sequence[Contour],
+             point_cls: Type[Point]) -> Point:
     x_numerator, y_numerator, double_area = centroid_components(border, holes)
     inverted_denominator = 1 / (3 * double_area)
     return point_cls(x_numerator * inverted_denominator,

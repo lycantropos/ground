@@ -24,12 +24,12 @@ from .robust import (contour as robust_contour,
                      polygon as robust_polygon,
                      region as robust_region)
 
-ContourCentroid = Callable[[Type[Point], Sequence[Point],
+ContourCentroid = Callable[[Sequence[Point], Type[Point],
                             Callable[[Coordinate], Coordinate]], Point]
-MultipointCentroid = RegionCentroid = Callable[[Type[Point], Sequence[Point]],
+MultipointCentroid = RegionCentroid = Callable[[Sequence[Point], Type[Point]],
                                                Point]
-MultipolygonCentroid = Callable[[Type[Point], Sequence[Polygon]], Point]
-PolygonCentroid = Callable[[Type[Point], Contour, Sequence[Contour]], Point]
+MultipolygonCentroid = Callable[[Sequence[Polygon], Type[Point]], Point]
+PolygonCentroid = Callable[[Contour, Sequence[Contour], Type[Point]], Point]
 
 
 class Context:

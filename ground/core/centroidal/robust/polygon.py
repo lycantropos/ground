@@ -11,9 +11,9 @@ from ground.core.shewchuk import sum_expansions
 from .region import centroid_components as region_centroid_components
 
 
-def centroid(point_cls: Type[Point],
-             border: Contour,
+def centroid(border: Contour,
              holes: Sequence[Contour],
+             point_cls: Type[Point],
              inverse: Callable[[int], Fraction] = Fraction(1).__truediv__
              ) -> Point:
     x_numerator, y_numerator, double_area = centroid_components(border, holes)

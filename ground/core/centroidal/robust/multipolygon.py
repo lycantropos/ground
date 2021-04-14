@@ -11,8 +11,8 @@ from ground.core.shewchuk import sum_expansions
 from .polygon import centroid_components as polygon_centroid_components
 
 
-def centroid(point_cls: Type[Point],
-             polygons: Sequence[Polygon],
+def centroid(polygons: Sequence[Polygon],
+             point_cls: Type[Point],
              inverse: Callable[[int], Fraction] = Fraction(1).__truediv__
              ) -> Point:
     x_numerator, y_numerator, double_area = centroid_components(polygons)

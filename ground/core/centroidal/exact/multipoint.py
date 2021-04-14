@@ -6,8 +6,8 @@ from typing import (Callable,
 from ground.core.hints import Point
 
 
-def centroid(point_cls: Type[Point],
-             points: Sequence[Point],
+def centroid(points: Sequence[Point],
+             point_cls: Type[Point],
              inverse: Callable[[int], Fraction] = Fraction(1).__truediv__
              ) -> Point:
     result_x = result_y = 0

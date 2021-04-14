@@ -8,8 +8,8 @@ from ground.core.hints import (Coordinate,
                                Point)
 
 
-def centroid(point_cls: Type[Point],
-             vertices: Sequence[Point],
+def centroid(vertices: Sequence[Point],
+             point_cls: Type[Point],
              inverse: Callable[[int], Fraction] = Fraction(1).__truediv__
              ) -> Point:
     x_numerator, y_numerator, double_area = centroid_components(vertices)
