@@ -347,6 +347,24 @@ class Context:
         return self._centroidal.contour_centroid(self.point_cls, vertices,
                                                  self._sqrt)
 
+    def region_centroid(self,
+                        vertices: _Sequence[_hints.Point]) -> _hints.Point:
+        """
+        Constructs centroid of a region given its contour vertices.
+
+        Time complexity:
+            ``O(len(vertices))``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Point = context.point_cls
+        >>> context.region_centroid([Point(0, 0), Point(2, 0), Point(2, 2),
+        ...                          Point(0, 2)]) == Point(1, 1)
+        True
+        """
+        return self._centroidal.region_centroid(self.point_cls, vertices)
+
     def merged_box(self, first_box: _hints.Box, second_box: _hints.Box
                    ) -> _hints.Box:
         """
