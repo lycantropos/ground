@@ -37,16 +37,24 @@ class Point(Protocol[Coordinate]):
         """Checks if the point is equal to the other."""
 
     @abstractmethod
+    def __ge__(self, other: 'Point') -> bool:
+        """Checks if the point is greater than or equal to the other."""
+
+    @abstractmethod
+    def __gt__(self, other: 'Point') -> bool:
+        """Checks if the point is greater than the other."""
+
+    @abstractmethod
     def __hash__(self) -> int:
         """Returns hash value of the point."""
 
     @abstractmethod
-    def __lt__(self, other: 'Point') -> bool:
-        """Checks if the point is less than the other."""
-
-    @abstractmethod
     def __le__(self, other: 'Point') -> bool:
         """Checks if the point is less than or equal to the other."""
+
+    @abstractmethod
+    def __lt__(self, other: 'Point') -> bool:
+        """Checks if the point is less than the other."""
 
     @property
     @abstractmethod
