@@ -6,13 +6,19 @@ from hypothesis import strategies
 
 from ground.base import (Context,
                          Orientation)
-from ground.hints import (Box, Contour,
+from ground.hints import (Box,
+                          Contour,
                           Coordinate,
-                          Point)
+                          Point,
+                          Polygon)
 from tests.hints import (PointsPair,
                          PointsQuadruplet,
                          Strategy)
-from tests.utils import (Box, MAX_SEQUENCE_SIZE, Point, pack, to_pairs)
+from tests.utils import (MAX_SEQUENCE_SIZE,
+                         Box,
+                         Point,
+                         pack,
+                         to_pairs)
 from .coordinates import coordinates_strategies
 
 
@@ -116,6 +122,21 @@ def to_contexts_with_boxes_and_segments_endpoints(
     points = coordinates_to_points(coordinates)
     return strategies.tuples(contexts, coordinates_to_boxes(coordinates),
                              points_to_segments_endpoints(points))
+
+
+def to_contexts_with_polygons_sequences(
+        contexts_with_coordinates: Tuple[Strategy[Context],
+                                         Strategy[Coordinate]]
+) -> Strategy[Tuple[Context, Sequence[Polygon]]]:
+    def to_context_with_polygons(context_with_vertices
+                                 : Tuple[Context, Sequence[Point]]
+                                 ) -> Tuple[Context, Sequence[Polygon]]:
+        context, vertices = context_with_vertices
+        return context, [context.polygon_cls(context.contour_cls(vertices),
+                                             [])]
+
+    return (to_contexts_with_vertices_sequences(contexts_with_coordinates)
+            .map(to_context_with_polygons))
 
 
 def to_contexts_with_segments_endpoints_and_points(
