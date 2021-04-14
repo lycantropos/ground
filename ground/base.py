@@ -269,8 +269,8 @@ class Context:
         ...  is Kind.ACUTE)
         True
         """
-        return _angular.kind(self.dot_product, vertex, first_ray_point,
-                             second_ray_point)
+        return _angular.kind(vertex, first_ray_point, second_ray_point,
+                             self.dot_product)
 
     def angle_orientation(self,
                           vertex: _hints.Point,
@@ -296,8 +296,8 @@ class Context:
         ...  is Orientation.COUNTERCLOCKWISE)
         True
         """
-        return _angular.orientation(self.cross_product, vertex,
-                                    first_ray_point, second_ray_point)
+        return _angular.orientation(vertex, first_ray_point, second_ray_point,
+                                    self.cross_product)
 
     def box_segment_squared_distance(self,
                                      box: _hints.Box,

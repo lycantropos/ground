@@ -5,18 +5,19 @@ from .hints import (Coordinate,
                     QuaternaryPointFunction)
 
 
-def kind(dot_producer: QuaternaryPointFunction[Coordinate],
-         vertex: Point,
+def kind(vertex: Point,
          first_ray_point: Point,
-         second_ray_point: Point) -> Kind:
+         second_ray_point: Point,
+         dot_producer: QuaternaryPointFunction[Coordinate]) -> Kind:
     return Kind(to_sign(dot_producer(vertex, first_ray_point, vertex,
                                      second_ray_point)))
 
 
-def orientation(cross_producer: QuaternaryPointFunction[Coordinate],
-                vertex: Point,
+def orientation(vertex: Point,
                 first_ray_point: Point,
-                second_ray_point: Point) -> Orientation:
+                second_ray_point: Point,
+                cross_producer: QuaternaryPointFunction[Coordinate]
+                ) -> Orientation:
     return Orientation(to_sign(cross_producer(vertex, first_ray_point, vertex,
                                               second_ray_point)))
 
