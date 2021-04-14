@@ -128,14 +128,14 @@ def to_contexts_with_polygons_sequences(
         contexts_with_coordinates: Tuple[Strategy[Context],
                                          Strategy[Coordinate]]
 ) -> Strategy[Tuple[Context, Sequence[Polygon]]]:
-    def to_context_with_polygons(context_with_vertices
-                                 : Tuple[Context, Sequence[Point]]
+    def to_context_with_polygons(context_with_border_and_holes
+                                 : Tuple[Context, Contour, Sequence[Contour]]
                                  ) -> Tuple[Context, Sequence[Polygon]]:
-        context, vertices = context_with_vertices
-        return context, [context.polygon_cls(context.contour_cls(vertices),
-                                             [])]
+        context, border, holes = context_with_border_and_holes
+        return context, [context.polygon_cls(border, holes)]
 
-    return (to_contexts_with_vertices_sequences(contexts_with_coordinates)
+    return (to_contexts_with_borders_and_holes_sequences(
+            contexts_with_coordinates)
             .map(to_context_with_polygons))
 
 
