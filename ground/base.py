@@ -349,7 +349,7 @@ class Context:
 
     def contours_box(self, contours: _Sequence[_hints.Contour]) -> _hints.Box:
         """
-        Constructs box of contours.
+        Constructs box from contours.
 
         Time complexity:
             ``O(vertices_count)``
@@ -534,7 +534,7 @@ class Context:
         Memory complexity:
             ``O(1)``
 
-        where ``vertices_count = len(polygon.vertices\
+        where ``vertices_count = sum(len(polygon.border.vertices)\
  for polygon in polygons)``.
 
         >>> context = get_context()
@@ -571,7 +571,7 @@ class Context:
 
     def segment_box(self, segment: _hints.Segment) -> _hints.Box:
         """
-        Constructs box of segment.
+        Constructs box from segment.
 
         Time complexity:
             ``O(1)``
@@ -654,7 +654,7 @@ class Context:
 
     def segments_box(self, segments: _Sequence[_hints.Segment]) -> _hints.Box:
         """
-        Constructs box of segments.
+        Constructs box from segments.
 
         Time complexity:
             ``O(len(segments))``
