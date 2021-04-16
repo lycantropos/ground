@@ -476,6 +476,24 @@ class Context:
         """
         return _discrete.to_convex_hull(points, self.angle_orientation)
 
+    def points_box(self, points: _Sequence[_hints.Point]) -> _hints.Box:
+        """
+        Constructs box from points.
+
+        Time complexity:
+            ``O(len(points))``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Box, Point = context.box_cls, context.point_cls
+        >>> (context.points_box([Point(0, 0), Point(2, 0), Point(2, 2),
+        ...                      Point(0, 2)])
+        ...  == Box(0, 2, 0, 2))
+        True
+        """
+        return _boxed.from_points(points, self.box_cls)
+
     def polygon_centroid(self,
                          border: _hints.Contour,
                          holes: _Sequence[_hints.Contour]) -> _hints.Point:
