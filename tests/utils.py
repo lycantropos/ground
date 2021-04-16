@@ -36,6 +36,7 @@ Box = _context.box_cls
 Contour = _context.contour_cls
 Multipoint = _context.multipoint_cls
 Point = _context.point_cls
+Segment = _context.segment_cls
 to_sign = to_sign
 
 
@@ -104,6 +105,29 @@ def permute(sequence: Sequence[_T1],
 
 def reverse_point_coordinates(point: Point) -> Point:
     return Point(point.y, point.x)
+
+
+def reverse_segment_coordinates(segment: Segment) -> Segment:
+    return Segment(reverse_point_coordinates(segment.start),
+                   reverse_point_coordinates(segment.end))
+
+
+def reverse_segments(segments: Sequence[Segment]) -> Sequence[Segment]:
+    return segments[::-1]
+
+
+def reverse_segment_endpoints(segment: Segment) -> Segment:
+    return Segment(segment.end, segment.start)
+
+
+def reverse_segments_endpoints(segments: Sequence[Segment]
+                               ) -> Sequence[Segment]:
+    return [reverse_segment_endpoints(segment) for segment in segments]
+
+
+def reverse_segments_coordinates(segments: Sequence[Segment]
+                                 ) -> Sequence[Segment]:
+    return [reverse_segment_coordinates(segment) for segment in segments]
 
 
 def rotate_sequence(vertices: Sequence[_T1], offset: int) -> Sequence[_T1]:

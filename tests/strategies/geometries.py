@@ -10,7 +10,8 @@ from ground.hints import (Box,
                           Contour,
                           Coordinate,
                           Point,
-                          Polygon)
+                          Polygon,
+                          Segment)
 from tests.hints import (PointsPair,
                          PointsQuadruplet,
                          Strategy)
@@ -58,7 +59,7 @@ def coordinates_to_points_sequences(coordinates: Strategy[Coordinate]
                             unique=True)
 
 
-def to_contexts_with_vertices_sequences(
+def to_contexts_with_convex_hulls(
         contexts_with_coordinates: Tuple[Strategy[Context],
                                          Strategy[Coordinate]]
 ) -> Strategy[Tuple[Context, Sequence[Point]]]:
@@ -88,6 +89,9 @@ def to_contexts_with_vertices_sequences(
                              unique=True))
             .filter(are_points_non_collinear)
             .map(to_context_with_points_convex_hull))
+
+
+to_contexts_with_vertices_sequences = to_contexts_with_convex_hulls
 
 
 def to_contexts_with_borders_and_holes_sequences(
@@ -137,6 +141,35 @@ def to_contexts_with_polygons_sequences(
     return (to_contexts_with_borders_and_holes_sequences(
             contexts_with_coordinates)
             .map(to_context_with_polygons))
+
+
+def to_contexts_with_segments_sequences(
+        contexts_with_coordinates: Tuple[Strategy[Context],
+                                         Strategy[Coordinate]]
+) -> Strategy[Tuple[Context, Sequence[Segment]]]:
+    def to_context_with_segments(context_with_convex_hull
+                                 : Tuple[Context, Sequence[Point]],
+                                 center_offset: int
+                                 ) -> Tuple[Context, Sequence[Segment]]:
+        context, convex_hull = context_with_convex_hull
+        center_offset %= len(convex_hull)
+        center = convex_hull[center_offset]
+        return context, ([context.segment_cls(convex_hull[end_index - 1], end)
+                          for end_index, end in enumerate(convex_hull)]
+                         + ([context.segment_cls(center, convex_hull[index])
+                             for index in range(center_offset - 1)]
+                            + [context.segment_cls(center, convex_hull[index])
+                               for index in range(center_offset + 1,
+                                                  len(convex_hull))]
+                            if center_offset
+                            else
+                            [context.segment_cls(center, convex_hull[index])
+                             for index in range(1, len(convex_hull) - 1)]))
+
+    return strategies.builds(
+            to_context_with_segments,
+            to_contexts_with_convex_hulls(contexts_with_coordinates),
+            strategies.integers(0))
 
 
 def to_contexts_with_segments_endpoints_and_points(
