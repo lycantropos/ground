@@ -347,6 +347,30 @@ class Context:
         return self._centroidal.contour_centroid(vertices, self.point_cls,
                                                  self._sqrt)
 
+    def contours_box(self, contours: _Sequence[_hints.Contour]) -> _hints.Box:
+        """
+        Constructs box of contours.
+
+        Time complexity:
+            ``O(vertices_count)``
+        Memory complexity:
+            ``O(1)``
+
+        where ``vertices_count = len(contour.vertices\
+ for contour in contours)``.
+
+        >>> context = get_context()
+        >>> Box, Contour, Point = (context.box_cls, context.contour_cls,
+        ...                        context.point_cls)
+        >>> (context.contours_box([Contour([Point(0, 0), Point(1, 0),
+        ...                                 Point(1, 1), Point(0, 1)]),
+        ...                        Contour([Point(1, 1), Point(2, 1),
+        ...                                 Point(2, 2), Point(1, 2)])])
+        ...  == Box(0, 2, 0, 2))
+        True
+        """
+        return _boxed.from_contours(contours, self.box_cls)
+
     def region_centroid(self, vertices: _Sequence[_hints.Point]
                         ) -> _hints.Point:
         """
