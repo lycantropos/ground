@@ -21,8 +21,8 @@ def test_basic(context_with_polygons: Tuple[Context, Sequence[Polygon]]
 
 
 @given(strategies.contexts_with_rational_polygons_sequences)
-def test_holes_rotations(context_with_polygons
-                         : Tuple[Context, Sequence[Polygon]]) -> None:
+def test_rotations(context_with_polygons: Tuple[Context, Sequence[Polygon]]
+                   ) -> None:
     context, polygons = context_with_polygons
 
     result = context.multipolygon_centroid(polygons)
