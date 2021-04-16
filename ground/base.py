@@ -543,10 +543,10 @@ class Context:
         ...                                 context.point_cls,
         ...                                 context.polygon_cls)
         >>> context.polygons_box(
-        ...    [Polygon(Contour([Point(0, 0), Point(1, 0), Point(1, 1),
-        ...                      Point(0, 1)]), []),
-        ...     Polygon(Contour([Point(1, 1), Point(2, 1), Point(2, 2),
-        ...                      Point(1, 2)]), [])]) == Box(0, 2, 0, 2)
+        ...     [Polygon(Contour([Point(0, 0), Point(1, 0), Point(1, 1),
+        ...                       Point(0, 1)]), []),
+        ...      Polygon(Contour([Point(1, 1), Point(2, 1), Point(2, 2),
+        ...                       Point(1, 2)]), [])]) == Box(0, 2, 0, 2)
         True
         """
         return _boxed.from_polygons(polygons, self.box_cls)
