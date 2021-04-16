@@ -356,7 +356,7 @@ class Context:
         Memory complexity:
             ``O(1)``
 
-        where ``vertices_count = len(contour.vertices\
+        where ``vertices_count = sum(len(contour.vertices)\
  for contour in contours)``.
 
         >>> context = get_context()
