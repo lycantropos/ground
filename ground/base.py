@@ -525,6 +525,32 @@ class Context:
         """
         return self._centroidal.polygon_centroid(border, holes, self.point_cls)
 
+    def polygons_box(self, polygons: _Sequence[_hints.Polygon]) -> _hints.Box:
+        """
+        Constructs box from polygons.
+
+        Time complexity:
+            ``O(vertices_count)``
+        Memory complexity:
+            ``O(1)``
+
+        where ``vertices_count = len(polygon.vertices\
+ for polygon in polygons)``.
+
+        >>> context = get_context()
+        >>> Box, Contour, Point, Polygon = (context.box_cls,
+        ...                                 context.contour_cls,
+        ...                                 context.point_cls,
+        ...                                 context.polygon_cls)
+        >>> context.polygons_box(
+        ...    [Polygon(Contour([Point(0, 0), Point(1, 0), Point(1, 1),
+        ...                      Point(0, 1)]), []),
+        ...     Polygon(Contour([Point(1, 1), Point(2, 1), Point(2, 2),
+        ...                      Point(1, 2)]), [])]) == Box(0, 2, 0, 2)
+        True
+        """
+        return _boxed.from_polygons(polygons, self.box_cls)
+
     def region_centroid(self, vertices: _Sequence[_hints.Point]
                         ) -> _hints.Point:
         """
