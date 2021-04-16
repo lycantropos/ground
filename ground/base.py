@@ -618,7 +618,7 @@ class Context:
             ``O(1)``
 
         >>> context = get_context()
-        >>> Box, Segment, Point = (context.box_cls, context.point_cls,
+        >>> Box, Point, Segment = (context.box_cls, context.point_cls,
         ...                        context.segment_cls)
         >>> (context.segments_box([Segment(Point(0, 0), Point(1, 1)),
         ...                        Segment(Point(1, 1), Point(2, 2))])
