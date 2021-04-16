@@ -19,6 +19,7 @@ from tests.utils import (MAX_SEQUENCE_SIZE,
                          Box,
                          Point,
                          pack,
+                         sub_lists,
                          to_pairs)
 from .coordinates import coordinates_strategies
 
@@ -154,22 +155,34 @@ def to_contexts_with_segments_sequences(
         context, convex_hull = context_with_convex_hull
         center_offset %= len(convex_hull)
         center = convex_hull[center_offset]
-        return context, ([context.segment_cls(convex_hull[end_index - 1], end)
-                          for end_index, end in enumerate(convex_hull)]
-                         + ([context.segment_cls(center, convex_hull[index])
-                             for index in range(center_offset - 1)]
-                            + [context.segment_cls(center, convex_hull[index])
-                               for index in range(center_offset + 1,
-                                                  len(convex_hull))]
-                            if center_offset
-                            else
-                            [context.segment_cls(center, convex_hull[index])
-                             for index in range(1, len(convex_hull) - 1)]))
+        edges = [context.segment_cls(convex_hull[end_index - 1], end)
+                 for end_index, end in enumerate(convex_hull)]
+        radii = ([context.segment_cls(center, convex_hull[index])
+                  for index in range(center_offset == len(convex_hull) - 1,
+                                     center_offset - 1)]
+                 + [context.segment_cls(center, convex_hull[index])
+                    for index in range(center_offset + 2,
+                                       len(convex_hull))]
+                 if center_offset
+                 else
+                 [context.segment_cls(center, convex_hull[index])
+                  for index in range(2, len(convex_hull) - 1)])
+        assert not any(radius in edges for radius in radii)
+        return context, edges + radii
 
-    return strategies.builds(
+    def to_contexts_with_segments_subsets(
+            context_with_segments: Tuple[Context, Sequence[Segment]]
+    ) -> Strategy[Tuple[Context, Sequence[Segment]]]:
+        context, segments = context_with_segments
+        return strategies.tuples(strategies.just(context),
+                                 sub_lists(segments,
+                                           min_size=2))
+
+    return (strategies.builds(
             to_context_with_segments,
             to_contexts_with_convex_hulls(contexts_with_coordinates),
             strategies.integers(0))
+            .flatmap(to_contexts_with_segments_subsets))
 
 
 def to_contexts_with_segments_endpoints_and_points(

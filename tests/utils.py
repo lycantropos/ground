@@ -1,9 +1,12 @@
 from functools import partial
 from numbers import (Rational,
                      Real)
+from operator import getitem
 from typing import (Any,
                     Callable,
                     Iterable,
+                    List,
+                    Optional,
                     Sequence,
                     Tuple,
                     Type,
@@ -134,6 +137,39 @@ def rotate_sequence(vertices: Sequence[_T1], offset: int) -> Sequence[_T1]:
     return (vertices[offset:] + vertices[:offset]
             if offset
             else vertices)
+
+
+def sub_lists(sequence: Sequence[_T1],
+              *,
+              min_size: int = 0) -> Strategy[List[_T1]]:
+    return strategies.builds(getitem,
+                             strategies.permutations(sequence),
+                             slices(min_size=min_size,
+                                    max_size=max(len(sequence), 1)))
+
+
+@strategies.composite
+def slices(draw: Callable[[Strategy[_T1]], _T1],
+           *,
+           min_size: int = 0,
+           max_size: Optional[int] = None) -> Strategy[slice]:
+    start = draw(strategies.none()
+                 | (strategies.integers(0)
+                    if max_size is None
+                    else strategies.integers(0, max_size - min_size)))
+    step = draw(strategies.none()
+                | (strategies.integers(1,
+                                       (max_size - (0
+                                                    if start is None
+                                                    else start)) // min_size)
+                   if min_size and max_size is not None
+                   else strategies.integers(1)))
+    stop = draw(strategies.none()
+                | strategies.integers((0 if start is None else start)
+                                      + min_size * (1
+                                                    if step is None
+                                                    else step), max_size))
+    return slice(start, stop, step)
 
 
 def to_contour_vertices_orientation(vertices: Sequence[Point],
