@@ -428,6 +428,33 @@ class Context:
         """
         return self._centroidal.multipolygon_centroid(polygons, self.point_cls)
 
+    def multisegment_centroid(self, segments: _Sequence[_hints.Segment]
+                              ) -> _hints.Point:
+        """
+        Constructs centroid of a multisegment given its segments.
+
+        Time complexity:
+            ``O(len(vertices_count))``
+        Memory complexity:
+            ``O(1)``
+
+        where ``vertices_count = sum(len(segment.border.vertices)\
+ + sum(len(hole.vertices) for hole in segment.holes)\
+ for segment in segments)``.
+
+        >>> context = get_context()
+        >>> Contour, Point, Segment = (context.contour_cls, context.point_cls,
+        ...                            context.segment_cls)
+        >>> (context.multisegment_centroid([Segment(Point(0, 0), Point(2, 0)),
+        ...                                 Segment(Point(2, 0), Point(2, 2)),
+        ...                                 Segment(Point(0, 2), Point(2, 2)),
+        ...                                 Segment(Point(0, 0), Point(0, 2))])
+        ...  == Point(1, 1))
+        True
+        """
+        return self._centroidal.multisegment_centroid(segments, self.point_cls,
+                                                      self._sqrt)
+
     def points_convex_hull(self,
                            points: _Sequence[_hints.Point]
                            ) -> _Sequence[_hints.Point]:
