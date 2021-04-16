@@ -328,8 +328,8 @@ class Context:
                 box, start, end, self.dot_product, self.segments_relation,
                 self.point_cls)
 
-    def contour_centroid(self,
-                         vertices: _Sequence[_hints.Point]) -> _hints.Point:
+    def contour_centroid(self, vertices: _Sequence[_hints.Point]
+                         ) -> _hints.Point:
         """
         Constructs centroid of a contour given its vertices.
 
@@ -347,8 +347,8 @@ class Context:
         return self._centroidal.contour_centroid(vertices, self.point_cls,
                                                  self._sqrt)
 
-    def region_centroid(self,
-                        vertices: _Sequence[_hints.Point]) -> _hints.Point:
+    def region_centroid(self, vertices: _Sequence[_hints.Point]
+                        ) -> _hints.Point:
         """
         Constructs centroid of a region given its contour vertices.
 
@@ -383,8 +383,8 @@ class Context:
         """
         return _boxed.merge(first_box, second_box, self.box_cls)
 
-    def multipoint_centroid(self,
-                            points: _Sequence[_hints.Point]) -> _hints.Point:
+    def multipoint_centroid(self, points: _Sequence[_hints.Point]
+                            ) -> _hints.Point:
         """
         Constructs centroid of a multipoint given its points.
 
@@ -401,8 +401,7 @@ class Context:
         """
         return self._centroidal.multipoint_centroid(points, self.point_cls)
 
-    def multipolygon_centroid(self,
-                              polygons: _Sequence[_hints.Polygon]
+    def multipolygon_centroid(self, polygons: _Sequence[_hints.Polygon]
                               ) -> _hints.Point:
         """
         Constructs centroid of a multipolygon given its polygons.
