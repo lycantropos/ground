@@ -328,6 +328,27 @@ class Context:
                 box, start, end, self.dot_product, self.segments_relation,
                 self.point_cls)
 
+    def contour_box(self, contour: _hints.Contour) -> _hints.Box:
+        """
+        Constructs box from contour.
+
+        Time complexity:
+            ``O(vertices_count)``
+        Memory complexity:
+            ``O(1)``
+
+        where ``vertices_count = len(contour.vertices)``.
+
+        >>> context = get_context()
+        >>> Box, Contour, Point = (context.box_cls, context.contour_cls,
+        ...                        context.point_cls)
+        >>> (context.contour_box(Contour([Point(0, 0), Point(1, 0),
+        ...                               Point(1, 1), Point(0, 1)]))
+        ...  == Box(0, 1, 0, 1))
+        True
+        """
+        return _boxed.from_contour(contour, self.box_cls)
+
     def contour_centroid(self, vertices: _Sequence[_hints.Point]
                          ) -> _hints.Point:
         """

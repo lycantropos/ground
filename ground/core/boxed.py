@@ -17,6 +17,10 @@ def merge(first_box: Box, second_box: Box, box_cls: Type[Box]) -> Box:
                    max(first_box.max_y, second_box.max_y))
 
 
+def from_contour(contour: Contour, box_cls: Type[Box]) -> Box:
+    return from_points(contour.vertices, box_cls)
+
+
 def from_contours(contours: Iterable[Contour], box_cls: Type[Box]) -> Box:
     iterator = iter(contours)
     contour = next(iterator)
