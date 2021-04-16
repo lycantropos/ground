@@ -39,6 +39,10 @@ def from_points(points: Iterable[Point], box_cls: Type[Box]) -> Box:
     return box_cls(*_from_points(points))
 
 
+def from_polygon(polygon: Polygon, box_cls: Type[Box]) -> Box:
+    return from_points(polygon.border.vertices, box_cls)
+
+
 def from_polygons(polygons: Iterable[Polygon], box_cls: Type[Box]) -> Box:
     return from_contours((polygon.border for polygon in polygons), box_cls)
 

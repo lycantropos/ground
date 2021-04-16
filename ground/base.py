@@ -500,6 +500,29 @@ class Context:
         """
         return _boxed.from_points(points, self.box_cls)
 
+    def polygon_box(self, polygon: _hints.Polygon) -> _hints.Box:
+        """
+        Constructs box from polygon.
+
+        Time complexity:
+            ``O(vertices_count)``
+        Memory complexity:
+            ``O(1)``
+
+        where ``vertices_count = len(polygon.border.vertices)``.
+
+        >>> context = get_context()
+        >>> Box, Contour, Point, Polygon = (context.box_cls,
+        ...                                 context.contour_cls,
+        ...                                 context.point_cls,
+        ...                                 context.polygon_cls)
+        >>> context.polygon_box(
+        ...     Polygon(Contour([Point(0, 0), Point(1, 0), Point(1, 1),
+        ...                      Point(0, 1)]), [])) == Box(0, 1, 0, 1)
+        True
+        """
+        return _boxed.from_polygon(polygon, self.box_cls)
+
     def polygon_centroid(self,
                          border: _hints.Contour,
                          holes: _Sequence[_hints.Contour]) -> _hints.Point:
