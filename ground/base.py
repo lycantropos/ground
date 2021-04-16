@@ -371,43 +371,6 @@ class Context:
         """
         return _boxed.from_contours(contours, self.box_cls)
 
-    def segments_box(self, segments: _Sequence[_hints.Segment]) -> _hints.Box:
-        """
-        Constructs box of segments.
-
-        Time complexity:
-            ``O(len(segments))``
-        Memory complexity:
-            ``O(1)``
-
-        >>> context = get_context()
-        >>> Box, Segment, Point = (context.box_cls, context.point_cls,
-        ...                        context.segment_cls)
-        >>> (context.segments_box([Segment(Point(0, 0), Point(1, 1)),
-        ...                        Segment(Point(1, 1), Point(2, 2))])
-        ...  == Box(0, 2, 0, 2))
-        True
-        """
-        return _boxed.from_segments(segments, self.box_cls)
-
-    def region_centroid(self, vertices: _Sequence[_hints.Point]
-                        ) -> _hints.Point:
-        """
-        Constructs centroid of a region given its contour vertices.
-
-        Time complexity:
-            ``O(len(vertices))``
-        Memory complexity:
-            ``O(1)``
-
-        >>> context = get_context()
-        >>> Point = context.point_cls
-        >>> context.region_centroid([Point(0, 0), Point(2, 0), Point(2, 2),
-        ...                          Point(0, 2)]) == Point(1, 1)
-        True
-        """
-        return self._centroidal.region_centroid(vertices, self.point_cls)
-
     def merged_box(self, first_box: _hints.Box, second_box: _hints.Box
                    ) -> _hints.Box:
         """
@@ -562,6 +525,24 @@ class Context:
         """
         return self._centroidal.polygon_centroid(border, holes, self.point_cls)
 
+    def region_centroid(self, vertices: _Sequence[_hints.Point]
+                        ) -> _hints.Point:
+        """
+        Constructs centroid of a region given its contour vertices.
+
+        Time complexity:
+            ``O(len(vertices))``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Point = context.point_cls
+        >>> context.region_centroid([Point(0, 0), Point(2, 0), Point(2, 2),
+        ...                          Point(0, 2)]) == Point(1, 1)
+        True
+        """
+        return self._centroidal.region_centroid(vertices, self.point_cls)
+
     def segment_contains_point(self,
                                start: _hints.Point,
                                end: _hints.Point,
@@ -626,6 +607,25 @@ class Context:
         """
         return self._metric.segment_point_squared_metric(start, end, point,
                                                          self.dot_product)
+
+    def segments_box(self, segments: _Sequence[_hints.Segment]) -> _hints.Box:
+        """
+        Constructs box of segments.
+
+        Time complexity:
+            ``O(len(segments))``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Box, Segment, Point = (context.box_cls, context.point_cls,
+        ...                        context.segment_cls)
+        >>> (context.segments_box([Segment(Point(0, 0), Point(1, 1)),
+        ...                        Segment(Point(1, 1), Point(2, 2))])
+        ...  == Box(0, 2, 0, 2))
+        True
+        """
+        return _boxed.from_segments(segments, self.box_cls)
 
     def segments_intersection(self,
                               first_start: _hints.Point,
