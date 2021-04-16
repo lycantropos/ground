@@ -371,6 +371,25 @@ class Context:
         """
         return _boxed.from_contours(contours, self.box_cls)
 
+    def segments_box(self, segments: _Sequence[_hints.Segment]) -> _hints.Box:
+        """
+        Constructs box of segments.
+
+        Time complexity:
+            ``O(len(segments))``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Box, Segment, Point = (context.box_cls, context.point_cls,
+        ...                        context.segment_cls)
+        >>> (context.segments_box([Segment(Point(0, 0), Point(1, 1)),
+        ...                        Segment(Point(1, 1), Point(2, 2))])
+        ...  == Box(0, 2, 0, 2))
+        True
+        """
+        return _boxed.from_segments(segments, self.box_cls)
+
     def region_centroid(self, vertices: _Sequence[_hints.Point]
                         ) -> _hints.Point:
         """
