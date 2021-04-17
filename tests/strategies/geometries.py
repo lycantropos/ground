@@ -144,6 +144,21 @@ def to_contexts_with_polygons_sequences(
             .map(to_context_with_polygons))
 
 
+def to_contexts_with_contours_sequences(
+        contexts_with_coordinates: Tuple[Strategy[Context],
+                                         Strategy[Coordinate]]
+) -> Strategy[Tuple[Context, Sequence[Contour]]]:
+    def to_context_with_contours_sequence(context_with_convex_hull
+                                          : Tuple[Context, Sequence[Point]]
+                                          ) -> Tuple[Context,
+                                                     Sequence[Contour]]:
+        context, convex_hull = context_with_convex_hull
+        return context, [context.contour_cls(convex_hull)]
+
+    return (to_contexts_with_convex_hulls(contexts_with_coordinates)
+            .map(to_context_with_contours_sequence))
+
+
 def to_contexts_with_segments_sequences(
         contexts_with_coordinates: Tuple[Strategy[Context],
                                          Strategy[Coordinate]]

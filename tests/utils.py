@@ -111,11 +111,22 @@ def reverse_box_coordinates(box: Box) -> Point:
     return Box(box.min_y, box.max_y, box.min_x, box.max_x)
 
 
+def reverse_contour_coordinates(contour: Contour) -> Contour:
+    return Contour([reverse_point_coordinates(vertex)
+                    for vertex in contour.vertices])
+
+
+def reverse_contours_coordinates(contours: Sequence[Contour]
+                                 ) -> Sequence[Contour]:
+    return [reverse_contour_coordinates(contour) for contour in contours]
+
+
 def reverse_point_coordinates(point: Point) -> Point:
     return Point(point.y, point.x)
 
 
-reverse_points = reverse_segments = itemgetter(slice(None, None, -1))
+reverse_contours = reverse_points = reverse_segments = itemgetter(
+        slice(None, None, -1))
 
 
 def reverse_points_coordinates(points: Sequence[Point]) -> Sequence[Point]:

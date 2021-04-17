@@ -24,6 +24,7 @@ from tests.strategies.geometries import (
     to_contexts_with_borders_and_holes_sequences,
     to_contexts_with_boxes_and_points,
     to_contexts_with_boxes_and_segments_endpoints,
+    to_contexts_with_contours_sequences,
     to_contexts_with_polygons_sequences,
     to_contexts_with_segments_endpoints_and_points,
     to_contexts_with_segments_pairs_endpoints,
@@ -235,6 +236,9 @@ contexts_with_rational_vertices = (
 contexts_with_borders_and_holes_sequences = (
     (contexts_with_coordinates_strategies
      .flatmap(to_contexts_with_borders_and_holes_sequences)))
+contexts_with_contours_sequences = (
+    (contexts_with_coordinates_strategies
+     .flatmap(to_contexts_with_contours_sequences)))
 contexts_with_rational_borders_and_holes_sequences = (
     (contexts_with_rational_coordinates_strategies
      .flatmap(to_contexts_with_borders_and_holes_sequences)))
