@@ -40,6 +40,7 @@ Box = _context.box_cls
 Contour = _context.contour_cls
 Multipoint = _context.multipoint_cls
 Point = _context.point_cls
+Polygon = _context.polygon_cls
 Segment = _context.segment_cls
 to_sign = to_sign
 
@@ -125,12 +126,23 @@ def reverse_point_coordinates(point: Point) -> Point:
     return Point(point.y, point.x)
 
 
-reverse_contours = reverse_points = reverse_segments = itemgetter(
-        slice(None, None, -1))
+reverse_contours = reverse_points = reverse_polygons = reverse_segments = (
+    itemgetter(slice(None, None, -1)))
 
 
 def reverse_points_coordinates(points: Sequence[Point]) -> Sequence[Point]:
     return [reverse_point_coordinates(point) for point in points]
+
+
+def reverse_polygon_coordinates(polygon: Polygon) -> Polygon:
+    return Polygon(reverse_contour_coordinates(polygon.border),
+                   [reverse_contour_coordinates(hole)
+                    for hole in polygon.holes])
+
+
+def reverse_polygons_coordinates(polygons: Sequence[Polygon]
+                                 ) -> Sequence[Polygon]:
+    return [reverse_polygon_coordinates(polygon) for polygon in polygons]
 
 
 def reverse_segment_coordinates(segment: Segment) -> Segment:
