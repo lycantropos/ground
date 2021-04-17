@@ -1,7 +1,8 @@
 from functools import partial
 from numbers import (Rational,
                      Real)
-from operator import getitem
+from operator import (getitem,
+                      itemgetter)
 from typing import (Any,
                     Callable,
                     Iterable,
@@ -106,17 +107,24 @@ def permute(sequence: Sequence[_T1],
     return [sequence[index] for index in permutation]
 
 
+def reverse_box_coordinates(box: Box) -> Point:
+    return Box(box.min_y, box.max_y, box.min_x, box.max_x)
+
+
 def reverse_point_coordinates(point: Point) -> Point:
     return Point(point.y, point.x)
+
+
+reverse_points = reverse_segments = itemgetter(slice(None, None, -1))
+
+
+def reverse_points_coordinates(points: Sequence[Point]) -> Sequence[Point]:
+    return [reverse_point_coordinates(point) for point in points]
 
 
 def reverse_segment_coordinates(segment: Segment) -> Segment:
     return Segment(reverse_point_coordinates(segment.start),
                    reverse_point_coordinates(segment.end))
-
-
-def reverse_segments(segments: Sequence[Segment]) -> Sequence[Segment]:
-    return segments[::-1]
 
 
 def reverse_segment_endpoints(segment: Segment) -> Segment:
