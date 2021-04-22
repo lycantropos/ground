@@ -1,4 +1,5 @@
-from operator import add
+from operator import (add,
+                      itemgetter)
 from typing import (Sequence,
                     Tuple)
 
@@ -197,7 +198,8 @@ def to_contexts_with_segments_sequences(
             to_context_with_segments,
             to_contexts_with_convex_hulls(contexts_with_coordinates),
             strategies.integers(0))
-            .flatmap(to_contexts_with_segments_subsets))
+            .flatmap(to_contexts_with_segments_subsets)
+            .map(itemgetter(slice(MAX_SEQUENCE_SIZE))))
 
 
 def to_contexts_with_segments_endpoints_and_points(

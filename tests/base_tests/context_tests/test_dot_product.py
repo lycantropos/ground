@@ -1,5 +1,3 @@
-from itertools import (permutations,
-                       product)
 from typing import Tuple
 
 from hypothesis import given
@@ -52,9 +50,12 @@ def test_segments_permutation(context_with_points_quadruplet
                                          first_end)
 
 
-@given(strategies.contexts_with_points_quadruplets)
+@given(strategies.contexts_with_points_quadruplets, strategies.indices,
+       strategies.indices)
 def test_endpoints_permutations(context_with_points_quadruplet
-                                : Tuple[Context, PointsQuadruplet]) -> None:
+                                : Tuple[Context, PointsQuadruplet],
+                                first_index: int,
+                                second_index: int) -> None:
     context, points_quadruplet = context_with_points_quadruplet
     first_start, first_end, second_start, second_end = points_quadruplet
 
@@ -64,14 +65,12 @@ def test_endpoints_permutations(context_with_points_quadruplet
     result_sign = to_sign(result)
     first_endpoints = first_start, first_end
     second_endpoints = second_start, second_end
-    assert all(to_sign(context.dot_product(*permute(first_endpoints,
-                                                    first_permutation),
-                                           *permute(second_endpoints,
-                                                    second_permutation)))
-               == (result_sign
-                   if equivalence(is_even_permutation(first_permutation),
-                                  is_even_permutation(second_permutation))
-                   else -result_sign)
-               for first_permutation, second_permutation
-               in product(permutations(range(len(first_endpoints))),
-                          permutations(range(len(second_endpoints)))))
+    assert (to_sign(context.dot_product(*permute(first_endpoints, first_index),
+                                        *permute(second_endpoints,
+                                                 second_index)))
+            == (result_sign
+                if equivalence(is_even_permutation(first_index,
+                                                   len(first_endpoints)),
+                               is_even_permutation(second_index,
+                                                   len(second_endpoints)))
+                else -result_sign))

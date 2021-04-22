@@ -37,9 +37,10 @@ def test_degenerate_cases(context_with_points_triplet
                for point in points_triplet)
 
 
-@given(strategies.contexts_with_points_quadruplets)
-def test_permutations(context_with_points_quadruplet
-                      : Tuple[Context, PointsQuadruplet]) -> None:
+@given(strategies.contexts_with_points_quadruplets, strategies.indices)
+def test_permutations(context_with_points_quadruplet: Tuple[Context,
+                                                            PointsQuadruplet],
+                      index: int) -> None:
     context, points_quadruplet = context_with_points_quadruplet
     first_point, second_point, third_point, fourth_point = points_quadruplet
 
@@ -47,10 +48,9 @@ def test_permutations(context_with_points_quadruplet
                                                      third_point, fourth_point)
 
     result_sign = to_sign(result)
-    assert all(to_sign(
+    assert (to_sign(
             context.point_point_point_incircle_test(*permute(points_quadruplet,
-                                                             permutation)))
-               == (result_sign
-                   if is_even_permutation(permutation)
-                   else -result_sign)
-               for permutation in permutations(range(len(points_quadruplet))))
+                                                             index)))
+            == (result_sign
+                if is_even_permutation(index, len(points_quadruplet))
+                else -result_sign))

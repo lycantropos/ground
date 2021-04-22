@@ -1,3 +1,4 @@
+import sys
 from functools import partial
 from numbers import Rational
 from typing import (Tuple,
@@ -39,6 +40,7 @@ from tests.utils import (MAX_SEQUENCE_SIZE,
                          to_quadruplets,
                          to_triplets)
 
+indices = strategies.integers(0, sys.maxsize)
 contexts = strategies.builds(Context,
                              mode=strategies.sampled_from(list(Mode)))
 contexts_with_empty_lists = strategies.tuples(contexts,

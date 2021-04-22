@@ -1,4 +1,3 @@
-from itertools import permutations
 from typing import (Sequence,
                     Tuple)
 
@@ -36,13 +35,11 @@ def test_reversals(context_with_polygons: Tuple[Context, Sequence[Polygon]]
             reverse_polygons_coordinates(polygons)))
 
 
-@given(strategies.contexts_with_polygons_sequences)
-def test_permutations(context_with_polygons: Tuple[Context, Sequence[Polygon]]
-                      ) -> None:
+@given(strategies.contexts_with_polygons_sequences, strategies.indices)
+def test_permutations(context_with_polygons: Tuple[Context, Sequence[Polygon]],
+                      index: int) -> None:
     context, polygons = context_with_polygons
 
     result = context.polygons_box(polygons)
 
-    assert all(context.polygons_box(permute(polygons, permutation))
-               == result
-               for permutation in permutations(range(len(polygons))))
+    assert context.polygons_box(permute(polygons, index)) == result

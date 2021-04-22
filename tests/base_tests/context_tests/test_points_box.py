@@ -1,4 +1,3 @@
-from itertools import permutations
 from typing import (Sequence,
                     Tuple)
 
@@ -35,13 +34,11 @@ def test_reversals(context_with_points: Tuple[Context, Sequence[Point]]
             reverse_points_coordinates(points)))
 
 
-@given(strategies.contexts_with_points_sequences)
-def test_permutations(context_with_points: Tuple[Context, Sequence[Point]]
-                      ) -> None:
+@given(strategies.contexts_with_points_sequences, strategies.indices)
+def test_permutations(context_with_points: Tuple[Context, Sequence[Point]],
+                      index: int) -> None:
     context, points = context_with_points
 
     result = context.points_box(points)
 
-    assert all(context.points_box(permute(points, permutation))
-               == result
-               for permutation in permutations(range(len(points))))
+    assert context.points_box(permute(points, index)) == result

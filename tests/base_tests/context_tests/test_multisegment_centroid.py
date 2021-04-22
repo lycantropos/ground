@@ -38,13 +38,12 @@ def test_reversals(context_with_segments: Tuple[Context, Sequence[Segment]]
             reverse_segments_coordinates(segments)))
 
 
-@given(strategies.contexts_with_segments_sequences)
-def test_rotations(context_with_segments: Tuple[Context, Sequence[Segment]]
-                   ) -> None:
+@given(strategies.contexts_with_segments_sequences, strategies.indices)
+def test_rotations(context_with_segments: Tuple[Context, Sequence[Segment]],
+                   offset: int) -> None:
     context, segments = context_with_segments
 
     result = context.multisegment_centroid(segments)
 
-    assert all(context.multisegment_centroid(rotate_sequence(segments, offset))
-               == result
-               for offset in range(len(segments)))
+    assert (context.multisegment_centroid(rotate_sequence(segments, offset))
+            == result)

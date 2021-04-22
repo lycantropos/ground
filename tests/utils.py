@@ -1,3 +1,4 @@
+import math
 from functools import partial
 from numbers import (Rational,
                      Real)
@@ -85,27 +86,31 @@ def is_coordinate(object_: Any) -> bool:
     return isinstance(object_, Coordinate.__constraints__)
 
 
-def is_even_permutation(permutation: Permutation) -> bool:
-    if len(permutation) == 1:
-        return True
-    transitions_count = 0
-    for index, element in enumerate(permutation):
-        for next_element in permutation[index + 1:]:
-            if element > next_element:
-                transitions_count += 1
-    return not (transitions_count % 2)
+def is_even_permutation(index: int, size: int) -> bool:
+    return ((index % math.factorial(size) - 1) % 4) > 1
 
 
 is_point = Point.__instancecheck__
+
+
+def nth_permutation(index: int, size: int) -> Permutation:
+    permutations_count = math.factorial(size)
+    index %= permutations_count
+    indices = list(range(size))
+    result = []
+    for rest_size in range(size, 0, -1):
+        permutations_count //= rest_size
+        step, index = divmod(index, permutations_count)
+        result.append(indices.pop(step))
+    return result
 
 
 def pack(function: Callable[..., _T2]) -> Callable[[Iterable[_T1]], _T2]:
     return partial(apply, function)
 
 
-def permute(sequence: Sequence[_T1],
-            permutation: Permutation) -> Sequence[_T1]:
-    return [sequence[index] for index in permutation]
+def permute(sequence: Sequence[_T1], index: int) -> Sequence[_T1]:
+    return [sequence[index] for index in nth_permutation(index, len(sequence))]
 
 
 def reverse_box_coordinates(box: Box) -> Point:
@@ -165,6 +170,7 @@ def reverse_segments_coordinates(segments: Sequence[Segment]
 
 
 def rotate_sequence(vertices: Sequence[_T1], offset: int) -> Sequence[_T1]:
+    offset = offset % len(vertices) if vertices else 0
     return (vertices[offset:] + vertices[:offset]
             if offset
             else vertices)

@@ -36,13 +36,11 @@ def test_reversals(context_with_contours: Tuple[Context, Sequence[Contour]]
             reverse_contours_coordinates(contours)))
 
 
-@given(strategies.contexts_with_contours_sequences)
-def test_permutations(context_with_contours: Tuple[Context, Sequence[Contour]]
-                      ) -> None:
+@given(strategies.contexts_with_contours_sequences, strategies.indices)
+def test_permutations(context_with_contours: Tuple[Context, Sequence[Contour]],
+                      index: int) -> None:
     context, contours = context_with_contours
 
     result = context.contours_box(contours)
 
-    assert all(context.contours_box(permute(contours, permutation))
-               == result
-               for permutation in permutations(range(len(contours))))
+    assert context.contours_box(permute(contours, index)) == result

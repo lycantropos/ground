@@ -20,13 +20,13 @@ def test_basic(context_with_polygons: Tuple[Context, Sequence[Polygon]]
     assert is_point(result)
 
 
-@given(strategies.contexts_with_rational_polygons_sequences)
-def test_rotations(context_with_polygons: Tuple[Context, Sequence[Polygon]]
-                   ) -> None:
+@given(strategies.contexts_with_rational_polygons_sequences,
+       strategies.indices)
+def test_rotations(context_with_polygons: Tuple[Context, Sequence[Polygon]],
+                   offset: int) -> None:
     context, polygons = context_with_polygons
 
     result = context.multipolygon_centroid(polygons)
 
-    assert all(context.multipolygon_centroid(rotate_sequence(polygons, offset))
-               == result
-               for offset in range(len(polygons)))
+    assert (context.multipolygon_centroid(rotate_sequence(polygons, offset))
+            == result)

@@ -19,13 +19,11 @@ def test_basic(context_with_vertices: Tuple[Context, Sequence[Point]]) -> None:
     assert is_point(result)
 
 
-@given(strategies.contexts_with_rational_vertices)
-def test_rotations(context_with_vertices: Tuple[Context, Sequence[Point]]
-                   ) -> None:
+@given(strategies.contexts_with_rational_vertices, strategies.indices)
+def test_rotations(context_with_vertices: Tuple[Context, Sequence[Point]],
+                   offset: int) -> None:
     context, vertices = context_with_vertices
 
     result = context.region_centroid(vertices)
 
-    assert all(context.region_centroid(rotate_sequence(vertices, offset))
-               == result
-               for offset in range(len(vertices)))
+    assert context.region_centroid(rotate_sequence(vertices, offset)) == result

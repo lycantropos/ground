@@ -4,8 +4,8 @@ from typing import (Sequence,
 from hypothesis import given
 
 from ground.base import Context
-from ground.hints import Point
-from tests.utils import (is_point,
+from tests.utils import (Point,
+                         is_point,
                          rotate_sequence)
 from . import strategies
 
@@ -19,13 +19,12 @@ def test_basic(context_with_vertices: Tuple[Context, Sequence[Point]]) -> None:
     assert is_point(result)
 
 
-@given(strategies.contexts_with_rational_vertices)
-def test_rotations(context_with_vertices: Tuple[Context, Sequence[Point]]
-                   ) -> None:
+@given(strategies.contexts_with_rational_vertices, strategies.indices)
+def test_rotations(context_with_vertices: Tuple[Context, Sequence[Point]],
+                   offset: int) -> None:
     context, vertices = context_with_vertices
 
     result = context.contour_centroid(vertices)
 
-    assert all(context.contour_centroid(rotate_sequence(vertices, offset))
-               == result
-               for offset in range(len(vertices)))
+    assert (context.contour_centroid(rotate_sequence(vertices, offset))
+            == result)

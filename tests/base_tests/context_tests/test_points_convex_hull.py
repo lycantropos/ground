@@ -1,5 +1,4 @@
 from collections import abc
-from itertools import permutations
 from typing import (Sequence,
                     Tuple)
 
@@ -25,17 +24,16 @@ def test_basic(context_with_points_sequence: Tuple[Context, Sequence[Point]]
     assert all(map(is_point, result))
 
 
-@given(strategies.contexts_with_points_lists)
+@given(strategies.contexts_with_points_lists, strategies.indices)
 def test_permutations(context_with_points_sequence
-                      : Tuple[Context, Sequence[Point]]) -> None:
+                      : Tuple[Context, Sequence[Point]],
+                      index: int) -> None:
     context, points_sequence = context_with_points_sequence
 
     result = context.points_convex_hull(points_sequence)
 
-    assert all(context.points_convex_hull(permute(points_sequence,
-                                                  permutation))
-               == result
-               for permutation in permutations(range(len(points_sequence))))
+    assert (context.points_convex_hull(permute(points_sequence, index))
+            == result)
 
 
 @given(strategies.contexts_with_empty_lists)

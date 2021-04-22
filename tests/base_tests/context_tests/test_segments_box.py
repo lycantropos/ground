@@ -36,13 +36,11 @@ def test_reversals(context_with_segments: Tuple[Context, Sequence[Segment]]
             reverse_segments_coordinates(segments)))
 
 
-@given(strategies.contexts_with_segments_sequences)
-def test_permutations(context_with_segments: Tuple[Context, Sequence[Segment]]
-                      ) -> None:
+@given(strategies.contexts_with_segments_sequences, strategies.indices)
+def test_permutations(context_with_segments: Tuple[Context, Sequence[Segment]],
+                      index: int) -> None:
     context, segments = context_with_segments
 
     result = context.segments_box(segments)
 
-    assert all(context.segments_box(permute(segments, permutation))
-               == result
-               for permutation in permutations(range(len(segments))))
+    assert context.segments_box(permute(segments, index)) == result

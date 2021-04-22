@@ -1,4 +1,3 @@
-from itertools import permutations
 from typing import (Sequence,
                     Tuple)
 
@@ -20,13 +19,11 @@ def test_basic(context_with_points: Tuple[Context, Sequence[Point]]) -> None:
     assert is_point(result)
 
 
-@given(strategies.contexts_with_rational_points_sequences)
-def test_permutations(context_with_points: Tuple[Context, Sequence[Point]]
-                      ) -> None:
+@given(strategies.contexts_with_rational_points_sequences, strategies.indices)
+def test_permutations(context_with_points: Tuple[Context, Sequence[Point]],
+                      index: int) -> None:
     context, points = context_with_points
 
     result = context.multipoint_centroid(points)
 
-    assert all(context.multipoint_centroid(permute(points, permutation))
-               == result
-               for permutation in permutations(range(len(points))))
+    assert context.multipoint_centroid(permute(points, index)) == result
