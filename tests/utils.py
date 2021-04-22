@@ -29,7 +29,7 @@ from .hints import (Permutation,
 _T1 = TypeVar('_T1')
 _T2 = TypeVar('_T2')
 
-MAX_SEQUENCE_SIZE = 10
+MAX_SEQUENCE_SIZE = 5
 
 ASYMMETRIC_LINEAR_RELATIONS = (Relation.COMPONENT, Relation.COMPOSITE)
 SYMMETRIC_LINEAR_RELATIONS = (Relation.CROSS, Relation.DISJOINT,
