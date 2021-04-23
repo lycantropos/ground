@@ -1,6 +1,7 @@
 import enum as _enum
 from contextvars import ContextVar as _ContextVar
-from typing import (Sequence as _Sequence,
+from typing import (Callable as _Callable,
+                    Sequence as _Sequence,
                     Type as _Type)
 
 from reprit.base import generate_repr as _generate_repr
@@ -53,7 +54,9 @@ class Context:
                  point_cls: _Type[_hints.Point] = _geometries.Point,
                  polygon_cls: _Type[_hints.Polygon] = _geometries.Polygon,
                  segment_cls: _Type[_hints.Segment] = _geometries.Segment,
-                 mode: Mode = Mode.EXACT) -> None:
+                 mode: Mode = Mode.EXACT,
+                 sqrt: _Callable[[_hints.Coordinate], _hints.Coordinate]
+                 = _sqrt) -> None:
         self._box_cls = box_cls
         self._contour_cls = contour_cls
         self._multipoint_cls = multipoint_cls
@@ -63,7 +66,7 @@ class Context:
         self._polygon_cls = polygon_cls
         self._segment_cls = segment_cls
         self._mode = mode
-        self._sqrt = _sqrt
+        self._sqrt = sqrt
         (self._centroidal, self._incircle, self._linear, self._metric,
          self._vector) = (
             (_centroidal.exact_context, _incircle.exact_context,
@@ -245,6 +248,11 @@ class Context:
         """Returns type for segments."""
         return self._segment_cls
 
+    @property
+    def sqrt(self) -> _Callable[[_hints.Coordinate], _hints.Coordinate]:
+        """Returns function for computing square root."""
+        return self._sqrt
+
     def angle_kind(self,
                    vertex: _hints.Point,
                    first_ray_point: _hints.Point,
@@ -366,7 +374,7 @@ class Context:
         True
         """
         return self._centroidal.contour_centroid(vertices, self.point_cls,
-                                                 self._sqrt)
+                                                 self.sqrt)
 
     def contours_box(self, contours: _Sequence[_hints.Contour]) -> _hints.Box:
         """
@@ -480,7 +488,7 @@ class Context:
         True
         """
         return self._centroidal.multisegment_centroid(segments, self.point_cls,
-                                                      self._sqrt)
+                                                      self.sqrt)
 
     def points_convex_hull(self,
                            points: _Sequence[_hints.Point]
