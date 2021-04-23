@@ -1,17 +1,22 @@
 from typing import (Sequence,
                     Tuple)
 
+import pytest
 from hypothesis import given
 
 from ground.base import Context
 from ground.hints import Segment
-from tests.utils import (is_point,
+from tests.utils import (IS_PYPY,
+                         is_point,
                          reverse_point_coordinates,
                          reverse_segments,
                          reverse_segments_coordinates,
                          reverse_segments_endpoints,
                          rotate_sequence)
 from . import strategies
+
+pytestmark = pytest.mark.skipif(IS_PYPY,
+                                reason='too slow on PyPy')
 
 
 @given(strategies.contexts_with_segments_sequences)

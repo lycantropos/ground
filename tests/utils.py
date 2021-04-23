@@ -1,3 +1,5 @@
+import platform
+
 import math
 from functools import partial
 from numbers import (Rational,
@@ -29,6 +31,7 @@ from .hints import (Permutation,
 _T1 = TypeVar('_T1')
 _T2 = TypeVar('_T2')
 
+IS_PYPY = platform.python_implementation() == 'PyPy'
 MAX_SEQUENCE_SIZE = 4
 
 ASYMMETRIC_LINEAR_RELATIONS = (Relation.COMPONENT, Relation.COMPOSITE)
