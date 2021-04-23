@@ -1,18 +1,13 @@
 from typing import (Sequence,
                     Tuple)
 
-import pytest
 from hypothesis import given
 
 from ground.base import Context
-from tests.utils import (IS_PYPY,
-                         Point,
+from tests.utils import (Point,
                          is_point,
                          rotate_sequence)
 from . import strategies
-
-pytestmark = pytest.mark.skipif(IS_PYPY,
-                                reason='too slow on PyPy')
 
 
 @given(strategies.contexts_with_vertices)

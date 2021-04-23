@@ -4,12 +4,11 @@ import platform
 from hypothesis import (HealthCheck,
                         settings)
 
-from .utils import IS_PYPY
-
 on_azure_pipelines = bool(os.getenv('TF_BUILD', False))
+is_pypy = platform.python_implementation() == 'PyPy'
 settings.register_profile('default',
                           max_examples=(settings.default.max_examples
-                                        // 5 * (1 + 4 * IS_PYPY)
+                                        // (5 * (1 + 4 * is_pypy))
                                         if on_azure_pipelines
                                         else settings.default.max_examples),
                           deadline=None,
