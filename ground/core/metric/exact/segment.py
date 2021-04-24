@@ -1,9 +1,8 @@
-from fractions import Fraction
-
 from ground.core.enums import Relation
 from ground.core.hints import (Coordinate,
                                Point,
                                QuaternaryPointFunction)
+from ground.core.primitive import rationalize
 from .point import point_squared_distance as point_point_squared_distance
 
 
@@ -18,11 +17,12 @@ def point_squared_distance(segment_start: Point,
                             / point_point_squared_distance(segment_start,
                                                            segment_end)))
     start_factor = 1 - end_factor
-    return ((start_factor * Fraction(segment_start.x)
-             + end_factor * Fraction(segment_end.x) - Fraction(point.x)) ** 2
-            + (start_factor * Fraction(segment_start.y)
-               + end_factor * Fraction(segment_end.y)
-               - Fraction(point.y)) ** 2)
+    return ((start_factor * rationalize(segment_start.x)
+             + end_factor * rationalize(segment_end.x)
+             - rationalize(point.x)) ** 2
+            + (start_factor * rationalize(segment_start.y)
+               + end_factor * rationalize(segment_end.y)
+               - rationalize(point.y)) ** 2)
 
 
 def segment_squared_distance(first_start: Point,

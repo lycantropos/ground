@@ -1,9 +1,8 @@
-from fractions import Fraction
-
 from ground.core.hints import (Coordinate,
                                Point)
+from ground.core.primitive import rationalize
 
 
 def point_squared_distance(first: Point, second: Point) -> Coordinate:
-    return ((Fraction(first.x) - Fraction(second.x)) ** 2
-            + (Fraction(first.y) - Fraction(second.y)) ** 2)
+    return ((rationalize(first.x) - rationalize(second.x)) ** 2
+            + (rationalize(first.y) - rationalize(second.y)) ** 2)

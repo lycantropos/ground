@@ -1,10 +1,10 @@
-from fractions import Fraction
 from typing import (Sequence,
                     Tuple,
                     Type)
 
 from ground.core.hints import (Coordinate,
                                Point)
+from ground.core.primitive import rationalize
 
 
 def centroid(vertices: Sequence[Point], point_cls: Type[Point]) -> Point:
@@ -18,9 +18,9 @@ def centroid_components(vertices: Sequence[Point]
                         ) -> Tuple[Coordinate, Coordinate, Coordinate]:
     double_area = x_numerator = y_numerator = 0
     prev_vertex = vertices[-1]
-    prev_x, prev_y = Fraction(prev_vertex.x), Fraction(prev_vertex.y)
+    prev_x, prev_y = rationalize(prev_vertex.x), rationalize(prev_vertex.y)
     for vertex in vertices:
-        x, y = Fraction(vertex.x), Fraction(vertex.y)
+        x, y = rationalize(vertex.x), rationalize(vertex.y)
         area_component = prev_x * y - prev_y * x
         double_area += area_component
         x_numerator += (prev_x + x) * area_component

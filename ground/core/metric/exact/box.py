@@ -1,4 +1,3 @@
-from fractions import Fraction
 from typing import Type
 
 from ground.core.enums import Relation
@@ -6,17 +5,19 @@ from ground.core.hints import (Box,
                                Coordinate,
                                Point,
                                QuaternaryPointFunction)
+from ground.core.primitive import rationalize
 from .segment import (point_squared_distance as segment_point_squared_distance,
                       segment_squared_distance
                       as segment_segment_squared_distance)
 
 
 def point_squared_distance(box: Box, point: Point) -> Coordinate:
-    return (_linear_interval_distance(Fraction(box.min_x), Fraction(box.max_x),
-                                      Fraction(point.x)) ** 2
-            + _linear_interval_distance(Fraction(box.min_y),
-                                        Fraction(box.max_y),
-                                        Fraction(point.y)) ** 2)
+    return (_linear_interval_distance(rationalize(box.min_x),
+                                      rationalize(box.max_x),
+                                      rationalize(point.x)) ** 2
+            + _linear_interval_distance(rationalize(box.min_y),
+                                        rationalize(box.max_y),
+                                        rationalize(point.y)) ** 2)
 
 
 def segment_squared_distance(box: Box,
@@ -26,8 +27,10 @@ def segment_squared_distance(box: Box,
                              segments_relater
                              : QuaternaryPointFunction[Relation],
                              point_cls: Type[Point]) -> Coordinate:
-    min_x, min_y, max_x, max_y = (Fraction(box.min_x), Fraction(box.min_y),
-                                  Fraction(box.max_x), Fraction(box.max_y))
+    min_x, min_y, max_x, max_y = (rationalize(box.min_x),
+                                  rationalize(box.min_y),
+                                  rationalize(box.max_x),
+                                  rationalize(box.max_y))
     return (0
             if ((min_x <= segment_start.x <= max_x
                  and min_y <= segment_start.y <= max_y)

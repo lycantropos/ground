@@ -1,14 +1,13 @@
-from fractions import Fraction
-
 from ground.core.hints import (Coordinate,
                                Point)
+from ground.core.primitive import rationalize
 
 
 def multiply(first_start: Point,
              first_end: Point,
              second_start: Point,
              second_end: Point) -> Coordinate:
-    return ((Fraction(first_end.x) - Fraction(first_start.x))
-            * (Fraction(second_end.x) - Fraction(second_start.x))
-            + (Fraction(first_end.y) - Fraction(first_start.y))
-            * (Fraction(second_end.y) - Fraction(second_start.y)))
+    return ((rationalize(first_end.x) - rationalize(first_start.x))
+            * (rationalize(second_end.x) - rationalize(second_start.x))
+            + (rationalize(first_end.y) - rationalize(first_start.y))
+            * (rationalize(second_end.y) - rationalize(second_start.y)))

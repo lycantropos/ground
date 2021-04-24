@@ -4,6 +4,7 @@ from typing import (Callable,
                     Type)
 
 from ground.core.hints import Point
+from ground.core.primitive import rationalize
 
 
 def centroid(points: Sequence[Point],
@@ -12,8 +13,8 @@ def centroid(points: Sequence[Point],
              ) -> Point:
     result_x = result_y = 0
     for point in points:
-        result_x += Fraction(point.x)
-        result_y += Fraction(point.y)
+        result_x += rationalize(point.x)
+        result_y += rationalize(point.y)
     inverted_points_count = inverse(len(points))
     return point_cls(result_x * inverted_points_count,
                      result_y * inverted_points_count)
