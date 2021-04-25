@@ -1,4 +1,3 @@
-from itertools import permutations
 from typing import (Sequence,
                     Tuple)
 
@@ -9,7 +8,7 @@ from ground.hints import Segment
 from tests.utils import (is_box,
                          permute,
                          reverse_box_coordinates,
-                         reverse_segments,
+                         reverse_sequence,
                          reverse_segments_coordinates)
 from . import strategies
 
@@ -31,7 +30,7 @@ def test_reversals(context_with_segments: Tuple[Context, Sequence[Segment]]
 
     result = context.segments_box(segments)
 
-    assert result == context.segments_box(reverse_segments(segments))
+    assert result == context.segments_box(reverse_sequence(segments))
     assert result == reverse_box_coordinates(context.segments_box(
             reverse_segments_coordinates(segments)))
 
@@ -43,4 +42,4 @@ def test_permutations(context_with_segments: Tuple[Context, Sequence[Segment]],
 
     result = context.segments_box(segments)
 
-    assert context.segments_box(permute(segments, index)) == result
+    assert result == context.segments_box(permute(segments, index))

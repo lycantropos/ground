@@ -1,4 +1,3 @@
-from itertools import permutations
 from typing import Tuple
 
 from hypothesis import given

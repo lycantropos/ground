@@ -32,8 +32,8 @@ def test_permutations(context_with_points_sequence
 
     result = context.points_convex_hull(points_sequence)
 
-    assert (context.points_convex_hull(permute(points_sequence, index))
-            == result)
+    assert result == context.points_convex_hull(permute(points_sequence,
+                                                        index))
 
 
 @given(strategies.contexts_with_empty_lists)
@@ -68,4 +68,4 @@ def test_step(context_with_points_sequence: Tuple[Context, Sequence[Point]]
                                                   result[index], point)
                         is result_orientation
                         for index in range(len(result)))),
-            next_result == result)
+            result == next_result)

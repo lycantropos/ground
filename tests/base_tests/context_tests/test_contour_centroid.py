@@ -26,5 +26,5 @@ def test_rotations(context_with_vertices: Tuple[Context, Sequence[Point]],
 
     result = context.contour_centroid(vertices)
 
-    assert (context.contour_centroid(rotate_sequence(vertices, offset))
-            == result)
+    assert result == context.contour_centroid(rotate_sequence(vertices,
+                                                              offset))

@@ -28,5 +28,5 @@ def test_rotations(context_with_polygons: Tuple[Context, Sequence[Polygon]],
 
     result = context.multipolygon_centroid(polygons)
 
-    assert (context.multipolygon_centroid(rotate_sequence(polygons, offset))
-            == result)
+    assert result == context.multipolygon_centroid(rotate_sequence(polygons,
+                                                                   offset))

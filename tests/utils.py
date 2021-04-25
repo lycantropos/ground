@@ -131,10 +131,6 @@ def reverse_point_coordinates(point: Point) -> Point:
     return Point(point.y, point.x)
 
 
-reverse_contours = reverse_points = reverse_polygons = reverse_segments = (
-    itemgetter(slice(None, None, -1)))
-
-
 def reverse_points_coordinates(points: Sequence[Point]) -> Sequence[Point]:
     return [reverse_point_coordinates(point) for point in points]
 
@@ -167,6 +163,9 @@ def reverse_segments_endpoints(segments: Sequence[Segment]
 def reverse_segments_coordinates(segments: Sequence[Segment]
                                  ) -> Sequence[Segment]:
     return [reverse_segment_coordinates(segment) for segment in segments]
+
+
+reverse_sequence = itemgetter(slice(None, None, -1))
 
 
 def rotate_sequence(vertices: Sequence[_T1], offset: int) -> Sequence[_T1]:

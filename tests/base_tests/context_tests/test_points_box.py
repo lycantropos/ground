@@ -8,7 +8,7 @@ from ground.hints import Point
 from tests.utils import (is_box,
                          permute,
                          reverse_box_coordinates,
-                         reverse_points,
+                         reverse_sequence,
                          reverse_points_coordinates)
 from . import strategies
 
@@ -29,7 +29,7 @@ def test_reversals(context_with_points: Tuple[Context, Sequence[Point]]
 
     result = context.points_box(points)
 
-    assert result == context.points_box(reverse_points(points))
+    assert result == context.points_box(reverse_sequence(points))
     assert result == reverse_box_coordinates(context.points_box(
             reverse_points_coordinates(points)))
 
@@ -41,4 +41,4 @@ def test_permutations(context_with_points: Tuple[Context, Sequence[Point]],
 
     result = context.points_box(points)
 
-    assert context.points_box(permute(points, index)) == result
+    assert result == context.points_box(permute(points, index))

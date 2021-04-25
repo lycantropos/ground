@@ -29,5 +29,5 @@ def test_holes_rotations(context_with_border_and_holes
 
     result = context.polygon_centroid(border, holes)
 
-    assert (context.polygon_centroid(border, rotate_sequence(holes, offset))
-            == result)
+    assert result == context.polygon_centroid(border, rotate_sequence(holes,
+                                                                      offset))

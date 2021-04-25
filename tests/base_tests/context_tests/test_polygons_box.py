@@ -8,7 +8,7 @@ from ground.hints import Polygon
 from tests.utils import (is_box,
                          permute,
                          reverse_box_coordinates,
-                         reverse_polygons,
+                         reverse_sequence,
                          reverse_polygons_coordinates)
 from . import strategies
 
@@ -30,7 +30,7 @@ def test_reversals(context_with_polygons: Tuple[Context, Sequence[Polygon]]
 
     result = context.polygons_box(polygons)
 
-    assert result == context.polygons_box(reverse_polygons(polygons))
+    assert result == context.polygons_box(reverse_sequence(polygons))
     assert result == reverse_box_coordinates(context.polygons_box(
             reverse_polygons_coordinates(polygons)))
 
@@ -42,4 +42,4 @@ def test_permutations(context_with_polygons: Tuple[Context, Sequence[Polygon]],
 
     result = context.polygons_box(polygons)
 
-    assert context.polygons_box(permute(polygons, index)) == result
+    assert result == context.polygons_box(permute(polygons, index))

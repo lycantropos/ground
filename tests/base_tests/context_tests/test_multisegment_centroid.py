@@ -7,7 +7,7 @@ from ground.base import Context
 from ground.hints import Segment
 from tests.utils import (is_point,
                          reverse_point_coordinates,
-                         reverse_segments,
+                         reverse_sequence,
                          reverse_segments_coordinates,
                          reverse_segments_endpoints,
                          rotate_sequence)
@@ -31,7 +31,7 @@ def test_reversals(context_with_segments: Tuple[Context, Sequence[Segment]]
 
     result = context.multisegment_centroid(segments)
 
-    assert result == context.multisegment_centroid(reverse_segments(segments))
+    assert result == context.multisegment_centroid(reverse_sequence(segments))
     assert result == context.multisegment_centroid(reverse_segments_endpoints(
             segments))
     assert result == reverse_point_coordinates(context.multisegment_centroid(
@@ -45,5 +45,5 @@ def test_rotations(context_with_segments: Tuple[Context, Sequence[Segment]],
 
     result = context.multisegment_centroid(segments)
 
-    assert (context.multisegment_centroid(rotate_sequence(segments, offset))
-            == result)
+    assert result == context.multisegment_centroid(rotate_sequence(segments,
+                                                                   offset))

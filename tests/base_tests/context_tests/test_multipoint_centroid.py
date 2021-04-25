@@ -26,4 +26,4 @@ def test_permutations(context_with_points: Tuple[Context, Sequence[Point]],
 
     result = context.multipoint_centroid(points)
 
-    assert context.multipoint_centroid(permute(points, index)) == result
+    assert result == context.multipoint_centroid(permute(points, index))

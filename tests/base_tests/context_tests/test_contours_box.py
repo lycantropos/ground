@@ -1,4 +1,3 @@
-from itertools import permutations
 from typing import (Sequence,
                     Tuple)
 
@@ -9,7 +8,7 @@ from ground.hints import Contour
 from tests.utils import (is_box,
                          permute,
                          reverse_box_coordinates,
-                         reverse_contours,
+                         reverse_sequence,
                          reverse_contours_coordinates)
 from . import strategies
 
@@ -31,7 +30,7 @@ def test_reversals(context_with_contours: Tuple[Context, Sequence[Contour]]
 
     result = context.contours_box(contours)
 
-    assert result == context.contours_box(reverse_contours(contours))
+    assert result == context.contours_box(reverse_sequence(contours))
     assert result == reverse_box_coordinates(context.contours_box(
             reverse_contours_coordinates(contours)))
 
@@ -43,4 +42,4 @@ def test_permutations(context_with_contours: Tuple[Context, Sequence[Contour]],
 
     result = context.contours_box(contours)
 
-    assert context.contours_box(permute(contours, index)) == result
+    assert result == context.contours_box(permute(contours, index))
