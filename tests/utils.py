@@ -91,6 +91,7 @@ def is_even_permutation(index: int, size: int) -> bool:
 
 
 is_point = Point.__instancecheck__
+is_segment = Segment.__instancecheck__
 
 
 def nth_permutation(index: int, size: int) -> Permutation:
