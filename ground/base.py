@@ -446,6 +446,31 @@ class Context:
         """
         return _boxed.from_contours(contours, self.box_cls)
 
+    def is_region_convex(self, vertices: _Sequence[_hints.Point]) -> bool:
+        """
+        Checks if region (given its contour vertices) is convex.
+
+        Time complexity:
+            ``O(len(vertices))``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Point = context.point_cls
+        >>> context.is_region_convex([Point(0, 0), Point(2, 0), Point(2, 2),
+        ...                           Point(0, 2)])
+        True
+        """
+        vertices_count = len(vertices)
+        if vertices_count == 3:
+            return True
+        orienteer = self.angle_orientation
+        base_orientation = orienteer(vertices[-2], vertices[-1], vertices[0])
+        # orientation change means that internal angle is greater than 180°
+        return all(orienteer(vertices[index - 1], vertices[index],
+                             vertices[index + 1]) is base_orientation
+                   for index in range(vertices_count - 1))
+
     def merged_box(self, first_box: _hints.Box, second_box: _hints.Box
                    ) -> _hints.Box:
         """
