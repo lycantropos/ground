@@ -398,6 +398,30 @@ class Context:
         return self._centroidal.contour_centroid(vertices, self.point_cls,
                                                  self.sqrt)
 
+    def contour_edges(self, vertices: _Sequence[_hints.Point]
+                      ) -> _Sequence[_hints.Segment]:
+        """
+        Constructs edges of a contour given its vertices.
+
+        Time complexity:
+            ``O(len(vertices))``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Point, Segment = context.point_cls, context.segment_cls
+        >>> (context.contour_edges([Point(0, 0), Point(2, 0), Point(2, 2),
+        ...                         Point(0, 2)])
+        ...  == [Segment(Point(0, 2), Point(0, 0)),
+        ...      Segment(Point(0, 0), Point(2, 0)),
+        ...      Segment(Point(2, 0), Point(2, 2)),
+        ...      Segment(Point(2, 2), Point(0, 2))])
+        True
+        """
+        segment_cls = self.segment_cls
+        return [segment_cls(vertices[index - 1], vertices[index])
+                for index in range(len(vertices))]
+
     def contours_box(self, contours: _Sequence[_hints.Contour]) -> _hints.Box:
         """
         Constructs box from contours.
