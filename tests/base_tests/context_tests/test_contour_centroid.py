@@ -4,8 +4,8 @@ from typing import (Sequence,
 from hypothesis import given
 
 from ground.base import Context
-from tests.utils import (Point,
-                         is_point,
+from ground.hints import Point
+from tests.utils import (is_point,
                          reverse_sequence,
                          rotate_sequence)
 from . import strategies
