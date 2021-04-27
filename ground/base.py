@@ -710,6 +710,23 @@ class Context:
         """
         return _boxed.from_segment(segment, self.box_cls)
 
+    def segment_centroid(self, segment: _hints.Segment) -> _hints.Point:
+        """
+        Constructs centroid of a segment.
+
+        Time complexity:
+            ``O(1)``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Point, Segment = context.point_cls, context.segment_cls
+        >>> (context.segment_centroid(Segment(Point(0, 1), Point(2, 3)))
+        ...  == Point(1, 2))
+        True
+        """
+        return self._centroidal.segment_centroid(segment, self.point_cls)
+
     def segment_contains_point(self,
                                start: _hints.Point,
                                end: _hints.Point,

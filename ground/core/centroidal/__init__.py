@@ -1,3 +1,4 @@
+from fractions import Fraction
 from typing import (Callable,
                     Sequence,
                     Type)
@@ -83,6 +84,13 @@ class Context:
     @property
     def region_centroid(self) -> RegionCentroid:
         return self._region_centroid
+
+    @staticmethod
+    def segment_centroid(segment: Segment, point_cls: Type[Point],
+                         *,
+                         _half: Fraction = Fraction(1, 2)) -> Point:
+        return point_cls(_half * (segment.start.x + segment.end.x),
+                         _half * (segment.start.y + segment.end.y))
 
 
 exact_context = Context(contour_centroid=exact_contour.centroid,
