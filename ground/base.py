@@ -704,8 +704,8 @@ class Context:
         >>> context = get_context()
         >>> Box, Point, Segment = (context.box_cls, context.point_cls,
         ...                        context.segment_cls)
-        >>> (context.segment_box(Segment(Point(0, 0), Point(1, 1)))
-        ...  == Box(0, 1, 0, 1))
+        >>> (context.segment_box(Segment(Point(0, 1), Point(2, 3)))
+        ...  == Box(0, 2, 1, 3))
         True
         """
         return _boxed.from_segment(segment, self.box_cls)
