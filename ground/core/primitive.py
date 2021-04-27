@@ -15,5 +15,5 @@ def to_rational_point(point: Point[Real],
 def rationalize(value: Coordinate) -> Coordinate:
     try:
         return Fraction(value)
-    except TypeError:
+    except (TypeError, ValueError):
         return value
