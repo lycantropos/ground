@@ -258,7 +258,7 @@ class Context:
         Returns signed area of the region given its contour.
 
         Time complexity:
-            ``O(len(vertices))``
+            ``O(len(contour.vertices))``
         Memory complexity:
             ``O(1)``
 
