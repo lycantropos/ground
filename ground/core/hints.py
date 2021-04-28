@@ -274,3 +274,42 @@ class Multipolygon(Protocol[Coordinate]):
     @abstractmethod
     def __eq__(self, other: 'Multipolygon') -> bool:
         """Checks if the multipolygon is equal to the other."""
+
+
+Linear = Union[Segment, Multisegment, Contour]
+Shaped = Union[Polygon, Multipolygon]
+
+
+@runtime_checkable
+class Mix(Protocol[Coordinate]):
+    """
+    **Mix** is a set of two or more non-empty geometries
+    with different dimensions.
+    """
+    __slots__ = ()
+
+    @abstractmethod
+    def __new__(cls,
+                discrete: Maybe[Multipoint],
+                linear: Maybe[Linear],
+                shaped: Maybe[Shaped]) -> 'Mix':
+        """Constructs mix given its components."""
+
+    @abstractmethod
+    def __eq__(self, other: 'Mix') -> bool:
+        """Checks if the mix is equal to the other."""
+
+    @property
+    @abstractmethod
+    def discrete(self) -> Maybe[Multipoint]:
+        """Returns discrete component of the mix."""
+
+    @property
+    @abstractmethod
+    def linear(self) -> Maybe[Linear]:
+        """Returns linear component of the mix."""
+
+    @property
+    @abstractmethod
+    def shaped(self) -> Maybe[Shaped]:
+        """Returns shaped component of the mix."""
