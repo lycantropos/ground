@@ -38,14 +38,16 @@ class Mode(_enum.IntEnum):
 class Context:
     """Represents common language for computational geometry."""
     __slots__ = ('_box_cls', '_centroidal', '_contour_cls', '_incircle',
-                 '_linear', '_measured', '_metric', '_mode', '_multipoint_cls',
-                 '_multipolygon_cls', '_multisegment_cls', '_point_cls',
-                 '_polygon_cls', '_segment_cls', '_sqrt', '_vector')
+                 '_linear', '_measured', '_metric', '_mix_cls', '_mode',
+                 '_multipoint_cls', '_multipolygon_cls', '_multisegment_cls',
+                 '_point_cls', '_polygon_cls', '_segment_cls', '_sqrt',
+                 '_vector')
 
     def __init__(self,
                  *,
                  box_cls: _Type[_hints.Box] = _geometries.Box,
                  contour_cls: _Type[_hints.Contour] = _geometries.Contour,
+                 mix_cls: _Type[_hints.Mix] = _geometries.Mix,
                  multipoint_cls: _Type[_hints.Multipoint]
                  = _geometries.Multipoint,
                  multipolygon_cls: _Type[_hints.Multipolygon]
@@ -60,6 +62,7 @@ class Context:
                  = _sqrt) -> None:
         self._box_cls = box_cls
         self._contour_cls = contour_cls
+        self._mix_cls = mix_cls
         self._multipoint_cls = multipoint_cls
         self._multipolygon_cls = multipolygon_cls
         self._multisegment_cls = multisegment_cls
@@ -165,6 +168,11 @@ class Context:
         True
         """
         return self._vector.dot_product
+
+    @property
+    def mix_cls(self) -> _Type[_hints.Mix]:
+        """Returns type for mixes."""
+        return self._mix_cls
 
     @property
     def mode(self) -> Mode:
