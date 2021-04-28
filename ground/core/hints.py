@@ -32,6 +32,16 @@ class Point(Protocol[Coordinate]):
     def __new__(cls, x: Coordinate, y: Coordinate) -> 'Point':
         """Constructs point given its coordinates."""
 
+    @property
+    @abstractmethod
+    def x(self) -> Coordinate:
+        """First coordinate of the point."""
+
+    @property
+    @abstractmethod
+    def y(self) -> Coordinate:
+        """Second coordinate of the point."""
+
     @abstractmethod
     def __eq__(self, other: 'Point') -> bool:
         """Checks if the point is equal to the other."""
@@ -56,16 +66,6 @@ class Point(Protocol[Coordinate]):
     def __lt__(self, other: 'Point') -> bool:
         """Checks if the point is less than the other."""
 
-    @property
-    @abstractmethod
-    def x(self) -> Coordinate:
-        """First coordinate of the point."""
-
-    @property
-    @abstractmethod
-    def y(self) -> Coordinate:
-        """Second coordinate of the point."""
-
 
 Range = TypeVar('Range')
 QuaternaryPointFunction = Callable[[Point, Point, Point, Point], Range]
@@ -88,10 +88,6 @@ class Box(Protocol[Coordinate]):
                 max_y: Coordinate) -> 'Box':
         """Constructs box given its coordinates limits."""
 
-    @abstractmethod
-    def __eq__(self, other: 'Box') -> bool:
-        """Checks if the box is equal to the other."""
-
     @property
     @abstractmethod
     def max_x(self) -> Coordinate:
@@ -112,6 +108,10 @@ class Box(Protocol[Coordinate]):
     def min_y(self) -> Coordinate:
         """Returns minimum ``y``-coordinate of the box."""
 
+    @abstractmethod
+    def __eq__(self, other: 'Box') -> bool:
+        """Checks if the box is equal to the other."""
+
 
 @runtime_checkable
 class Multipoint(Protocol[Coordinate]):
@@ -124,14 +124,14 @@ class Multipoint(Protocol[Coordinate]):
     def __new__(cls, points: Sequence[Point]) -> 'Multipoint':
         """Constructs multipoint given its points."""
 
-    @abstractmethod
-    def __eq__(self, other: 'Multipoint') -> bool:
-        """Checks if the multipoint is equal to the other."""
-
     @property
     @abstractmethod
     def points(self) -> Sequence[Point]:
         """Returns points of the multipoint."""
+
+    @abstractmethod
+    def __eq__(self, other: 'Multipoint') -> bool:
+        """Checks if the multipoint is equal to the other."""
 
 
 @runtime_checkable
@@ -147,10 +147,6 @@ class Segment(Protocol[Coordinate]):
     def __new__(cls, start: Point, end: Point) -> 'Segment':
         """Constructs segment given its endpoints."""
 
-    @abstractmethod
-    def __eq__(self, other: 'Segment') -> bool:
-        """Checks if the segment is equal to the other."""
-
     @property
     @abstractmethod
     def start(self) -> Point:
@@ -161,12 +157,16 @@ class Segment(Protocol[Coordinate]):
     def end(self) -> Point:
         """Returns start endpoint of the segment."""
 
+    @abstractmethod
+    def __eq__(self, other: 'Segment') -> bool:
+        """Checks if the segment is equal to the other."""
+
 
 @runtime_checkable
 class Multisegment(Protocol[Coordinate]):
     """
     **Multisegment**
-    is a non-empty set of non-crossing and non-overlapping segments.
+    is a set of two or more non-crossing and non-overlapping segments.
     """
     __slots__ = ()
 
@@ -174,14 +174,14 @@ class Multisegment(Protocol[Coordinate]):
     def __new__(cls, segments: Sequence[Segment]) -> 'Multisegment':
         """Constructs multisegment given its segments."""
 
-    @abstractmethod
-    def __eq__(self, other: 'Multisegment') -> bool:
-        """Checks if the multisegment is equal to the other."""
-
     @property
     @abstractmethod
     def segments(self) -> Sequence[Segment]:
         """Returns segments of the multisegment."""
+
+    @abstractmethod
+    def __eq__(self, other: 'Multisegment') -> bool:
+        """Checks if the multisegment is equal to the other."""
 
 
 @runtime_checkable
@@ -196,14 +196,14 @@ class Contour(Protocol[Coordinate]):
     def __new__(cls, vertices: Sequence[Point]) -> 'Contour':
         """Constructs contour given its vertices."""
 
-    @abstractmethod
-    def __eq__(self, other: 'Contour') -> bool:
-        """Checks if the contour is equal to the other."""
-
     @property
     @abstractmethod
     def vertices(self) -> Sequence[Point]:
         """Returns coordinates of the contour."""
+
+    @abstractmethod
+    def __eq__(self, other: 'Contour') -> bool:
+        """Checks if the contour is equal to the other."""
 
 
 @runtime_checkable
@@ -219,10 +219,6 @@ class Polygon(Protocol[Coordinate]):
     def __new__(cls, border: Contour, holes: Sequence[Contour]) -> 'Polygon':
         """Constructs polygon given its border and holes."""
 
-    @abstractmethod
-    def __eq__(self, other: 'Polygon') -> bool:
-        """Checks if the polygon is equal to the other."""
-
     @property
     @abstractmethod
     def border(self) -> Contour:
@@ -233,11 +229,15 @@ class Polygon(Protocol[Coordinate]):
     def holes(self) -> Sequence[Contour]:
         """Returns holes of the polygon."""
 
+    @abstractmethod
+    def __eq__(self, other: 'Polygon') -> bool:
+        """Checks if the polygon is equal to the other."""
+
 
 @runtime_checkable
 class Multipolygon(Protocol[Coordinate]):
     """
-    **Multipolygon** is a non-empty set of non-overlapping polygons
+    **Multipolygon** is a set of two or more non-overlapping polygons
     intersecting only in discrete set of points.
     """
     __slots__ = ()
