@@ -114,6 +114,20 @@ class Box(Protocol[Coordinate]):
 
 
 @runtime_checkable
+class Empty(Protocol):
+    """Represents an empty set."""
+    __slots__ = ()
+
+    @abstractmethod
+    def __new__(cls) -> 'Empty':
+        """Constructs empty geometry."""
+
+    @abstractmethod
+    def __eq__(self, other: 'Empty') -> bool:
+        """Checks if the empty geometry is equal to the other."""
+
+
+@runtime_checkable
 class Multipoint(Protocol[Coordinate]):
     """
     **Multipoint** is a non-empty set of unique points.
@@ -246,25 +260,11 @@ class Multipolygon(Protocol[Coordinate]):
     def __new__(cls, polygons: Sequence[Polygon]) -> 'Multipolygon':
         """Constructs multipolygon given its polygons."""
 
-    @abstractmethod
-    def __eq__(self, other: 'Multipolygon') -> bool:
-        """Checks if the multipolygon is equal to the other."""
-
     @property
     @abstractmethod
     def polygons(self) -> Sequence[Polygon]:
         """Returns polygons of the multipolygon."""
 
-
-@runtime_checkable
-class Empty(Protocol):
-    """Represents an empty set."""
-    __slots__ = ()
-
     @abstractmethod
-    def __new__(cls) -> 'Empty':
-        """Constructs empty geometry."""
-
-    @abstractmethod
-    def __eq__(self, other: 'Empty') -> bool:
-        """Checks if the empty geometry is equal to the other."""
+    def __eq__(self, other: 'Multipolygon') -> bool:
+        """Checks if the multipolygon is equal to the other."""
