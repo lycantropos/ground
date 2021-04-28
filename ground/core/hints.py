@@ -2,7 +2,8 @@ from abc import abstractmethod
 from numbers import Real
 from typing import (Callable,
                     Sequence,
-                    TypeVar)
+                    TypeVar,
+                    Union)
 
 from symba.base import Expression
 
@@ -115,7 +116,7 @@ class Box(Protocol[Coordinate]):
 
 @runtime_checkable
 class Empty(Protocol):
-    """Represents an empty set."""
+    """Represents an empty set of points."""
     __slots__ = ()
 
     @abstractmethod
@@ -127,10 +128,15 @@ class Empty(Protocol):
         """Checks if the empty geometry is equal to the other."""
 
 
+_T = TypeVar('_T')
+Maybe = Union[Empty, _T]
+
+
 @runtime_checkable
 class Multipoint(Protocol[Coordinate]):
     """
-    **Multipoint** is a non-empty set of unique points.
+    **Multipoint** is a discrete geometry
+    that represents non-empty set of unique points.
     """
     __slots__ = ()
 
@@ -151,8 +157,8 @@ class Multipoint(Protocol[Coordinate]):
 @runtime_checkable
 class Segment(Protocol[Coordinate]):
     """
-    **Segment** (or **line segment**)
-    is a limited continuous part of the line containing more than one point
+    **Segment** (or **line segment**) is a linear geometry that represents
+    a limited continuous part of the line containing more than one point
     defined by a pair of unequal points (called *segment's endpoints*).
     """
     __slots__ = ()
@@ -179,8 +185,8 @@ class Segment(Protocol[Coordinate]):
 @runtime_checkable
 class Multisegment(Protocol[Coordinate]):
     """
-    **Multisegment**
-    is a set of two or more non-crossing and non-overlapping segments.
+    **Multisegment** is a linear geometry that represents set of two or more
+    non-crossing and non-overlapping segments.
     """
     __slots__ = ()
 
@@ -201,8 +207,8 @@ class Multisegment(Protocol[Coordinate]):
 @runtime_checkable
 class Contour(Protocol[Coordinate]):
     """
-    **Contour** is a closed simple polyline defined by a sequence of points
-    (called *contour's vertices*).
+    **Contour** is a linear geometry that represents closed simple polyline
+    defined by a sequence of points (called *contour's vertices*).
     """
     __slots__ = ()
 
@@ -223,9 +229,9 @@ class Contour(Protocol[Coordinate]):
 @runtime_checkable
 class Polygon(Protocol[Coordinate]):
     """
-    **Polygon** is a limited closed region defined by the pair of outer contour
-    (called *polygon's border*) and possibly empty sequence of inner contours
-    (called *polygon's holes*).
+    **Polygon** is a shaped geometry that represents limited closed region
+    defined by the pair of outer contour (called *polygon's border*)
+    and possibly empty sequence of inner contours (called *polygon's holes*).
     """
     __slots__ = ()
 
@@ -251,8 +257,8 @@ class Polygon(Protocol[Coordinate]):
 @runtime_checkable
 class Multipolygon(Protocol[Coordinate]):
     """
-    **Multipolygon** is a set of two or more non-overlapping polygons
-    intersecting only in discrete set of points.
+    **Multipolygon** is a shaped geometry that represents set of two or more
+    non-overlapping polygons intersecting only in discrete set of points.
     """
     __slots__ = ()
 
