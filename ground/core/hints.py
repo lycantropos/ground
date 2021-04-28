@@ -254,3 +254,17 @@ class Multipolygon(Protocol[Coordinate]):
     @abstractmethod
     def polygons(self) -> Sequence[Polygon]:
         """Returns polygons of the multipolygon."""
+
+
+@runtime_checkable
+class Empty(Protocol):
+    """Represents an empty set."""
+    __slots__ = ()
+
+    @abstractmethod
+    def __new__(cls) -> 'Empty':
+        """Constructs empty geometry."""
+
+    @abstractmethod
+    def __eq__(self, other: 'Empty') -> bool:
+        """Checks if the empty geometry is equal to the other."""
