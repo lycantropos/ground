@@ -255,7 +255,7 @@ class Context:
     @property
     def region_signed_area(self) -> _measured.SignedRegionMeasure:
         """
-        Returns signed area of the region given its contour vertices.
+        Returns signed area of the region given its contour.
 
         Time complexity:
             ``O(len(vertices))``
@@ -263,12 +263,15 @@ class Context:
             ``O(1)``
 
         >>> context = get_context()
+        >>> Contour = context.contour_cls
         >>> Point = context.point_cls
-        >>> context.region_signed_area([Point(0, 0), Point(1, 0), Point(1, 1),
-        ...                             Point(0, 1)]) == 1
+        >>> (context.region_signed_area(Contour([Point(0, 0), Point(1, 0),
+        ...                                      Point(1, 1), Point(0, 1)]))
+        ...  == 1)
         True
-        >>> context.region_signed_area([Point(0, 0), Point(0, 1), Point(1, 1),
-        ...                             Point(1, 0)]) == -1
+        >>> (context.region_signed_area(Contour([Point(0, 0), Point(0, 1),
+        ...                                      Point(1, 1), Point(1, 0)]))
+        ...  == -1)
         True
         """
         return self._measured.signed_region_measure

@@ -1,15 +1,14 @@
-from typing import (Callable,
-                    Sequence)
+from typing import Callable
 
 from reprit.base import generate_repr
 
-from ground.core.hints import (Coordinate,
-                               Point)
+from ground.core.hints import (Contour,
+                               Coordinate)
 from .exact import region as exact_region
 from .plain import region as plain_region
 from .robust import region as robust_region
 
-SignedRegionMeasure = Callable[[Sequence[Point]], Coordinate]
+SignedRegionMeasure = Callable[[Contour[Coordinate]], Coordinate]
 
 
 class Context:

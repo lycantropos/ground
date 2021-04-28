@@ -1,14 +1,14 @@
 from fractions import Fraction
-from typing import Sequence
 
-from ground.core.hints import (Coordinate,
-                               Point)
+from ground.core.hints import (Contour,
+                               Coordinate)
 from ground.core.primitive import rationalize
 
 
-def signed_area(vertices: Sequence[Point],
+def signed_area(contour: Contour[Coordinate],
                 *,
                 _half: Fraction = Fraction(1, 2)) -> Coordinate:
+    vertices = contour.vertices
     result, vertex = 0, vertices[-1]
     vertex_x, vertex_y = rationalize(vertex.x), rationalize(vertex.y)
     for next_vertex in vertices:
