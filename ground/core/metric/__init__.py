@@ -7,7 +7,8 @@ from ground.core.enums import Relation
 from ground.core.hints import (Box,
                                Coordinate,
                                Point,
-                               QuaternaryPointFunction)
+                               QuaternaryPointFunction,
+                               Segment)
 from .exact import (box as exact_box,
                     point as exact_point,
                     segment as exact_segment)
@@ -19,8 +20,7 @@ from .robust import (box as robust_box,
                      segment as robust_segment)
 
 BoxPointMetric = Callable[[Box, Point], Coordinate]
-BoxSegmentMetric = Callable[[Box, Point, Point,
-                             QuaternaryPointFunction[Coordinate],
+BoxSegmentMetric = Callable[[Box, Segment, QuaternaryPointFunction[Coordinate],
                              QuaternaryPointFunction[Relation], Type[Point]],
                             Coordinate]
 PointPointMetric = Callable[[Point, Point], Coordinate]

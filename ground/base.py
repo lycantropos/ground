@@ -342,11 +342,10 @@ class Context:
 
     def box_segment_squared_distance(self,
                                      box: _hints.Box,
-                                     start: _hints.Point,
-                                     end: _hints.Point) -> _hints.Coordinate:
+                                     segment: _hints.Segment
+                                     ) -> _hints.Coordinate:
         """
-        Returns squared Euclidean distance between box and a segment
-        given its endpoints.
+        Returns squared Euclidean distance between box and a segment.
 
         Time complexity:
             ``O(1)``
@@ -354,19 +353,21 @@ class Context:
             ``O(1)``
 
         >>> context = get_context()
-        >>> Box, Point = context.box_cls, context.point_cls
-        >>> context.box_segment_squared_distance(Box(0, 1, 0, 1), Point(0, 0),
-        ...                                      Point(1, 1)) == 0
+        >>> Box = context.box_cls
+        >>> Point = context.point_cls
+        >>> Segment = context.segment_cls
+        >>> context.box_segment_squared_distance(
+        ...     Box(0, 1, 0, 1), Segment(Point(0, 0), Point(1, 1))) == 0
         True
-        >>> context.box_segment_squared_distance(Box(0, 1, 0, 1), Point(2, 0),
-        ...                                      Point(2, 1)) == 1
+        >>> context.box_segment_squared_distance(
+        ...     Box(0, 1, 0, 1), Segment(Point(2, 0), Point(2, 1))) == 1
         True
-        >>> context.box_segment_squared_distance(Box(0, 1, 0, 1), Point(2, 2),
-        ...                                      Point(3, 2)) == 2
+        >>> context.box_segment_squared_distance(
+        ...     Box(0, 1, 0, 1), Segment(Point(2, 2), Point(3, 2))) == 2
         True
         """
         return self._metric.box_segment_squared_metric(
-                box, start, end, self.dot_product, self.segments_relation,
+                box, segment, self.dot_product, self.segments_relation,
                 self.point_cls)
 
     def contour_box(self, contour: _hints.Contour) -> _hints.Box:
