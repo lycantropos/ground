@@ -187,6 +187,35 @@ class Multipolygon:
     __repr__ = generate_repr(__init__)
 
 
+class Mix:
+    __slots__ = '_discrete', '_linear', '_shaped'
+
+    def __init__(self,
+                 discrete: hints.Maybe[hints.Multipoint],
+                 linear: hints.Maybe[hints.Linear],
+                 shaped: hints.Maybe[hints.Shaped]) -> None:
+        self._discrete, self._linear, self._shaped = discrete, linear, shaped
+
+    @property
+    def discrete(self) -> hints.Maybe[hints.Multipoint]:
+        return self._discrete
+
+    @property
+    def linear(self) -> hints.Maybe[hints.Linear]:
+        return self._linear
+
+    @property
+    def shaped(self) -> hints.Maybe[hints.Shaped]:
+        return self._shaped
+
+    def __eq__(self, other: 'Mix') -> bool:
+        return (self.discrete == other.discrete
+                and self.linear == other.linear
+                and self.shaped == other.shaped)
+
+    __repr__ = generate_repr(__init__)
+
+
 _T = TypeVar('_T')
 
 
