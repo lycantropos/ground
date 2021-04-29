@@ -57,8 +57,9 @@ Usage
 ```python
 >>> from ground.base import get_context
 >>> context = get_context()
->>> Point = context.point_cls
 >>> Multipoint = context.multipoint_cls
+>>> Point = context.point_cls
+>>> Segment = context.segment_cls
 >>> origin = Point(0, 0)
 >>> x_unit = Point(1, 0)
 >>> y_unit = Point(0, 1)
@@ -82,7 +83,8 @@ True
 False
 >>> context.segment_contains_point(origin, x_unit, origin)
 True
->>> context.segments_intersection(origin, x_unit, origin, y_unit) == origin
+>>> context.segments_intersection(Segment(origin, x_unit),
+...                               Segment(origin, y_unit)) == origin
 True
 >>> from ground.base import Relation
 >>> (context.segments_relation(origin, x_unit, origin, y_unit)
