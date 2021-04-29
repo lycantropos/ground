@@ -20,7 +20,8 @@ def test_basic(context_with_segments_pair_endpoints
     assert is_point(result)
 
 
-@given(strategies.contexts_with_crossing_or_touching_segments_pairs_endpoints)
+@given(strategies
+       .contexts_with_rational_crossing_or_touching_segments_pairs_endpoints)
 def test_endpoints_permutation(context_with_segments_pair_endpoints
                                : Tuple[Context, PointsQuadruplet]) -> None:
     context, segments_pair_endpoints = context_with_segments_pair_endpoints
@@ -37,7 +38,8 @@ def test_endpoints_permutation(context_with_segments_pair_endpoints
                                              second_end, second_start))
 
 
-@given(strategies.contexts_with_crossing_or_touching_segments_pairs_endpoints)
+@given(strategies
+       .contexts_with_rational_crossing_or_touching_segments_pairs_endpoints)
 def test_segments_permutation(context_with_segments_pair_endpoints
                               : Tuple[Context, PointsQuadruplet]) -> None:
     context, segments_pair_endpoints = context_with_segments_pair_endpoints

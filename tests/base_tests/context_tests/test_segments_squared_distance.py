@@ -3,17 +3,18 @@ from typing import Tuple
 from hypothesis import given
 
 from ground.base import Context
-from tests.hints import (PointsPair,
-                         PointsQuadruplet)
+from tests.hints import PointsPair
 from tests.utils import is_coordinate
 from . import strategies
 
 
-@given(strategies.contexts_with_segments_pairs_endpoints)
-def test_basic(context_with_segments_pair_endpoints
-               : Tuple[Context, PointsQuadruplet]) -> None:
-    context, segments_pair_endpoints = context_with_segments_pair_endpoints
-    first_start, first_end, second_start, second_end = segments_pair_endpoints
+@given(strategies.contexts_with_segments_endpoints_pairs)
+def test_basic(context_with_segments_endpoints_pair
+               : Tuple[Context, Tuple[PointsPair, PointsPair]]) -> None:
+    context, (first_endpoints,
+              second_endpoints) = context_with_segments_endpoints_pair
+    first_start, first_end = first_endpoints
+    second_start, second_end = second_endpoints
 
     result = context.segments_squared_distance(first_start, first_end,
                                                second_start, second_end)
@@ -21,11 +22,14 @@ def test_basic(context_with_segments_pair_endpoints
     assert is_coordinate(result)
 
 
-@given(strategies.contexts_with_segments_pairs_endpoints)
-def test_endpoints_symmetry(context_with_segments_pair_endpoints
-                            : Tuple[Context, PointsQuadruplet]) -> None:
-    context, segments_pair_endpoints = context_with_segments_pair_endpoints
-    first_start, first_end, second_start, second_end = segments_pair_endpoints
+@given(strategies.contexts_with_segments_endpoints_pairs)
+def test_endpoints_symmetry(context_with_segments_endpoints_pair
+                            : Tuple[Context, Tuple[
+                                PointsPair, PointsPair]]) -> None:
+    context, (first_endpoints,
+              second_endpoints) = context_with_segments_endpoints_pair
+    first_start, first_end = first_endpoints
+    second_start, second_end = second_endpoints
 
     result = context.segments_squared_distance(first_start, first_end,
                                                second_start, second_end)
@@ -39,11 +43,14 @@ def test_endpoints_symmetry(context_with_segments_pair_endpoints
                                                  second_end, second_start))
 
 
-@given(strategies.contexts_with_segments_pairs_endpoints)
-def test_segments_symmetry(context_with_segments_pair_endpoints
-                           : Tuple[Context, PointsQuadruplet]) -> None:
-    context, segments_pair_endpoints = context_with_segments_pair_endpoints
-    first_start, first_end, second_start, second_end = segments_pair_endpoints
+@given(strategies.contexts_with_segments_endpoints_pairs)
+def test_segments_symmetry(context_with_segments_endpoints_pair
+                           : Tuple[Context, Tuple[
+                               PointsPair, PointsPair]]) -> None:
+    context, (first_endpoints,
+              second_endpoints) = context_with_segments_endpoints_pair
+    first_start, first_end = first_endpoints
+    second_start, second_end = second_endpoints
 
     result = context.segments_squared_distance(first_start, first_end,
                                                second_start, second_end)

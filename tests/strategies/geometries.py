@@ -1,196 +1,153 @@
 from operator import (add,
                       itemgetter)
-from typing import (Sequence,
+from typing import (List,
+                    Optional,
+                    Sequence,
                     Tuple)
 
 from hypothesis import strategies
 
 from ground.base import (Context,
                          Orientation)
-from ground.hints import (Contour,
+from ground.hints import (Box,
+                          Contour,
                           Coordinate,
-                          Polygon)
+                          Multipoint,
+                          Point,
+                          Polygon,
+                          Segment)
 from tests.hints import (PointsPair,
                          PointsQuadruplet,
+                         PointsTriplet,
                          Strategy)
 from tests.utils import (MAX_SEQUENCE_SIZE,
-                         Box,
-                         Multipoint,
-                         Point,
-                         Segment,
-                         pack,
+                         lift, pack,
                          sub_lists,
                          to_pairs)
 
 
-def coordinates_to_boxes(coordinates: Strategy[Coordinate]
-                         ) -> Strategy[Box]:
+def to_boxes(context: Context,
+             coordinates: Strategy[Coordinate]) -> Strategy[Box]:
     return (to_pairs(strategies.lists(coordinates,
                                       unique=True,
                                       min_size=2,
                                       max_size=2)
                      .map(sorted))
             .map(pack(add))
-            .map(pack(Box)))
+            .map(pack(context.box_cls)))
 
 
-def coordinates_to_points(coordinates: Strategy[Coordinate]
-                          ) -> Strategy[Point]:
-    return strategies.builds(Point, coordinates, coordinates)
+def to_points(context: Context,
+              coordinates: Strategy[Coordinate]) -> Strategy[Point]:
+    return strategies.builds(context.point_cls, coordinates, coordinates)
 
 
-def coordinates_to_segments(coordinates: Strategy[Coordinate]
-                            ) -> Strategy[Segment]:
-    return (points_to_segments_endpoints(coordinates_to_points(coordinates))
-            .map(pack(Segment)))
+def to_multipoints(context: Context,
+                   coordinates: Strategy[Coordinate],
+                   *,
+                   min_size: int = 1,
+                   max_size: Optional[int] = None) -> Strategy[Multipoint]:
+    return strategies.builds(context.multipoint_cls,
+                             to_points_lists(context, coordinates,
+                                             max_size=max_size,
+                                             min_size=min_size))
 
 
-def points_to_segments_endpoints(points: Strategy[Point]
-                                 ) -> Strategy[PointsPair]:
-    return (strategies.lists(points,
+def to_points_lists(context: Context,
+                    coordinates: Strategy[Coordinate],
+                    *,
+                    min_size: int = 0,
+                    max_size: Optional[int] = None,
+                    unique: bool = False) -> Strategy[List[Point]]:
+    return strategies.lists(to_points(context, coordinates),
+                            min_size=min_size,
+                            max_size=max_size,
+                            unique=unique)
+
+
+def to_segments(context: Context,
+                coordinates: Strategy[Coordinate]) -> Strategy[Segment]:
+    return (to_segments_endpoints(context, coordinates)
+            .map(pack(context.segment_cls)))
+
+
+def to_segments_endpoints(context: Context,
+                          coordinates: Strategy[Coordinate]
+                          ) -> Strategy[PointsPair]:
+    return (strategies.lists(to_points(context, coordinates),
+                             unique=True,
                              min_size=2,
-                             max_size=2,
-                             unique=True)
+                             max_size=2)
             .map(tuple))
 
 
-def coordinates_to_multipoints(coordinates: Strategy[Coordinate]
-                               ) -> Strategy[Multipoint]:
-    return coordinates_to_points_sequences(coordinates).map(Multipoint)
+def to_convex_contours(context: Context,
+                       coordinates: Strategy[Coordinate]) -> Strategy[Contour]:
+    return strategies.builds(context.contour_cls,
+                             to_vertices_sequences(context, coordinates,
+                                                   max_size=5))
 
 
-def coordinates_to_points_sequences(coordinates: Strategy[Coordinate]
-                                    ) -> Strategy[Sequence[Point]]:
-    return strategies.lists(coordinates_to_points(coordinates),
-                            min_size=1,
-                            max_size=MAX_SEQUENCE_SIZE,
-                            unique=True)
-
-
-def to_contexts_with_convex_contours(
-        contexts_with_coordinates: Tuple[Strategy[Context],
-                                         Strategy[Coordinate]]
-) -> Strategy[Tuple[Context, Contour]]:
-    def to_context_with_convex_contour(context_with_convex_hull
-                                       : Tuple[Context, Sequence[Point]]
-                                       ) -> Tuple[Context, Contour]:
-        context, convex_hull = context_with_convex_hull
-        return context, context.contour_cls(convex_hull)
-
-    return (to_contexts_with_convex_hulls(contexts_with_coordinates)
-            .map(to_context_with_convex_contour))
-
-
-to_contexts_with_contours = to_contexts_with_convex_contours
-
-
-def to_contexts_with_convex_hulls(
-        contexts_with_coordinates: Tuple[Strategy[Context],
-                                         Strategy[Coordinate]]
-) -> Strategy[Tuple[Context, Sequence[Point]]]:
-    contexts, coordinates = contexts_with_coordinates
-
-    def are_points_non_collinear(context_with_points_list
-                                 : Tuple[Context, Sequence[Point]]) -> bool:
-        context, points_list = context_with_points_list
+def to_non_degenerate_convex_hulls(context: Context,
+                                   coordinates: Strategy[Coordinate],
+                                   *,
+                                   min_size: int = 3,
+                                   max_size: Optional[int] = None
+                                   ) -> Strategy[Sequence[Point]]:
+    def are_points_non_collinear(points_list: List[Point]) -> bool:
         return any(context.angle_orientation(points_list[index - 2],
                                              points_list[index - 1],
                                              points_list[index])
                    is not Orientation.COLLINEAR
                    for index in range(len(points_list)))
 
-    def to_context_with_points_convex_hull(context_with_points_list
-                                           : Tuple[Context, Sequence[Point]]
-                                           ) -> Tuple[Context,
-                                                      Sequence[Point]]:
-        context, points_list = context_with_points_list
-        return context, context.points_convex_hull(points_list)
-
-    return (strategies.tuples(
-            contexts,
-            strategies.lists(coordinates_to_points(coordinates),
-                             min_size=3,
-                             max_size=MAX_SEQUENCE_SIZE,
-                             unique=True))
+    return (to_points_lists(context, coordinates,
+                            min_size=min_size,
+                            max_size=max_size)
             .filter(are_points_non_collinear)
-            .map(to_context_with_points_convex_hull))
+            .map(context.points_convex_hull))
 
 
-to_contexts_with_vertices_sequences = to_contexts_with_convex_hulls
+to_contours = to_convex_contours
+to_vertices_sequences = to_non_degenerate_convex_hulls
 
 
-def to_contexts_with_borders_and_holes_sequences(
-        contexts_with_coordinates: Tuple[Strategy[Context],
-                                         Strategy[Coordinate]]
-) -> Strategy[Tuple[Context, Contour, Sequence[Contour]]]:
-    def to_context_with_border_and_holes(context_with_vertices
-                                         : Tuple[Context, Sequence[Point]]
-                                         ) -> Tuple[Context, Contour,
+def to_borders_and_holes_sequences(context: Context,
+                                   coordinates: Strategy[Coordinate]
+                                   ) -> Strategy[Tuple[Contour,
+                                                       Sequence[Contour]]]:
+    def to_context_with_border_and_holes(vertices: Sequence[Point]
+                                         ) -> Tuple[Contour,
                                                     Sequence[Contour]]:
-        context, vertices = context_with_vertices
-        return context, context.contour_cls(vertices), []
+        return context.contour_cls(vertices), []
 
-    return (to_contexts_with_vertices_sequences(contexts_with_coordinates)
+    return (to_vertices_sequences(context, coordinates)
             .map(to_context_with_border_and_holes))
 
 
-def to_contexts_with_boxes_and_points(
-        contexts_with_coordinates
-        : Tuple[Strategy[Context], Strategy[Coordinate]]
-) -> Strategy[Tuple[Context, Box, Point]]:
-    contexts, coordinates = contexts_with_coordinates
-    return strategies.tuples(contexts, coordinates_to_boxes(coordinates),
-                             coordinates_to_points(coordinates))
+def to_polygons_sequences(context: Context,
+                          coordinates: Strategy[Coordinate]
+                          ) -> Strategy[Sequence[Polygon]]:
+    return to_polygons(context, coordinates).map(lift)
 
 
-def to_contexts_with_boxes_and_segments(
-        contexts_with_coordinates
-        : Tuple[Strategy[Context], Strategy[Coordinate]]
-) -> Strategy[Tuple[Context, Box, Segment]]:
-    contexts, coordinates = contexts_with_coordinates
-    return strategies.tuples(contexts, coordinates_to_boxes(coordinates),
-                             coordinates_to_segments(coordinates))
+def to_polygons(context, coordinates):
+    return strategies.builds(pack(context.polygon_cls),
+                             to_borders_and_holes_sequences(context,
+                                                            coordinates))
 
 
-def to_contexts_with_polygons_sequences(
-        contexts_with_coordinates: Tuple[Strategy[Context],
-                                         Strategy[Coordinate]]
-) -> Strategy[Tuple[Context, Sequence[Polygon]]]:
-    def to_context_with_polygons(context_with_border_and_holes
-                                 : Tuple[Context, Contour, Sequence[Contour]]
-                                 ) -> Tuple[Context, Sequence[Polygon]]:
-        context, border, holes = context_with_border_and_holes
-        return context, [context.polygon_cls(border, holes)]
-
-    return (to_contexts_with_borders_and_holes_sequences(
-            contexts_with_coordinates)
-            .map(to_context_with_polygons))
+def to_contours_sequences(context: Context,
+                          coordinates: Strategy[Coordinate]
+                          ) -> Strategy[Sequence[Contour]]:
+    return to_contours(context, coordinates).map(lift)
 
 
-def to_contexts_with_contours_sequences(
-        contexts_with_coordinates: Tuple[Strategy[Context],
-                                         Strategy[Coordinate]]
-) -> Strategy[Tuple[Context, Sequence[Contour]]]:
-    def to_context_with_contours_sequence(context_with_convex_hull
-                                          : Tuple[Context, Sequence[Point]]
-                                          ) -> Tuple[Context,
-                                                     Sequence[Contour]]:
-        context, convex_hull = context_with_convex_hull
-        return context, [context.contour_cls(convex_hull)]
-
-    return (to_contexts_with_convex_hulls(contexts_with_coordinates)
-            .map(to_context_with_contours_sequence))
-
-
-def to_contexts_with_segments_sequences(
-        contexts_with_coordinates: Tuple[Strategy[Context],
-                                         Strategy[Coordinate]]
-) -> Strategy[Tuple[Context, Sequence[Segment]]]:
-    def to_context_with_segments(context_with_convex_hull
-                                 : Tuple[Context, Sequence[Point]],
-                                 center_offset: int
-                                 ) -> Tuple[Context, Sequence[Segment]]:
-        context, convex_hull = context_with_convex_hull
+def to_segments_sequences(context: Context,
+                          coordinates: Strategy[Coordinate]
+                          ) -> Strategy[Sequence[Segment]]:
+    def to_segments_sequence(convex_hull: Sequence[Point],
+                             center_offset: int) -> Sequence[Segment]:
         center_offset %= len(convex_hull)
         center = convex_hull[center_offset]
         edges = [context.segment_cls(convex_hull[end_index - 1], end)
@@ -206,36 +163,83 @@ def to_contexts_with_segments_sequences(
                  [context.segment_cls(center, convex_hull[index])
                   for index in range(2, len(convex_hull) - 1)])
         assert not any(radius in edges for radius in radii)
-        return context, edges + radii
+        return edges + radii
 
-    def to_contexts_with_segments_subsets(
-            context_with_segments: Tuple[Context, Sequence[Segment]]
-    ) -> Strategy[Tuple[Context, Sequence[Segment]]]:
-        context, segments = context_with_segments
-        return strategies.tuples(strategies.just(context),
-                                 sub_lists(segments,
-                                           min_size=2))
+    def to_contexts_with_segments_subsets(segments: Sequence[Segment]
+                                          ) -> Strategy[Sequence[Segment]]:
+        return sub_lists(segments,
+                         min_size=2)
 
-    return (strategies.builds(
-            to_context_with_segments,
-            to_contexts_with_convex_hulls(contexts_with_coordinates),
-            strategies.integers(0))
+    return (strategies.builds(to_segments_sequence,
+                              to_non_degenerate_convex_hulls(context,
+                                                             coordinates),
+                              strategies.integers(0))
             .flatmap(to_contexts_with_segments_subsets)
             .map(itemgetter(slice(MAX_SEQUENCE_SIZE))))
 
 
-def to_contexts_with_segments_endpoints_and_points(
-        contexts_with_points: Tuple[Strategy[Context], Strategy[Point]]
-) -> Strategy[Tuple[Context, PointsPair, Point]]:
-    contexts, points = contexts_with_points
-    return strategies.tuples(contexts, points_to_segments_endpoints(points),
-                             points)
+def to_touching_segments_endpoints(context: Context,
+                                   coordinates: Strategy[Coordinate]
+                                   ) -> Strategy[PointsQuadruplet]:
+    return (to_non_zero_angles(context, coordinates)
+            .map(itemgetter(0, 1, 0, 2)))
 
 
-def to_contexts_with_segments_pairs_endpoints(
-        contexts_with_points: Tuple[Strategy[Context], Strategy[Point]]
-) -> Strategy[Tuple[Context, PointsQuadruplet]]:
-    contexts, points = contexts_with_points
-    return strategies.tuples(contexts,
-                             to_pairs(points_to_segments_endpoints(points))
-                             .map(pack(add)))
+def to_crossing_segments_pairs_endpoints(context: Context,
+                                         coordinates: Strategy[Coordinate]
+                                         ) -> Strategy[PointsQuadruplet]:
+    def to_segments_pairs_endpoints(
+            angle_points: PointsTriplet,
+            first_scale: int,
+            second_scale: int) -> PointsQuadruplet:
+        vertex, first_ray_point, second_ray_point = angle_points
+        return (to_scaled_segment_end(first_ray_point, vertex, first_scale),
+                first_ray_point,
+                to_scaled_segment_end(second_ray_point, vertex, second_scale),
+                second_ray_point)
+
+    def to_scaled_segment_end(start: Point,
+                              end: Point,
+                              scale: int) -> Point:
+        return context.point_cls(end.x + scale * (end.x - start.x),
+                                 end.y + scale * (end.y - start.y))
+
+    scales = strategies.integers(1, 100)
+    return strategies.builds(to_segments_pairs_endpoints,
+                             to_non_zero_sine_angles(context, coordinates),
+                             scales, scales)
+
+
+def to_non_zero_angles(context: Context,
+                       coordinates: Strategy[Coordinate]
+                       ) -> Strategy[PointsTriplet]:
+    def is_non_zero_angle(angle_points: PointsTriplet) -> bool:
+        vertex, first_ray_point, second_ray_point = angle_points
+        return (second_ray_point < min(vertex, first_ray_point)
+                or (context.angle_orientation(vertex, first_ray_point,
+                                              second_ray_point)
+                    is not Orientation.COLLINEAR))
+
+    return (to_points_lists(context, coordinates,
+                            min_size=3,
+                            max_size=3,
+                            unique=True)
+            .map(tuple)
+            .filter(is_non_zero_angle))
+
+
+def to_non_zero_sine_angles(context: Context,
+                            coordinates: Strategy[Coordinate]
+                            ) -> Strategy[PointsTriplet]:
+    def is_non_zero_sine_angle(angle_points: PointsTriplet) -> bool:
+        vertex, first_ray_point, second_ray_point = angle_points
+        return (context.angle_orientation(vertex, first_ray_point,
+                                          second_ray_point)
+                is not Orientation.COLLINEAR)
+
+    return (to_points_lists(context, coordinates,
+                            min_size=3,
+                            max_size=3,
+                            unique=True)
+            .map(tuple)
+            .filter(is_non_zero_sine_angle))

@@ -54,10 +54,6 @@ coordinates_strategies_factories = {
 coordinates_strategies = strategies.sampled_from(
         [factory(MIN_COORDINATE, MAX_COORDINATE)
          for factory in coordinates_strategies_factories.values()])
-coordinates_types_with_strategies = strategies.sampled_from(
-        [(type_, factory(MIN_COORDINATE, MAX_COORDINATE))
-         for type_, factory in coordinates_strategies_factories.items()])
-rational_coordinates_types_with_strategies = strategies.sampled_from(
-        [(type_, factory(MIN_COORDINATE, MAX_COORDINATE))
-         for type_, factory
-         in rational_coordinates_strategies_factories.items()])
+rational_coordinates_strategies = strategies.sampled_from(
+        [factory(MIN_COORDINATE, MAX_COORDINATE)
+         for factory in rational_coordinates_strategies_factories.values()])

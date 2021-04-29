@@ -4,8 +4,7 @@ from hypothesis import given
 
 from ground.base import (Context,
                          Relation)
-from tests.hints import (PointsPair,
-                         PointsQuadruplet)
+from tests.hints import PointsPair
 from tests.utils import (ASYMMETRIC_LINEAR_RELATIONS,
                          LINEAR_RELATIONS,
                          SYMMETRIC_LINEAR_RELATIONS,
@@ -13,11 +12,13 @@ from tests.utils import (ASYMMETRIC_LINEAR_RELATIONS,
 from . import strategies
 
 
-@given(strategies.contexts_with_segments_pairs_endpoints)
-def test_basic(context_with_segments_pair_endpoints
-               : Tuple[Context, PointsQuadruplet]) -> None:
-    context, segments_pair_endpoints = context_with_segments_pair_endpoints
-    first_start, first_end, second_start, second_end = segments_pair_endpoints
+@given(strategies.contexts_with_segments_endpoints_pairs)
+def test_basic(context_with_segments_endpoints_pair
+               : Tuple[Context, Tuple[PointsPair, PointsPair]]) -> None:
+    context, (first_endpoints,
+              second_endpoints) = context_with_segments_endpoints_pair
+    first_start, first_end = first_endpoints
+    second_start, second_end = second_endpoints
 
     result = context.segments_relation(first_start, first_end, second_start,
                                        second_end)
@@ -26,11 +27,14 @@ def test_basic(context_with_segments_pair_endpoints
     assert result in LINEAR_RELATIONS
 
 
-@given(strategies.contexts_with_segments_pairs_endpoints)
-def test_endpoints_permutation(context_with_segments_pair_endpoints
-                               : Tuple[Context, PointsQuadruplet]) -> None:
-    context, segments_pair_endpoints = context_with_segments_pair_endpoints
-    first_start, first_end, second_start, second_end = segments_pair_endpoints
+@given(strategies.contexts_with_segments_endpoints_pairs)
+def test_endpoints_permutation(context_with_segments_endpoints_pair
+                               : Tuple[Context, Tuple[PointsPair, PointsPair]]
+                               ) -> None:
+    context, (first_endpoints,
+              second_endpoints) = context_with_segments_endpoints_pair
+    first_start, first_end = first_endpoints
+    second_start, second_end = second_endpoints
 
     result = context.segments_relation(first_start, first_end, second_start,
                                        second_end)
@@ -43,11 +47,14 @@ def test_endpoints_permutation(context_with_segments_pair_endpoints
                                          second_start))
 
 
-@given(strategies.contexts_with_segments_pairs_endpoints)
-def test_segments_permutation(context_with_segments_pair_endpoints
-                              : Tuple[Context, PointsQuadruplet]) -> None:
-    context, segments_pair_endpoints = context_with_segments_pair_endpoints
-    first_start, first_end, second_start, second_end = segments_pair_endpoints
+@given(strategies.contexts_with_segments_endpoints_pairs)
+def test_segments_permutation(context_with_segments_endpoints_pair
+                              : Tuple[Context, Tuple[PointsPair, PointsPair]]
+                              ) -> None:
+    context, (first_endpoints,
+              second_endpoints) = context_with_segments_endpoints_pair
+    first_start, first_end = first_endpoints
+    second_start, second_end = second_endpoints
 
     result = context.segments_relation(first_start, first_end, second_start,
                                        second_end)

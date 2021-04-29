@@ -10,9 +10,10 @@ from . import strategies
 
 
 @given(strategies.contexts_with_segments_endpoints_and_points)
-def test_basic(context_with_segments_pair_endpoints
+def test_basic(context_with_segment_endpoints_and_point
                : Tuple[Context, PointsPair, Point]) -> None:
-    context, segment_endpoints, point = context_with_segments_pair_endpoints
+    (context, segment_endpoints,
+     point) = context_with_segment_endpoints_and_point
     start, end = segment_endpoints
 
     result = context.segment_point_squared_distance(start, end, point)
@@ -20,10 +21,11 @@ def test_basic(context_with_segments_pair_endpoints
     assert is_coordinate(result)
 
 
-@given(strategies.contexts_with_segments_endpoints_and_points)
-def test_endpoints_symmetry(context_with_segments_pair_endpoints
+@given(strategies.contexts_with_rational_segments_endpoints_and_points)
+def test_endpoints_symmetry(context_with_segment_endpoints_and_point
                             : Tuple[Context, PointsPair, Point]) -> None:
-    context, segment_endpoints, point = context_with_segments_pair_endpoints
+    (context, segment_endpoints,
+     point) = context_with_segment_endpoints_and_point
     start, end = segment_endpoints
 
     result = context.segment_point_squared_distance(start, end, point)
@@ -31,7 +33,7 @@ def test_endpoints_symmetry(context_with_segments_pair_endpoints
     assert result == context.segment_point_squared_distance(end, start, point)
 
 
-@given(strategies.contexts_with_segments_endpoints)
+@given(strategies.contexts_with_rational_segments_endpoints)
 def test_self(context_with_segment_endpoints: Tuple[Context, PointsPair]
               ) -> None:
     context, segment_endpoints = context_with_segment_endpoints

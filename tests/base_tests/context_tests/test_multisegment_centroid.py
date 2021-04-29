@@ -17,9 +17,9 @@ from . import strategies
 @given(strategies.contexts_with_segments_sequences)
 def test_basic(context_with_segments: Tuple[Context, Sequence[Segment]]
                ) -> None:
-    context, holes = context_with_segments
+    context, segments = context_with_segments
 
-    result = context.multisegment_centroid(holes)
+    result = context.multisegment_centroid(segments)
 
     assert is_point(result)
 

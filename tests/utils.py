@@ -1,4 +1,3 @@
-import math
 from functools import partial
 from numbers import (Rational,
                      Real)
@@ -14,6 +13,7 @@ from typing import (Any,
                     Type,
                     TypeVar)
 
+import math
 from hypothesis import strategies
 
 from ground.base import (Context,
@@ -50,6 +50,14 @@ def apply(function: Callable[..., _T2], args: Iterable[_T1]) -> _T2:
     return function(*args)
 
 
+def cleave(*functions: Callable[..., _T2]
+           ) -> Callable[..., Tuple[_T2, ...]]:
+    def cleft(*args: Any, **kwargs: Any) -> Tuple[_T2, ...]:
+        return tuple(function(*args, **kwargs) for function in functions)
+
+    return cleft
+
+
 def compose(*functions: Callable[..., _T2]) -> Callable[..., _T2]:
     *rest_functions, first_function = functions
     reversed_rest_functions = rest_functions[::-1]
@@ -77,6 +85,10 @@ def equivalence(left: bool, right: bool) -> bool:
 
 def identity(value: _T1) -> _T1:
     return value
+
+
+def lift(value: _T1) -> List[_T1]:
+    return [value]
 
 
 is_box = Box.__instancecheck__
@@ -258,3 +270,16 @@ def reverse_segment(segment: Segment) -> Segment:
 
 def rotate_contour(contour: Contour, offset: int) -> Contour:
     return type(contour)(rotate_sequence(contour.vertices, offset))
+
+
+_T = TypeVar('_T')
+
+
+def cleave_in_tuples(*functions: Callable[..., Strategy[_T]]
+                     ) -> Callable[..., Strategy[Tuple[_T, ...]]]:
+    cleft = cleave(*functions)
+
+    def bound(*args: Any, **kwargs: Any) -> Strategy[Tuple[_T, ...]]:
+        return strategies.tuples(*cleft(*args, **kwargs))
+
+    return bound
