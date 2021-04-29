@@ -6,7 +6,7 @@ from ground.base import Context
 from ground.hints import Multipoint
 from tests.utils import (is_point,
                          permute_multipoint,
-                         reverse_sequence)
+                         reverse_multipoint)
 from . import strategies
 
 
@@ -26,7 +26,8 @@ def test_reversals(context_with_points: Tuple[Context, Multipoint]
 
     result = context.multipoint_centroid(multipoint)
 
-    assert result == context.multipoint_centroid(reverse_sequence(multipoint))
+    assert result == context.multipoint_centroid(reverse_multipoint(
+            multipoint))
 
 
 @given(strategies.contexts_with_rational_multipoints, strategies.indices)

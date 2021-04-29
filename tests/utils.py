@@ -248,6 +248,10 @@ def permute_multipoint(multipoint: Multipoint, index: int) -> Multipoint:
     return type(multipoint)(permute(multipoint.points, index))
 
 
+def reverse_multipoint(multipoint: Multipoint) -> Multipoint:
+    return type(multipoint)(reverse_sequence(multipoint.points))
+
+
 def reverse_segment(segment: Segment) -> Segment:
     return type(segment)(segment.end, segment.start)
 
