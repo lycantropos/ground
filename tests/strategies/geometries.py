@@ -15,6 +15,7 @@ from tests.hints import (PointsPair,
                          Strategy)
 from tests.utils import (MAX_SEQUENCE_SIZE,
                          Box,
+                         Multipoint,
                          Point,
                          Segment,
                          pack,
@@ -51,6 +52,11 @@ def points_to_segments_endpoints(points: Strategy[Point]
                              max_size=2,
                              unique=True)
             .map(tuple))
+
+
+def coordinates_to_multipoints(coordinates: Strategy[Coordinate]
+                               ) -> Strategy[Multipoint]:
+    return coordinates_to_points_sequences(coordinates).map(Multipoint)
 
 
 def coordinates_to_points_sequences(coordinates: Strategy[Coordinate]

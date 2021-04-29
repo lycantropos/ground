@@ -244,6 +244,10 @@ def context_to_output_coordinate_cls(context: Context) -> Type[Coordinate]:
     return Rational if context.mode is Mode.EXACT else Real
 
 
+def permute_multipoint(multipoint: Multipoint, index: int) -> Multipoint:
+    return type(multipoint)(permute(multipoint.points, index))
+
+
 def reverse_segment(segment: Segment) -> Segment:
     return type(segment)(segment.end, segment.start)
 
