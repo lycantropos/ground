@@ -449,8 +449,9 @@ class Context:
  for contour in contours)``.
 
         >>> context = get_context()
-        >>> Box, Contour, Point = (context.box_cls, context.contour_cls,
-        ...                        context.point_cls)
+        >>> Box = context.box_cls
+        >>> Contour = context.contour_cls
+        >>> Point = context.point_cls
         >>> (context.contours_box([Contour([Point(0, 0), Point(1, 0),
         ...                                 Point(1, 1), Point(0, 1)]),
         ...                        Contour([Point(1, 1), Point(2, 1),
