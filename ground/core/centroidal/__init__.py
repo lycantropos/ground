@@ -36,7 +36,7 @@ MultipointCentroid = Callable[[Multipoint, Type[Point]], Point]
 MultipolygonCentroid = Callable[[Sequence[Polygon], Type[Point]], Point]
 MultisegmentCentroid = Callable[[Sequence[Segment], Type[Point],
                                  Callable[[Coordinate], Coordinate]], Point]
-PolygonCentroid = Callable[[Contour, Sequence[Contour], Type[Point]], Point]
+PolygonCentroid = Callable[[Polygon, Type[Point]], Point]
 RegionCentroid = Callable[[Sequence[Point], Type[Point]], Point]
 
 

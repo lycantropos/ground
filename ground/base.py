@@ -647,30 +647,30 @@ class Context:
         """
         return _boxed.from_polygon(polygon, self.box_cls)
 
-    def polygon_centroid(self,
-                         border: _hints.Contour,
-                         holes: _Sequence[_hints.Contour]) -> _hints.Point:
+    def polygon_centroid(self, polygon: _hints.Polygon) -> _hints.Point:
         """
-        Constructs centroid of a polygon given its border & holes.
+        Constructs centroid of a polygon.
 
         Time complexity:
             ``O(vertices_count)``
         Memory complexity:
             ``O(1)``
 
-        where ``vertices_count = len(border.vertices)\
- + sum(len(hole.vertices) for hole in holes)``.
+        where ``vertices_count = len(polygon.border.vertices)\
+ + sum(len(hole.vertices) for hole in polygon.holes)``.
 
         >>> context = get_context()
-        >>> Contour, Point = context.contour_cls, context.point_cls
-        >>> (context.polygon_centroid(Contour([Point(0, 0), Point(4, 0),
-        ...                                    Point(4, 4), Point(0, 4)]),
-        ...                           [Contour([Point(1, 1), Point(1, 3),
-        ...                                     Point(3, 3), Point(3, 1)])])
-        ...  == Point(2, 2))
+        >>> Contour = context.contour_cls
+        >>> Point = context.point_cls
+        >>> Polygon = context.polygon_cls
+        >>> context.polygon_centroid(
+        ...     Polygon(Contour([Point(0, 0), Point(4, 0), Point(4, 4),
+        ...                      Point(0, 4)]),
+        ...             [Contour([Point(1, 1), Point(1, 3), Point(3, 3),
+        ...                       Point(3, 1)])])) == Point(2, 2)
         True
         """
-        return self._centroidal.polygon_centroid(border, holes, self.point_cls)
+        return self._centroidal.polygon_centroid(polygon, self.point_cls)
 
     def polygons_box(self, polygons: _Sequence[_hints.Polygon]) -> _hints.Box:
         """
