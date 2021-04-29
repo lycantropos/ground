@@ -22,10 +22,10 @@ def test_basic(context_with_segments_endpoints_pair
     assert is_coordinate(result)
 
 
-@given(strategies.contexts_with_segments_endpoints_pairs)
+@given(strategies.contexts_with_rational_segments_endpoints_pairs)
 def test_endpoints_symmetry(context_with_segments_endpoints_pair
-                            : Tuple[Context, Tuple[
-                                PointsPair, PointsPair]]) -> None:
+                            : Tuple[Context, Tuple[PointsPair, PointsPair]]
+                            ) -> None:
     context, (first_endpoints,
               second_endpoints) = context_with_segments_endpoints_pair
     first_start, first_end = first_endpoints
@@ -45,8 +45,8 @@ def test_endpoints_symmetry(context_with_segments_endpoints_pair
 
 @given(strategies.contexts_with_segments_endpoints_pairs)
 def test_segments_symmetry(context_with_segments_endpoints_pair
-                           : Tuple[Context, Tuple[
-                               PointsPair, PointsPair]]) -> None:
+                           : Tuple[Context, Tuple[PointsPair, PointsPair]]
+                           ) -> None:
     context, (first_endpoints,
               second_endpoints) = context_with_segments_endpoints_pair
     first_start, first_end = first_endpoints

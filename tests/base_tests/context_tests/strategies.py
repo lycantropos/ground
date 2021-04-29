@@ -100,10 +100,12 @@ contexts_with_rational_segments_endpoints = (
 contexts_with_segments_endpoints = (
     contexts_with_coordinates_strategies.flatmap(to_contexts_with(
             segments_endpoints_factory)))
+contexts_with_rational_segments_endpoints_pairs = (
+    contexts_with_rational_coordinates_strategies.flatmap(to_contexts_with(
+            compose(to_pairs, segments_endpoints_factory))))
 contexts_with_segments_endpoints_pairs = (
-    (contexts_with_coordinates_strategies
-     .flatmap(to_contexts_with(compose(to_pairs,
-                                       segments_endpoints_factory)))))
+    contexts_with_coordinates_strategies.flatmap(to_contexts_with(
+            compose(to_pairs, segments_endpoints_factory))))
 contexts_with_rational_segments_endpoints_and_points = (
     (contexts_with_rational_coordinates_strategies
      .flatmap(to_contexts_with(segments_endpoints_factory, points_factory))))
