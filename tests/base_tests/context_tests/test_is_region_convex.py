@@ -1,40 +1,42 @@
-from typing import (Sequence,
-                    Tuple)
+from typing import Tuple
 
 from hypothesis import given
 
 from ground.base import Context
-from ground.hints import Point
-from tests.utils import (reverse_sequence,
-                         rotate_sequence)
+from ground.hints import Contour
+from tests.utils import (reverse_contour_coordinates,
+                         reverse_contour_vertices,
+                         rotate_contour)
 from . import strategies
 
 
-@given(strategies.contexts_with_vertices)
-def test_basic(context_with_vertices: Tuple[Context, Sequence[Point]]) -> None:
-    context, vertices = context_with_vertices
+@given(strategies.contexts_with_contours)
+def test_basic(context_with_contour: Tuple[Context, Contour]) -> None:
+    context, contour = context_with_contour
 
-    result = context.is_region_convex(vertices)
+    result = context.is_region_convex(contour)
 
     assert isinstance(result, bool)
 
 
-@given(strategies.contexts_with_rational_vertices)
-def test_reversals(context_with_vertices: Tuple[Context, Sequence[Point]]
-                   ) -> None:
-    context, vertices = context_with_vertices
+@given(strategies.contexts_with_rational_contours)
+def test_reversals(context_with_contour: Tuple[Context, Contour]) -> None:
+    context, contour = context_with_contour
 
-    result = context.is_region_convex(vertices)
+    result = context.is_region_convex(contour)
 
-    assert result is context.is_region_convex(reverse_sequence(vertices))
+    assert result is context.is_region_convex(
+            reverse_contour_vertices(contour))
+    assert result is context.is_region_convex(
+            reverse_contour_coordinates(contour))
 
 
-@given(strategies.contexts_with_rational_vertices, strategies.indices)
-def test_rotations(context_with_vertices: Tuple[Context, Sequence[Point]],
+@given(strategies.contexts_with_rational_contours, strategies.indices)
+def test_rotations(context_with_contour: Tuple[Context, Contour],
                    offset: int) -> None:
-    context, vertices = context_with_vertices
+    context, contour = context_with_contour
 
-    result = context.is_region_convex(vertices)
+    result = context.is_region_convex(contour)
 
-    assert result is context.is_region_convex(rotate_sequence(vertices,
-                                                              offset))
+    assert result is context.is_region_convex(rotate_contour(contour,
+                                                             offset))
