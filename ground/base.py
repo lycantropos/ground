@@ -752,11 +752,10 @@ class Context:
         return self._centroidal.segment_centroid(segment, self.point_cls)
 
     def segment_contains_point(self,
-                               start: _hints.Point,
-                               end: _hints.Point,
+                               segment: _hints.Segment,
                                point: _hints.Point) -> bool:
         """
-        Checks if a segment given by its endpoints contains given point.
+        Checks if a segment contains given point.
 
         Time complexity:
             ``O(1)``
@@ -765,27 +764,28 @@ class Context:
 
         >>> context = get_context()
         >>> Point = context.point_cls
-        >>> context.segment_contains_point(Point(0, 0), Point(2, 0),
+        >>> Segment = context.segment_cls
+        >>> context.segment_contains_point(Segment(Point(0, 0), Point(2, 0)),
         ...                                Point(0, 0))
         True
-        >>> context.segment_contains_point(Point(0, 0), Point(2, 0),
+        >>> context.segment_contains_point(Segment(Point(0, 0), Point(2, 0)),
         ...                                Point(0, 2))
         False
-        >>> context.segment_contains_point(Point(0, 0), Point(2, 0),
+        >>> context.segment_contains_point(Segment(Point(0, 0), Point(2, 0)),
         ...                                Point(1, 0))
         True
-        >>> context.segment_contains_point(Point(0, 0), Point(2, 0),
+        >>> context.segment_contains_point(Segment(Point(0, 0), Point(2, 0)),
         ...                                Point(1, 1))
         False
-        >>> context.segment_contains_point(Point(0, 0), Point(2, 0),
+        >>> context.segment_contains_point(Segment(Point(0, 0), Point(2, 0)),
         ...                                Point(2, 0))
         True
-        >>> context.segment_contains_point(Point(0, 0), Point(2, 0),
+        >>> context.segment_contains_point(Segment(Point(0, 0), Point(2, 0)),
         ...                                Point(3, 0))
         False
         """
-        return self._linear.containment_checker(start, end, point,
-                                                self.cross_product)
+        return self._linear.containment_checker(segment.start, segment.end,
+                                                point, self.cross_product)
 
     def segment_point_squared_distance(self,
                                        segment: _hints.Segment,
