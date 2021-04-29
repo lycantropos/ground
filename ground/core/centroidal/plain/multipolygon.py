@@ -1,21 +1,21 @@
 from fractions import Fraction
-from typing import (Callable,
-                    Sequence,
+from typing import (Sequence,
                     Tuple,
                     Type)
 
-from ground.core.hints import (Point,
+from ground.core.hints import (Multipolygon,
+                               Point,
                                Polygon,
                                Scalar)
 from .polygon import centroid_components as polygon_centroid_components
 
 
-def centroid(polygons: Sequence[Polygon],
+def centroid(multipolygon: Multipolygon,
              point_cls: Type[Point],
-             inverse: Callable[[int], Fraction] = Fraction(1).__truediv__
-             ) -> Point:
-    x_numerator, y_numerator, double_area = centroid_components(polygons)
-    inverted_denominator = inverse(3 * double_area)
+             third: Fraction = Fraction(1, 3)) -> Point:
+    x_numerator, y_numerator, double_area = centroid_components(
+            multipolygon.polygons)
+    inverted_denominator = third / double_area
     return point_cls(x_numerator * inverted_denominator,
                      y_numerator * inverted_denominator)
 

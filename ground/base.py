@@ -531,10 +531,10 @@ class Context:
         """
         return self._centroidal.multipoint_centroid(multipoint, self.point_cls)
 
-    def multipolygon_centroid(self, polygons: _Sequence[_hints.Polygon]
+    def multipolygon_centroid(self, multipolygon: _hints.Multipolygon
                               ) -> _hints.Point:
         """
-        Constructs centroid of a multipolygon given its polygons.
+        Constructs centroid of a multipolygon.
 
         Time complexity:
             ``O(len(vertices_count))``
@@ -543,20 +543,24 @@ class Context:
 
         where ``vertices_count = sum(len(polygon.border.vertices)\
  + sum(len(hole.vertices) for hole in polygon.holes)\
- for polygon in polygons)``.
+ for polygon in multipolygon.polygons)``.
 
         >>> context = get_context()
-        >>> Contour, Point, Polygon = (context.contour_cls, context.point_cls,
-        ...                            context.polygon_cls)
+        >>> Contour = context.contour_cls
+        >>> Point = context.point_cls
+        >>> Polygon = context.polygon_cls
+        >>> Multipolygon = context.multipolygon_cls
         >>> (context.multipolygon_centroid(
-        ...     [Polygon(Contour([Point(0, 0), Point(1, 0), Point(1, 1),
-        ...                       Point(0, 1)]), []),
-        ...      Polygon(Contour([Point(1, 1), Point(2, 1), Point(2, 2),
-        ...                       Point(1, 2)]), [])])
+        ...      Multipolygon([Polygon(Contour([Point(0, 0), Point(1, 0),
+        ...                                     Point(1, 1), Point(0, 1)]), []),
+        ...                    Polygon(Contour([Point(1, 1), Point(2, 1),
+        ...                                     Point(2, 2), Point(1, 2)]),
+        ...                            [])])
         ...  == Point(1, 1))
         True
         """
-        return self._centroidal.multipolygon_centroid(polygons, self.point_cls)
+        return self._centroidal.multipolygon_centroid(multipolygon,
+                                                      self.point_cls)
 
     def multisegment_centroid(self, segments: _Sequence[_hints.Segment]
                               ) -> _hints.Point:
