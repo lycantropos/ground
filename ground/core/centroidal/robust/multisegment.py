@@ -1,18 +1,17 @@
 from typing import (Callable,
-                    Sequence,
                     Type)
 
-from ground.core.hints import (Point,
-                               Scalar,
-                               Segment)
+from ground.core.hints import (Multisegment,
+                               Point,
+                               Scalar)
 from ground.core.shewchuk import to_squared_points_distance
 
 
-def centroid(segments: Sequence[Segment],
+def centroid(multisegment: Multisegment,
              point_cls: Type[Point],
              sqrt: Callable[[Scalar], Scalar]) -> Point:
     accumulated_x = accumulated_y = accumulated_length = 0
-    for segment in segments:
+    for segment in multisegment.segments:
         start, end = segment.start, segment.end
         length = sqrt(to_squared_points_distance(end.x, end.y, start.x,
                                                  start.y)[-1])

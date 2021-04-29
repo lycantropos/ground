@@ -1,18 +1,17 @@
 from typing import (Callable,
-                    Sequence,
                     Type)
 
-from ground.core.hints import (Point,
-                               Scalar,
-                               Segment)
+from ground.core.hints import (Multisegment,
+                               Point,
+                               Scalar)
 from ground.core.primitive import rationalize
 
 
-def centroid(segments: Sequence[Segment],
+def centroid(multisegment: Multisegment,
              point_cls: Type[Point],
              sqrt: Callable[[Scalar], Scalar]) -> Point:
     accumulated_x = accumulated_y = accumulated_length = 0
-    for segment in segments:
+    for segment in multisegment.segments:
         start, end = segment.start, segment.end
         start_x, start_y = rationalize(start.x), rationalize(start.y)
         end_x, end_y = rationalize(end.x), rationalize(end.y)
