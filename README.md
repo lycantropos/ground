@@ -87,8 +87,8 @@ True
 ...                               Segment(origin, y_unit)) == origin
 True
 >>> from ground.base import Relation
->>> (context.segments_relation(origin, x_unit, origin, y_unit)
-...  is Relation.TOUCH)
+>>> context.segments_relation(Segment(origin, x_unit),
+...                           Segment(origin, y_unit)) is Relation.TOUCH
 True
 
 ```
