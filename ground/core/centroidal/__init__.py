@@ -7,6 +7,7 @@ from reprit.base import generate_repr
 
 from ground.core.hints import (Contour,
                                Coordinate,
+                               Multipoint,
                                Point,
                                Polygon,
                                Segment)
@@ -31,12 +32,12 @@ from .robust import (contour as robust_contour,
 
 ContourCentroid = Callable[[Contour, Type[Point],
                             Callable[[Coordinate], Coordinate]], Point]
-MultipointCentroid = RegionCentroid = Callable[[Sequence[Point], Type[Point]],
-                                               Point]
+MultipointCentroid = Callable[[Multipoint, Type[Point]], Point]
 MultipolygonCentroid = Callable[[Sequence[Polygon], Type[Point]], Point]
 MultisegmentCentroid = Callable[[Sequence[Segment], Type[Point],
                                  Callable[[Coordinate], Coordinate]], Point]
 PolygonCentroid = Callable[[Contour, Sequence[Contour], Type[Point]], Point]
+RegionCentroid = Callable[[Sequence[Point], Type[Point]], Point]
 
 
 class Context:

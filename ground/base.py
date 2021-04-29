@@ -511,23 +511,25 @@ class Context:
                             min(first_box.min_y, second_box.min_y),
                             max(first_box.max_y, second_box.max_y))
 
-    def multipoint_centroid(self, points: _Sequence[_hints.Point]
+    def multipoint_centroid(self, multipoint: _hints.Multipoint
                             ) -> _hints.Point:
         """
-        Constructs centroid of a multipoint given its points.
+        Constructs centroid of a multipoint.
 
         Time complexity:
-            ``O(len(points))``
+            ``O(len(multipoint.points))``
         Memory complexity:
             ``O(1)``
 
         >>> context = get_context()
+        >>> Multipoint = context.multipoint_cls
         >>> Point = context.point_cls
-        >>> context.multipoint_centroid([Point(0, 0), Point(2, 0), Point(2, 2),
-        ...                              Point(0, 2)]) == Point(1, 1)
+        >>> context.multipoint_centroid(
+        ...     Multipoint([Point(0, 0), Point(2, 0), Point(2, 2),
+        ...                 Point(0, 2)])) == Point(1, 1)
         True
         """
-        return self._centroidal.multipoint_centroid(points, self.point_cls)
+        return self._centroidal.multipoint_centroid(multipoint, self.point_cls)
 
     def multipolygon_centroid(self, polygons: _Sequence[_hints.Polygon]
                               ) -> _hints.Point:
