@@ -79,9 +79,9 @@ True
 >>> (context.points_convex_hull([origin, x_unit, y_unit])
 ...  == [origin, x_unit, y_unit])
 True
->>> context.segment_contains_point(origin, x_unit, y_unit)
+>>> context.segment_contains_point(Segment(origin, x_unit), y_unit)
 False
->>> context.segment_contains_point(origin, x_unit, origin)
+>>> context.segment_contains_point(Segment(origin, x_unit), origin)
 True
 >>> context.segments_intersection(Segment(origin, x_unit),
 ...                               Segment(origin, y_unit)) == origin
