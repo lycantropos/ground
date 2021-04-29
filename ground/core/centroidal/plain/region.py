@@ -4,16 +4,17 @@ from typing import (Callable,
                     Tuple,
                     Type)
 
-from ground.core.hints import (Coordinate,
+from ground.core.hints import (Contour,
+                               Coordinate,
                                Point)
 
 
-def centroid(vertices: Sequence[Point],
+def centroid(contour: Contour,
              point_cls: Type[Point],
-             inverse: Callable[[int], Fraction] = Fraction(1).__truediv__
-             ) -> Point:
-    x_numerator, y_numerator, double_area = centroid_components(vertices)
-    inverted_divisor = inverse(3 * double_area)
+             third: Fraction = Fraction(1, 3)) -> Point:
+    x_numerator, y_numerator, double_area = centroid_components(
+            contour.vertices)
+    inverted_divisor = third / double_area
     return point_cls(x_numerator * inverted_divisor,
                      y_numerator * inverted_divisor)
 

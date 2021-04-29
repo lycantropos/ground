@@ -698,23 +698,24 @@ class Context:
         """
         return _boxed.from_polygons(polygons, self.box_cls)
 
-    def region_centroid(self, vertices: _Sequence[_hints.Point]
-                        ) -> _hints.Point:
+    def region_centroid(self, contour: _hints.Contour) -> _hints.Point:
         """
-        Constructs centroid of a region given its contour vertices.
+        Constructs centroid of a region given its contour.
 
         Time complexity:
-            ``O(len(vertices))``
+            ``O(len(contour.vertices))``
         Memory complexity:
             ``O(1)``
 
         >>> context = get_context()
+        >>> Contour = context.contour_cls
         >>> Point = context.point_cls
-        >>> context.region_centroid([Point(0, 0), Point(2, 0), Point(2, 2),
-        ...                          Point(0, 2)]) == Point(1, 1)
+        >>> (context.region_centroid(Contour([Point(0, 0), Point(2, 0),
+        ...                                   Point(2, 2), Point(0, 2)]))
+        ...  == Point(1, 1))
         True
         """
-        return self._centroidal.region_centroid(vertices, self.point_cls)
+        return self._centroidal.region_centroid(contour, self.point_cls)
 
     def segment_box(self, segment: _hints.Segment) -> _hints.Box:
         """

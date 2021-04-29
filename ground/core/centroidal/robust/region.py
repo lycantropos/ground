@@ -1,22 +1,22 @@
 from fractions import Fraction
-from typing import (Callable,
-                    Sequence,
+from typing import (Sequence,
                     Tuple,
                     Type)
 
-from ground.core.hints import (Expansion,
+from ground.core.hints import (Contour,
+                               Expansion,
                                Point)
 from ground.core.shewchuk import (scale_expansion,
                                   sum_expansions,
                                   to_cross_product)
 
 
-def centroid(vertices: Sequence[Point],
+def centroid(contour: Contour,
              point_cls: Type[Point],
-             inverse: Callable[[int], Fraction] = Fraction(1).__truediv__
-             ) -> Point:
-    x_numerator, y_numerator, double_area = centroid_components(vertices)
-    inverted_denominator = inverse(3 * double_area[-1])
+             third: Fraction = Fraction(1, 3)) -> Point:
+    x_numerator, y_numerator, double_area = centroid_components(
+            contour.vertices)
+    inverted_denominator = third / double_area[-1]
     return point_cls(x_numerator[-1] * inverted_denominator,
                      y_numerator[-1] * inverted_denominator)
 
