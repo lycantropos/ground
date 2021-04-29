@@ -5,6 +5,7 @@ from hypothesis import given
 from ground.base import Context
 from ground.hints import Contour
 from tests.utils import (context_to_output_coordinate_cls,
+                         reverse_contour_coordinates,
                          reverse_contour_vertices,
                          rotate_contour)
 from . import strategies
@@ -27,6 +28,8 @@ def test_reversals(context_with_contours: Tuple[Context, Contour]
     result = context.region_signed_area(contour)
 
     assert result == -context.region_signed_area(reverse_contour_vertices(
+            contour))
+    assert result == -context.region_signed_area(reverse_contour_coordinates(
             contour))
 
 
