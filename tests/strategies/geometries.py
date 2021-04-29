@@ -21,7 +21,10 @@ from tests.hints import (PointsPair,
                          PointsTriplet,
                          Strategy)
 from tests.utils import (MAX_SEQUENCE_SIZE,
-                         lift, pack,
+                         cleave,
+                         compose,
+                         lift,
+                         pack,
                          sub_lists,
                          to_pairs)
 
@@ -178,11 +181,29 @@ def to_segments_sequences(context: Context,
             .map(itemgetter(slice(MAX_SEQUENCE_SIZE))))
 
 
-def to_touching_segments_endpoints(context: Context,
-                                   coordinates: Strategy[Coordinate]
-                                   ) -> Strategy[PointsQuadruplet]:
+def to_touching_segments_pairs(context: Context,
+                               coordinates: Strategy[Coordinate]
+                               ) -> Strategy[Tuple[Segment, Segment]]:
+    segment_factory = pack(context.segment_cls)
+    return (to_touching_segments_pairs_endpoints(context, coordinates)
+            .map(cleave(compose(segment_factory, itemgetter(0, 1)),
+                        compose(segment_factory, itemgetter(2, 3)))))
+
+
+def to_touching_segments_pairs_endpoints(context: Context,
+                                         coordinates: Strategy[Coordinate]
+                                         ) -> Strategy[PointsQuadruplet]:
     return (to_non_zero_angles(context, coordinates)
             .map(itemgetter(0, 1, 0, 2)))
+
+
+def to_crossing_segments_pairs(context: Context,
+                               coordinates: Strategy[Coordinate]
+                               ) -> Strategy[Tuple[Segment, Segment]]:
+    segment_factory = pack(context.segment_cls)
+    return (to_crossing_segments_pairs_endpoints(context, coordinates)
+            .map(cleave(compose(segment_factory, itemgetter(0, 1)),
+                        compose(segment_factory, itemgetter(2, 3)))))
 
 
 def to_crossing_segments_pairs_endpoints(context: Context,
