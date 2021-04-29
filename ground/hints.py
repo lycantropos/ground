@@ -1,5 +1,7 @@
 from .core.hints import (Box,
                          Contour,
+                         Empty,
+                         Maybe,
                          Mix,
                          Multipoint,
                          Multipolygon,
@@ -11,11 +13,13 @@ from .core.hints import (Box,
 
 Box = Box
 Contour = Contour
-Scalar = Scalar
+Empty = Empty
+Maybe = Maybe
 Mix = Mix
 Multipoint = Multipoint
+Multipolygon = Multipolygon
 Multisegment = Multisegment
 Point = Point
-Segment = Segment
 Polygon = Polygon
-Multipolygon = Multipolygon
+Scalar = Scalar
+Segment = Segment
