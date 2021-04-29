@@ -61,6 +61,23 @@ def coordinates_to_points_sequences(coordinates: Strategy[Coordinate]
                             unique=True)
 
 
+def to_contexts_with_convex_contours(
+        contexts_with_coordinates: Tuple[Strategy[Context],
+                                         Strategy[Coordinate]]
+) -> Strategy[Tuple[Context, Contour]]:
+    def to_context_with_convex_contour(context_with_convex_hull
+                                       : Tuple[Context, Sequence[Point]]
+                                       ) -> Tuple[Context, Contour]:
+        context, convex_hull = context_with_convex_hull
+        return context, context.contour_cls(convex_hull)
+
+    return (to_contexts_with_convex_hulls(contexts_with_coordinates)
+            .map(to_context_with_convex_contour))
+
+
+to_contexts_with_contours = to_contexts_with_convex_contours
+
+
 def to_contexts_with_convex_hulls(
         contexts_with_coordinates: Tuple[Strategy[Context],
                                          Strategy[Coordinate]]

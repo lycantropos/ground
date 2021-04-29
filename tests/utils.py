@@ -123,6 +123,10 @@ def reverse_contour_coordinates(contour: Contour) -> Contour:
                     for vertex in contour.vertices])
 
 
+def reverse_contour_vertices(contour: Contour) -> Contour:
+    return type(contour)(reverse_sequence(contour.vertices))
+
+
 def reverse_contours_coordinates(contours: Sequence[Contour]
                                  ) -> Sequence[Contour]:
     return [reverse_contour_coordinates(contour) for contour in contours]
@@ -242,3 +246,7 @@ def context_to_output_coordinate_cls(context: Context) -> Type[Coordinate]:
 
 def reverse_segment(segment: Segment) -> Segment:
     return type(segment)(segment.end, segment.start)
+
+
+def rotate_contour(contour: Contour, offset: int) -> Contour:
+    return type(contour)(rotate_sequence(contour.vertices, offset))
