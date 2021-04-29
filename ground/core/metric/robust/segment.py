@@ -19,8 +19,6 @@ def point_squared_distance(start: Point,
                            point: Point,
                            dot_producer: QuaternaryPointFunction[Scalar]
                            ) -> Scalar:
-    if end < start:
-        start, end = end, start
     segment_squared_norm = dot_producer(start, end, start, end)
     end_factor_numerator = max(0, min(segment_squared_norm,
                                       dot_producer(start, point, start, end)))
