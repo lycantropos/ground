@@ -913,14 +913,10 @@ class Context:
                                     self.cross_product)
 
     def segments_squared_distance(self,
-                                  first_start: _hints.Point,
-                                  first_end: _hints.Point,
-                                  second_start: _hints.Point,
-                                  second_end: _hints.Point
-                                  ) -> _hints.Scalar:
+                                  first: _hints.Segment,
+                                  second: _hints.Segment) -> _hints.Scalar:
         """
-        Returns squared Euclidean distance between two segments
-        given their endpoints.
+        Returns squared Euclidean distance between two segments.
 
         Time complexity:
             ``O(1)``
@@ -929,18 +925,22 @@ class Context:
 
         >>> context = get_context()
         >>> Point = context.point_cls
-        >>> context.segments_squared_distance(Point(0, 0), Point(1, 0),
-        ...                                   Point(0, 0), Point(0, 1)) == 0
+        >>> Segment = context.segment_cls
+        >>> context.segments_squared_distance(
+        ...     Segment(Point(0, 0), Point(1, 0)),
+        ...     Segment(Point(0, 0), Point(0, 1))) == 0
         True
-        >>> context.segments_squared_distance(Point(0, 0), Point(1, 0),
-        ...                                   Point(0, 1), Point(1, 1)) == 1
+        >>> context.segments_squared_distance(
+        ...     Segment(Point(0, 0), Point(1, 0)),
+        ...     Segment(Point(0, 1), Point(1, 1))) == 1
         True
-        >>> context.segments_squared_distance(Point(0, 0), Point(1, 0),
-        ...                                   Point(2, 1), Point(2, 2)) == 2
+        >>> context.segments_squared_distance(
+        ...     Segment(Point(0, 0), Point(1, 0)),
+        ...     Segment(Point(2, 1), Point(2, 2))) == 2
         True
         """
         return self._metric.segment_segment_squared_metric(
-                first_start, first_end, second_start, second_end,
+                first.start, first.end, second.start, second.end,
                 self.dot_product, self._segments_intersect)
 
     def _segments_intersect(self,

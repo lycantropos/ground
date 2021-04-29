@@ -28,8 +28,7 @@ SegmentPointMetric = Callable[[Point, Point, Point,
                               Scalar]
 SegmentSegmentMetric = Callable[[Point, Point, Point, Point,
                                  QuaternaryPointFunction[Scalar],
-                                 QuaternaryPointFunction[bool]],
-                                Scalar]
+                                 QuaternaryPointFunction[bool]], Scalar]
 
 
 class Context:
