@@ -14,6 +14,7 @@ from tests.strategies.geometries import (to_boxes,
                                          to_crossing_segments_pairs,
                                          to_multipoints,
                                          to_multipolygons,
+                                         to_multisegments,
                                          to_points,
                                          to_polygons,
                                          to_polygons_sequences,
@@ -45,6 +46,7 @@ contours_factory = pack(to_contours)
 crossing_segments_pairs_factory = pack(to_crossing_segments_pairs)
 multipoints_factory = pack(to_multipoints)
 multipolygons_factory = pack(to_multipolygons)
+multisegments_factory = pack(to_multisegments)
 points_factory = pack(to_points)
 polygons_factory = pack(to_polygons)
 polygons_sequences_factory = pack(to_polygons_sequences)
@@ -160,6 +162,9 @@ contexts_with_multipolygons = (
 contexts_with_segments_sequences = (
     contexts_with_coordinates_strategies.flatmap(to_contexts_with(
             segments_sequences_factory)))
-contexts_with_rational_segments_sequences = (
+contexts_with_multisegments = (
+    contexts_with_coordinates_strategies.flatmap(to_contexts_with(
+            multisegments_factory)))
+contexts_with_rational_multisegments = (
     contexts_with_rational_coordinates_strategies.flatmap(to_contexts_with(
-            segments_sequences_factory)))
+            multisegments_factory)))

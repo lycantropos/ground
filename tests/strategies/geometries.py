@@ -13,6 +13,7 @@ from ground.hints import (Box,
                           Contour,
                           Multipoint,
                           Multipolygon,
+                          Multisegment,
                           Point,
                           Polygon,
                           Scalar,
@@ -61,6 +62,12 @@ def to_multipolygons(context: Context,
                      coordinates: Strategy[Scalar]) -> Strategy[Multipolygon]:
     return (to_polygons_sequences(context, coordinates)
             .map(context.multipolygon_cls))
+
+
+def to_multisegments(context: Context,
+                     coordinates: Strategy[Scalar]) -> Strategy[Multisegment]:
+    return (to_segments_sequences(context, coordinates)
+            .map(context.multisegment_cls))
 
 
 def to_points_lists(context: Context,

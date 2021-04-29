@@ -25,6 +25,7 @@ from ground.hints import (Box,
                           Contour,
                           Multipoint,
                           Multipolygon,
+                          Multisegment,
                           Point,
                           Polygon,
                           Scalar,
@@ -155,6 +156,16 @@ def reverse_multipolygon_coordinates(multipolygon: Multipolygon
                                      ) -> Multipolygon:
     return type(multipolygon)([reverse_polygon_coordinates(polygon)
                                for polygon in multipolygon.polygons])
+
+
+def reverse_multisegment(multisegment: Multisegment) -> Multisegment:
+    return type(multisegment)(reverse_sequence(multisegment.segments))
+
+
+def reverse_multisegment_coordinates(multisegment: Multisegment
+                                     ) -> Multisegment:
+    return type(multisegment)([reverse_segment_coordinates(segment)
+                               for segment in multisegment.segments])
 
 
 def reverse_point_coordinates(point: Point) -> Point:
@@ -293,6 +304,12 @@ def rotate_contour(contour: Contour, offset: int) -> Contour:
 def rotate_multipolygon(multipolygon: Multipolygon,
                         offset: int) -> Multipolygon:
     return type(multipolygon)(rotate_sequence(multipolygon.polygons, offset))
+
+
+def rotate_multisegment(multisegment: Multisegment,
+                        offset: int) -> Multisegment:
+    return type(multisegment)(rotate_sequence(multisegment.multisegment,
+                                              offset))
 
 
 def rotate_polygon_border(polygon: Polygon, offset: int) -> Polygon:

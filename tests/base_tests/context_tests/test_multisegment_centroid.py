@@ -1,49 +1,46 @@
-from typing import (Sequence,
-                    Tuple)
+from typing import Tuple
 
 from hypothesis import given
 
 from ground.base import Context
-from ground.hints import Segment
+from ground.hints import Multisegment
 from tests.utils import (is_point,
+                         reverse_multisegment,
+                         reverse_multisegment_coordinates,
                          reverse_point_coordinates,
-                         reverse_segments_coordinates,
-                         reverse_segments_endpoints,
-                         reverse_sequence,
-                         rotate_sequence)
+                         rotate_multisegment)
 from . import strategies
 
 
-@given(strategies.contexts_with_segments_sequences)
-def test_basic(context_with_segments: Tuple[Context, Sequence[Segment]]
+@given(strategies.contexts_with_multisegments)
+def test_basic(context_with_multisegment: Tuple[Context, Multisegment]
                ) -> None:
-    context, segments = context_with_segments
+    context, multisegment = context_with_multisegment
 
-    result = context.multisegment_centroid(segments)
+    result = context.multisegment_centroid(multisegment)
 
     assert is_point(result)
 
 
-@given(strategies.contexts_with_rational_segments_sequences)
-def test_reversals(context_with_segments: Tuple[Context, Sequence[Segment]]
+@given(strategies.contexts_with_rational_multisegments)
+def test_reversals(context_with_multisegment: Tuple[Context, Multisegment]
                    ) -> None:
-    context, segments = context_with_segments
+    context, multisegment = context_with_multisegment
 
-    result = context.multisegment_centroid(segments)
+    result = context.multisegment_centroid(multisegment)
 
-    assert result == context.multisegment_centroid(reverse_sequence(segments))
-    assert result == context.multisegment_centroid(reverse_segments_endpoints(
-            segments))
+    assert result == context.multisegment_centroid(reverse_multisegment(
+            multisegment))
     assert result == reverse_point_coordinates(context.multisegment_centroid(
-            reverse_segments_coordinates(segments)))
+            reverse_multisegment_coordinates(multisegment)))
 
 
-@given(strategies.contexts_with_segments_sequences, strategies.indices)
-def test_rotations(context_with_segments: Tuple[Context, Sequence[Segment]],
+@given(strategies.contexts_with_multisegments, strategies.indices)
+def test_rotations(context_with_multisegment: Tuple[Context, Multisegment],
                    offset: int) -> None:
-    context, segments = context_with_segments
+    context, multisegment = context_with_multisegment
 
-    result = context.multisegment_centroid(segments)
+    result = context.multisegment_centroid(multisegment)
 
-    assert result == context.multisegment_centroid(rotate_sequence(segments,
-                                                                   offset))
+    assert result == context.multisegment_centroid(rotate_multisegment(
+            multisegment, offset))
