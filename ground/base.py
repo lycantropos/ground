@@ -788,13 +788,11 @@ class Context:
                                                 self.cross_product)
 
     def segment_point_squared_distance(self,
-                                       start: _hints.Point,
-                                       end: _hints.Point,
+                                       segment: _hints.Segment,
                                        point: _hints.Point
                                        ) -> _hints.Coordinate:
         """
-        Returns squared Euclidean distance between segment given its endpoints
-        and a point.
+        Returns squared Euclidean distance between segment and a point.
 
         Time complexity:
             ``O(1)``
@@ -803,18 +801,19 @@ class Context:
 
         >>> context = get_context()
         >>> Point = context.point_cls
-        >>> context.segment_point_squared_distance(Point(0, 0), Point(1, 0),
-        ...                                        Point(0, 0)) == 0
+        >>> Segment = context.segment_cls
+        >>> context.segment_point_squared_distance(
+        ...     Segment(Point(0, 0), Point(1, 0)), Point(0, 0)) == 0
         True
-        >>> context.segment_point_squared_distance(Point(0, 0), Point(1, 0),
-        ...                                        Point(0, 1)) == 1
+        >>> context.segment_point_squared_distance(
+        ...     Segment(Point(0, 0), Point(1, 0)), Point(0, 1)) == 1
         True
-        >>> context.segment_point_squared_distance(Point(0, 0), Point(1, 0),
-        ...                                        Point(2, 1)) == 2
+        >>> context.segment_point_squared_distance(
+        ...     Segment(Point(0, 0), Point(1, 0)), Point(2, 1)) == 2
         True
         """
-        return self._metric.segment_point_squared_metric(start, end, point,
-                                                         self.dot_product)
+        return self._metric.segment_point_squared_metric(
+                segment.start, segment.end, point, self.dot_product)
 
     def segments_box(self, segments: _Sequence[_hints.Segment]) -> _hints.Box:
         """
