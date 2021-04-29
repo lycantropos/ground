@@ -553,10 +553,11 @@ class Context:
         >>> Multipolygon = context.multipolygon_cls
         >>> (context.multipolygon_centroid(
         ...      Multipolygon([Polygon(Contour([Point(0, 0), Point(1, 0),
-        ...                                     Point(1, 1), Point(0, 1)]), []),
+        ...                                     Point(1, 1), Point(0, 1)]),
+        ...                            []),
         ...                    Polygon(Contour([Point(1, 1), Point(2, 1),
         ...                                     Point(2, 2), Point(1, 2)]),
-        ...                            [])])
+        ...                            [])]))
         ...  == Point(1, 1))
         True
         """
@@ -582,7 +583,7 @@ class Context:
         ...      Multisegment([Segment(Point(0, 0), Point(2, 0)),
         ...                    Segment(Point(2, 0), Point(2, 2)),
         ...                    Segment(Point(0, 2), Point(2, 2)),
-        ...                    Segment(Point(0, 0), Point(0, 2))])
+        ...                    Segment(Point(0, 0), Point(0, 2))]))
         ...  == Point(1, 1))
         True
         """
