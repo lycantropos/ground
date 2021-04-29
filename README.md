@@ -58,6 +58,7 @@ Usage
 >>> from ground.base import get_context
 >>> context = get_context()
 >>> Point = context.point_cls
+>>> Multipoint = context.multipoint_cls
 >>> origin = Point(0, 0)
 >>> x_unit = Point(1, 0)
 >>> y_unit = Point(0, 1)
@@ -72,7 +73,7 @@ True
 True
 >>> context.dot_product(origin, x_unit, origin, y_unit) == 0
 True
->>> context.multipoint_centroid([origin]) == origin
+>>> context.multipoint_centroid(Multipoint([origin])) == origin
 True
 >>> (context.points_convex_hull([origin, x_unit, y_unit])
 ...  == [origin, x_unit, y_unit])
