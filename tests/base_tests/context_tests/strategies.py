@@ -43,7 +43,6 @@ contexts_with_coordinates_strategies = strategies.tuples(
         contexts, coordinates_strategies)
 to_contexts_with = partial(cleave_in_tuples,
                            compose(strategies.just, itemgetter(0)))
-borders_and_holes_sequences_factory = pack(to_borders_and_holes_sequences)
 boxes_factory = pack(to_boxes)
 contours_factory = pack(to_contours)
 crossing_segments_pairs_endpoints_factory = pack(
@@ -171,9 +170,6 @@ contexts_with_vertices = contexts_with_coordinates_strategies.flatmap(
 contexts_with_rational_vertices = (
     contexts_with_rational_coordinates_strategies.flatmap(to_contexts_with(
             vertices_sequences_factories)))
-contexts_with_borders_and_holes_sequences = (
-    contexts_with_coordinates_strategies.flatmap(to_contexts_with(
-            borders_and_holes_sequences_factory)))
 contexts_with_contours_sequences = (
     (contexts_with_coordinates_strategies
      .flatmap(to_contexts_with(pack(to_contours_sequences)))))
@@ -183,9 +179,6 @@ contexts_with_rational_polygons = (
 contexts_with_polygons = (
     contexts_with_coordinates_strategies.flatmap(to_contexts_with(
             polygons_factory)))
-contexts_with_rational_borders_and_holes_sequences = (
-    contexts_with_rational_coordinates_strategies.flatmap(to_contexts_with(
-            borders_and_holes_sequences_factory)))
 contexts_with_polygons_sequences = (
     contexts_with_coordinates_strategies.flatmap(to_contexts_with(
             polygons_sequences_factory)))
