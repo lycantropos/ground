@@ -133,7 +133,7 @@ def reverse_contour_coordinates(contour: Contour) -> Contour:
                           for vertex in contour.vertices])
 
 
-def reverse_contour_vertices(contour: Contour) -> Contour:
+def reverse_contour(contour: Contour) -> Contour:
     return type(contour)(reverse_sequence(contour.vertices))
 
 
@@ -155,7 +155,7 @@ def reverse_points_coordinates(points: Sequence[Point]) -> Sequence[Point]:
 
 
 def reverse_polygon_border(polygon: Polygon) -> Polygon:
-    return type(polygon)(reverse_contour_vertices(polygon.border),
+    return type(polygon)(reverse_contour(polygon.border),
                          polygon.holes)
 
 

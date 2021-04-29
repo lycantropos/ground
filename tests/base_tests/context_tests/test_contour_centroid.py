@@ -5,8 +5,10 @@ from hypothesis import given
 from ground.base import Context
 from ground.hints import Contour
 from tests.utils import (is_point,
-                         reverse_contour_coordinates, reverse_contour_vertices,
-                         reverse_point_coordinates, rotate_contour)
+                         reverse_contour,
+                         reverse_contour_coordinates,
+                         reverse_point_coordinates,
+                         rotate_contour)
 from . import strategies
 
 
@@ -26,7 +28,7 @@ def test_reversals(context_with_contour: Tuple[Context, Contour]
 
     result = context.contour_centroid(contour)
 
-    assert result == context.contour_centroid(reverse_contour_vertices(
+    assert result == context.contour_centroid(reverse_contour(
             contour))
     assert reverse_point_coordinates(result) == context.contour_centroid(
             reverse_contour_coordinates(contour))

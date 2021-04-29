@@ -5,7 +5,7 @@ from hypothesis import given
 from ground.base import Context
 from ground.hints import Contour
 from tests.utils import (reverse_contour_coordinates,
-                         reverse_contour_vertices,
+                         reverse_contour,
                          rotate_contour)
 from . import strategies
 
@@ -26,7 +26,7 @@ def test_reversals(context_with_contour: Tuple[Context, Contour]) -> None:
     result = context.is_region_convex(contour)
 
     assert result is context.is_region_convex(
-            reverse_contour_vertices(contour))
+            reverse_contour(contour))
     assert result is context.is_region_convex(
             reverse_contour_coordinates(contour))
 
