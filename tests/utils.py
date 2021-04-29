@@ -142,6 +142,10 @@ def reverse_contours_coordinates(contours: Sequence[Contour]
     return [reverse_contour_coordinates(contour) for contour in contours]
 
 
+def reverse_multipoint(multipoint: Multipoint) -> Multipoint:
+    return type(multipoint)(reverse_sequence(multipoint.points))
+
+
 def reverse_point_coordinates(point: Point) -> Point:
     return type(point)(point.y, point.x)
 
@@ -150,10 +154,19 @@ def reverse_points_coordinates(points: Sequence[Point]) -> Sequence[Point]:
     return [reverse_point_coordinates(point) for point in points]
 
 
+def reverse_polygon_border(polygon: Polygon) -> Polygon:
+    return type(polygon)(reverse_contour_vertices(polygon.border),
+                         polygon.holes)
+
+
 def reverse_polygon_coordinates(polygon: Polygon) -> Polygon:
     return type(polygon)(reverse_contour_coordinates(polygon.border),
                          [reverse_contour_coordinates(hole)
                           for hole in polygon.holes])
+
+
+def reverse_polygon_holes(polygon: Polygon) -> Polygon:
+    return type(polygon)(polygon.border, reverse_sequence(polygon.holes))
 
 
 def reverse_polygons_coordinates(polygons: Sequence[Polygon]
@@ -258,16 +271,21 @@ def permute_multipoint(multipoint: Multipoint, index: int) -> Multipoint:
     return type(multipoint)(permute(multipoint.points, index))
 
 
-def reverse_multipoint(multipoint: Multipoint) -> Multipoint:
-    return type(multipoint)(reverse_sequence(multipoint.points))
-
-
 def reverse_segment(segment: Segment) -> Segment:
     return type(segment)(segment.end, segment.start)
 
 
 def rotate_contour(contour: Contour, offset: int) -> Contour:
     return type(contour)(rotate_sequence(contour.vertices, offset))
+
+
+def rotate_polygon_border(polygon: Polygon, offset: int) -> Polygon:
+    return type(polygon)(rotate_contour(polygon.border, offset), polygon.holes)
+
+
+def rotate_polygon_holes(polygon: Polygon, offset: int) -> Polygon:
+    return type(polygon)(polygon.border, rotate_sequence(polygon.holes,
+                                                         offset))
 
 
 _T = TypeVar('_T')

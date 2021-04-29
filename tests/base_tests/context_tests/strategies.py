@@ -16,6 +16,7 @@ from tests.strategies.geometries import (to_borders_and_holes_sequences,
                                          to_crossing_segments_pairs_endpoints,
                                          to_multipoints,
                                          to_points,
+                                         to_polygons,
                                          to_polygons_sequences,
                                          to_segments,
                                          to_segments_endpoints,
@@ -50,6 +51,7 @@ crossing_segments_pairs_endpoints_factory = pack(
 crossing_segments_pairs_factory = pack(to_crossing_segments_pairs)
 multipoints_factory = pack(to_multipoints)
 points_factory = pack(to_points)
+polygons_factory = pack(to_polygons)
 polygons_sequences_factory = pack(to_polygons_sequences)
 segments_endpoints_factory = pack(to_segments_endpoints)
 segments_factory = pack(to_segments)
@@ -175,6 +177,12 @@ contexts_with_borders_and_holes_sequences = (
 contexts_with_contours_sequences = (
     (contexts_with_coordinates_strategies
      .flatmap(to_contexts_with(pack(to_contours_sequences)))))
+contexts_with_rational_polygons = (
+    contexts_with_rational_coordinates_strategies.flatmap(to_contexts_with(
+            polygons_factory)))
+contexts_with_polygons = (
+    contexts_with_coordinates_strategies.flatmap(to_contexts_with(
+            polygons_factory)))
 contexts_with_rational_borders_and_holes_sequences = (
     contexts_with_rational_coordinates_strategies.flatmap(to_contexts_with(
             borders_and_holes_sequences_factory)))
