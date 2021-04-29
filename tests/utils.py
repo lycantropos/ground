@@ -238,3 +238,7 @@ def to_triplets(strategy: Strategy[_T1]) -> Strategy[Tuple[_T1, _T1, _T1]]:
 
 def context_to_output_coordinate_cls(context: Context) -> Type[Coordinate]:
     return Rational if context.mode is Mode.EXACT else Real
+
+
+def reverse_segment(segment: Segment) -> Segment:
+    return type(segment)(segment.end, segment.start)

@@ -7,22 +7,19 @@ from hypothesis import strategies
 
 from ground.base import (Context,
                          Orientation)
-from ground.hints import (Box,
-                          Contour,
+from ground.hints import (Contour,
                           Coordinate,
-                          Point,
-                          Polygon,
-                          Segment)
+                          Polygon)
 from tests.hints import (PointsPair,
                          PointsQuadruplet,
                          Strategy)
 from tests.utils import (MAX_SEQUENCE_SIZE,
                          Box,
                          Point,
+                         Segment,
                          pack,
                          sub_lists,
                          to_pairs)
-from .coordinates import coordinates_strategies
 
 
 def coordinates_to_boxes(coordinates: Strategy[Coordinate]
@@ -41,7 +38,10 @@ def coordinates_to_points(coordinates: Strategy[Coordinate]
     return strategies.builds(Point, coordinates, coordinates)
 
 
-points_strategies = coordinates_strategies.map(coordinates_to_points)
+def coordinates_to_segments(coordinates: Strategy[Coordinate]
+                            ) -> Strategy[Segment]:
+    return (points_to_segments_endpoints(coordinates_to_points(coordinates))
+            .map(pack(Segment)))
 
 
 def points_to_segments_endpoints(points: Strategy[Point]
@@ -120,14 +120,13 @@ def to_contexts_with_boxes_and_points(
                              coordinates_to_points(coordinates))
 
 
-def to_contexts_with_boxes_and_segments_endpoints(
+def to_contexts_with_boxes_and_segments(
         contexts_with_coordinates
         : Tuple[Strategy[Context], Strategy[Coordinate]]
-) -> Strategy[Tuple[Context, Box, PointsPair]]:
+) -> Strategy[Tuple[Context, Box, Segment]]:
     contexts, coordinates = contexts_with_coordinates
-    points = coordinates_to_points(coordinates)
     return strategies.tuples(contexts, coordinates_to_boxes(coordinates),
-                             points_to_segments_endpoints(points))
+                             coordinates_to_segments(coordinates))
 
 
 def to_contexts_with_polygons_sequences(

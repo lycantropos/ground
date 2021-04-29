@@ -24,7 +24,7 @@ from tests.strategies.geometries import (
     points_to_segments_endpoints,
     to_contexts_with_borders_and_holes_sequences,
     to_contexts_with_boxes_and_points,
-    to_contexts_with_boxes_and_segments_endpoints,
+    to_contexts_with_boxes_and_segments,
     to_contexts_with_contours_sequences,
     to_contexts_with_polygons_sequences,
     to_contexts_with_segments_endpoints_and_points,
@@ -70,9 +70,9 @@ contexts_with_boxes = (contexts_with_coordinates_strategies
                        .flatmap(pack(strategies.tuples)))
 contexts_with_boxes_and_points = (contexts_with_coordinates_strategies
                                   .flatmap(to_contexts_with_boxes_and_points))
-contexts_with_boxes_and_segments_endpoints = (
+contexts_with_boxes_and_segments = (
     (contexts_with_coordinates_strategies
-     .flatmap(to_contexts_with_boxes_and_segments_endpoints)))
+     .flatmap(to_contexts_with_boxes_and_segments)))
 contexts_with_boxes_pairs = (contexts_with_coordinates_strategies
                              .map(combine(identity,
                                           compose(to_pairs,
