@@ -1,15 +1,16 @@
 from typing import (Callable,
-                    Sequence,
                     Type)
 
-from ground.core.hints import (Coordinate,
+from ground.core.hints import (Contour,
+                               Coordinate,
                                Point)
 from ground.core.primitive import rationalize
 
 
-def centroid(vertices: Sequence[Point],
+def centroid(contour: Contour,
              point_cls: Type[Point],
              sqrt: Callable[[Coordinate], Coordinate]) -> Point:
+    vertices = contour.vertices
     accumulated_x = accumulated_y = accumulated_length = 0
     vertex = vertices[-1]
     start_x, start_y = rationalize(vertex.x), rationalize(vertex.y)

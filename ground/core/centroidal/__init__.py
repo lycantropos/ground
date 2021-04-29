@@ -29,7 +29,7 @@ from .robust import (contour as robust_contour,
                      polygon as robust_polygon,
                      region as robust_region)
 
-ContourCentroid = Callable[[Sequence[Point], Type[Point],
+ContourCentroid = Callable[[Contour, Type[Point],
                             Callable[[Coordinate], Coordinate]], Point]
 MultipointCentroid = RegionCentroid = Callable[[Sequence[Point], Type[Point]],
                                                Point]
