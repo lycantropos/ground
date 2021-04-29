@@ -12,16 +12,13 @@ from tests.strategies.geometries import (to_boxes,
                                          to_contours,
                                          to_contours_sequences,
                                          to_crossing_segments_pairs,
-                                         to_crossing_segments_pairs_endpoints,
                                          to_multipoints,
                                          to_points,
                                          to_polygons,
                                          to_polygons_sequences,
                                          to_segments,
-                                         to_segments_endpoints,
                                          to_segments_sequences,
                                          to_touching_segments_pairs,
-                                         to_touching_segments_pairs_endpoints,
                                          to_vertices_sequences)
 from tests.utils import (MAX_SEQUENCE_SIZE,
                          cleave_in_tuples,
@@ -44,18 +41,13 @@ to_contexts_with = partial(cleave_in_tuples,
                            compose(strategies.just, itemgetter(0)))
 boxes_factory = pack(to_boxes)
 contours_factory = pack(to_contours)
-crossing_segments_pairs_endpoints_factory = pack(
-        to_crossing_segments_pairs_endpoints)
 crossing_segments_pairs_factory = pack(to_crossing_segments_pairs)
 multipoints_factory = pack(to_multipoints)
 points_factory = pack(to_points)
 polygons_factory = pack(to_polygons)
 polygons_sequences_factory = pack(to_polygons_sequences)
-segments_endpoints_factory = pack(to_segments_endpoints)
 segments_factory = pack(to_segments)
 segments_sequences_factory = pack(to_segments_sequences)
-touching_segments_endpoints_factory = pack(
-        to_touching_segments_pairs_endpoints)
 touching_segments_pairs_factory = pack(to_touching_segments_pairs)
 vertices_sequences_factories = pack(to_vertices_sequences)
 
@@ -99,12 +91,6 @@ contexts_with_points_triplets = (
 contexts_with_points_quadruplets = (
     contexts_with_coordinates_strategies.flatmap(to_contexts_with(
             compose(to_quadruplets, points_factory))))
-contexts_with_rational_segments_endpoints = (
-    contexts_with_rational_coordinates_strategies.flatmap(to_contexts_with(
-            segments_endpoints_factory)))
-contexts_with_segments_endpoints = (
-    contexts_with_coordinates_strategies.flatmap(to_contexts_with(
-            segments_endpoints_factory)))
 contexts_with_rational_segments_pairs = (
     contexts_with_rational_coordinates_strategies.flatmap(to_contexts_with(
             compose(to_pairs, segments_factory))))
@@ -123,24 +109,6 @@ contexts_with_rational_segments_and_points = (
 contexts_with_segments_and_points = (
     contexts_with_coordinates_strategies.flatmap(to_contexts_with(
             segments_factory, points_factory)))
-contexts_with_rational_segments_endpoints_and_points = (
-    (contexts_with_rational_coordinates_strategies
-     .flatmap(to_contexts_with(segments_endpoints_factory, points_factory))))
-contexts_with_segments_endpoints_and_points = (
-    (contexts_with_coordinates_strategies
-     .flatmap(to_contexts_with(segments_endpoints_factory, points_factory))))
-contexts_with_rational_crossing_or_touching_segments_pairs_endpoints = (
-        contexts_with_rational_coordinates_strategies.flatmap(
-                to_contexts_with(crossing_segments_pairs_endpoints_factory))
-        |
-        contexts_with_coordinates_strategies.flatmap(to_contexts_with(
-                touching_segments_endpoints_factory)))
-contexts_with_crossing_or_touching_segments_pairs_endpoints = (
-        contexts_with_coordinates_strategies.flatmap(to_contexts_with(
-                crossing_segments_pairs_endpoints_factory))
-        |
-        contexts_with_coordinates_strategies.flatmap(to_contexts_with(
-                touching_segments_endpoints_factory)))
 contexts_with_rational_crossing_or_touching_segments_pairs = (
         contexts_with_rational_coordinates_strategies.flatmap(
                 to_contexts_with(crossing_segments_pairs_factory))
