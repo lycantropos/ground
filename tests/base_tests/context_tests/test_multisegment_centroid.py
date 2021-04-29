@@ -7,9 +7,9 @@ from ground.base import Context
 from ground.hints import Segment
 from tests.utils import (is_point,
                          reverse_point_coordinates,
-                         reverse_sequence,
                          reverse_segments_coordinates,
                          reverse_segments_endpoints,
+                         reverse_sequence,
                          rotate_sequence)
 from . import strategies
 

@@ -8,8 +8,8 @@ from ground.hints import Polygon
 from tests.utils import (is_box,
                          permute,
                          reverse_box_coordinates,
-                         reverse_sequence,
-                         reverse_polygons_coordinates)
+                         reverse_polygons_coordinates,
+                         reverse_sequence)
 from . import strategies
 
 

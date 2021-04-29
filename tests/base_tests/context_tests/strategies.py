@@ -8,8 +8,7 @@ from ground.base import (Context,
                          Mode)
 from tests.strategies.coordinates import (coordinates_strategies,
                                           rational_coordinates_strategies)
-from tests.strategies.geometries import (to_borders_and_holes_sequences,
-                                         to_boxes,
+from tests.strategies.geometries import (to_boxes,
                                          to_contours,
                                          to_contours_sequences,
                                          to_crossing_segments_pairs,

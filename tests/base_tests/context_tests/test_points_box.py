@@ -8,8 +8,8 @@ from ground.hints import Point
 from tests.utils import (is_box,
                          permute,
                          reverse_box_coordinates,
-                         reverse_sequence,
-                         reverse_points_coordinates)
+                         reverse_points_coordinates,
+                         reverse_sequence)
 from . import strategies
 
 

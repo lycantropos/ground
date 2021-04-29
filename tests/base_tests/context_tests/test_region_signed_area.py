@@ -5,8 +5,8 @@ from hypothesis import given
 from ground.base import Context
 from ground.hints import Contour
 from tests.utils import (context_to_output_coordinate_cls,
-                         reverse_contour_coordinates,
                          reverse_contour,
+                         reverse_contour_coordinates,
                          rotate_contour)
 from . import strategies
 
