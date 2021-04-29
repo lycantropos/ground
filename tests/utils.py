@@ -24,6 +24,7 @@ from ground.core.angular import to_sign
 from ground.hints import (Box,
                           Contour,
                           Multipoint,
+                          Multipolygon,
                           Point,
                           Polygon,
                           Scalar,
@@ -144,6 +145,16 @@ def reverse_contours_coordinates(contours: Sequence[Contour]
 
 def reverse_multipoint(multipoint: Multipoint) -> Multipoint:
     return type(multipoint)(reverse_sequence(multipoint.points))
+
+
+def reverse_multipolygon(multipolygon: Multipolygon) -> Multipolygon:
+    return type(multipolygon)(reverse_sequence(multipolygon.polygons))
+
+
+def reverse_multipolygon_coordinates(multipolygon: Multipolygon
+                                     ) -> Multipolygon:
+    return type(multipolygon)([reverse_polygon_coordinates(polygon)
+                               for polygon in multipolygon.polygons])
 
 
 def reverse_point_coordinates(point: Point) -> Point:
@@ -277,6 +288,11 @@ def reverse_segment(segment: Segment) -> Segment:
 
 def rotate_contour(contour: Contour, offset: int) -> Contour:
     return type(contour)(rotate_sequence(contour.vertices, offset))
+
+
+def rotate_multipolygon(multipolygon: Multipolygon,
+                        offset: int) -> Multipolygon:
+    return type(multipolygon)(rotate_sequence(multipolygon.polygons, offset))
 
 
 def rotate_polygon_border(polygon: Polygon, offset: int) -> Polygon:

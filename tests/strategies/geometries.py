@@ -12,6 +12,7 @@ from ground.base import (Context,
 from ground.hints import (Box,
                           Contour,
                           Multipoint,
+                          Multipolygon,
                           Point,
                           Polygon,
                           Scalar,
@@ -54,6 +55,12 @@ def to_multipoints(context: Context,
                              to_points_lists(context, coordinates,
                                              max_size=max_size,
                                              min_size=min_size))
+
+
+def to_multipolygons(context: Context,
+                     coordinates: Strategy[Scalar]) -> Strategy[Multipolygon]:
+    return (to_polygons_sequences(context, coordinates)
+            .map(context.multipolygon_cls))
 
 
 def to_points_lists(context: Context,
