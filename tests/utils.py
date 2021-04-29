@@ -308,8 +308,7 @@ def rotate_multipolygon(multipolygon: Multipolygon,
 
 def rotate_multisegment(multisegment: Multisegment,
                         offset: int) -> Multisegment:
-    return type(multisegment)(rotate_sequence(multisegment.multisegment,
-                                              offset))
+    return type(multisegment)(rotate_sequence(multisegment.segments, offset))
 
 
 def rotate_polygon_border(polygon: Polygon, offset: int) -> Polygon:
