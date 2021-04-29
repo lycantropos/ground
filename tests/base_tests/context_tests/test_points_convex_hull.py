@@ -14,54 +14,50 @@ from . import strategies
 
 
 @given(strategies.contexts_with_points_lists)
-def test_basic(context_with_points_sequence: Tuple[Context, Sequence[Point]]
-               ) -> None:
-    context, points_sequence = context_with_points_sequence
+def test_basic(context_with_points: Tuple[Context, Sequence[Point]]) -> None:
+    context, points = context_with_points
 
-    result = context.points_convex_hull(points_sequence)
+    result = context.points_convex_hull(points)
 
     assert isinstance(result, abc.Sequence)
     assert all(map(is_point, result))
 
 
 @given(strategies.contexts_with_points_lists, strategies.indices)
-def test_permutations(context_with_points_sequence
-                      : Tuple[Context, Sequence[Point]],
+def test_permutations(context_with_points: Tuple[Context, Sequence[Point]],
                       index: int) -> None:
-    context, points_sequence = context_with_points_sequence
+    context, points = context_with_points
 
-    result = context.points_convex_hull(points_sequence)
+    result = context.points_convex_hull(points)
 
-    assert result == context.points_convex_hull(permute(points_sequence,
-                                                        index))
+    assert result == context.points_convex_hull(permute(points, index))
 
 
 @given(strategies.contexts_with_empty_lists)
-def test_basic(context_with_points_sequence: Tuple[Context, Sequence[Point]]
+def test_basic(context_with_points: Tuple[Context, Sequence[Point]]
                ) -> None:
-    context, points_sequence = context_with_points_sequence
+    context, points = context_with_points
 
-    result = context.points_convex_hull(points_sequence)
+    result = context.points_convex_hull(points)
 
     assert len(result) == 0
 
 
 @given(strategies.contexts_with_non_empty_points_lists)
-def test_step(context_with_points_sequence: Tuple[Context, Sequence[Point]]
-              ) -> None:
-    context, points_sequence = context_with_points_sequence
-    point, *rest_points = points_sequence
+def test_step(context_with_points: Tuple[Context, Sequence[Point]]) -> None:
+    context, points = context_with_points
+    point, *rest_points = points
 
     result = context.points_convex_hull(rest_points)
-    next_result = context.points_convex_hull(points_sequence)
+    next_result = context.points_convex_hull(points)
 
     result_orientation = to_contour_vertices_orientation(result, context)
     assert equivalence(
             point in result
             or (len(result) > 1
-                and any(context.segment_contains_point(result[index - 1],
-                                                       result[index],
-                                                       point)
+                and any(context.segment_contains_point(
+                            context.segment_cls(result[index - 1],
+                                                result[index]), point)
                         for index in range(len(result))))
             or (len(result) > 2
                 and all(context.angle_orientation(result[index - 1],
