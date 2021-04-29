@@ -867,10 +867,8 @@ class Context:
                                         self.point_cls)
 
     def segments_relation(self,
-                          test_start: _hints.Point,
-                          test_end: _hints.Point,
-                          goal_start: _hints.Point,
-                          goal_end: _hints.Point) -> Relation:
+                          test: _hints.Segment,
+                          goal: _hints.Segment) -> Relation:
         """
         Returns relation between two segments.
 
@@ -881,29 +879,37 @@ class Context:
 
         >>> context = get_context()
         >>> Point = context.point_cls
-        >>> context.segments_relation(Point(0, 0), Point(2, 2), Point(1, 0),
-        ...                           Point(2, 0)) is Relation.DISJOINT
+        >>> Segment = context.segment_cls
+        >>> (context.segments_relation(Segment(Point(0, 0), Point(2, 2)),
+        ...                            Segment(Point(1, 0), Point(2, 0)))
+        ...  is Relation.DISJOINT)
         True
-        >>> context.segments_relation(Point(0, 0), Point(2, 2), Point(0, 0),
-        ...                           Point(2, 0)) is Relation.TOUCH
+        >>> (context.segments_relation(Segment(Point(0, 0), Point(2, 2)),
+        ...                            Segment(Point(0, 0), Point(2, 0)))
+        ...  is Relation.TOUCH)
         True
-        >>> context.segments_relation(Point(0, 0), Point(2, 2), Point(2, 0),
-        ...                           Point(0, 2)) is Relation.CROSS
+        >>> (context.segments_relation(Segment(Point(0, 0), Point(2, 2)),
+        ...                            Segment(Point(2, 0), Point(0, 2)))
+        ...  is Relation.CROSS)
         True
-        >>> context.segments_relation(Point(0, 0), Point(2, 2), Point(0, 0),
-        ...                           Point(1, 1)) is Relation.COMPOSITE
+        >>> (context.segments_relation(Segment(Point(0, 0), Point(2, 2)),
+        ...                           Segment(Point(0, 0), Point(1, 1)))
+        ...  is Relation.COMPOSITE)
         True
-        >>> context.segments_relation(Point(0, 0), Point(2, 2), Point(0, 0),
-        ...                           Point(2, 2)) is Relation.EQUAL
+        >>> (context.segments_relation(Segment(Point(0, 0), Point(2, 2)),
+        ...                            Segment(Point(0, 0), Point(2, 2)))
+        ...  is Relation.EQUAL)
         True
-        >>> context.segments_relation(Point(0, 0), Point(2, 2), Point(0, 0),
-        ...                           Point(3, 3)) is Relation.COMPONENT
+        >>> (context.segments_relation(Segment(Point(0, 0), Point(2, 2)),
+        ...                            Segment(Point(0, 0), Point(3, 3)))
+        ...  is Relation.COMPONENT)
         True
-        >>> context.segments_relation(Point(0, 0), Point(2, 2), Point(1, 1),
-        ...                           Point(3, 3)) is Relation.OVERLAP
+        >>> (context.segments_relation(Segment(Point(0, 0), Point(2, 2)),
+        ...                            Segment(Point(1, 1), Point(3, 3)))
+        ...  is Relation.OVERLAP)
         True
         """
-        return self._linear.relater(test_start, test_end, goal_start, goal_end,
+        return self._linear.relater(test.start, test.end, goal.start, goal.end,
                                     self.cross_product)
 
     def segments_squared_distance(self,
