@@ -506,7 +506,10 @@ class Context:
         ...  == Box(0, 2, 0, 2))
         True
         """
-        return _boxed.merge(first_box, second_box, self.box_cls)
+        return self.box_cls(min(first_box.min_x, second_box.min_x),
+                            max(first_box.max_x, second_box.max_x),
+                            min(first_box.min_y, second_box.min_y),
+                            max(first_box.max_y, second_box.max_y))
 
     def multipoint_centroid(self, points: _Sequence[_hints.Point]
                             ) -> _hints.Point:
