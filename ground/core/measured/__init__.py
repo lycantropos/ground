@@ -3,12 +3,12 @@ from typing import Callable
 from reprit.base import generate_repr
 
 from ground.core.hints import (Contour,
-                               Coordinate)
+                               Scalar)
 from .exact import region as exact_region
 from .plain import region as plain_region
 from .robust import region as robust_region
 
-SignedRegionMeasure = Callable[[Contour[Coordinate]], Coordinate]
+SignedRegionMeasure = Callable[[Contour[Scalar]], Scalar]
 
 
 class Context:

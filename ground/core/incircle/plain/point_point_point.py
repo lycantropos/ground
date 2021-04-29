@@ -1,11 +1,11 @@
-from ground.core.hints import (Coordinate,
-                               Point)
+from ground.core.hints import (Point,
+                               Scalar)
 
 
 def test(first: Point,
          second: Point,
          third: Point,
-         fourth: Point) -> Coordinate:
+         fourth: Point) -> Scalar:
     first_dx, first_dy = first.x - fourth.x, first.y - fourth.y
     second_dx, second_dy = second.x - fourth.x, second.y - fourth.y
     third_dx, third_dy = third.x - fourth.x, third.y - fourth.y

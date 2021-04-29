@@ -3,8 +3,8 @@ from typing import (Sequence,
                     Type)
 
 from ground.core.hints import (Contour,
-                               Coordinate,
-                               Point)
+                               Point,
+                               Scalar)
 from ground.core.primitive import rationalize
 
 
@@ -17,7 +17,7 @@ def centroid(contour: Contour, point_cls: Type[Point]) -> Point:
 
 
 def centroid_components(vertices: Sequence[Point]
-                        ) -> Tuple[Coordinate, Coordinate, Coordinate]:
+                        ) -> Tuple[Scalar, Scalar, Scalar]:
     double_area = x_numerator = y_numerator = 0
     prev_vertex = vertices[-1]
     prev_x, prev_y = rationalize(prev_vertex.x), rationalize(prev_vertex.y)

@@ -1,12 +1,12 @@
-from ground.core.hints import (Coordinate,
-                               Point)
+from ground.core.hints import (Point,
+                               Scalar)
 from ground.core.primitive import rationalize
 
 
 def test(first: Point,
          second: Point,
          third: Point,
-         fourth: Point) -> Coordinate:
+         fourth: Point) -> Scalar:
     fourth_x, fourth_y = rationalize(fourth.x), rationalize(fourth.y)
     first_dx, first_dy = (rationalize(first.x) - fourth_x,
                           rationalize(first.y) - fourth_y)

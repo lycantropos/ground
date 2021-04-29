@@ -2,9 +2,9 @@ from functools import reduce
 from typing import (Iterable,
                     Tuple)
 
-from ground.core.hints import (Coordinate,
-                               Expansion,
-                               Point)
+from ground.core.hints import (Expansion,
+                               Point,
+                               Scalar)
 from ground.core.shewchuk import (scale_expansion,
                                   square,
                                   sum_expansions,
@@ -19,7 +19,7 @@ from . import bounds
 def test(first: Point,
          second: Point,
          third: Point,
-         fourth: Point) -> Coordinate:
+         fourth: Point) -> Scalar:
     first_x, first_y = first.x, first.y
     second_x, second_y = second.x, second.y
     third_x, third_y = third.x, third.y
@@ -55,15 +55,15 @@ def test(first: Point,
                                  third_y, fourth_x, fourth_y, upper_bound)
 
 
-def _adjusted_determinant(first_x: Coordinate,
-                          first_y: Coordinate,
-                          second_x: Coordinate,
-                          second_y: Coordinate,
-                          third_x: Coordinate,
-                          third_y: Coordinate,
-                          fourth_x: Coordinate,
-                          fourth_y: Coordinate,
-                          upper_bound: Coordinate) -> Coordinate:
+def _adjusted_determinant(first_x: Scalar,
+                          first_y: Scalar,
+                          second_x: Scalar,
+                          second_y: Scalar,
+                          third_x: Scalar,
+                          third_y: Scalar,
+                          fourth_x: Scalar,
+                          fourth_y: Scalar,
+                          upper_bound: Scalar) -> Scalar:
     first_dx_head, first_dy_head = first_x - fourth_x, first_y - fourth_y
     second_dx_head, second_dy_head = second_x - fourth_x, second_y - fourth_y
     third_dx_head, third_dy_head = third_x - fourth_x, third_y - fourth_y
@@ -249,11 +249,11 @@ def _adjusted_determinant(first_x: Coordinate,
 
 
 def _to_dx_extras(head: Expansion,
-                  dx_head: Coordinate,
-                  dx_tail: Coordinate,
-                  left_dy_tail: Coordinate,
+                  dx_head: Scalar,
+                  dx_tail: Scalar,
+                  left_dy_tail: Scalar,
                   left_squared_length: Expansion,
-                  right_dy_tail: Coordinate,
+                  right_dy_tail: Scalar,
                   right_squared_length: Expansion,
                   left_right_crossed_tails_head: Expansion,
                   left_right_crossed_tails_tail: Expansion
@@ -280,8 +280,8 @@ def _to_dx_extras(head: Expansion,
 
 
 def _to_dy_extras(expansion: Expansion,
-                  dy_head: Coordinate,
-                  dy_tail: Coordinate,
+                  dy_head: Scalar,
+                  dy_tail: Scalar,
                   rest_crossed_tails_head: Expansion,
                   rest_crossed_tails_tail: Expansion) -> Iterable[Expansion]:
     dy_tail_rest_crossed_tails = scale_expansion(rest_crossed_tails_head,
@@ -299,11 +299,11 @@ def _to_dy_extras(expansion: Expansion,
 
 
 def _to_extra(head: Expansion,
-              coordinate: Coordinate,
-              coordinate_tail: Coordinate,
-              left_coordinate: Coordinate,
+              coordinate: Scalar,
+              coordinate_tail: Scalar,
+              left_coordinate: Scalar,
               left_squared_length: Expansion,
-              right_coordinate: Coordinate,
+              right_coordinate: Scalar,
               right_squared_length: Expansion) -> Expansion:
     second_addend = scale_expansion(scale_expansion(right_squared_length,
                                                     coordinate_tail),
@@ -316,14 +316,14 @@ def _to_extra(head: Expansion,
     return sum_expansions(subtrahend, minuend)
 
 
-def _to_crossed_tails(left_dx_head: Coordinate,
-                      left_dx_tail: Coordinate,
-                      left_dy_head: Coordinate,
-                      left_dy_tail: Coordinate,
-                      right_dx_head: Coordinate,
-                      right_dx_tail: Coordinate,
-                      right_dy_head: Coordinate,
-                      right_dy_tail: Coordinate
+def _to_crossed_tails(left_dx_head: Scalar,
+                      left_dx_tail: Scalar,
+                      left_dy_head: Scalar,
+                      left_dy_tail: Scalar,
+                      right_dx_head: Scalar,
+                      right_dx_tail: Scalar,
+                      right_dy_head: Scalar,
+                      right_dy_tail: Scalar
                       ) -> Tuple[Expansion, Expansion]:
     tail = two_two_sub(*two_mul(left_dx_tail, right_dy_tail),
                        *two_mul(right_dx_tail, left_dy_tail))
@@ -335,25 +335,25 @@ def _to_crossed_tails(left_dx_head: Coordinate,
 
 
 def _multiply_by_squared_length(expansion: Expansion,
-                                dx_head: Coordinate,
-                                dy_head: Coordinate) -> Expansion:
+                                dx_head: Scalar,
+                                dy_head: Scalar) -> Expansion:
     return sum_expansions(
             scale_expansion(scale_expansion(expansion, dx_head), dx_head),
             scale_expansion(scale_expansion(expansion, dy_head), dy_head))
 
 
-def _to_addend(left_dx_head: Coordinate,
-               left_dx_tail: Coordinate,
-               left_dy_head: Coordinate,
-               left_dy_tail: Coordinate,
-               mid_dx_head: Coordinate,
-               mid_dx_tail: Coordinate,
-               mid_dy_head: Coordinate,
-               mid_dy_tail: Coordinate,
-               right_dx_head: Coordinate,
-               right_dx_tail: Coordinate,
-               right_dy_head: Coordinate,
-               right_dy_tail: Coordinate) -> Coordinate:
+def _to_addend(left_dx_head: Scalar,
+               left_dx_tail: Scalar,
+               left_dy_head: Scalar,
+               left_dy_tail: Scalar,
+               mid_dx_head: Scalar,
+               mid_dx_tail: Scalar,
+               mid_dy_head: Scalar,
+               mid_dy_tail: Scalar,
+               right_dx_head: Scalar,
+               right_dx_tail: Scalar,
+               right_dy_head: Scalar,
+               right_dy_tail: Scalar) -> Scalar:
     return ((left_dx_head * left_dx_head + left_dy_head * left_dy_head)
             * ((mid_dx_head * right_dy_tail + right_dy_head * mid_dx_tail)
                - (mid_dy_head * right_dx_tail + right_dx_head * mid_dy_tail))
@@ -361,7 +361,7 @@ def _to_addend(left_dx_head: Coordinate,
             * (mid_dx_head * right_dy_head - mid_dy_head * right_dx_head))
 
 
-def _to_squared_length(dx_head: Coordinate, dy_head: Coordinate) -> Expansion:
+def _to_squared_length(dx_head: Scalar, dy_head: Scalar) -> Expansion:
     dx_squared_tail, dx_squared = square(dx_head)
     dy_squared_tail, dy_squared = square(dy_head)
     return two_two_sum(dx_squared_tail, dx_squared, dy_squared_tail,

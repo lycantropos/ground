@@ -2,10 +2,10 @@ from functools import reduce
 
 from ground.core.arithmetic import robust_divide
 from ground.core.enums import Relation
-from ground.core.hints import (Coordinate,
-                               Expansion,
+from ground.core.hints import (Expansion,
                                Point,
-                               QuaternaryPointFunction)
+                               QuaternaryPointFunction,
+                               Scalar)
 from ground.core.shewchuk import (add_to_expansion,
                                   scale_expansion,
                                   sum_expansions,
@@ -17,8 +17,8 @@ from ground.core.shewchuk import (add_to_expansion,
 def point_squared_distance(start: Point,
                            end: Point,
                            point: Point,
-                           dot_producer: QuaternaryPointFunction[Coordinate]
-                           ) -> Coordinate:
+                           dot_producer: QuaternaryPointFunction[Scalar]
+                           ) -> Scalar:
     if end < start:
         start, end = end, start
     segment_squared_norm = dot_producer(start, end, start, end)
@@ -44,10 +44,10 @@ def segment_squared_distance(first_start: Point,
                              first_end: Point,
                              second_start: Point,
                              second_end: Point,
-                             dot_producer: QuaternaryPointFunction[Coordinate],
+                             dot_producer: QuaternaryPointFunction[Scalar],
                              segments_relater
                              : QuaternaryPointFunction[Relation]
-                             ) -> Coordinate:
+                             ) -> Scalar:
     return (min(point_squared_distance(first_start, first_end, second_start,
                                        dot_producer),
                 point_squared_distance(first_start, first_end, second_end,

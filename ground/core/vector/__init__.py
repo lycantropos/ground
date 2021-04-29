@@ -1,7 +1,7 @@
 from reprit.base import generate_repr
 
-from ground.core.hints import (Coordinate,
-                               QuaternaryPointFunction)
+from ground.core.hints import (QuaternaryPointFunction,
+                               Scalar)
 from .exact import (cross as exact_cross,
                     dot as exact_dot)
 from .plain import (cross as plain_cross,
@@ -9,7 +9,7 @@ from .plain import (cross as plain_cross,
 from .robust import (cross as robust_cross,
                      dot as robust_dot)
 
-QuaternaryFunction = QuaternaryPointFunction[Coordinate]
+QuaternaryFunction = QuaternaryPointFunction[Scalar]
 
 
 class Context:

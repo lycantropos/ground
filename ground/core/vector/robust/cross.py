@@ -1,5 +1,5 @@
-from ground.core.hints import (Coordinate,
-                               Point)
+from ground.core.hints import (Point,
+                               Scalar)
 from ground.core.shewchuk import (sum_expansions,
                                   to_cross_product,
                                   two_mul,
@@ -11,7 +11,7 @@ from . import bounds
 def multiply(first_start: Point,
              first_end: Point,
              second_start: Point,
-             second_end: Point) -> Coordinate:
+             second_end: Point) -> Scalar:
     first_start_x, first_start_y = first_start.x, first_start.y
     first_end_x, first_end_y = first_end.x, first_end.y
     second_start_x, second_start_y = second_start.x, second_start.y
@@ -40,15 +40,15 @@ def multiply(first_start: Point,
                                  second_end_x, second_end_y, upper_bound)
 
 
-def _adjusted_signed_area(first_start_x: Coordinate,
-                          first_start_y: Coordinate,
-                          first_end_x: Coordinate,
-                          first_end_y: Coordinate,
-                          second_start_x: Coordinate,
-                          second_start_y: Coordinate,
-                          second_end_x: Coordinate,
-                          second_end_y: Coordinate,
-                          upper_bound: Coordinate) -> Coordinate:
+def _adjusted_signed_area(first_start_x: Scalar,
+                          first_start_y: Scalar,
+                          first_end_x: Scalar,
+                          first_end_y: Scalar,
+                          second_start_x: Scalar,
+                          second_start_y: Scalar,
+                          second_end_x: Scalar,
+                          second_end_y: Scalar,
+                          upper_bound: Scalar) -> Scalar:
     first_dx_head = first_end_x - first_start_x
     first_dy_head = first_end_y - first_start_y
     second_dx_head = second_end_x - second_start_x

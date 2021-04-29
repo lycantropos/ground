@@ -23,10 +23,10 @@ from ground.base import (Context,
 from ground.core.angular import to_sign
 from ground.hints import (Box,
                           Contour,
-                          Coordinate,
                           Multipoint,
                           Point,
                           Polygon,
+                          Scalar,
                           Segment)
 from .hints import (Permutation,
                     Strategy)
@@ -93,7 +93,7 @@ is_box = Box.__instancecheck__
 
 
 def is_coordinate(object_: Any) -> bool:
-    return isinstance(object_, Coordinate.__constraints__)
+    return isinstance(object_, Scalar.__constraints__)
 
 
 def is_even_permutation(index: int, size: int) -> bool:
@@ -263,7 +263,7 @@ def to_triplets(strategy: Strategy[_T1]) -> Strategy[Tuple[_T1, _T1, _T1]]:
     return strategies.tuples(strategy, strategy, strategy)
 
 
-def context_to_output_coordinate_cls(context: Context) -> Type[Coordinate]:
+def context_to_output_coordinate_cls(context: Context) -> Type[Scalar]:
     return Rational if context.mode is Mode.EXACT else Real
 
 

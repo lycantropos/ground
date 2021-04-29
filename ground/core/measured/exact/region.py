@@ -1,13 +1,13 @@
 from fractions import Fraction
 
 from ground.core.hints import (Contour,
-                               Coordinate)
+                               Scalar)
 from ground.core.primitive import rationalize
 
 
-def signed_area(contour: Contour[Coordinate],
+def signed_area(contour: Contour[Scalar],
                 *,
-                _half: Fraction = Fraction(1, 2)) -> Coordinate:
+                _half: Fraction = Fraction(1, 2)) -> Scalar:
     vertices = contour.vertices
     result, vertex = 0, vertices[-1]
     vertex_x, vertex_y = rationalize(vertex.x), rationalize(vertex.y)

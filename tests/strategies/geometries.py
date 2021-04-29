@@ -11,10 +11,10 @@ from ground.base import (Context,
                          Orientation)
 from ground.hints import (Box,
                           Contour,
-                          Coordinate,
                           Multipoint,
                           Point,
                           Polygon,
+                          Scalar,
                           Segment)
 from tests.hints import (PointsPair,
                          PointsQuadruplet,
@@ -30,7 +30,7 @@ from tests.utils import (MAX_SEQUENCE_SIZE,
 
 
 def to_boxes(context: Context,
-             coordinates: Strategy[Coordinate]) -> Strategy[Box]:
+             coordinates: Strategy[Scalar]) -> Strategy[Box]:
     return (to_pairs(strategies.lists(coordinates,
                                       unique=True,
                                       min_size=2,
@@ -41,12 +41,12 @@ def to_boxes(context: Context,
 
 
 def to_points(context: Context,
-              coordinates: Strategy[Coordinate]) -> Strategy[Point]:
+              coordinates: Strategy[Scalar]) -> Strategy[Point]:
     return strategies.builds(context.point_cls, coordinates, coordinates)
 
 
 def to_multipoints(context: Context,
-                   coordinates: Strategy[Coordinate],
+                   coordinates: Strategy[Scalar],
                    *,
                    min_size: int = 1,
                    max_size: Optional[int] = None) -> Strategy[Multipoint]:
@@ -57,7 +57,7 @@ def to_multipoints(context: Context,
 
 
 def to_points_lists(context: Context,
-                    coordinates: Strategy[Coordinate],
+                    coordinates: Strategy[Scalar],
                     *,
                     min_size: int = 0,
                     max_size: Optional[int] = None,
@@ -69,13 +69,13 @@ def to_points_lists(context: Context,
 
 
 def to_segments(context: Context,
-                coordinates: Strategy[Coordinate]) -> Strategy[Segment]:
+                coordinates: Strategy[Scalar]) -> Strategy[Segment]:
     return (to_segments_endpoints(context, coordinates)
             .map(pack(context.segment_cls)))
 
 
 def to_segments_endpoints(context: Context,
-                          coordinates: Strategy[Coordinate]
+                          coordinates: Strategy[Scalar]
                           ) -> Strategy[PointsPair]:
     return (strategies.lists(to_points(context, coordinates),
                              unique=True,
@@ -85,14 +85,14 @@ def to_segments_endpoints(context: Context,
 
 
 def to_convex_contours(context: Context,
-                       coordinates: Strategy[Coordinate]) -> Strategy[Contour]:
+                       coordinates: Strategy[Scalar]) -> Strategy[Contour]:
     return strategies.builds(context.contour_cls,
                              to_vertices_sequences(context, coordinates,
                                                    max_size=5))
 
 
 def to_non_degenerate_convex_hulls(context: Context,
-                                   coordinates: Strategy[Coordinate],
+                                   coordinates: Strategy[Scalar],
                                    *,
                                    min_size: int = 3,
                                    max_size: Optional[int] = None
@@ -116,7 +116,7 @@ to_vertices_sequences = to_non_degenerate_convex_hulls
 
 
 def to_borders_and_holes_sequences(context: Context,
-                                   coordinates: Strategy[Coordinate]
+                                   coordinates: Strategy[Scalar]
                                    ) -> Strategy[Tuple[Contour,
                                                        Sequence[Contour]]]:
     def to_context_with_border_and_holes(vertices: Sequence[Point]
@@ -129,7 +129,7 @@ def to_borders_and_holes_sequences(context: Context,
 
 
 def to_polygons_sequences(context: Context,
-                          coordinates: Strategy[Coordinate]
+                          coordinates: Strategy[Scalar]
                           ) -> Strategy[Sequence[Polygon]]:
     return to_polygons(context, coordinates).map(lift)
 
@@ -141,13 +141,13 @@ def to_polygons(context, coordinates):
 
 
 def to_contours_sequences(context: Context,
-                          coordinates: Strategy[Coordinate]
+                          coordinates: Strategy[Scalar]
                           ) -> Strategy[Sequence[Contour]]:
     return to_contours(context, coordinates).map(lift)
 
 
 def to_segments_sequences(context: Context,
-                          coordinates: Strategy[Coordinate]
+                          coordinates: Strategy[Scalar]
                           ) -> Strategy[Sequence[Segment]]:
     def to_segments_sequence(convex_hull: Sequence[Point],
                              center_offset: int) -> Sequence[Segment]:
@@ -182,7 +182,7 @@ def to_segments_sequences(context: Context,
 
 
 def to_touching_segments_pairs(context: Context,
-                               coordinates: Strategy[Coordinate]
+                               coordinates: Strategy[Scalar]
                                ) -> Strategy[Tuple[Segment, Segment]]:
     segment_factory = pack(context.segment_cls)
     return (to_touching_segments_pairs_endpoints(context, coordinates)
@@ -191,14 +191,14 @@ def to_touching_segments_pairs(context: Context,
 
 
 def to_touching_segments_pairs_endpoints(context: Context,
-                                         coordinates: Strategy[Coordinate]
+                                         coordinates: Strategy[Scalar]
                                          ) -> Strategy[PointsQuadruplet]:
     return (to_non_zero_angles(context, coordinates)
             .map(itemgetter(0, 1, 0, 2)))
 
 
 def to_crossing_segments_pairs(context: Context,
-                               coordinates: Strategy[Coordinate]
+                               coordinates: Strategy[Scalar]
                                ) -> Strategy[Tuple[Segment, Segment]]:
     segment_factory = pack(context.segment_cls)
     return (to_crossing_segments_pairs_endpoints(context, coordinates)
@@ -207,7 +207,7 @@ def to_crossing_segments_pairs(context: Context,
 
 
 def to_crossing_segments_pairs_endpoints(context: Context,
-                                         coordinates: Strategy[Coordinate]
+                                         coordinates: Strategy[Scalar]
                                          ) -> Strategy[PointsQuadruplet]:
     def to_segments_pairs_endpoints(
             angle_points: PointsTriplet,
@@ -232,7 +232,7 @@ def to_crossing_segments_pairs_endpoints(context: Context,
 
 
 def to_non_zero_angles(context: Context,
-                       coordinates: Strategy[Coordinate]
+                       coordinates: Strategy[Scalar]
                        ) -> Strategy[PointsTriplet]:
     def is_non_zero_angle(angle_points: PointsTriplet) -> bool:
         vertex, first_ray_point, second_ray_point = angle_points
@@ -250,7 +250,7 @@ def to_non_zero_angles(context: Context,
 
 
 def to_non_zero_sine_angles(context: Context,
-                            coordinates: Strategy[Coordinate]
+                            coordinates: Strategy[Scalar]
                             ) -> Strategy[PointsTriplet]:
     def is_non_zero_sine_angle(angle_points: PointsTriplet) -> bool:
         vertex, first_ray_point, second_ray_point = angle_points

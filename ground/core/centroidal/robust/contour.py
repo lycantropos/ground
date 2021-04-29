@@ -2,14 +2,14 @@ from typing import (Callable,
                     Type)
 
 from ground.core.hints import (Contour,
-                               Coordinate,
-                               Point)
+                               Point,
+                               Scalar)
 from ground.core.shewchuk import to_squared_points_distance
 
 
 def centroid(contour: Contour,
              point_cls: Type[Point],
-             sqrt: Callable[[Coordinate], Coordinate]) -> Point:
+             sqrt: Callable[[Scalar], Scalar]) -> Point:
     vertices = contour.vertices
     accumulated_x = accumulated_y = accumulated_length = 0
     vertex = vertices[-1]

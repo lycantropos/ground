@@ -2,15 +2,15 @@ from typing import (Callable,
                     Sequence,
                     Type)
 
-from ground.core.hints import (Coordinate,
-                               Point,
+from ground.core.hints import (Point,
+                               Scalar,
                                Segment)
 from ground.core.primitive import rationalize
 
 
 def centroid(segments: Sequence[Segment],
              point_cls: Type[Point],
-             sqrt: Callable[[Coordinate], Coordinate]) -> Point:
+             sqrt: Callable[[Scalar], Scalar]) -> Point:
     accumulated_x = accumulated_y = accumulated_length = 0
     for segment in segments:
         start, end = segment.start, segment.end

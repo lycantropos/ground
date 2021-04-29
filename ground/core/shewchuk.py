@@ -1,10 +1,10 @@
 from typing import Tuple
 
-from .hints import (Coordinate,
-                    Expansion)
+from .hints import (Expansion,
+                    Scalar)
 
 
-def _to_epsilon_and_splitter() -> Tuple[Coordinate, int]:
+def _to_epsilon_and_splitter() -> Tuple[Scalar, int]:
     every_other = True
     epsilon, splitter = 1., 1
     check = 1.
@@ -24,16 +24,14 @@ def _to_epsilon_and_splitter() -> Tuple[Coordinate, int]:
 epsilon, splitter = _to_epsilon_and_splitter()
 
 
-def fast_two_sum(left: Coordinate,
-                 right: Coordinate) -> Tuple[Coordinate, Coordinate]:
+def fast_two_sum(left: Scalar, right: Scalar) -> Tuple[Scalar, Scalar]:
     head = left + right
     right_virtual = head - left
     tail = right - right_virtual
     return tail, head
 
 
-def two_sum(left: Coordinate,
-            right: Coordinate) -> Tuple[Coordinate, Coordinate]:
+def two_sum(left: Scalar, right: Scalar) -> Tuple[Scalar, Scalar]:
     head = left + right
     right_virtual = head - left
     left_virtual = head - right_virtual
@@ -43,17 +41,16 @@ def two_sum(left: Coordinate,
     return tail, head
 
 
-def split(value: Coordinate,
+def split(value: Scalar,
           *,
-          _splitter: Coordinate = splitter) -> Tuple[Coordinate, Coordinate]:
+          _splitter: Scalar = splitter) -> Tuple[Scalar, Scalar]:
     base = _splitter * value
     high = base - (base - value)
     low = value - high
     return low, high
 
 
-def two_mul(left: Coordinate,
-            right: Coordinate) -> Tuple[Coordinate, Coordinate]:
+def two_mul(left: Scalar, right: Scalar) -> Tuple[Scalar, Scalar]:
     head = left * right
     left_low, left_high = split(left)
     right_low, right_high = split(right)
@@ -64,10 +61,10 @@ def two_mul(left: Coordinate,
     return tail, head
 
 
-def two_mul_presplit(left: Coordinate,
-                     right: Coordinate,
-                     right_low: Coordinate,
-                     right_high: Coordinate) -> Tuple[Coordinate, Coordinate]:
+def two_mul_presplit(left: Scalar,
+                     right: Scalar,
+                     right_low: Scalar,
+                     right_high: Scalar) -> Tuple[Scalar, Scalar]:
     head = left * right
     left_low, left_high = split(left)
     first_error = head - left_high * right_high
@@ -77,50 +74,45 @@ def two_mul_presplit(left: Coordinate,
     return tail, head
 
 
-def two_two_sub(left_tail: Coordinate,
-                left_head: Coordinate,
-                right_tail: Coordinate,
-                right_head: Coordinate
-                ) -> Tuple[Coordinate, Coordinate, Coordinate, Coordinate]:
+def two_two_sub(left_tail: Scalar,
+                left_head: Scalar,
+                right_tail: Scalar,
+                right_head: Scalar) -> Tuple[Scalar, Scalar, Scalar, Scalar]:
     third_tail, mid_tail, mid_head = two_one_sub(left_tail, left_head,
                                                  right_tail)
     second_tail, first_tail, head = two_one_sub(mid_tail, mid_head, right_head)
     return third_tail, second_tail, first_tail, head
 
 
-def two_two_sum(left_tail: Coordinate,
-                left_head: Coordinate,
-                right_tail: Coordinate,
-                right_head: Coordinate
-                ) -> Tuple[Coordinate, Coordinate, Coordinate, Coordinate]:
+def two_two_sum(left_tail: Scalar,
+                left_head: Scalar,
+                right_tail: Scalar,
+                right_head: Scalar) -> Tuple[Scalar, Scalar, Scalar, Scalar]:
     third_tail, mid_tail, mid_head = two_one_sum(left_tail, left_head,
                                                  right_tail)
     second_tail, first_tail, head = two_one_sum(mid_tail, mid_head, right_head)
     return third_tail, second_tail, first_tail, head
 
 
-def two_one_sum(left_tail: Coordinate,
-                left_head: Coordinate,
-                right: Coordinate
-                ) -> Tuple[Coordinate, Coordinate, Coordinate]:
+def two_one_sum(left_tail: Scalar,
+                left_head: Scalar,
+                right: Scalar) -> Tuple[Scalar, Scalar, Scalar]:
     second_tail, mid_head = two_sum(left_tail, right)
     first_tail, head = two_sum(left_head, mid_head)
     return second_tail, first_tail, head
 
 
-def two_one_sub(left_tail: Coordinate,
-                left_head: Coordinate,
-                right: Coordinate
-                ) -> Tuple[Coordinate, Coordinate, Coordinate]:
+def two_one_sub(left_tail: Scalar,
+                left_head: Scalar,
+                right: Scalar) -> Tuple[Scalar, Scalar, Scalar]:
     second_tail, mid_head = two_sub(left_tail, right)
     first_tail, head = two_sum(left_head, mid_head)
     return second_tail, first_tail, head
 
 
-def two_one_mul(left_tail: Coordinate,
-                left_head: Coordinate,
-                right: Coordinate
-                ) -> Tuple[Coordinate, Coordinate, Coordinate, Coordinate]:
+def two_one_mul(left_tail: Scalar,
+                left_head: Scalar,
+                right: Scalar) -> Tuple[Scalar, Scalar, Scalar, Scalar]:
     right_low, right_high = split(right)
     head_tail, head = two_mul_presplit(left_head, right, right_low, right_high)
     tail_tail, tail_head = two_mul_presplit(left_tail, right, right_low,
@@ -130,9 +122,9 @@ def two_one_mul(left_tail: Coordinate,
     return third_tail, second_tail, first_tail, head
 
 
-def two_square(tail: Coordinate,
-               head: Coordinate) -> Tuple[Coordinate, Coordinate, Coordinate,
-                                          Coordinate, Coordinate, Coordinate]:
+def two_square(tail: Scalar,
+               head: Scalar
+               ) -> Tuple[Scalar, Scalar, Scalar, Scalar, Scalar, Scalar]:
     first_tail_accumulator, head = square(head)
     second_tail_accumulator, first_head_accumulator = two_mul(tail,
                                                               head + head)
@@ -146,15 +138,12 @@ def two_square(tail: Coordinate,
     return fifth_tail, fourth_tail, third_tail, second_tail, first_tail, head
 
 
-def two_sub(left: Coordinate,
-            right: Coordinate) -> Tuple[Coordinate, Coordinate]:
+def two_sub(left: Scalar, right: Scalar) -> Tuple[Scalar, Scalar]:
     head = left - right
     return two_sub_tail(left, right, head), head
 
 
-def two_sub_tail(left: Coordinate,
-                 right: Coordinate,
-                 head: Coordinate) -> Coordinate:
+def two_sub_tail(left: Scalar, right: Scalar, head: Scalar) -> Scalar:
     right_virtual = left - head
     left_virtual = head + right_virtual
     right_error = right_virtual - right
@@ -162,7 +151,7 @@ def two_sub_tail(left: Coordinate,
     return left_error + right_error
 
 
-def square(value: Coordinate) -> Tuple[Coordinate, Coordinate]:
+def square(value: Scalar) -> Tuple[Scalar, Scalar]:
     head = value * value
     value_low, value_high = split(value)
     first_error = head - value_high * value_high
@@ -171,7 +160,7 @@ def square(value: Coordinate) -> Tuple[Coordinate, Coordinate]:
     return tail, head
 
 
-def add_to_expansion(expansion: Expansion, value: Coordinate) -> Expansion:
+def add_to_expansion(expansion: Expansion, value: Scalar) -> Expansion:
     """
     Adds given value to the expansion with zero components elimination.
     """
@@ -239,7 +228,7 @@ def sum_expansions(left: Expansion, right: Expansion) -> Expansion:
     return result
 
 
-def scale_expansion(expansion: Expansion, scalar: Coordinate) -> Expansion:
+def scale_expansion(expansion: Expansion, scalar: Scalar) -> Expansion:
     """
     Multiplies the expansion by given scalar with zero components elimination.
     """
@@ -264,10 +253,10 @@ def scale_expansion(expansion: Expansion, scalar: Coordinate) -> Expansion:
     return result
 
 
-def to_cross_product(first_x: Coordinate,
-                     first_y: Coordinate,
-                     second_x: Coordinate,
-                     second_y: Coordinate) -> Expansion:
+def to_cross_product(first_x: Scalar,
+                     first_y: Scalar,
+                     second_x: Scalar,
+                     second_y: Scalar) -> Expansion:
     """
     Returns expansion of vectors' cross product.
     """
@@ -277,8 +266,8 @@ def to_cross_product(first_x: Coordinate,
                        subtrahend_head)
 
 
-def to_dot_product(first_x: Coordinate, first_y: Coordinate,
-                   second_x: Coordinate, second_y: Coordinate) -> Expansion:
+def to_dot_product(first_x: Scalar, first_y: Scalar,
+                   second_x: Scalar, second_y: Scalar) -> Expansion:
     """
     Returns expansion of vectors' dot product.
     """
@@ -287,10 +276,10 @@ def to_dot_product(first_x: Coordinate, first_y: Coordinate,
     return two_two_sum(x_tail, x_head, y_tail, y_head)
 
 
-def to_squared_points_distance(first_x: Coordinate,
-                               first_y: Coordinate,
-                               second_x: Coordinate,
-                               second_y: Coordinate) -> Expansion:
+def to_squared_points_distance(first_x: Scalar,
+                               first_y: Scalar,
+                               second_x: Scalar,
+                               second_y: Scalar) -> Expansion:
     dx_tail, dx_head = two_sub(first_x, second_x)
     dy_tail, dy_head = two_sub(first_y, second_y)
     return sum_expansions(two_square(dx_tail, dx_head),

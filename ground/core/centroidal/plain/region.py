@@ -1,12 +1,11 @@
 from fractions import Fraction
-from typing import (Callable,
-                    Sequence,
+from typing import (Sequence,
                     Tuple,
                     Type)
 
 from ground.core.hints import (Contour,
-                               Coordinate,
-                               Point)
+                               Point,
+                               Scalar)
 
 
 def centroid(contour: Contour,
@@ -20,7 +19,7 @@ def centroid(contour: Contour,
 
 
 def centroid_components(vertices: Sequence[Point]
-                        ) -> Tuple[Coordinate, Coordinate, Coordinate]:
+                        ) -> Tuple[Scalar, Scalar, Scalar]:
     double_area = x_numerator = y_numerator = 0
     prev_vertex = vertices[-1]
     prev_x, prev_y = prev_vertex.x, prev_vertex.y

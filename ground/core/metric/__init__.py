@@ -5,9 +5,9 @@ from reprit.base import generate_repr
 
 from ground.core.enums import Relation
 from ground.core.hints import (Box,
-                               Coordinate,
                                Point,
                                QuaternaryPointFunction,
+                               Scalar,
                                Segment)
 from .exact import (box as exact_box,
                     point as exact_point,
@@ -19,18 +19,18 @@ from .robust import (box as robust_box,
                      point as robust_point,
                      segment as robust_segment)
 
-BoxPointMetric = Callable[[Box, Point], Coordinate]
-BoxSegmentMetric = Callable[[Box, Segment, QuaternaryPointFunction[Coordinate],
+BoxPointMetric = Callable[[Box, Point], Scalar]
+BoxSegmentMetric = Callable[[Box, Segment, QuaternaryPointFunction[Scalar],
                              QuaternaryPointFunction[Relation], Type[Point]],
-                            Coordinate]
-PointPointMetric = Callable[[Point, Point], Coordinate]
+                            Scalar]
+PointPointMetric = Callable[[Point, Point], Scalar]
 SegmentPointMetric = Callable[[Point, Point, Point,
-                               QuaternaryPointFunction[Coordinate]],
-                              Coordinate]
+                               QuaternaryPointFunction[Scalar]],
+                              Scalar]
 SegmentSegmentMetric = Callable[[Point, Point, Point, Point,
-                                 QuaternaryPointFunction[Coordinate],
+                                 QuaternaryPointFunction[Scalar],
                                  QuaternaryPointFunction[Relation]],
-                                Coordinate]
+                                Scalar]
 
 
 class Context:

@@ -10,15 +10,15 @@ from . import hints
 class Point:
     __slots__ = '_x', '_y'
 
-    def __init__(self, x: hints.Coordinate, y: hints.Coordinate) -> None:
+    def __init__(self, x: hints.Scalar, y: hints.Scalar) -> None:
         self._x, self._y = x, y
 
     @property
-    def x(self) -> hints.Coordinate:
+    def x(self) -> hints.Scalar:
         return self._x
 
     @property
-    def y(self) -> hints.Coordinate:
+    def y(self) -> hints.Scalar:
         return self._y
 
     def __eq__(self, other: 'Point') -> bool:
@@ -117,27 +117,27 @@ class Box:
     __slots__ = '_min_x', '_max_x', '_min_y', '_max_y'
 
     def __init__(self,
-                 min_x: hints.Coordinate,
-                 max_x: hints.Coordinate,
-                 min_y: hints.Coordinate,
-                 max_y: hints.Coordinate) -> None:
+                 min_x: hints.Scalar,
+                 max_x: hints.Scalar,
+                 min_y: hints.Scalar,
+                 max_y: hints.Scalar) -> None:
         self._min_x, self._max_x, self._min_y, self._max_y = (min_x, max_x,
                                                               min_y, max_y)
 
     @property
-    def max_x(self) -> hints.Coordinate:
+    def max_x(self) -> hints.Scalar:
         return self._max_x
 
     @property
-    def max_y(self) -> hints.Coordinate:
+    def max_y(self) -> hints.Scalar:
         return self._max_y
 
     @property
-    def min_x(self) -> hints.Coordinate:
+    def min_x(self) -> hints.Scalar:
         return self._min_x
 
     @property
-    def min_y(self) -> hints.Coordinate:
+    def min_y(self) -> hints.Scalar:
         return self._min_y
 
     def __eq__(self, other: 'Box') -> bool:

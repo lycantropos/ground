@@ -3,9 +3,9 @@ from typing import (Tuple,
 
 from ground.core.enums import Relation
 from ground.core.hints import (Box,
-                               Coordinate,
                                Point,
                                QuaternaryPointFunction,
+                               Scalar,
                                Segment)
 from ground.core.shewchuk import (sum_expansions,
                                   two_square,
@@ -15,7 +15,7 @@ from .segment import (point_squared_distance as segment_point_squared_distance,
                       as segment_segment_squared_distance)
 
 
-def point_squared_distance(box: Box, point: Point) -> Coordinate:
+def point_squared_distance(box: Box, point: Point) -> Scalar:
     dx_tail, dx_head = _linear_interval_distance(box.min_x, box.max_x, point.x)
     dy_tail, dy_head = _linear_interval_distance(box.min_y, box.max_y, point.y)
     return sum_expansions(two_square(dx_tail, dx_head),
@@ -24,10 +24,10 @@ def point_squared_distance(box: Box, point: Point) -> Coordinate:
 
 def segment_squared_distance(box: Box,
                              segment: Segment,
-                             dot_producer: QuaternaryPointFunction[Coordinate],
+                             dot_producer: QuaternaryPointFunction[Scalar],
                              segments_relater
                              : QuaternaryPointFunction[Relation],
-                             point_cls: Type[Point]) -> Coordinate:
+                             point_cls: Type[Point]) -> Scalar:
     segment_start, segment_end = segment.start, segment.end
     min_x, min_y, max_x, max_y = box.min_x, box.min_y, box.max_x, box.max_y
     return (0
@@ -53,10 +53,10 @@ def segment_squared_distance(box: Box,
                     dot_producer, segments_relater, point_cls))))
 
 
-def _linear_interval_distance(min_coordinate: Coordinate,
-                              max_coordinate: Coordinate,
-                              coordinate: Coordinate
-                              ) -> Tuple[Coordinate, Coordinate]:
+def _linear_interval_distance(min_coordinate: Scalar,
+                              max_coordinate: Scalar,
+                              coordinate: Scalar
+                              ) -> Tuple[Scalar, Scalar]:
     return (two_sub(min_coordinate, coordinate)
             if coordinate < min_coordinate
             else (two_sub(coordinate, max_coordinate)
@@ -65,15 +65,15 @@ def _linear_interval_distance(min_coordinate: Coordinate,
 
 
 def _non_degenerate_segment_squared_distance(
-        max_x: Coordinate,
-        max_y: Coordinate,
-        min_x: Coordinate,
-        min_y: Coordinate,
+        max_x: Scalar,
+        max_y: Scalar,
+        min_x: Scalar,
+        min_y: Scalar,
         segment_start: Point,
         segment_end: Point,
-        dot_producer: QuaternaryPointFunction[Coordinate],
+        dot_producer: QuaternaryPointFunction[Scalar],
         segments_relater: QuaternaryPointFunction[Relation],
-        point_cls: Type[Point]) -> Coordinate:
+        point_cls: Type[Point]) -> Scalar:
     bottom_left, bottom_right = (point_cls(min_x, min_y),
                                  point_cls(max_x, min_y))
     bottom_side_distance = segment_segment_squared_distance(

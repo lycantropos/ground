@@ -6,10 +6,10 @@ from typing import (Callable,
 from reprit.base import generate_repr
 
 from ground.core.hints import (Contour,
-                               Coordinate,
                                Multipoint,
                                Point,
                                Polygon,
+                               Scalar,
                                Segment)
 from .exact import (contour as exact_contour,
                     multipoint as exact_multipoint,
@@ -30,12 +30,12 @@ from .robust import (contour as robust_contour,
                      polygon as robust_polygon,
                      region as robust_region)
 
-ContourCentroid = Callable[[Contour, Type[Point],
-                            Callable[[Coordinate], Coordinate]], Point]
+ContourCentroid = Callable[[Contour, Type[Point], Callable[[Scalar], Scalar]],
+                           Point]
 MultipointCentroid = Callable[[Multipoint, Type[Point]], Point]
 MultipolygonCentroid = Callable[[Sequence[Polygon], Type[Point]], Point]
 MultisegmentCentroid = Callable[[Sequence[Segment], Type[Point],
-                                 Callable[[Coordinate], Coordinate]], Point]
+                                 Callable[[Scalar], Scalar]], Point]
 PolygonCentroid = Callable[[Polygon, Type[Point]], Point]
 RegionCentroid = Callable[[Contour, Type[Point]], Point]
 

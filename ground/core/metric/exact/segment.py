@@ -1,7 +1,7 @@
 from ground.core.enums import Relation
-from ground.core.hints import (Coordinate,
-                               Point,
-                               QuaternaryPointFunction)
+from ground.core.hints import (Point,
+                               QuaternaryPointFunction,
+                               Scalar)
 from ground.core.primitive import rationalize
 from .point import point_squared_distance as point_point_squared_distance
 
@@ -9,8 +9,8 @@ from .point import point_squared_distance as point_point_squared_distance
 def point_squared_distance(segment_start: Point,
                            segment_end: Point,
                            point: Point,
-                           dot_producer: QuaternaryPointFunction[Coordinate]
-                           ) -> Coordinate:
+                           dot_producer: QuaternaryPointFunction[Scalar]
+                           ) -> Scalar:
     end_factor = max(0, min(1,
                             dot_producer(segment_start, point, segment_start,
                                          segment_end)
@@ -29,10 +29,10 @@ def segment_squared_distance(first_start: Point,
                              first_end: Point,
                              second_start: Point,
                              second_end: Point,
-                             dot_producer: QuaternaryPointFunction[Coordinate],
+                             dot_producer: QuaternaryPointFunction[Scalar],
                              segments_relater
                              : QuaternaryPointFunction[Relation]
-                             ) -> Coordinate:
+                             ) -> Scalar:
     return (min(point_squared_distance(first_start, first_end, second_start,
                                        dot_producer),
                 point_squared_distance(first_start, first_end, second_end,

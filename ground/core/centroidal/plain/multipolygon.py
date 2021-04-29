@@ -4,9 +4,9 @@ from typing import (Callable,
                     Tuple,
                     Type)
 
-from ground.core.hints import (Coordinate,
-                               Point,
-                               Polygon)
+from ground.core.hints import (Point,
+                               Polygon,
+                               Scalar)
 from .polygon import centroid_components as polygon_centroid_components
 
 
@@ -21,7 +21,7 @@ def centroid(polygons: Sequence[Polygon],
 
 
 def centroid_components(polygons: Sequence[Polygon]
-                        ) -> Tuple[Coordinate, Coordinate, Coordinate]:
+                        ) -> Tuple[Scalar, Scalar, Scalar]:
     iterator = iter(polygons)
     polygon = next(iterator)
     x_numerator, y_numerator, double_area = polygon_centroid_components(

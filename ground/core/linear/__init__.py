@@ -5,7 +5,8 @@ from reprit.base import generate_repr
 
 from ground.core.enums import Relation
 from ground.core.hints import (Point,
-                               QuaternaryPointFunction)
+                               QuaternaryPointFunction,
+                               Scalar)
 from .exact import segment as exact_segment
 from .plain import segment as plain_segment
 

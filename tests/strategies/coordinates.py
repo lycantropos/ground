@@ -4,15 +4,14 @@ from fractions import Fraction
 
 from hypothesis import strategies
 
-from ground.hints import Coordinate
+from ground.hints import Scalar
 from tests.hints import Strategy
 
 MAX_COORDINATE = 10 ** 10
 MIN_COORDINATE = -MAX_COORDINATE
 
 
-def to_floats(min_value: Coordinate,
-              max_value: Coordinate) -> Strategy:
+def to_floats(min_value: Scalar, max_value: Scalar) -> Strategy[float]:
     return (strategies.floats(min_value=min_value,
                               max_value=max_value,
                               allow_nan=False,

@@ -4,9 +4,9 @@ from typing import (Sequence,
                     Type)
 
 from ground.core.hints import (Contour,
-                               Coordinate,
                                Point,
-                               Polygon)
+                               Polygon,
+                               Scalar)
 from .region import centroid_components as region_centroid_components
 
 
@@ -22,7 +22,7 @@ def centroid(polygon: Polygon,
 
 def centroid_components(border: Contour,
                         holes: Sequence[Contour]
-                        ) -> Tuple[Coordinate, Coordinate, Coordinate]:
+                        ) -> Tuple[Scalar, Scalar, Scalar]:
     x_numerator, y_numerator, double_area = region_centroid_components(
             border.vertices)
     for hole in holes:

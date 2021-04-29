@@ -21,7 +21,7 @@ from .core import (angular as _angular,
                    vector as _vector)
 from .core.hints import QuaternaryPointFunction as _QuaternaryPointFunction
 
-_QuaternaryFunction = _QuaternaryPointFunction[_hints.Coordinate]
+_QuaternaryFunction = _QuaternaryPointFunction[_hints.Scalar]
 Kind = _enums.Kind
 Orientation = _enums.Orientation
 Relation = _enums.Relation
@@ -58,7 +58,7 @@ class Context:
                  polygon_cls: _Type[_hints.Polygon] = _geometries.Polygon,
                  segment_cls: _Type[_hints.Segment] = _geometries.Segment,
                  mode: Mode = Mode.EXACT,
-                 sqrt: _Callable[[_hints.Coordinate], _hints.Coordinate]
+                 sqrt: _Callable[[_hints.Scalar], _hints.Scalar]
                  = _sqrt) -> None:
         self._box_cls = box_cls
         self._contour_cls = contour_cls
@@ -282,7 +282,7 @@ class Context:
         return self._segment_cls
 
     @property
-    def sqrt(self) -> _Callable[[_hints.Coordinate], _hints.Coordinate]:
+    def sqrt(self) -> _Callable[[_hints.Scalar], _hints.Scalar]:
         """Returns function for computing square root."""
         return self._sqrt
 
@@ -343,7 +343,7 @@ class Context:
     def box_segment_squared_distance(self,
                                      box: _hints.Box,
                                      segment: _hints.Segment
-                                     ) -> _hints.Coordinate:
+                                     ) -> _hints.Scalar:
         """
         Returns squared Euclidean distance between box and a segment.
 
@@ -791,7 +791,7 @@ class Context:
     def segment_point_squared_distance(self,
                                        segment: _hints.Segment,
                                        point: _hints.Point
-                                       ) -> _hints.Coordinate:
+                                       ) -> _hints.Scalar:
         """
         Returns squared Euclidean distance between segment and a point.
 
@@ -911,7 +911,7 @@ class Context:
                                   first_end: _hints.Point,
                                   second_start: _hints.Point,
                                   second_end: _hints.Point
-                                  ) -> _hints.Coordinate:
+                                  ) -> _hints.Scalar:
         """
         Returns squared Euclidean distance between two segments
         given their endpoints.

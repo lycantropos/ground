@@ -4,9 +4,9 @@ from typing import (Iterable,
 
 from .hints import (Box,
                     Contour,
-                    Coordinate,
                     Point,
                     Polygon,
+                    Scalar,
                     Segment)
 
 
@@ -66,8 +66,8 @@ def from_segments(segments: Iterable[Segment], box_cls: Type[Box]) -> Box:
     return box_cls(min_x, max_x, min_y, max_y)
 
 
-def _from_points(points: Iterable[Point]) -> Tuple[Coordinate, Coordinate,
-                                                   Coordinate, Coordinate]:
+def _from_points(points: Iterable[Point]
+                 ) -> Tuple[Scalar, Scalar, Scalar, Scalar]:
     iterator = iter(points)
     point = next(iterator)
     max_x = min_x = point.x
@@ -84,8 +84,7 @@ def _from_points(points: Iterable[Point]) -> Tuple[Coordinate, Coordinate,
     return min_x, max_x, min_y, max_y
 
 
-def _from_segment(segment: Segment) -> Tuple[Coordinate, Coordinate,
-                                             Coordinate, Coordinate]:
+def _from_segment(segment: Segment) -> Tuple[Scalar, Scalar, Scalar, Scalar]:
     start, end = segment.start, segment.end
     max_x, min_x = (end.x, start.x) if start.x < end.x else (start.x, end.x)
     max_y, min_y = (end.y, start.y) if start.y < end.y else (start.y, end.y)

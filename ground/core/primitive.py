@@ -3,8 +3,8 @@ from numbers import (Rational,
                      Real)
 from typing import Type
 
-from .hints import (Coordinate,
-                    Point)
+from .hints import (Point,
+                    Scalar)
 
 
 def to_rational_point(point: Point[Real],
@@ -12,7 +12,7 @@ def to_rational_point(point: Point[Real],
     return point_cls(rationalize(point.x), rationalize(point.y))
 
 
-def rationalize(value: Coordinate) -> Coordinate:
+def rationalize(value: Scalar) -> Scalar:
     try:
         return Fraction(value)
     except TypeError:

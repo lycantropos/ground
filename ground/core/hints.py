@@ -14,12 +14,12 @@ except ImportError:
     from typing_extensions import (Protocol,
                                    runtime_checkable)
 
-Coordinate = TypeVar('Coordinate', Expression, Real)
-Expansion = Sequence[Coordinate]
+Scalar = TypeVar('Scalar', Expression, Real)
+Expansion = Sequence[Scalar]
 
 
 @runtime_checkable
-class Point(Protocol[Coordinate]):
+class Point(Protocol[Scalar]):
     """
     **Point** is a minimal element of the plane
     defined by pair of real numbers (called *point's coordinates*).
@@ -30,17 +30,17 @@ class Point(Protocol[Coordinate]):
     __slots__ = ()
 
     @abstractmethod
-    def __new__(cls, x: Coordinate, y: Coordinate) -> 'Point':
+    def __new__(cls, x: Scalar, y: Scalar) -> 'Point':
         """Constructs point given its coordinates."""
 
     @property
     @abstractmethod
-    def x(self) -> Coordinate:
+    def x(self) -> Scalar:
         """First coordinate of the point."""
 
     @property
     @abstractmethod
-    def y(self) -> Coordinate:
+    def y(self) -> Scalar:
         """Second coordinate of the point."""
 
     @abstractmethod
@@ -74,7 +74,7 @@ TernaryPointFunction = Callable[[Point, Point, Point], Range]
 
 
 @runtime_checkable
-class Box(Protocol[Coordinate]):
+class Box(Protocol[Scalar]):
     """
     **Box** is a limited closed region
     defined by axis-aligned rectangular contour.
@@ -83,30 +83,30 @@ class Box(Protocol[Coordinate]):
 
     @abstractmethod
     def __new__(cls,
-                min_x: Coordinate,
-                max_x: Coordinate,
-                min_y: Coordinate,
-                max_y: Coordinate) -> 'Box':
+                min_x: Scalar,
+                max_x: Scalar,
+                min_y: Scalar,
+                max_y: Scalar) -> 'Box':
         """Constructs box given its coordinates limits."""
 
     @property
     @abstractmethod
-    def max_x(self) -> Coordinate:
+    def max_x(self) -> Scalar:
         """Returns maximum ``x``-coordinate of the box."""
 
     @property
     @abstractmethod
-    def max_y(self) -> Coordinate:
+    def max_y(self) -> Scalar:
         """Returns maximum ``y``-coordinate of the box."""
 
     @property
     @abstractmethod
-    def min_x(self) -> Coordinate:
+    def min_x(self) -> Scalar:
         """Returns minimum ``x``-coordinate of the box."""
 
     @property
     @abstractmethod
-    def min_y(self) -> Coordinate:
+    def min_y(self) -> Scalar:
         """Returns minimum ``y``-coordinate of the box."""
 
     @abstractmethod
@@ -133,7 +133,7 @@ Maybe = Union[Empty, _T]
 
 
 @runtime_checkable
-class Multipoint(Protocol[Coordinate]):
+class Multipoint(Protocol[Scalar]):
     """
     **Multipoint** is a discrete geometry
     that represents non-empty set of unique points.
@@ -155,7 +155,7 @@ class Multipoint(Protocol[Coordinate]):
 
 
 @runtime_checkable
-class Segment(Protocol[Coordinate]):
+class Segment(Protocol[Scalar]):
     """
     **Segment** (or **line segment**) is a linear geometry that represents
     a limited continuous part of the line containing more than one point
@@ -183,7 +183,7 @@ class Segment(Protocol[Coordinate]):
 
 
 @runtime_checkable
-class Multisegment(Protocol[Coordinate]):
+class Multisegment(Protocol[Scalar]):
     """
     **Multisegment** is a linear geometry that represents set of two or more
     non-crossing and non-overlapping segments.
@@ -205,7 +205,7 @@ class Multisegment(Protocol[Coordinate]):
 
 
 @runtime_checkable
-class Contour(Protocol[Coordinate]):
+class Contour(Protocol[Scalar]):
     """
     **Contour** is a linear geometry that represents closed simple polyline
     defined by a sequence of points (called *contour's vertices*).
@@ -227,7 +227,7 @@ class Contour(Protocol[Coordinate]):
 
 
 @runtime_checkable
-class Polygon(Protocol[Coordinate]):
+class Polygon(Protocol[Scalar]):
     """
     **Polygon** is a shaped geometry that represents limited closed region
     defined by the pair of outer contour (called *polygon's border*)
@@ -255,7 +255,7 @@ class Polygon(Protocol[Coordinate]):
 
 
 @runtime_checkable
-class Multipolygon(Protocol[Coordinate]):
+class Multipolygon(Protocol[Scalar]):
     """
     **Multipolygon** is a shaped geometry that represents set of two or more
     non-overlapping polygons intersecting only in discrete set of points.
@@ -281,7 +281,7 @@ Shaped = Union[Polygon, Multipolygon]
 
 
 @runtime_checkable
-class Mix(Protocol[Coordinate]):
+class Mix(Protocol[Scalar]):
     """
     **Mix** is a set of two or more non-empty geometries
     with different dimensions.
