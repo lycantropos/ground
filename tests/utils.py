@@ -19,10 +19,15 @@ from hypothesis import strategies
 from ground.base import (Context,
                          Mode,
                          Orientation,
-                         Relation,
-                         get_context)
+                         Relation)
 from ground.core.angular import to_sign
-from ground.hints import Coordinate
+from ground.hints import (Box,
+                          Contour,
+                          Coordinate,
+                          Multipoint,
+                          Point,
+                          Polygon,
+                          Segment)
 from .hints import (Permutation,
                     Strategy)
 
@@ -36,13 +41,6 @@ SYMMETRIC_LINEAR_RELATIONS = (Relation.CROSS, Relation.DISJOINT,
                               Relation.EQUAL, Relation.OVERLAP, Relation.TOUCH)
 LINEAR_RELATIONS = ASYMMETRIC_LINEAR_RELATIONS + SYMMETRIC_LINEAR_RELATIONS
 
-_context = get_context()
-Box = _context.box_cls
-Contour = _context.contour_cls
-Multipoint = _context.multipoint_cls
-Point = _context.point_cls
-Polygon = _context.polygon_cls
-Segment = _context.segment_cls
 to_sign = to_sign
 
 
@@ -127,12 +125,12 @@ def permute(sequence: Sequence[_T1], index: int) -> Sequence[_T1]:
 
 
 def reverse_box_coordinates(box: Box) -> Point:
-    return Box(box.min_y, box.max_y, box.min_x, box.max_x)
+    return type(box)(box.min_y, box.max_y, box.min_x, box.max_x)
 
 
 def reverse_contour_coordinates(contour: Contour) -> Contour:
-    return Contour([reverse_point_coordinates(vertex)
-                    for vertex in contour.vertices])
+    return type(contour)([reverse_point_coordinates(vertex)
+                          for vertex in contour.vertices])
 
 
 def reverse_contour_vertices(contour: Contour) -> Contour:
@@ -145,7 +143,7 @@ def reverse_contours_coordinates(contours: Sequence[Contour]
 
 
 def reverse_point_coordinates(point: Point) -> Point:
-    return Point(point.y, point.x)
+    return type(point)(point.y, point.x)
 
 
 def reverse_points_coordinates(points: Sequence[Point]) -> Sequence[Point]:
@@ -153,9 +151,9 @@ def reverse_points_coordinates(points: Sequence[Point]) -> Sequence[Point]:
 
 
 def reverse_polygon_coordinates(polygon: Polygon) -> Polygon:
-    return Polygon(reverse_contour_coordinates(polygon.border),
-                   [reverse_contour_coordinates(hole)
-                    for hole in polygon.holes])
+    return type(polygon)(reverse_contour_coordinates(polygon.border),
+                         [reverse_contour_coordinates(hole)
+                          for hole in polygon.holes])
 
 
 def reverse_polygons_coordinates(polygons: Sequence[Polygon]
@@ -164,12 +162,12 @@ def reverse_polygons_coordinates(polygons: Sequence[Polygon]
 
 
 def reverse_segment_coordinates(segment: Segment) -> Segment:
-    return Segment(reverse_point_coordinates(segment.start),
-                   reverse_point_coordinates(segment.end))
+    return type(segment)(reverse_point_coordinates(segment.start),
+                         reverse_point_coordinates(segment.end))
 
 
 def reverse_segment_endpoints(segment: Segment) -> Segment:
-    return Segment(segment.end, segment.start)
+    return type(segment)(segment.end, segment.start)
 
 
 def reverse_segments_endpoints(segments: Sequence[Segment]
@@ -240,7 +238,7 @@ def to_pairs(strategy: Strategy[_T1]) -> Strategy[Tuple[_T1, _T1]]:
 
 
 def to_perpendicular_point(point: Point) -> Point:
-    return Point(-point.y, point.x)
+    return type(point)(-point.y, point.x)
 
 
 def to_quadruplets(strategy: Strategy[_T1]
