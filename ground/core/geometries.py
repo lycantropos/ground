@@ -42,6 +42,18 @@ class Point:
     __repr__ = generate_repr(__init__)
 
 
+class Empty:
+    __slots__ = ()
+
+    def __init__(self) -> None:
+        pass
+
+    def __eq__(self, other: 'Empty'):
+        return isinstance(other, Empty) or NotImplemented
+
+    __repr__ = generate_repr(__init__)
+
+
 class Multipoint:
     __slots__ = '_points',
 

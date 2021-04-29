@@ -37,16 +37,17 @@ class Mode(_enum.IntEnum):
 
 class Context:
     """Represents common language for computational geometry."""
-    __slots__ = ('_box_cls', '_centroidal', '_contour_cls', '_incircle',
-                 '_linear', '_measured', '_metric', '_mix_cls', '_mode',
-                 '_multipoint_cls', '_multipolygon_cls', '_multisegment_cls',
-                 '_point_cls', '_polygon_cls', '_segment_cls', '_sqrt',
-                 '_vector')
+    __slots__ = ('_box_cls', '_centroidal', '_contour_cls', '_empty',
+                 '_empty_cls', '_incircle', '_linear', '_measured', '_metric',
+                 '_mix_cls', '_mode', '_multipoint_cls', '_multipolygon_cls',
+                 '_multisegment_cls', '_point_cls', '_polygon_cls',
+                 '_segment_cls', '_sqrt', '_vector')
 
     def __init__(self,
                  *,
                  box_cls: _Type[_hints.Box] = _geometries.Box,
                  contour_cls: _Type[_hints.Contour] = _geometries.Contour,
+                 empty_cls: _Type[_hints.Empty] = _geometries.Empty,
                  mix_cls: _Type[_hints.Mix] = _geometries.Mix,
                  multipoint_cls: _Type[_hints.Multipoint]
                  = _geometries.Multipoint,
@@ -62,6 +63,7 @@ class Context:
                  = _sqrt) -> None:
         self._box_cls = box_cls
         self._contour_cls = contour_cls
+        self._empty, self._empty_cls = empty_cls(), empty_cls
         self._mix_cls = mix_cls
         self._multipoint_cls = multipoint_cls
         self._multipolygon_cls = multipolygon_cls
@@ -168,6 +170,16 @@ class Context:
         True
         """
         return self._vector.dot_product
+
+    @property
+    def empty(self) -> _hints.Empty:
+        """Returns an empty geometry."""
+        return self._empty
+
+    @property
+    def empty_cls(self) -> _Type[_hints.Empty]:
+        """Returns type for empty geometries."""
+        return self._empty_cls
 
     @property
     def mix_cls(self) -> _Type[_hints.Mix]:
