@@ -277,7 +277,7 @@ def cleave_in_tuples(*functions: Callable[..., Strategy[_T]]
                      ) -> Callable[..., Strategy[Tuple[_T, ...]]]:
     cleft = cleave(*functions)
 
-    def bound(*args: Any, **kwargs: Any) -> Strategy[Tuple[_T, ...]]:
+    def to_tuples(*args: Any, **kwargs: Any) -> Strategy[Tuple[_T, ...]]:
         return strategies.tuples(*cleft(*args, **kwargs))
 
-    return bound
+    return to_tuples
