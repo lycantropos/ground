@@ -460,21 +460,26 @@ class Context:
         """
         return _boxed.from_contours(contours, self.box_cls)
 
-    def is_region_convex(self, vertices: _Sequence[_hints.Point]) -> bool:
+    def is_region_convex(self, contour: _hints.Contour) -> bool:
         """
-        Checks if region (given its contour vertices) is convex.
+        Checks if region (given its contour) is convex.
 
         Time complexity:
-            ``O(len(vertices))``
+            ``O(len(contour.vertices))``
         Memory complexity:
             ``O(1)``
 
         >>> context = get_context()
+        >>> Contour = context.contour_cls
         >>> Point = context.point_cls
-        >>> context.is_region_convex([Point(0, 0), Point(2, 0), Point(2, 2),
-        ...                           Point(0, 2)])
+        >>> context.is_region_convex(Contour([Point(0, 0), Point(3, 0),
+        ...                                   Point(1, 1), Point(0, 3)]))
+        False
+        >>> context.is_region_convex(Contour([Point(0, 0), Point(2, 0),
+        ...                                   Point(2, 2), Point(0, 2)]))
         True
         """
+        vertices = contour.vertices
         vertices_count = len(vertices)
         if vertices_count == 3:
             return True
