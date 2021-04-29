@@ -836,10 +836,8 @@ class Context:
         return _boxed.from_segments(segments, self.box_cls)
 
     def segments_intersection(self,
-                              first_start: _hints.Point,
-                              first_end: _hints.Point,
-                              second_start: _hints.Point,
-                              second_end: _hints.Point) -> _hints.Point:
+                              first: _hints.Segment,
+                              second: _hints.Segment) -> _hints.Point:
         """
         Returns intersection point of two segments.
 
@@ -850,22 +848,23 @@ class Context:
 
         >>> context = get_context()
         >>> Point = context.point_cls
-        >>> (context.segments_intersection(Point(0, 0), Point(2, 0),
-        ...                                Point(0, 0), Point(0, 1))
+        >>> Segment = context.segment_cls
+        >>> (context.segments_intersection(Segment(Point(0, 0), Point(2, 0)),
+        ...                                Segment(Point(0, 0), Point(0, 1)))
         ...  == Point(0, 0))
         True
-        >>> (context.segments_intersection(Point(0, 0), Point(2, 0),
-        ...                                Point(1, 0), Point(1, 1))
+        >>> (context.segments_intersection(Segment(Point(0, 0), Point(2, 0)),
+        ...                                Segment(Point(1, 0), Point(1, 1)))
         ...  == Point(1, 0))
         True
-        >>> (context.segments_intersection(Point(0, 0), Point(2, 0),
-        ...                                Point(2, 0), Point(3, 0))
+        >>> (context.segments_intersection(Segment(Point(0, 0), Point(2, 0)),
+        ...                                Segment(Point(2, 0), Point(3, 0)))
         ...  == Point(2, 0))
         True
         """
-        return self._linear.intersector(
-                first_start, first_end, second_start, second_end,
-                self.cross_product, self.point_cls)
+        return self._linear.intersector(first.start, first.end, second.start,
+                                        second.end, self.cross_product,
+                                        self.point_cls)
 
     def segments_relation(self,
                           test_start: _hints.Point,
