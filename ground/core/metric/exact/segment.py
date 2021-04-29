@@ -1,4 +1,3 @@
-from ground.core.enums import Relation
 from ground.core.hints import (Point,
                                QuaternaryPointFunction,
                                Scalar)
@@ -30,17 +29,16 @@ def segment_squared_distance(first_start: Point,
                              second_start: Point,
                              second_end: Point,
                              dot_producer: QuaternaryPointFunction[Scalar],
-                             segments_relater
-                             : QuaternaryPointFunction[Relation]
-                             ) -> Scalar:
-    return (min(point_squared_distance(first_start, first_end, second_start,
-                                       dot_producer),
-                point_squared_distance(first_start, first_end, second_end,
-                                       dot_producer),
-                point_squared_distance(second_start, second_end, first_start,
-                                       dot_producer),
-                point_squared_distance(second_start, second_end, first_end,
-                                       dot_producer))
-            if segments_relater(first_start, first_end, second_start,
-                                second_end) is Relation.DISJOINT
-            else 0)
+                             segments_collision_detector
+                             : QuaternaryPointFunction[bool]) -> Scalar:
+    return (0
+            if segments_collision_detector(first_start, first_end,
+                                           second_start, second_end)
+            else min(point_squared_distance(first_start, first_end,
+                                            second_start, dot_producer),
+                     point_squared_distance(first_start, first_end, second_end,
+                                            dot_producer),
+                     point_squared_distance(second_start, second_end,
+                                            first_start, dot_producer),
+                     point_squared_distance(second_start, second_end,
+                                            first_end, dot_producer)))

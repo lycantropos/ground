@@ -3,13 +3,15 @@ from typing import (Callable,
 
 from reprit.base import generate_repr
 
-from ground.core.enums import Relation
+from ground.core.enums import (Orientation,
+                               Relation)
 from ground.core.hints import (Point,
-                               QuaternaryPointFunction,
-                               Scalar)
+                               QuaternaryPointFunction)
 from .exact import segment as exact_segment
 from .plain import segment as plain_segment
 
+CollisionDetector = Callable[[Point, Point, Point, Point,
+                              QuaternaryPointFunction], bool]
 ContainmentChecker = Callable[[Point, Point, Point, QuaternaryPointFunction],
                               bool]
 Intersector = Callable[[Point, Point, Point, Point, QuaternaryPointFunction,
@@ -19,6 +21,39 @@ Relater = Callable[[Point, Point, Point, Point, QuaternaryPointFunction],
 
 
 class Context:
+    @staticmethod
+    def collision_detector(first_start: Point,
+                           first_end: Point,
+                           second_start: Point,
+                           second_end: Point,
+                           orienteer: QuaternaryPointFunction[Orientation]
+                           ) -> bool:
+        second_start_orientation = orienteer(first_start, first_end,
+                                             second_start)
+        if (second_start_orientation is Orientation.COLLINEAR
+                and plain_segment.bounding_box_contains_point(first_start,
+                                                              first_end,
+                                                              second_end)):
+            return True
+        second_end_orientation = orienteer(first_start, first_end, second_end)
+        if (second_end_orientation is Orientation.COLLINEAR
+                and plain_segment.bounding_box_contains_point(first_start,
+                                                              first_end,
+                                                              second_end)):
+            return True
+        first_start_orientation = orienteer(second_start, second_end,
+                                            first_start)
+        if (first_start_orientation is Orientation.COLLINEAR
+                and plain_segment.bounding_box_contains_point(
+                        second_start, second_end, first_end)):
+            return True
+        first_end_orientation = orienteer(second_start, second_end, first_end)
+        return (first_end_orientation is Orientation.COLLINEAR
+                and plain_segment.bounding_box_contains_point(
+                        second_start, second_end, first_end)
+                or (second_start_orientation is not second_end_orientation
+                    and first_start_orientation is not first_end_orientation))
+
     __slots__ = '_containment_checker', '_intersector', '_relater'
 
     def __init__(self,

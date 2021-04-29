@@ -367,7 +367,7 @@ class Context:
         True
         """
         return self._metric.box_segment_squared_metric(
-                box, segment, self.dot_product, self.segments_relation,
+                box, segment, self.dot_product, self._segments_intersect,
                 self.point_cls)
 
     def contour_box(self, contour: _hints.Contour) -> _hints.Box:
@@ -935,7 +935,16 @@ class Context:
         """
         return self._metric.segment_segment_squared_metric(
                 first_start, first_end, second_start, second_end,
-                self.dot_product, self.segments_relation)
+                self.dot_product, self._segments_intersect)
+
+    def _segments_intersect(self,
+                            first_start: _hints.Point,
+                            first_end: _hints.Point,
+                            second_start: _hints.Point,
+                            second_end: _hints.Point) -> bool:
+        return self._linear.collision_detector(first_start, first_end,
+                                               second_start, second_end,
+                                               self.angle_orientation)
 
 
 _context = _ContextVar('context',

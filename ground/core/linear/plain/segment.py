@@ -11,7 +11,7 @@ def contains_point(start: Point,
                    point: Point,
                    cross_product: QuaternaryPointFunction) -> bool:
     return (point == start or point == end
-            or (_bounding_box_contains(start, end, point)
+            or (bounding_box_contains_point(start, end, point)
                 and not cross_product(start, end, start, point)))
 
 
@@ -106,7 +106,8 @@ def relate(test_start: Point,
         return Relation.DISJOINT
 
 
-def _bounding_box_contains(start: Point, end: Point, point: Point) -> bool:
+def bounding_box_contains_point(start: Point, end: Point, point: Point
+                                ) -> bool:
     start_x, start_y, end_x, end_y = start.x, start.y, end.x, end.y
     min_x, max_x = (start_x, end_x) if start_x < end_x else (end_x, start_x)
     min_y, max_y = (start_y, end_y) if start_y < end_y else (end_y, start_y)

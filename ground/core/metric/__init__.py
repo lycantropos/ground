@@ -3,7 +3,6 @@ from typing import (Callable,
 
 from reprit.base import generate_repr
 
-from ground.core.enums import Relation
 from ground.core.hints import (Box,
                                Point,
                                QuaternaryPointFunction,
@@ -21,7 +20,7 @@ from .robust import (box as robust_box,
 
 BoxPointMetric = Callable[[Box, Point], Scalar]
 BoxSegmentMetric = Callable[[Box, Segment, QuaternaryPointFunction[Scalar],
-                             QuaternaryPointFunction[Relation], Type[Point]],
+                             QuaternaryPointFunction[bool], Type[Point]],
                             Scalar]
 PointPointMetric = Callable[[Point, Point], Scalar]
 SegmentPointMetric = Callable[[Point, Point, Point,
@@ -29,7 +28,7 @@ SegmentPointMetric = Callable[[Point, Point, Point,
                               Scalar]
 SegmentSegmentMetric = Callable[[Point, Point, Point, Point,
                                  QuaternaryPointFunction[Scalar],
-                                 QuaternaryPointFunction[Relation]],
+                                 QuaternaryPointFunction[bool]],
                                 Scalar]
 
 
