@@ -65,7 +65,9 @@ class Multipoint:
         return self._points
 
     def __eq__(self, other: 'Multipoint') -> bool:
-        return are_sequences_equivalent(self.points, other.points)
+        return (are_sequences_equivalent(self.points, other.points)
+                if isinstance(other, Multipoint)
+                else NotImplemented)
 
     __repr__ = generate_repr(__init__)
 
@@ -104,7 +106,9 @@ class Multisegment:
         return self._segments
 
     def __eq__(self, other: 'Multisegment') -> bool:
-        return are_sequences_equivalent(self.segments, other.segments)
+        return (are_sequences_equivalent(self.segments, other.segments)
+                if isinstance(other, Multisegment)
+                else NotImplemented)
 
     __repr__ = generate_repr(__init__)
 
@@ -120,7 +124,9 @@ class Contour:
         return self._vertices
 
     def __eq__(self, other: 'Contour') -> bool:
-        return are_sequences_equivalent(self.vertices, other.vertices)
+        return (are_sequences_equivalent(self.vertices, other.vertices)
+                if isinstance(other, Contour)
+                else NotImplemented)
 
     __repr__ = generate_repr(__init__)
 
@@ -178,7 +184,9 @@ class Polygon:
 
     def __eq__(self, other: 'Polygon') -> bool:
         return (self.border == other.border
-                and are_sequences_equivalent(self.holes, other.holes))
+                and are_sequences_equivalent(self.holes, other.holes)
+                if isinstance(other, Polygon)
+                else NotImplemented)
 
     __repr__ = generate_repr(__init__)
 
@@ -194,7 +202,9 @@ class Multipolygon:
         return self._polygons
 
     def __eq__(self, other: 'Multipolygon') -> bool:
-        return are_sequences_equivalent(self.polygons, other.polygons)
+        return (are_sequences_equivalent(self.polygons, other.polygons)
+                if isinstance(other, Multipolygon)
+                else NotImplemented)
 
     __repr__ = generate_repr(__init__)
 
@@ -223,7 +233,9 @@ class Mix:
     def __eq__(self, other: 'Mix') -> bool:
         return (self.discrete == other.discrete
                 and self.linear == other.linear
-                and self.shaped == other.shaped)
+                and self.shaped == other.shaped
+                if isinstance(other, Mix)
+                else NotImplemented)
 
     __repr__ = generate_repr(__init__)
 
