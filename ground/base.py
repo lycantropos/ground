@@ -354,8 +354,7 @@ class Context:
 
     def box_segment_squared_distance(self,
                                      box: _hints.Box,
-                                     segment: _hints.Segment
-                                     ) -> _hints.Scalar:
+                                     segment: _hints.Segment) -> _hints.Scalar:
         """
         Returns squared Euclidean distance between box and a segment.
 
@@ -807,8 +806,7 @@ class Context:
 
     def segment_point_squared_distance(self,
                                        segment: _hints.Segment,
-                                       point: _hints.Point
-                                       ) -> _hints.Scalar:
+                                       point: _hints.Point) -> _hints.Scalar:
         """
         Returns squared Euclidean distance between segment and a point.
 
