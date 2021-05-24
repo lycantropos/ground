@@ -15,7 +15,7 @@ from . import strategies
 def test_basic(context_with_contour: Tuple[Context, Contour]) -> None:
     context, contour = context_with_contour
 
-    result = context.contour_edges(contour)
+    result = context.contour_segments(contour)
 
     assert isinstance(result, abc.Sequence)
     assert len(result) == len(contour.vertices)
@@ -27,7 +27,7 @@ def test_rotations(context_with_contour: Tuple[Context, Contour],
                    offset: int) -> None:
     context, contour = context_with_contour
 
-    result = context.contour_edges(contour)
+    result = context.contour_segments(contour)
 
     assert (rotate_sequence(result, offset)
-            == context.contour_edges(rotate_contour(contour, offset)))
+            == context.contour_segments(rotate_contour(contour, offset)))
