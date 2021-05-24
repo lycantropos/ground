@@ -59,8 +59,8 @@ class Context:
                  polygon_cls: _Type[_hints.Polygon] = _geometries.Polygon,
                  segment_cls: _Type[_hints.Segment] = _geometries.Segment,
                  mode: Mode = Mode.EXACT,
-                 sqrt: _Callable[[_hints.Scalar], _hints.Scalar]
-                 = _sqrt) -> None:
+                 sqrt: _Callable[[_hints.Scalar], _hints.Scalar] = _sqrt
+                 ) -> None:
         self._box_cls = box_cls
         self._contour_cls = contour_cls
         self._empty, self._empty_cls = empty_cls(), empty_cls
