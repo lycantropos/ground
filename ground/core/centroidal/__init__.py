@@ -1,8 +1,7 @@
-from fractions import Fraction
 from typing import (Callable,
-                    Sequence,
                     Type)
 
+from cfractions import Fraction
 from reprit.base import generate_repr
 
 from ground.core.hints import (Contour,

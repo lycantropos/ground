@@ -1,7 +1,8 @@
-from fractions import Fraction
 from typing import (Sequence,
                     Tuple,
                     Type)
+
+from cfractions import Fraction
 
 from ground.core.hints import (Contour,
                                Point,

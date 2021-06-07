@@ -1,4 +1,4 @@
-from fractions import Fraction
+from cfractions import Fraction
 
 from .hints import Scalar
 

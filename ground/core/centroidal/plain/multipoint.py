@@ -1,6 +1,7 @@
-from fractions import Fraction
 from typing import (Callable,
                     Type)
+
+from cfractions import Fraction
 
 from ground.core.hints import (Multipoint,
                                Point)

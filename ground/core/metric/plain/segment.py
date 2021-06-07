@@ -1,5 +1,6 @@
-from fractions import Fraction
 from typing import Callable
+
+from cfractions import Fraction
 
 from ground.core.enums import Relation
 from ground.core.hints import (Point,
