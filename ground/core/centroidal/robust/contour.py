@@ -17,7 +17,7 @@ def centroid(contour: Contour,
     for vertex in vertices:
         end_x, end_y = vertex.x, vertex.y
         length = sqrt(to_squared_points_distance(end_x, end_y, start_x,
-                                                 start_y)[-1])
+                                                 start_y))
         accumulated_x += (start_x + end_x) * length
         accumulated_y += (start_y + end_y) * length
         accumulated_length += length
