@@ -4,7 +4,7 @@ from typing import (Callable,
 from ground.core.hints import (Contour,
                                Point,
                                Scalar)
-from ground.core.shewchuk import to_squared_points_distance
+from ground.core.robust import to_squared_points_distance
 
 
 def centroid(contour: Contour,

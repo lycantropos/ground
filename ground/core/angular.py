@@ -3,6 +3,7 @@ from .enums import (Kind,
 from .hints import (Point,
                     QuaternaryPointFunction,
                     Scalar)
+from .primitive import to_sign
 
 
 def kind(vertex: Point,
@@ -20,7 +21,3 @@ def orientation(vertex: Point,
                 ) -> Orientation:
     return Orientation(to_sign(cross_producer(vertex, first_ray_point, vertex,
                                               second_ray_point)))
-
-
-def to_sign(value: Scalar) -> int:
-    return (1 if value > 0 else -1) if value else 0

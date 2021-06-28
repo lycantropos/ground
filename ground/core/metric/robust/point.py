@@ -1,6 +1,6 @@
 from ground.core.hints import (Point,
                                Scalar)
-from ground.core.shewchuk import to_squared_points_distance
+from ground.core.robust import to_squared_points_distance
 
 
 def point_squared_distance(first: Point, second: Point) -> Scalar:

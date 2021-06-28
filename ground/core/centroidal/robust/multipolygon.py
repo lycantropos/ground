@@ -3,12 +3,11 @@ from typing import (Sequence,
                     Type)
 
 from cfractions import Fraction
+from shewchuk import Expansion
 
-from ground.core.hints import (Expansion,
-                               Multipolygon,
+from ground.core.hints import (Multipolygon,
                                Point,
                                Polygon)
-from ground.core.shewchuk import sum_expansions
 from .polygon import centroid_components as polygon_centroid_components
 
 
@@ -17,9 +16,9 @@ def centroid(multipolygon: Multipolygon,
              third: Fraction = Fraction(1, 3)) -> Point:
     x_numerator, y_numerator, double_area = centroid_components(
             multipolygon.polygons)
-    inverted_denominator = third / double_area[-1]
-    return point_cls(x_numerator[-1] * inverted_denominator,
-                     y_numerator[-1] * inverted_denominator)
+    inverted_denominator = third / double_area
+    return point_cls(x_numerator * inverted_denominator,
+                     y_numerator * inverted_denominator)
 
 
 def centroid_components(polygons: Sequence[Polygon]
@@ -33,7 +32,7 @@ def centroid_components(polygons: Sequence[Polygon]
          polygon_double_area) = polygon_centroid_components(polygon.border,
                                                             polygon.holes)
         x_numerator, y_numerator, double_area = (
-            sum_expansions(x_numerator, polygon_x_numerator),
-            sum_expansions(y_numerator, polygon_y_numerator),
-            sum_expansions(double_area, polygon_double_area))
+            x_numerator + polygon_x_numerator,
+            y_numerator + polygon_y_numerator,
+            double_area + polygon_double_area)
     return x_numerator, y_numerator, double_area

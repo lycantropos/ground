@@ -14,7 +14,7 @@ from .core import (angular as _angular,
                    discrete as _discrete,
                    enums as _enums,
                    geometries as _geometries,
-                   incircle as _incircle,
+                   circular as _circular,
                    linear as _linear,
                    measured as _measured,
                    metric as _metric,
@@ -22,6 +22,7 @@ from .core import (angular as _angular,
 from .core.hints import QuaternaryPointFunction as _QuaternaryPointFunction
 
 _QuaternaryFunction = _QuaternaryPointFunction[_hints.Scalar]
+Location = _enums.Location
 Kind = _enums.Kind
 Orientation = _enums.Orientation
 Relation = _enums.Relation
@@ -38,7 +39,7 @@ class Mode(_enum.IntEnum):
 class Context:
     """Represents common language for computational geometry."""
     __slots__ = ('_box_cls', '_centroidal', '_contour_cls', '_empty',
-                 '_empty_cls', '_incircle', '_linear', '_measured', '_metric',
+                 '_empty_cls', '_circular', '_linear', '_measured', '_metric',
                  '_mix_cls', '_mode', '_multipoint_cls', '_multipolygon_cls',
                  '_multisegment_cls', '_point_cls', '_polygon_cls',
                  '_segment_cls', '_sqrt', '_vector')
@@ -73,17 +74,17 @@ class Context:
         self._segment_cls = segment_cls
         self._mode = mode
         self._sqrt = sqrt
-        (self._centroidal, self._incircle, self._linear, self._measured,
+        (self._centroidal, self._circular, self._linear, self._measured,
          self._metric, self._vector) = (
-            (_centroidal.exact_context, _incircle.exact_context,
+            (_centroidal.exact_context, _circular.exact_context,
              _linear.exact_context, _measured.exact_context,
              _metric.exact_context, _vector.exact_context)
             if mode is Mode.EXACT
-            else ((_centroidal.plain_context, _incircle.plain_context,
+            else ((_centroidal.plain_context, _circular.plain_context,
                    _linear.plain_context, _measured.plain_context,
                    _metric.plain_context, _vector.plain_context)
                   if mode is Mode.PLAIN
-                  else (_centroidal.robust_context, _incircle.robust_context,
+                  else (_centroidal.robust_context, _circular.robust_context,
                         _linear.exact_context, _measured.robust_context,
                         _metric.robust_context, _vector.robust_context)))
 
@@ -212,9 +213,10 @@ class Context:
         return self._point_cls
 
     @property
-    def point_point_point_incircle_test(self) -> _QuaternaryFunction:
+    def locate_point_in_point_point_point_circle(
+            self) -> _circular.PointPointPointLocator:
         """
-        Returns result of "incircle test" for point-point-point case.
+        Returns location of point in point-point-point circle.
 
         Time complexity:
             ``O(1)``
@@ -223,20 +225,20 @@ class Context:
 
         >>> context = get_context()
         >>> Point = context.point_cls
-        >>> (context.point_point_point_incircle_test(Point(0, 0), Point(2, 0),
-        ...                                          Point(0, 2), Point(1, 1))
-        ...  > 0)
+        >>> (context.locate_point_in_point_point_point_circle(
+        ...      Point(0, 0), Point(2, 0), Point(0, 2), Point(1, 1))
+        ...  is Location.INTERIOR)
         True
-        >>> (context.point_point_point_incircle_test(Point(0, 0), Point(2, 0),
-        ...                                          Point(0, 2), Point(2, 2))
-        ...  == 0)
+        >>> (context.locate_point_in_point_point_point_circle(
+        ...      Point(0, 0), Point(2, 0), Point(0, 2), Point(2, 2))
+        ...  is Location.BOUNDARY)
         True
-        >>> (context.point_point_point_incircle_test(Point(0, 0), Point(2, 0),
-        ...                                          Point(0, 2), Point(3, 3))
-        ...  < 0)
+        >>> (context.locate_point_in_point_point_point_circle(
+        ...      Point(0, 0), Point(2, 0), Point(0, 2), Point(3, 3))
+        ...  is Location.EXTERIOR)
         True
         """
-        return self._incircle.point_point_point_test
+        return self._circular.point_point_point_locator
 
     @property
     def points_squared_distance(self) -> _metric.PointPointMetric:

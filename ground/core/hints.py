@@ -15,7 +15,6 @@ except ImportError:
                                    runtime_checkable)
 
 Scalar = TypeVar('Scalar', Expression, Real)
-Expansion = Sequence[Scalar]
 
 
 @runtime_checkable

@@ -1,17 +1,10 @@
-from functools import reduce
+from shewchuk import Expansion
 
-from ground.core.arithmetic import robust_divide
 from ground.core.enums import Relation
-from ground.core.hints import (Expansion,
-                               Point,
+from ground.core.hints import (Point,
                                QuaternaryPointFunction,
                                Scalar)
-from ground.core.shewchuk import (add_to_expansion,
-                                  scale_expansion,
-                                  sum_expansions,
-                                  two_mul,
-                                  two_one_mul,
-                                  two_sub)
+from ground.core.primitive import square
 
 
 def point_squared_distance(start: Point,
@@ -22,20 +15,10 @@ def point_squared_distance(start: Point,
     segment_squared_norm = dot_producer(start, end, start, end)
     end_factor_numerator = max(0, min(segment_squared_norm,
                                       dot_producer(start, point, start, end)))
-    end_factor = robust_divide(end_factor_numerator, segment_squared_norm)
-    start_factor_tail, start_factor_head = two_sub(1, end_factor)
-    return sum_expansions(
-            square_expansion(add_to_expansion(sum_expansions(
-                    two_one_mul(start_factor_tail, start_factor_head, start.x),
-                    two_mul(end_factor, end.x)), -point.x)),
-            square_expansion(add_to_expansion(sum_expansions(
-                    two_one_mul(start_factor_tail, start_factor_head, start.y),
-                    two_mul(end_factor, end.y)), -point.y)))[-1]
-
-
-def square_expansion(expansion: Expansion) -> Expansion:
-    return reduce(sum_expansions, [scale_expansion(expansion, component)
-                                   for component in expansion])
+    end_factor = Expansion(end_factor_numerator) / segment_squared_norm
+    start_factor = Expansion(1, -end_factor)
+    return (square(start_factor * start.x + end_factor * end.x - point.x)
+            + square(start_factor * start.y + end_factor * end.y - point.y))
 
 
 def segment_squared_distance(first_start: Point,

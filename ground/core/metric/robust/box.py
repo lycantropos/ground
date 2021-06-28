@@ -1,5 +1,6 @@
-from typing import (Tuple,
-                    Type)
+from typing import Type
+
+from shewchuk import Expansion
 
 from ground.core.enums import Relation
 from ground.core.hints import (Box,
@@ -7,19 +8,16 @@ from ground.core.hints import (Box,
                                QuaternaryPointFunction,
                                Scalar,
                                Segment)
-from ground.core.shewchuk import (sum_expansions,
-                                  two_square,
-                                  two_sub)
+from ground.core.primitive import square
 from .segment import (point_squared_distance as segment_point_squared_distance,
                       segment_squared_distance
                       as segment_segment_squared_distance)
 
 
 def point_squared_distance(box: Box, point: Point) -> Scalar:
-    dx_tail, dx_head = _linear_interval_distance(box.min_x, box.max_x, point.x)
-    dy_tail, dy_head = _linear_interval_distance(box.min_y, box.max_y, point.y)
-    return sum_expansions(two_square(dx_tail, dx_head),
-                          two_square(dy_tail, dy_head))[-1]
+    dx, dy = (_linear_interval_distance(box.min_x, box.max_x, point.x),
+              _linear_interval_distance(box.min_y, box.max_y, point.y))
+    return square(dx) + square(dy)
 
 
 def segment_squared_distance(box: Box,
@@ -55,13 +53,12 @@ def segment_squared_distance(box: Box,
 
 def _linear_interval_distance(min_coordinate: Scalar,
                               max_coordinate: Scalar,
-                              coordinate: Scalar
-                              ) -> Tuple[Scalar, Scalar]:
-    return (two_sub(min_coordinate, coordinate)
+                              coordinate: Scalar) -> Expansion:
+    return (Expansion(min_coordinate, -coordinate)
             if coordinate < min_coordinate
-            else (two_sub(coordinate, max_coordinate)
+            else (Expansion(coordinate, -max_coordinate)
                   if coordinate > max_coordinate
-                  else (0, 0)))
+                  else Expansion()))
 
 
 def _non_degenerate_segment_squared_distance(
