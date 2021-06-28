@@ -2,13 +2,13 @@ from typing import Tuple
 
 from hypothesis import given
 
-from ground.base import Context
+from ground.base import (Context,
+                         Location)
 from tests.hints import (PointsQuadruplet,
                          PointsTriplet)
-from tests.utils import (context_to_output_coordinate_cls,
-                         is_even_permutation,
+from tests.utils import (is_even_permutation,
                          permute,
-                         to_sign)
+                         to_opposite_location)
 from . import strategies
 
 
@@ -18,10 +18,10 @@ def test_basic(context_with_points_quadruplet: Tuple[Context, PointsQuadruplet]
     context, points_quadruplet = context_with_points_quadruplet
     first_point, second_point, third_point, fourth_point = points_quadruplet
 
-    result = context.point_point_point_incircle_test(first_point, second_point,
-                                                     third_point, fourth_point)
+    result = context.locate_point_in_point_point_point_circle(
+            first_point, second_point, third_point, fourth_point)
 
-    assert isinstance(result, context_to_output_coordinate_cls(context))
+    assert isinstance(result, Location)
 
 
 @given(strategies.contexts_with_points_triplets)
@@ -30,10 +30,11 @@ def test_degenerate_cases(context_with_points_triplet
     context, points_triplet = context_with_points_triplet
     first_point, second_point, third_point = points_triplet
 
-    assert all(not context.point_point_point_incircle_test(first_point,
-                                                           second_point,
-                                                           third_point, point)
-               for point in points_triplet)
+    assert all(
+            context.locate_point_in_point_point_point_circle(
+                    first_point, second_point, third_point, point)
+            is Location.BOUNDARY
+            for point in points_triplet)
 
 
 @given(strategies.contexts_with_points_quadruplets, strategies.indices)
@@ -43,13 +44,13 @@ def test_permutations(context_with_points_quadruplet: Tuple[Context,
     context, points_quadruplet = context_with_points_quadruplet
     first_point, second_point, third_point, fourth_point = points_quadruplet
 
-    result = context.point_point_point_incircle_test(first_point, second_point,
-                                                     third_point, fourth_point)
+    result = context.locate_point_in_point_point_point_circle(first_point,
+                                                              second_point,
+                                                              third_point,
+                                                              fourth_point)
 
-    result_sign = to_sign(result)
-    assert (to_sign(
-            context.point_point_point_incircle_test(*permute(points_quadruplet,
-                                                             index)))
-            == (result_sign
+    assert (context.locate_point_in_point_point_point_circle(
+            *permute(points_quadruplet, index))
+            is (result
                 if is_even_permutation(index, len(points_quadruplet))
-                else -result_sign))
+                else to_opposite_location(result)))

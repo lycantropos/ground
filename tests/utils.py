@@ -1,3 +1,4 @@
+import math
 from functools import partial
 from numbers import (Rational,
                      Real)
@@ -13,10 +14,10 @@ from typing import (Any,
                     Type,
                     TypeVar)
 
-import math
 from hypothesis import strategies
 
 from ground.base import (Context,
+                         Location,
                          Mode,
                          Orientation,
                          Relation)
@@ -331,3 +332,7 @@ def cleave_in_tuples(*functions: Callable[..., Strategy[_T]]
         return strategies.tuples(*cleft(*args, **kwargs))
 
     return to_tuples
+
+
+def to_opposite_location(location: Location) -> Location:
+    return Location(1 - (location - 1))
