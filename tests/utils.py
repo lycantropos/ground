@@ -20,7 +20,7 @@ from ground.base import (Context,
                          Mode,
                          Orientation,
                          Relation)
-from ground.core.angular import to_sign
+from ground.core.primitive import to_sign
 from ground.hints import (Box,
                           Contour,
                           Multipoint,
