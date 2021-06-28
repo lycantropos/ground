@@ -15,10 +15,15 @@ def point_squared_distance(start: Point,
     segment_squared_norm = dot_producer(start, end, start, end)
     end_factor_numerator = max(0, min(segment_squared_norm,
                                       dot_producer(start, point, start, end)))
-    end_factor = Expansion(end_factor_numerator) / segment_squared_norm
-    start_factor = Expansion(1, -end_factor)
-    return (square(start_factor * start.x + end_factor * end.x - point.x)
-            + square(start_factor * start.y + end_factor * end.y - point.y))
+    start_factor_numerator = Expansion(segment_squared_norm,
+                                       -end_factor_numerator)
+    return ((square(start_factor_numerator * start.x
+                    + end_factor_numerator * end.x
+                    - segment_squared_norm * point.x)
+             + square(start_factor_numerator * start.y
+                      + end_factor_numerator * end.y
+                      - segment_squared_norm * point.y))
+            / square(segment_squared_norm))
 
 
 def segment_squared_distance(first_start: Point,
