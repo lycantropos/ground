@@ -11,10 +11,10 @@ from . import hints as _hints
 from .core import (angular as _angular,
                    boxed as _boxed,
                    centroidal as _centroidal,
+                   circular as _circular,
                    discrete as _discrete,
                    enums as _enums,
                    geometries as _geometries,
-                   circular as _circular,
                    linear as _linear,
                    measured as _measured,
                    metric as _metric,
@@ -38,11 +38,12 @@ class Mode(_enum.IntEnum):
 
 class Context:
     """Represents common language for computational geometry."""
-    __slots__ = ('_box_cls', '_centroidal', '_contour_cls', '_empty',
-                 '_empty_cls', '_circular', '_linear', '_measured', '_metric',
-                 '_mix_cls', '_mode', '_multipoint_cls', '_multipolygon_cls',
-                 '_multisegment_cls', '_point_cls', '_polygon_cls',
-                 '_segment_cls', '_sqrt', '_vector')
+    __slots__ = ('_angular', '_box_cls', '_centroidal', '_circular',
+                 '_contour_cls', '_empty', '_empty_cls', '_linear',
+                 '_measured', '_metric', '_mix_cls', '_mode',
+                 '_multipoint_cls', '_multipolygon_cls', '_multisegment_cls',
+                 '_point_cls', '_polygon_cls', '_segment_cls', '_sqrt',
+                 '_vector')
 
     def __init__(self,
                  *,
@@ -74,19 +75,22 @@ class Context:
         self._segment_cls = segment_cls
         self._mode = mode
         self._sqrt = sqrt
-        (self._centroidal, self._circular, self._linear, self._measured,
-         self._metric, self._vector) = (
-            (_centroidal.exact_context, _circular.exact_context,
-             _linear.exact_context, _measured.exact_context,
-             _metric.exact_context, _vector.exact_context)
+        (self._angular, self._centroidal, self._circular, self._linear,
+         self._measured, self._metric, self._vector) = (
+            (_angular.exact_context, _centroidal.exact_context,
+             _circular.exact_context, _linear.exact_context,
+             _measured.exact_context, _metric.exact_context,
+             _vector.exact_context)
             if mode is Mode.EXACT
-            else ((_centroidal.plain_context, _circular.plain_context,
-                   _linear.plain_context, _measured.plain_context,
-                   _metric.plain_context, _vector.plain_context)
+            else ((_angular.plain_context, _centroidal.plain_context,
+                   _circular.plain_context, _linear.plain_context,
+                   _measured.plain_context, _metric.plain_context,
+                   _vector.plain_context)
                   if mode is Mode.PLAIN
-                  else (_centroidal.robust_context, _circular.robust_context,
-                        _linear.exact_context, _measured.robust_context,
-                        _metric.robust_context, _vector.robust_context)))
+                  else (_angular.robust_context, _centroidal.robust_context,
+                        _circular.robust_context, _linear.exact_context,
+                        _measured.robust_context, _metric.robust_context,
+                        _vector.robust_context)))
 
     __repr__ = _generate_repr(__init__)
 
@@ -300,12 +304,10 @@ class Context:
         """Returns function for computing square root."""
         return self._sqrt
 
-    def angle_kind(self,
-                   vertex: _hints.Point,
-                   first_ray_point: _hints.Point,
-                   second_ray_point: _hints.Point) -> Kind:
+    @property
+    def angle_kind(self) -> _QuaternaryPointFunction[Kind]:
         """
-        Returns angle kind.
+        Returns function for computing angle kind.
 
         Time complexity:
             ``O(1)``
@@ -324,15 +326,12 @@ class Context:
         ...  is Kind.ACUTE)
         True
         """
-        return _angular.kind(vertex, first_ray_point, second_ray_point,
-                             self.dot_product)
+        return self._angular.kind
 
-    def angle_orientation(self,
-                          vertex: _hints.Point,
-                          first_ray_point: _hints.Point,
-                          second_ray_point: _hints.Point) -> Orientation:
+    @property
+    def angle_orientation(self) -> _QuaternaryPointFunction[Orientation]:
         """
-        Returns angle orientation.
+        Returns function for computing angle orientation.
 
         Time complexity:
             ``O(1)``
@@ -351,8 +350,7 @@ class Context:
         ...  is Orientation.COUNTERCLOCKWISE)
         True
         """
-        return _angular.orientation(vertex, first_ray_point, second_ray_point,
-                                    self.cross_product)
+        return self._angular.orientation
 
     def box_segment_squared_distance(self,
                                      box: _hints.Box,

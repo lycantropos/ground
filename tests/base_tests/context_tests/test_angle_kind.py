@@ -29,6 +29,7 @@ def test_same_endpoints(context_with_points_pair: Tuple[Context, PointsPair]
     assert context.angle_kind(end, start, start) is (Kind.RIGHT
                                                      if start == end
                                                      else Kind.ACUTE)
+    assert context.angle_kind(start, end, start) is Kind.RIGHT
 
 
 @given(strategies.contexts_with_points_triplets)
