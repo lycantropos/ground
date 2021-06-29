@@ -44,8 +44,7 @@ def segment_squared_distance(first_start: Point,
                              second_end: Point,
                              dot_producer: QuaternaryPointFunction[Scalar],
                              segments_relater
-                             : QuaternaryPointFunction[Relation]
-                             ) -> Scalar:
+                             : QuaternaryPointFunction[Relation]) -> Scalar:
     return (min(point_squared_distance(first_start, first_end, second_start,
                                        dot_producer),
                 point_squared_distance(first_start, first_end, second_end,
