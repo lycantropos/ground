@@ -22,7 +22,7 @@ def test_basic(context_with_segment_and_point: Tuple[Context, Segment, Point]
     assert is_coordinate(result)
 
 
-@given(strategies.contexts_with_segments_and_points)
+@given(strategies.contexts_with_rational_segments_and_points)
 def test_reversals(context_with_segment_and_point
                    : Tuple[Context, Segment, Point]) -> None:
     context, segment, point = context_with_segment_and_point
@@ -36,7 +36,7 @@ def test_reversals(context_with_segment_and_point
             reverse_point_coordinates(point))
 
 
-@given(strategies.contexts_with_segments)
+@given(strategies.contexts_with_rational_segments)
 def test_self(context_with_segment: Tuple[Context, Segment]) -> None:
     context, segment = context_with_segment
 
