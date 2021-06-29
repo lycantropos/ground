@@ -15,9 +15,9 @@ from .core import (angular as _angular,
                    discrete as _discrete,
                    enums as _enums,
                    geometries as _geometries,
-                   linear as _linear,
                    measured as _measured,
                    metric as _metric,
+                   segment as _segment,
                    vector as _vector)
 from .core.hints import QuaternaryPointFunction as _QuaternaryPointFunction
 
@@ -39,10 +39,10 @@ class Mode(_enum.IntEnum):
 class Context:
     """Represents common language for computational geometry."""
     __slots__ = ('_angular', '_box_cls', '_centroidal', '_circular',
-                 '_contour_cls', '_empty', '_empty_cls', '_linear',
-                 '_measured', '_metric', '_mix_cls', '_mode',
-                 '_multipoint_cls', '_multipolygon_cls', '_multisegment_cls',
-                 '_point_cls', '_polygon_cls', '_segment_cls', '_sqrt',
+                 '_contour_cls', '_empty', '_empty_cls', '_measured',
+                 '_metric', '_mix_cls', '_mode', '_multipoint_cls',
+                 '_multipolygon_cls', '_multisegment_cls', '_point_cls',
+                 '_polygon_cls', '_segment', '_segment_cls', '_sqrt',
                  '_vector')
 
     def __init__(self,
@@ -75,21 +75,21 @@ class Context:
         self._segment_cls = segment_cls
         self._mode = mode
         self._sqrt = sqrt
-        (self._angular, self._centroidal, self._circular, self._linear,
-         self._measured, self._metric, self._vector) = (
+        (self._angular, self._centroidal, self._circular, self._measured,
+         self._metric, self._segment, self._vector) = (
             (_angular.exact_context, _centroidal.exact_context,
-             _circular.exact_context, _linear.exact_context,
-             _measured.exact_context, _metric.exact_context,
+             _circular.exact_context, _measured.exact_context,
+             _metric.exact_context, _segment.exact_context,
              _vector.exact_context)
             if mode is Mode.EXACT
             else ((_angular.plain_context, _centroidal.plain_context,
-                   _circular.plain_context, _linear.plain_context,
-                   _measured.plain_context, _metric.plain_context,
+                   _circular.plain_context, _measured.plain_context,
+                   _metric.plain_context, _segment.plain_context,
                    _vector.plain_context)
                   if mode is Mode.PLAIN
                   else (_angular.robust_context, _centroidal.robust_context,
-                        _circular.robust_context, _linear.exact_context,
-                        _measured.robust_context, _metric.robust_context,
+                        _circular.robust_context, _measured.robust_context,
+                        _metric.robust_context, _segment.exact_context,
                         _vector.robust_context)))
 
     __repr__ = _generate_repr(__init__)
@@ -801,8 +801,8 @@ class Context:
         ...                                Point(3, 0))
         False
         """
-        return self._linear.containment_checker(segment.start, segment.end,
-                                                point, self.cross_product)
+        return self._segment.containment_checker(segment.start, segment.end,
+                                                 point, self.angle_orientation)
 
     def segment_point_squared_distance(self,
                                        segment: _hints.Segment,
@@ -877,9 +877,9 @@ class Context:
         ...  == Point(2, 0))
         True
         """
-        return self._linear.intersector(first.start, first.end, second.start,
-                                        second.end, self.cross_product,
-                                        self.point_cls)
+        return self._segment.intersector(first.start, first.end, second.start,
+                                         second.end, self.point_cls,
+                                         self._segment_contains_point)
 
     def segments_relation(self,
                           test: _hints.Segment,
@@ -924,8 +924,8 @@ class Context:
         ...  is Relation.OVERLAP)
         True
         """
-        return self._linear.relater(test.start, test.end, goal.start, goal.end,
-                                    self.cross_product)
+        return self._segment.relater(test.start, test.end, goal.start,
+                                     goal.end, self.angle_orientation)
 
     def segments_squared_distance(self,
                                   first: _hints.Segment,
@@ -958,14 +958,21 @@ class Context:
                 first.start, first.end, second.start, second.end,
                 self.dot_product, self._segments_intersect)
 
+    def _segment_contains_point(self,
+                                start: _hints.Point,
+                                end: _hints.Point,
+                                point: _hints.Point) -> bool:
+        return self._segment.containment_checker(start, end, point,
+                                                 self.angle_orientation)
+
     def _segments_intersect(self,
                             first_start: _hints.Point,
                             first_end: _hints.Point,
                             second_start: _hints.Point,
                             second_end: _hints.Point) -> bool:
-        return self._linear.collision_detector(first_start, first_end,
-                                               second_start, second_end,
-                                               self.angle_orientation)
+        return self._segment.collision_detector(first_start, first_end,
+                                                second_start, second_end,
+                                                self.angle_orientation)
 
 
 _context = _ContextVar('context',
