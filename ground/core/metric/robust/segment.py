@@ -13,16 +13,28 @@ def point_squared_distance(start: Point,
                            dot_producer: QuaternaryPointFunction[Scalar]
                            ) -> Scalar:
     segment_squared_norm = dot_producer(start, end, start, end)
-    end_factor_numerator = max(0, min(segment_squared_norm,
-                                      dot_producer(start, point, start, end)))
-    start_factor_numerator = Expansion(segment_squared_norm,
-                                       -end_factor_numerator)
-    return ((square(start_factor_numerator * start.x
-                    + end_factor_numerator * end.x
-                    - segment_squared_norm * point.x)
-             + square(start_factor_numerator * start.y
-                      + end_factor_numerator * end.y
-                      - segment_squared_norm * point.y))
+    point_end_projection = dot_producer(point, end, start, end)
+    start_point_projection = dot_producer(start, point, start, end)
+    start_factor = ((point_end_projection
+                     if point_end_projection > 0
+                     else 0)
+                    if point_end_projection < segment_squared_norm
+                    else segment_squared_norm)
+    end_factor = ((start_point_projection
+                   if start_point_projection > 0
+                   else 0)
+                  if start_point_projection < segment_squared_norm
+                  else segment_squared_norm)
+    return ((square(segment_squared_norm * Expansion(start.x, -point.x)
+                    + end_factor * Expansion(end.x, -start.x))
+             + square(segment_squared_norm * Expansion(start.y, -point.y)
+                      + end_factor * Expansion(end.y, -start.y))
+             if (abs(segment_squared_norm - end_factor)
+                 < abs(segment_squared_norm - start_factor))
+             else (square(segment_squared_norm * Expansion(end.x, -point.x)
+                          + start_factor * Expansion(start.x, -end.x))
+                   + square(segment_squared_norm * Expansion(end.y, -point.y)
+                            + start_factor * Expansion(start.y, -end.y))))
             / square(segment_squared_norm))
 
 
