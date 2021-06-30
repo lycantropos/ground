@@ -95,6 +95,54 @@ class Context:
     __repr__ = _generate_repr(__init__)
 
     @property
+    def angle_kind(self) -> _QuaternaryPointFunction[Kind]:
+        """
+        Returns function for computing angle kind.
+
+        Time complexity:
+            ``O(1)``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Point = context.point_cls
+        >>> (context.angle_kind(Point(0, 0), Point(1, 0), Point(-1, 0))
+        ...  is Kind.OBTUSE)
+        True
+        >>> (context.angle_kind(Point(0, 0), Point(1, 0), Point(0, 1))
+        ...  is Kind.RIGHT)
+        True
+        >>> (context.angle_kind(Point(0, 0), Point(1, 0), Point(1, 0))
+        ...  is Kind.ACUTE)
+        True
+        """
+        return self._angular.kind
+
+    @property
+    def angle_orientation(self) -> _QuaternaryPointFunction[Orientation]:
+        """
+        Returns function for computing angle orientation.
+
+        Time complexity:
+            ``O(1)``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Point = context.point_cls
+        >>> (context.angle_orientation(Point(0, 0), Point(0, 1), Point(1, 0))
+        ...  is Orientation.CLOCKWISE)
+        True
+        >>> (context.angle_orientation(Point(0, 0), Point(1, 0), Point(1, 0))
+        ...  is Orientation.COLLINEAR)
+        True
+        >>> (context.angle_orientation(Point(0, 0), Point(1, 0), Point(0, 1))
+        ...  is Orientation.COUNTERCLOCKWISE)
+        True
+        """
+        return self._angular.orientation
+
+    @property
     def box_cls(self) -> _Type[_hints.Box]:
         """Returns type for boxes."""
         return self._box_cls
@@ -303,54 +351,6 @@ class Context:
     def sqrt(self) -> _Callable[[_hints.Scalar], _hints.Scalar]:
         """Returns function for computing square root."""
         return self._sqrt
-
-    @property
-    def angle_kind(self) -> _QuaternaryPointFunction[Kind]:
-        """
-        Returns function for computing angle kind.
-
-        Time complexity:
-            ``O(1)``
-        Memory complexity:
-            ``O(1)``
-
-        >>> context = get_context()
-        >>> Point = context.point_cls
-        >>> (context.angle_kind(Point(0, 0), Point(1, 0), Point(-1, 0))
-        ...  is Kind.OBTUSE)
-        True
-        >>> (context.angle_kind(Point(0, 0), Point(1, 0), Point(0, 1))
-        ...  is Kind.RIGHT)
-        True
-        >>> (context.angle_kind(Point(0, 0), Point(1, 0), Point(1, 0))
-        ...  is Kind.ACUTE)
-        True
-        """
-        return self._angular.kind
-
-    @property
-    def angle_orientation(self) -> _QuaternaryPointFunction[Orientation]:
-        """
-        Returns function for computing angle orientation.
-
-        Time complexity:
-            ``O(1)``
-        Memory complexity:
-            ``O(1)``
-
-        >>> context = get_context()
-        >>> Point = context.point_cls
-        >>> (context.angle_orientation(Point(0, 0), Point(0, 1), Point(1, 0))
-        ...  is Orientation.CLOCKWISE)
-        True
-        >>> (context.angle_orientation(Point(0, 0), Point(1, 0), Point(1, 0))
-        ...  is Orientation.COLLINEAR)
-        True
-        >>> (context.angle_orientation(Point(0, 0), Point(1, 0), Point(0, 1))
-        ...  is Orientation.COUNTERCLOCKWISE)
-        True
-        """
-        return self._angular.orientation
 
     def box_segment_squared_distance(self,
                                      box: _hints.Box,
