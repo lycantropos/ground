@@ -20,6 +20,17 @@ def test_basic(context_with_multisegment_and_steps
     assert isinstance(result, context.multisegment_cls)
 
 
+@given(strategies.contexts_with_rational_multisegments_and_scalars_pairs)
+def test_round_trip(context_with_multisegment_and_steps
+                    : Tuple[Context, Multisegment, Scalar, Scalar]) -> None:
+    context, multisegment, step_x, step_y = context_with_multisegment_and_steps
+
+    result = context.translate_multisegment(multisegment, step_x, step_y)
+
+    assert (context.translate_multisegment(result, -step_x, -step_y)
+            == context.translate_multisegment(multisegment, 0, 0))
+
+
 @given(strategies.contexts_with_multisegments_and_scalars_pairs)
 def test_reversals(context_with_multisegment_and_steps
                    : Tuple[Context, Multisegment, Scalar, Scalar]) -> None:
