@@ -4,6 +4,7 @@ from typing import (Callable,
 from ground.core.hints import (Contour,
                                Multisegment,
                                Point,
+                               Polygon,
                                Scalar,
                                Segment)
 from . import (exact,
@@ -39,6 +40,20 @@ class Context:
                                                         step_y, point_cls,
                                                         segment_cls)
                                  for segment in multisegment.segments])
+
+    def translate_polygon(self,
+                          polygon: Polygon,
+                          step_x: Scalar,
+                          step_y: Scalar,
+                          contour_cls: Type[Contour],
+                          polygon_cls: Type[Polygon],
+                          point_cls: Type[Point]) -> Polygon:
+        return polygon_cls(self.translate_contour(polygon.border, step_x,
+                                                  step_y, contour_cls,
+                                                  point_cls),
+                           [self.translate_contour(hole, step_x, step_y,
+                                                   contour_cls, point_cls)
+                            for hole in polygon.holes])
 
     def translate_segment(self,
                           segment: Segment,

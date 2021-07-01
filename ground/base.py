@@ -1040,6 +1040,50 @@ class Context:
                 multisegment, step_x, step_y, self.multisegment_cls,
                 self.point_cls, self.segment_cls)
 
+    def translate_polygon(self,
+                          polygon: _hints.Polygon,
+                          step_x: _hints.Scalar,
+                          step_y: _hints.Scalar) -> _hints.Polygon:
+        """
+        Returns polygon translated by given step.
+
+        Time complexity:
+            ``O(vertices_count)``
+        Memory complexity:
+            ``O(vertices_count)``
+
+        where ``vertices_count = len(polygon.border.vertices)\
+ + sum(len(hole.vertices) for hole in polygon.holes)``.
+
+        >>> context = get_context()
+        >>> Point = context.point_cls
+        >>> Polygon = context.polygon_cls
+        >>> Contour = context.contour_cls
+        >>> (context.translate_polygon(
+        ...      Polygon(Contour([Point(0, 0), Point(1, 0), Point(0, 1)]), []),
+        ...      0, 0)
+        ...  == Polygon(Contour([Point(0, 0), Point(1, 0), Point(0, 1)]), []))
+        True
+        >>> (context.translate_polygon(
+        ...      Polygon(Contour([Point(0, 0), Point(1, 0), Point(0, 1)]), []),
+        ...      1, 0)
+        ...  == Polygon(Contour([Point(1, 0), Point(2, 0), Point(1, 1)]), []))
+        True
+        >>> (context.translate_polygon(
+        ...      Polygon(Contour([Point(0, 0), Point(1, 0), Point(0, 1)]), []),
+        ...      0, 1)
+        ...  == Polygon(Contour([Point(0, 1), Point(1, 1), Point(0, 2)]), []))
+        True
+        >>> (context.translate_polygon(
+        ...      Polygon(Contour([Point(0, 0), Point(1, 0), Point(0, 1)]), []),
+        ...      1, 1)
+        ...  == Polygon(Contour([Point(1, 1), Point(2, 1), Point(1, 2)]), []))
+        True
+        """
+        return self._translate.translate_polygon(
+                polygon, step_x, step_y, self.contour_cls, self.polygon_cls,
+                self.point_cls)
+
     def translate_point(self,
                         point: _hints.Point,
                         step_x: _hints.Scalar,
