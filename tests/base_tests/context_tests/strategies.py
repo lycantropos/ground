@@ -75,6 +75,9 @@ contexts_with_points = (contexts_with_coordinates_strategies
 contexts_with_points_and_scalars_pairs = (
     contexts_with_coordinates_strategies.flatmap(
         to_contexts_with(points_factory, itemgetter(1), itemgetter(1))))
+contexts_with_segments_and_scalars_pairs = (
+    contexts_with_rational_coordinates_strategies.flatmap(
+        to_contexts_with(segments_factory, itemgetter(1), itemgetter(1))))
 contexts_with_points_pairs = (
     contexts_with_coordinates_strategies.flatmap(to_contexts_with(compose(
             to_pairs, points_factory))))
