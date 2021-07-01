@@ -995,6 +995,72 @@ class Context:
         return self._translate.translate_contour(
                 contour, step_x, step_y, self.contour_cls, self.point_cls)
 
+    def translate_multipolygon(self,
+                               multipolygon: _hints.Multipolygon,
+                               step_x: _hints.Scalar,
+                               step_y: _hints.Scalar) -> _hints.Multipolygon:
+        """
+        Returns multipolygon translated by given step.
+
+        Time complexity:
+            ``O(vertices_count)``
+        Memory complexity:
+            ``O(vertices_count)``
+
+        where ``vertices_count = sum(len(polygon.border.vertices)\
+ + sum(len(hole.vertices) for hole in polygon.holes)\
+ for polygon in multipolygon.polygons)``.
+
+        >>> context = get_context()
+        >>> Contour = context.contour_cls
+        >>> Multipolygon = context.multipolygon_cls
+        >>> Point = context.point_cls
+        >>> Polygon = context.polygon_cls
+        >>> (context.translate_multipolygon(
+        ...      Multipolygon([Polygon(Contour([Point(0, 0), Point(1, 0),
+        ...                                     Point(0, 1)]), []),
+        ...                    Polygon(Contour([Point(1, 1), Point(2, 1),
+        ...                                     Point(1, 2)]), [])]), 0, 0)
+        ...  == Multipolygon([Polygon(Contour([Point(0, 0), Point(1, 0),
+        ...                                    Point(0, 1)]), []),
+        ...                   Polygon(Contour([Point(1, 1), Point(2, 1),
+        ...                                    Point(1, 2)]), [])]))
+        True
+        >>> (context.translate_multipolygon(
+        ...      Multipolygon([Polygon(Contour([Point(0, 0), Point(1, 0),
+        ...                                     Point(0, 1)]), []),
+        ...                    Polygon(Contour([Point(1, 1), Point(2, 1),
+        ...                                     Point(1, 2)]), [])]), 1, 0)
+        ...  == Multipolygon([Polygon(Contour([Point(1, 0), Point(2, 0),
+        ...                                    Point(1, 1)]), []),
+        ...                   Polygon(Contour([Point(2, 1), Point(3, 1),
+        ...                                    Point(2, 2)]), [])]))
+        True
+        >>> (context.translate_multipolygon(
+        ...      Multipolygon([Polygon(Contour([Point(0, 0), Point(1, 0),
+        ...                                     Point(0, 1)]), []),
+        ...                    Polygon(Contour([Point(1, 1), Point(2, 1),
+        ...                                     Point(1, 2)]), [])]), 0, 1)
+        ...  == Multipolygon([Polygon(Contour([Point(0, 1), Point(1, 1),
+        ...                                    Point(0, 2)]), []),
+        ...                   Polygon(Contour([Point(1, 2), Point(2, 2),
+        ...                                    Point(1, 3)]), [])]))
+        True
+        >>> (context.translate_multipolygon(
+        ...      Multipolygon([Polygon(Contour([Point(0, 0), Point(1, 0),
+        ...                                     Point(0, 1)]), []),
+        ...                    Polygon(Contour([Point(1, 1), Point(2, 1),
+        ...                                     Point(1, 2)]), [])]), 1, 1)
+        ...  == Multipolygon([Polygon(Contour([Point(1, 1), Point(2, 1),
+        ...                                    Point(1, 2)]), []),
+        ...                   Polygon(Contour([Point(2, 2), Point(3, 2),
+        ...                                    Point(2, 3)]), [])]))
+        True
+        """
+        return self._translate.translate_multipolygon(
+                multipolygon, step_x, step_y, self.contour_cls,
+                self.multipolygon_cls, self.polygon_cls, self.point_cls)
+
     def translate_multisegment(self,
                                multisegment: _hints.Multisegment,
                                step_x: _hints.Scalar,

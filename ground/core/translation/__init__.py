@@ -2,6 +2,7 @@ from typing import (Callable,
                     Type)
 
 from ground.core.hints import (Contour,
+                               Multipolygon,
                                Multisegment,
                                Point,
                                Polygon,
@@ -28,6 +29,19 @@ class Context:
         return contour_cls([self.translate_point(vertex, step_x, step_y,
                                                  point_cls)
                             for vertex in contour.vertices])
+
+    def translate_multipolygon(self,
+                               multipolygon: Multipolygon,
+                               step_x: Scalar,
+                               step_y: Scalar,
+                               contour_cls: Type[Contour],
+                               multipolygon_cls: Type[Multipolygon],
+                               polygon_cls: Type[Polygon],
+                               point_cls: Type[Point]) -> Multipolygon:
+        return multipolygon_cls(
+                [self.translate_polygon(polygon, step_x, step_y, contour_cls,
+                                        polygon_cls, point_cls)
+                 for polygon in multipolygon.polygons])
 
     def translate_multisegment(self,
                                multisegment: Multisegment,
