@@ -149,6 +149,10 @@ def reverse_multipoint(multipoint: Multipoint) -> Multipoint:
     return type(multipoint)(reverse_sequence(multipoint.points))
 
 
+def reverse_multipoint_coordinates(multipoint: Multipoint) -> Multipoint:
+    return type(multipoint)(reverse_points_coordinates(multipoint.points))
+
+
 def reverse_multipolygon(multipolygon: Multipolygon) -> Multipolygon:
     return type(multipolygon)(reverse_sequence(multipolygon.polygons))
 
