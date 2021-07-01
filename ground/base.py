@@ -967,9 +967,9 @@ class Context:
         Returns multisegment translated by given step.
 
         Time complexity:
-            ``O(1)``
+            ``O(len(multisegment.segments))``
         Memory complexity:
-            ``O(1)``
+            ``O(len(multisegment.segments))``
 
         >>> context = get_context()
         >>> Point = context.point_cls
