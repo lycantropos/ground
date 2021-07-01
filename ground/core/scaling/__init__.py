@@ -1,3 +1,5 @@
+import sys
+from collections import OrderedDict
 from typing import (Callable,
                     Type,
                     Union)
@@ -12,11 +14,32 @@ from . import (exact,
 
 PointScaler = Callable[[Point, Scalar, Scalar, Type[Point]], Point]
 
+unique_ever_seen = (dict.fromkeys
+                    if sys.version_info >= (3, 6)
+                    else OrderedDict.fromkeys)
+
 
 class Context:
     @property
     def scale_point(self) -> PointScaler:
         return self._scale_point
+
+    def scale_multipoint(self,
+                         multipoint: Multipoint,
+                         factor_x: Scalar,
+                         factor_y: Scalar,
+                         multipoint_cls: Type[Multipoint],
+                         point_cls: Type[Point]) -> Multipoint:
+        return multipoint_cls(
+                [self.scale_point(point, factor_x, factor_y, point_cls)
+                 for point in multipoint.points]
+                if factor_x and factor_y
+                else
+                (list(unique_ever_seen(self.scale_point(point, factor_x,
+                                                        factor_y, point_cls)
+                                       for point in multipoint.points))
+                 if factor_x or factor_y
+                 else [point_cls(factor_x, factor_y)]))
 
     def scale_segment(self,
                       segment: Segment,

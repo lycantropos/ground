@@ -740,6 +740,42 @@ class Context:
         """
         return self._centroidal.region_centroid(contour, self.point_cls)
 
+    def scale_multipoint(self,
+                         multipoint: _hints.Multipoint,
+                         step_x: _hints.Scalar,
+                         step_y: _hints.Scalar) -> _hints.Multipoint:
+        """
+        Returns multipoint scaled by given step.
+
+        Time complexity:
+            ``O(len(multipoint.points))``
+        Memory complexity:
+            ``O(len(multipoint.points))``
+
+        >>> context = get_context()
+        >>> Multipoint = context.multipoint_cls
+        >>> Point = context.point_cls
+        >>> (context.scale_multipoint(Multipoint([Point(0, 0), Point(1, 1)]),
+        ...                           0, 0)
+        ...  == Multipoint([Point(0, 0)]))
+        True
+        >>> (context.scale_multipoint(Multipoint([Point(0, 0), Point(1, 1)]),
+        ...                           1, 0)
+        ...  == Multipoint([Point(0, 0), Point(1, 0)]))
+        True
+        >>> (context.scale_multipoint(Multipoint([Point(0, 0), Point(1, 1)]),
+        ...                           0, 1)
+        ...  == Multipoint([Point(0, 0), Point(0, 1)]))
+        True
+        >>> (context.scale_multipoint(Multipoint([Point(0, 0), Point(1, 1)]),
+        ...                           1, 1)
+        ...  == Multipoint([Point(0, 0), Point(1, 1)]))
+        True
+        """
+        return self._scaling.scale_multipoint(multipoint, step_x, step_y,
+                                              self.multipoint_cls,
+                                              self.point_cls)
+
     def scale_point(self,
                     point: _hints.Point,
                     factor_x: _hints.Scalar,
