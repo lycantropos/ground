@@ -972,8 +972,8 @@ class Context:
             ``O(len(contour.vertices))``
 
         >>> context = get_context()
-        >>> Point = context.point_cls
         >>> Contour = context.contour_cls
+        >>> Point = context.point_cls
         >>> Segment = context.segment_cls
         >>> (context.translate_contour(Contour([Point(0, 0), Point(1, 0),
         ...                                     Point(0, 1)]), 0, 0)
@@ -1008,8 +1008,8 @@ class Context:
             ``O(len(multisegment.segments))``
 
         >>> context = get_context()
-        >>> Point = context.point_cls
         >>> Multisegment = context.multisegment_cls
+        >>> Point = context.point_cls
         >>> Segment = context.segment_cls
         >>> (context.translate_multisegment(
         ...      Multisegment([Segment(Point(0, 0), Point(1, 0)),
@@ -1056,9 +1056,9 @@ class Context:
  + sum(len(hole.vertices) for hole in polygon.holes)``.
 
         >>> context = get_context()
+        >>> Contour = context.contour_cls
         >>> Point = context.point_cls
         >>> Polygon = context.polygon_cls
-        >>> Contour = context.contour_cls
         >>> (context.translate_polygon(
         ...      Polygon(Contour([Point(0, 0), Point(1, 0), Point(0, 1)]), []),
         ...      0, 0)
