@@ -959,6 +959,51 @@ class Context:
                 first.start, first.end, second.start, second.end,
                 self.dot_product, self._segments_intersect)
 
+    def translate_multisegment(self,
+                               multisegment: _hints.Multisegment,
+                               step_x: _hints.Scalar,
+                               step_y: _hints.Scalar) -> _hints.Multisegment:
+        """
+        Returns multisegment translated by given step.
+
+        Time complexity:
+            ``O(1)``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Point = context.point_cls
+        >>> Multisegment = context.multisegment_cls
+        >>> Segment = context.segment_cls
+        >>> (context.translate_multisegment(
+        ...      Multisegment([Segment(Point(0, 0), Point(1, 0)),
+        ...                    Segment(Point(0, 0), Point(0, 1))]), 0, 0)
+        ...  == Multisegment([Segment(Point(0, 0), Point(1, 0)),
+        ...                   Segment(Point(0, 0), Point(0, 1))]))
+        True
+        >>> (context.translate_multisegment(
+        ...      Multisegment([Segment(Point(0, 0), Point(1, 0)),
+        ...                    Segment(Point(0, 0), Point(0, 1))]), 1, 0)
+        ...  == Multisegment([Segment(Point(1, 0), Point(2, 0)),
+        ...                   Segment(Point(1, 0), Point(1, 1))]))
+        True
+        >>> (context.translate_multisegment(
+        ...      Multisegment([Segment(Point(0, 0), Point(1, 0)),
+        ...                    Segment(Point(0, 0), Point(0, 1))]), 0, 1)
+        ...  == Multisegment([Segment(Point(0, 1), Point(1, 1)),
+        ...                   Segment(Point(0, 1), Point(0, 2))]))
+        True
+        >>> (context.translate_multisegment(
+        ...      Multisegment([Segment(Point(0, 0), Point(1, 0)),
+        ...                    Segment(Point(0, 0), Point(0, 1))]), 1, 1)
+        ...  == Multisegment([Segment(Point(1, 1), Point(2, 1)),
+        ...                   Segment(Point(1, 1), Point(1, 2))]))
+        True
+        """
+        return self._translate.translate_multisegment(
+                multisegment, step_x, step_y, self.multisegment_cls,
+                self.point_cls, self.segment_cls)
+
     def translate_point(self,
                         point: _hints.Point,
                         step_x: _hints.Scalar,

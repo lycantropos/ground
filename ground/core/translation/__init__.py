@@ -1,7 +1,8 @@
 from typing import (Callable,
                     Type)
 
-from ground.core.hints import (Point,
+from ground.core.hints import (Multisegment,
+                               Point,
                                Scalar,
                                Segment)
 from . import (exact,
@@ -12,6 +13,22 @@ PointTranslator = Callable[[Point, Scalar, Scalar, Type[Point]], Point]
 
 
 class Context:
+    @property
+    def translate_point(self) -> PointTranslator:
+        return self._translate_point
+
+    def translate_multisegment(self,
+                               multisegment: Multisegment,
+                               step_x: Scalar,
+                               step_y: Scalar,
+                               multisegment_cls: Type[Multisegment],
+                               point_cls: Type[Point],
+                               segment_cls: Type[Segment]) -> Multisegment:
+        return multisegment_cls([self.translate_segment(segment, step_x,
+                                                        step_y, point_cls,
+                                                        segment_cls)
+                                 for segment in multisegment.segments])
+
     def translate_segment(self,
                           segment: Segment,
                           step_x: Scalar,
@@ -27,10 +44,6 @@ class Context:
 
     def __init__(self, translate_point: PointTranslator) -> None:
         self._translate_point = translate_point
-
-    @property
-    def translate_point(self) -> PointTranslator:
-        return self._translate_point
 
 
 exact_context = Context(exact.translate_point)
