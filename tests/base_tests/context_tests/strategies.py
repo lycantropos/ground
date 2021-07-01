@@ -72,6 +72,12 @@ contexts_with_boxes_and_segments = (
             boxes_factory, segments_factory)))
 contexts_with_points = (contexts_with_coordinates_strategies
                         .flatmap(to_contexts_with(points_factory)))
+contexts_with_rational_contours_and_scalars_pairs = (
+    contexts_with_rational_coordinates_strategies.flatmap(
+            to_contexts_with(contours_factory, itemgetter(1), itemgetter(1))))
+contexts_with_contours_and_scalars_pairs = (
+    contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(contours_factory, itemgetter(1), itemgetter(1))))
 contexts_with_rational_multisegments_and_scalars_pairs = (
     contexts_with_rational_coordinates_strategies.flatmap(
             to_contexts_with(multisegments_factory, itemgetter(1),
