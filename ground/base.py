@@ -17,6 +17,7 @@ from .core import (angular as _angular,
                    geometries as _geometries,
                    measured as _measured,
                    metric as _metric,
+                   scaling as _scaling,
                    segment as _segment,
                    translation as _translation,
                    vector as _vector)
@@ -43,8 +44,8 @@ class Context:
                  '_contour_cls', '_empty', '_empty_cls', '_measured',
                  '_metric', '_mix_cls', '_mode', '_multipoint_cls',
                  '_multipolygon_cls', '_multisegment_cls', '_point_cls',
-                 '_polygon_cls', '_segment', '_segment_cls', '_sqrt',
-                 '_translate', '_vector')
+                 '_polygon_cls', '_scaling', '_segment', '_segment_cls',
+                 '_sqrt', '_translate', '_vector')
 
     def __init__(self,
                  *,
@@ -77,21 +78,25 @@ class Context:
         self._mode = mode
         self._sqrt = sqrt
         (self._angular, self._centroidal, self._circular, self._measured,
-         self._metric, self._segment, self._translate, self._vector) = (
+         self._metric, self._scaling, self._segment, self._translate,
+         self._vector) = (
             (_angular.exact_context, _centroidal.exact_context,
              _circular.exact_context, _measured.exact_context,
-             _metric.exact_context, _segment.exact_context,
-             _translation.exact_context, _vector.exact_context)
+             _metric.exact_context, _scaling.exact_context,
+             _segment.exact_context, _translation.exact_context,
+             _vector.exact_context)
             if mode is Mode.EXACT
             else ((_angular.plain_context, _centroidal.plain_context,
                    _circular.plain_context, _measured.plain_context,
-                   _metric.plain_context, _segment.plain_context,
-                   _translation.plain_context, _vector.plain_context)
+                   _metric.plain_context, _scaling.plain_context,
+                   _segment.plain_context, _translation.plain_context,
+                   _vector.plain_context)
                   if mode is Mode.PLAIN
                   else (_angular.robust_context, _centroidal.robust_context,
                         _circular.robust_context, _measured.robust_context,
-                        _metric.robust_context, _segment.exact_context,
-                        _translation.robust_context, _vector.robust_context)))
+                        _metric.robust_context, _scaling.robust_context,
+                        _segment.exact_context, _translation.robust_context,
+                        _vector.robust_context)))
 
     __repr__ = _generate_repr(__init__)
 
@@ -733,6 +738,32 @@ class Context:
         True
         """
         return self._centroidal.region_centroid(contour, self.point_cls)
+
+    def scale_point(self,
+                    point: _hints.Point,
+                    factor_x: _hints.Scalar,
+                    factor_y: _hints.Scalar) -> _hints.Point:
+        """
+        Returns point scaled by given factor.
+
+        Time complexity:
+            ``O(1)``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Point = context.point_cls
+        >>> context.scale_point(Point(1, 1), 0, 0) == Point(0, 0)
+        True
+        >>> context.scale_point(Point(1, 1), 1, 0) == Point(1, 0)
+        True
+        >>> context.scale_point(Point(1, 1), 0, 1) == Point(0, 1)
+        True
+        >>> context.scale_point(Point(1, 1), 1, 1) == Point(1, 1)
+        True
+        """
+        return self._scaling.scale_point(point, factor_x, factor_y,
+                                         self.point_cls)
 
     def segment_box(self, segment: _hints.Segment) -> _hints.Box:
         """
