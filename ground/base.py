@@ -995,6 +995,42 @@ class Context:
         return self._translate.translate_contour(
                 contour, step_x, step_y, self.contour_cls, self.point_cls)
 
+    def translate_multipoint(self,
+                             multipoint: _hints.Multipoint,
+                             step_x: _hints.Scalar,
+                             step_y: _hints.Scalar) -> _hints.Multipoint:
+        """
+        Returns multipoint translated by given step.
+
+        Time complexity:
+            ``O(len(multipoint.points))``
+        Memory complexity:
+            ``O(len(multipoint.points))``
+
+        >>> context = get_context()
+        >>> Multipoint = context.multipoint_cls
+        >>> Point = context.point_cls
+        >>> (context.translate_multipoint(Multipoint([Point(0, 0),
+        ...                                           Point(1, 0)]), 0, 0)
+        ...  == Multipoint([Point(0, 0), Point(1, 0)]))
+        True
+        >>> (context.translate_multipoint(Multipoint([Point(0, 0),
+        ...                                           Point(1, 0)]), 1, 0)
+        ...  == Multipoint([Point(1, 0), Point(2, 0)]))
+        True
+        >>> (context.translate_multipoint(Multipoint([Point(0, 0),
+        ...                                           Point(1, 0)]), 0, 1)
+        ...  == Multipoint([Point(0, 1), Point(1, 1)]))
+        True
+        >>> (context.translate_multipoint(Multipoint([Point(0, 0),
+        ...                                           Point(1, 0)]), 1, 1)
+        ...  == Multipoint([Point(1, 1), Point(2, 1)]))
+        True
+        """
+        return self._translate.translate_multipoint(multipoint, step_x, step_y,
+                                                    self.multipoint_cls,
+                                                    self.point_cls)
+
     def translate_multipolygon(self,
                                multipolygon: _hints.Multipolygon,
                                step_x: _hints.Scalar,
