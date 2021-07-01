@@ -1,5 +1,6 @@
 import math
-from functools import partial
+from functools import (partial,
+                       singledispatch)
 from numbers import (Rational,
                      Real)
 from operator import (getitem,
@@ -31,6 +32,7 @@ from ground.hints import (Box,
                           Polygon,
                           Scalar,
                           Segment)
+from ground.core import geometries
 from .hints import (Permutation,
                     Strategy)
 
@@ -127,15 +129,28 @@ def permute(sequence: Sequence[_T1], index: int) -> Sequence[_T1]:
     return [sequence[index] for index in nth_permutation(index, len(sequence))]
 
 
+@singledispatch
+def reverse_geometry(geometry: _T1) -> _T1:
+    raise TypeError('Unsupported geometry type: {!r}.'.format(type(geometry)))
+
+
+@singledispatch
+def reverse_geometry_coordinates(geometry: _T1) -> _T1:
+    raise TypeError('Unsupported geometry type: {!r}.'.format(type(geometry)))
+
+
+@reverse_geometry_coordinates.register(geometries.Box)
 def reverse_box_coordinates(box: Box) -> Point:
     return type(box)(box.min_y, box.max_y, box.min_x, box.max_x)
 
 
+@reverse_geometry_coordinates.register(geometries.Contour)
 def reverse_contour_coordinates(contour: Contour) -> Contour:
     return type(contour)([reverse_point_coordinates(vertex)
                           for vertex in contour.vertices])
 
 
+@reverse_geometry.register(geometries.Contour)
 def reverse_contour(contour: Contour) -> Contour:
     return type(contour)(reverse_sequence(contour.vertices))
 
@@ -145,34 +160,41 @@ def reverse_contours_coordinates(contours: Sequence[Contour]
     return [reverse_contour_coordinates(contour) for contour in contours]
 
 
+@reverse_geometry.register(geometries.Multipoint)
 def reverse_multipoint(multipoint: Multipoint) -> Multipoint:
     return type(multipoint)(reverse_sequence(multipoint.points))
 
 
+@reverse_geometry_coordinates.register(geometries.Multipoint)
 def reverse_multipoint_coordinates(multipoint: Multipoint) -> Multipoint:
     return type(multipoint)(reverse_points_coordinates(multipoint.points))
 
 
+@reverse_geometry.register(geometries.Multipolygon)
 def reverse_multipolygon(multipolygon: Multipolygon) -> Multipolygon:
     return type(multipolygon)(reverse_sequence(multipolygon.polygons))
 
 
+@reverse_geometry_coordinates.register(geometries.Multipolygon)
 def reverse_multipolygon_coordinates(multipolygon: Multipolygon
                                      ) -> Multipolygon:
     return type(multipolygon)([reverse_polygon_coordinates(polygon)
                                for polygon in multipolygon.polygons])
 
 
+@reverse_geometry.register(geometries.Multisegment)
 def reverse_multisegment(multisegment: Multisegment) -> Multisegment:
     return type(multisegment)(reverse_sequence(multisegment.segments))
 
 
+@reverse_geometry_coordinates.register(geometries.Multisegment)
 def reverse_multisegment_coordinates(multisegment: Multisegment
                                      ) -> Multisegment:
     return type(multisegment)([reverse_segment_coordinates(segment)
                                for segment in multisegment.segments])
 
 
+@reverse_geometry_coordinates.register(geometries.Point)
 def reverse_point_coordinates(point: Point) -> Point:
     return type(point)(point.y, point.x)
 
@@ -186,6 +208,7 @@ def reverse_polygon_border(polygon: Polygon) -> Polygon:
                          polygon.holes)
 
 
+@reverse_geometry_coordinates.register(geometries.Polygon)
 def reverse_polygon_coordinates(polygon: Polygon) -> Polygon:
     return type(polygon)(reverse_contour_coordinates(polygon.border),
                          [reverse_contour_coordinates(hole)
@@ -201,18 +224,20 @@ def reverse_polygons_coordinates(polygons: Sequence[Polygon]
     return [reverse_polygon_coordinates(polygon) for polygon in polygons]
 
 
+@reverse_geometry_coordinates.register(geometries.Segment)
 def reverse_segment_coordinates(segment: Segment) -> Segment:
     return type(segment)(reverse_point_coordinates(segment.start),
                          reverse_point_coordinates(segment.end))
 
 
-def reverse_segment_endpoints(segment: Segment) -> Segment:
+@reverse_geometry.register(geometries.Segment)
+def reverse_segment(segment: Segment) -> Segment:
     return type(segment)(segment.end, segment.start)
 
 
 def reverse_segments_endpoints(segments: Sequence[Segment]
                                ) -> Sequence[Segment]:
-    return [reverse_segment_endpoints(segment) for segment in segments]
+    return [reverse_segment(segment) for segment in segments]
 
 
 def reverse_segments_coordinates(segments: Sequence[Segment]
@@ -296,10 +321,6 @@ def context_to_output_coordinate_cls(context: Context) -> Type[Scalar]:
 
 def permute_multipoint(multipoint: Multipoint, index: int) -> Multipoint:
     return type(multipoint)(permute(multipoint.points, index))
-
-
-def reverse_segment(segment: Segment) -> Segment:
-    return type(segment)(segment.end, segment.start)
 
 
 def rotate_contour(contour: Contour, offset: int) -> Contour:
