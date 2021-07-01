@@ -959,6 +959,42 @@ class Context:
                 first.start, first.end, second.start, second.end,
                 self.dot_product, self._segments_intersect)
 
+    def translate_contour(self,
+                          contour: _hints.Contour,
+                          step_x: _hints.Scalar,
+                          step_y: _hints.Scalar) -> _hints.Contour:
+        """
+        Returns contour translated by given step.
+
+        Time complexity:
+            ``O(len(contour.vertices))``
+        Memory complexity:
+            ``O(len(contour.vertices))``
+
+        >>> context = get_context()
+        >>> Point = context.point_cls
+        >>> Contour = context.contour_cls
+        >>> Segment = context.segment_cls
+        >>> (context.translate_contour(Contour([Point(0, 0), Point(1, 0),
+        ...                                     Point(0, 1)]), 0, 0)
+        ...  == Contour([Point(0, 0), Point(1, 0), Point(0, 1)]))
+        True
+        >>> (context.translate_contour(Contour([Point(0, 0), Point(1, 0),
+        ...                                     Point(0, 1)]), 1, 0)
+        ...  == Contour([Point(1, 0), Point(2, 0), Point(1, 1)]))
+        True
+        >>> (context.translate_contour(Contour([Point(0, 0), Point(1, 0),
+        ...                                     Point(0, 1)]), 0, 1)
+        ...  == Contour([Point(0, 1), Point(1, 1), Point(0, 2)]))
+        True
+        >>> (context.translate_contour(Contour([Point(0, 0), Point(1, 0),
+        ...                                     Point(0, 1)]), 1, 1)
+        ...  == Contour([Point(1, 1), Point(2, 1), Point(1, 2)]))
+        True
+        """
+        return self._translate.translate_contour(
+                contour, step_x, step_y, self.contour_cls, self.point_cls)
+
     def translate_multisegment(self,
                                multisegment: _hints.Multisegment,
                                step_x: _hints.Scalar,

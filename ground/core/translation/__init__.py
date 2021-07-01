@@ -1,7 +1,8 @@
 from typing import (Callable,
                     Type)
 
-from ground.core.hints import (Multisegment,
+from ground.core.hints import (Contour,
+                               Multisegment,
                                Point,
                                Scalar,
                                Segment)
@@ -16,6 +17,16 @@ class Context:
     @property
     def translate_point(self) -> PointTranslator:
         return self._translate_point
+
+    def translate_contour(self,
+                          contour: Contour,
+                          step_x: Scalar,
+                          step_y: Scalar,
+                          contour_cls: Type[Contour],
+                          point_cls: Type[Point]) -> Contour:
+        return contour_cls([self.translate_point(vertex, step_x, step_y,
+                                                 point_cls)
+                            for vertex in contour.vertices])
 
     def translate_multisegment(self,
                                multisegment: Multisegment,
