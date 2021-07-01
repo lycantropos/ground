@@ -985,6 +985,37 @@ class Context:
         return self._translate.translate_point(point, step_x, step_y,
                                                self.point_cls)
 
+    def translate_segment(self,
+                          segment: _hints.Segment,
+                          step_x: _hints.Scalar,
+                          step_y: _hints.Scalar) -> _hints.Segment:
+        """
+        Returns segment translated by given step.
+
+        Time complexity:
+            ``O(1)``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Point = context.point_cls
+        >>> Segment = context.segment_cls
+        >>> (context.translate_segment(Segment(Point(0, 0), Point(1, 0)), 0, 0)
+        ...  == Segment(Point(0, 0), Point(1, 0)))
+        True
+        >>> (context.translate_segment(Segment(Point(0, 0), Point(1, 0)), 1, 0)
+        ...  == Segment(Point(1, 0), Point(2, 0)))
+        True
+        >>> (context.translate_segment(Segment(Point(0, 0), Point(1, 0)), 0, 1)
+        ...  == Segment(Point(0, 1), Point(1, 1)))
+        True
+        >>> (context.translate_segment(Segment(Point(0, 0), Point(1, 0)), 1, 1)
+        ...  == Segment(Point(1, 1), Point(2, 1)))
+        True
+        """
+        return self._translate.translate_segment(
+                segment, step_x, step_y, self.point_cls, self.segment_cls)
+
     def _segment_contains_point(self,
                                 start: _hints.Point,
                                 end: _hints.Point,
