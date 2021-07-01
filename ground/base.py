@@ -45,7 +45,7 @@ class Context:
                  '_metric', '_mix_cls', '_mode', '_multipoint_cls',
                  '_multipolygon_cls', '_multisegment_cls', '_point_cls',
                  '_polygon_cls', '_scaling', '_segment', '_segment_cls',
-                 '_sqrt', '_translate', '_vector')
+                 '_sqrt', '_translation', '_vector')
 
     def __init__(self,
                  *,
@@ -78,7 +78,7 @@ class Context:
         self._mode = mode
         self._sqrt = sqrt
         (self._angular, self._centroidal, self._circular, self._measured,
-         self._metric, self._scaling, self._segment, self._translate,
+         self._metric, self._scaling, self._segment, self._translation,
          self._vector) = (
             (_angular.exact_context, _centroidal.exact_context,
              _circular.exact_context, _measured.exact_context,
@@ -1023,7 +1023,7 @@ class Context:
         ...  == Contour([Point(1, 1), Point(2, 1), Point(1, 2)]))
         True
         """
-        return self._translate.translate_contour(
+        return self._translation.translate_contour(
                 contour, step_x, step_y, self.contour_cls, self.point_cls)
 
     def translate_multipoint(self,
@@ -1058,9 +1058,9 @@ class Context:
         ...  == Multipoint([Point(1, 1), Point(2, 1)]))
         True
         """
-        return self._translate.translate_multipoint(multipoint, step_x, step_y,
-                                                    self.multipoint_cls,
-                                                    self.point_cls)
+        return self._translation.translate_multipoint(
+                multipoint, step_x, step_y, self.multipoint_cls,
+                self.point_cls)
 
     def translate_multipolygon(self,
                                multipolygon: _hints.Multipolygon,
@@ -1124,7 +1124,7 @@ class Context:
         ...                                    Point(2, 3)]), [])]))
         True
         """
-        return self._translate.translate_multipolygon(
+        return self._translation.translate_multipolygon(
                 multipolygon, step_x, step_y, self.contour_cls,
                 self.multipolygon_cls, self.polygon_cls, self.point_cls)
 
@@ -1169,7 +1169,7 @@ class Context:
         ...                   Segment(Point(1, 1), Point(1, 2))]))
         True
         """
-        return self._translate.translate_multisegment(
+        return self._translation.translate_multisegment(
                 multisegment, step_x, step_y, self.multisegment_cls,
                 self.point_cls, self.segment_cls)
 
@@ -1213,7 +1213,7 @@ class Context:
         ...  == Polygon(Contour([Point(1, 1), Point(2, 1), Point(1, 2)]), []))
         True
         """
-        return self._translate.translate_polygon(
+        return self._translation.translate_polygon(
                 polygon, step_x, step_y, self.contour_cls, self.polygon_cls,
                 self.point_cls)
 
@@ -1240,8 +1240,8 @@ class Context:
         >>> context.translate_point(Point(0, 0), 1, 1) == Point(1, 1)
         True
         """
-        return self._translate.translate_point(point, step_x, step_y,
-                                               self.point_cls)
+        return self._translation.translate_point(point, step_x, step_y,
+                                                 self.point_cls)
 
     def translate_segment(self,
                           segment: _hints.Segment,
@@ -1271,7 +1271,7 @@ class Context:
         ...  == Segment(Point(1, 1), Point(2, 1)))
         True
         """
-        return self._translate.translate_segment(
+        return self._translation.translate_segment(
                 segment, step_x, step_y, self.point_cls, self.segment_cls)
 
     def _segment_contains_point(self,
