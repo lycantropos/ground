@@ -765,6 +765,39 @@ class Context:
         return self._scaling.scale_point(point, factor_x, factor_y,
                                          self.point_cls)
 
+    def scale_segment(self,
+                      segment: _hints.Segment,
+                      factor_x: _hints.Scalar,
+                      factor_y: _hints.Scalar) -> _hints.Segment:
+        """
+        Returns segment scaled by given factor.
+
+        Time complexity:
+            ``O(1)``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Multipoint = context.multipoint_cls
+        >>> Point = context.point_cls
+        >>> Segment = context.segment_cls
+        >>> (context.scale_segment(Segment(Point(0, 0), Point(1, 1)), 0, 0)
+        ...  == Multipoint([Point(0, 0)]))
+        True
+        >>> (context.scale_segment(Segment(Point(0, 0), Point(1, 1)), 1, 0)
+        ...  == Segment(Point(0, 0), Point(1, 0)))
+        True
+        >>> (context.scale_segment(Segment(Point(0, 0), Point(1, 1)), 0, 1)
+        ...  == Segment(Point(0, 0), Point(0, 1)))
+        True
+        >>> (context.scale_segment(Segment(Point(0, 0), Point(1, 1)), 1, 1)
+        ...  == Segment(Point(0, 0), Point(1, 1)))
+        True
+        """
+        return self._scaling.scale_segment(
+                segment, factor_x, factor_y, self.multipoint_cls,
+                self.point_cls, self.segment_cls)
+
     def segment_box(self, segment: _hints.Segment) -> _hints.Box:
         """
         Constructs box from segment.
