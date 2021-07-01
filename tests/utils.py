@@ -1,4 +1,3 @@
-import math
 from functools import (partial,
                        singledispatch)
 from numbers import (Rational,
@@ -15,6 +14,7 @@ from typing import (Any,
                     Type,
                     TypeVar)
 
+import math
 from hypothesis import strategies
 
 from ground.base import (Context,
@@ -22,6 +22,7 @@ from ground.base import (Context,
                          Mode,
                          Orientation,
                          Relation)
+from ground.core import geometries
 from ground.core.primitive import to_sign
 from ground.hints import (Box,
                           Contour,
@@ -32,7 +33,6 @@ from ground.hints import (Box,
                           Polygon,
                           Scalar,
                           Segment)
-from ground.core import geometries
 from .hints import (Permutation,
                     Strategy)
 
@@ -92,6 +92,10 @@ def identity(value: _T1) -> _T1:
 
 def lift(value: _T1) -> List[_T1]:
     return [value]
+
+
+def are_multipoints_equivalent(left: Multipoint, right: Multipoint) -> bool:
+    return frozenset(left.points) == frozenset(right.points)
 
 
 is_box = Box.__instancecheck__

@@ -55,7 +55,8 @@ def to_multipoints(context: Context,
     return strategies.builds(context.multipoint_cls,
                              to_points_lists(context, coordinates,
                                              max_size=max_size,
-                                             min_size=min_size))
+                                             min_size=min_size,
+                                             unique=True))
 
 
 def to_multipolygons(context: Context,
