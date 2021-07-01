@@ -2,7 +2,8 @@ import enum as _enum
 from contextvars import ContextVar as _ContextVar
 from typing import (Callable as _Callable,
                     Sequence as _Sequence,
-                    Type as _Type)
+                    Type as _Type,
+                    Union as _Union)
 
 from reprit.base import generate_repr as _generate_repr
 from symba.base import sqrt as _sqrt
@@ -768,7 +769,8 @@ class Context:
     def scale_segment(self,
                       segment: _hints.Segment,
                       factor_x: _hints.Scalar,
-                      factor_y: _hints.Scalar) -> _hints.Segment:
+                      factor_y: _hints.Scalar
+                      ) -> _Union[_hints.Multipoint, _hints.Segment]:
         """
         Returns segment scaled by given factor.
 
