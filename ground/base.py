@@ -892,6 +892,55 @@ class Context:
         return self._scaling.scale_point(point, factor_x, factor_y,
                                          self.point_cls)
 
+    def scale_polygon(self,
+                      polygon: _hints.Polygon,
+                      factor_x: _hints.Scalar,
+                      factor_y: _hints.Scalar
+                      ) -> _Union[_hints.Multipoint, _hints.Polygon,
+                                  _hints.Segment]:
+        """
+        Returns polygon scaled by given factor.
+
+        Time complexity:
+            ``O(vertices_count)``
+        Memory complexity:
+            ``O(vertices_count)``
+
+        where ``vertices_count = len(polygon.border.vertices)\
+ + sum(len(hole.vertices) for hole in polygon.holes)``.
+
+        >>> context = get_context()
+        >>> Contour = context.contour_cls
+        >>> Multipoint = context.multipoint_cls
+        >>> Point = context.point_cls
+        >>> Polygon = context.polygon_cls
+        >>> Segment = context.segment_cls
+        >>> (context.scale_polygon(
+        ...      Polygon(Contour([Point(0, 0), Point(1, 0), Point(0, 1)]), []),
+        ...      0, 0)
+        ...  == Multipoint([Point(0, 0)]))
+        True
+        >>> (context.scale_polygon(
+        ...      Polygon(Contour([Point(0, 0), Point(1, 0), Point(0, 1)]), []),
+        ...      1, 0)
+        ...  == Segment(Point(0, 0), Point(1, 0)))
+        True
+        >>> (context.scale_polygon(
+        ...      Polygon(Contour([Point(0, 0), Point(1, 0), Point(0, 1)]), []),
+        ...      0, 1)
+        ...  == Segment(Point(0, 0), Point(0, 1)))
+        True
+        >>> (context.scale_polygon(
+        ...      Polygon(Contour([Point(0, 0), Point(1, 0), Point(0, 1)]), []),
+        ...      1, 1)
+        ...  == Polygon(Contour([Point(0, 0), Point(1, 0), Point(0, 1)]), []))
+        True
+        """
+        return self._scaling.scale_polygon(
+                polygon, factor_x, factor_y, self.contour_cls,
+                self.multipoint_cls, self.point_cls, self.polygon_cls,
+                self.segment_cls)
+
     def scale_segment(self,
                       segment: _hints.Segment,
                       factor_x: _hints.Scalar,

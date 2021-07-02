@@ -11,6 +11,7 @@ from ground.core.hints import (Contour,
                                Multipoint,
                                Multisegment,
                                Point,
+                               Polygon,
                                Scalar,
                                Segment)
 from ground.core.packing import (pack_mix,
@@ -31,6 +32,44 @@ class Context:
     @property
     def scale_point(self) -> PointScaler:
         return self._scale_point
+
+    def scale_contour(self,
+                      contour: Contour,
+                      factor_x: Scalar,
+                      factor_y: Scalar,
+                      contour_cls: Type[Contour],
+                      multipoint_cls: Type[Multipoint],
+                      point_cls: Type[Point],
+                      segment_cls: Type[Segment]
+                      ) -> Union[Contour, Multipoint, Segment]:
+        return (self.scale_contour_non_degenerate(contour, factor_x, factor_y,
+                                                  contour_cls, point_cls)
+                if factor_x and factor_y
+                else self.scale_contour_degenerate(contour, factor_x, factor_y,
+                                                   multipoint_cls, point_cls,
+                                                   segment_cls))
+
+    def scale_contour_non_degenerate(self,
+                                     contour: Contour,
+                                     factor_x: Scalar,
+                                     factor_y: Scalar,
+                                     contour_cls: Type[Contour],
+                                     point_cls: Type[Point]) -> Contour:
+        return contour_cls([self.scale_point(vertex, factor_x, factor_y,
+                                             point_cls)
+                            for vertex in contour.vertices])
+
+    def scale_contour_degenerate(self,
+                                 contour: Contour,
+                                 factor_x: Scalar,
+                                 factor_y: Scalar,
+                                 multipoint_cls: Type[Multipoint],
+                                 point_cls: Type[Point],
+                                 segment_cls: Type[Segment]
+                                 ) -> Union[Segment, Multipoint]:
+        return self.scale_vertices_degenerate(contour.vertices, factor_x,
+                                              factor_y, multipoint_cls,
+                                              point_cls, segment_cls)
 
     def scale_multipoint(self,
                          multipoint: Multipoint,
@@ -102,43 +141,38 @@ class Context:
                            self.scale_point(segment.end, factor_x, factor_y,
                                             point_cls))
 
-    def scale_contour(self,
-                      contour: Contour,
+    def scale_polygon(self,
+                      polygon: Polygon,
                       factor_x: Scalar,
                       factor_y: Scalar,
                       contour_cls: Type[Contour],
                       multipoint_cls: Type[Multipoint],
                       point_cls: Type[Point],
+                      polygon_cls: Type[Polygon],
                       segment_cls: Type[Segment]
-                      ) -> Union[Contour, Multipoint, Segment]:
-        return (self.scale_contour_non_degenerate(contour, factor_x, factor_y,
-                                                  contour_cls, point_cls)
+                      ) -> Union[Multipoint, Polygon, Segment]:
+        return (self.scale_polygon_non_degenerate(polygon, factor_x, factor_y,
+                                                  contour_cls, point_cls,
+                                                  polygon_cls)
                 if factor_x and factor_y
-                else self.scale_contour_degenerate(contour, factor_x, factor_y,
-                                                   multipoint_cls, point_cls,
-                                                   segment_cls))
+                else self.scale_contour_degenerate(polygon.border, factor_x,
+                                                   factor_y, multipoint_cls,
+                                                   point_cls, segment_cls))
 
-    def scale_contour_non_degenerate(self,
-                                     contour: Contour,
+    def scale_polygon_non_degenerate(self,
+                                     polygon: Polygon,
                                      factor_x: Scalar,
                                      factor_y: Scalar,
                                      contour_cls: Type[Contour],
-                                     point_cls: Type[Point]) -> Contour:
-        return contour_cls([self.scale_point(vertex, factor_x, factor_y,
-                                             point_cls)
-                            for vertex in contour.vertices])
-
-    def scale_contour_degenerate(self,
-                                 contour: Contour,
-                                 factor_x: Scalar,
-                                 factor_y: Scalar,
-                                 multipoint_cls: Type[Multipoint],
-                                 point_cls: Type[Point],
-                                 segment_cls: Type[Segment]
-                                 ) -> Union[Segment, Multipoint]:
-        return self.scale_vertices_degenerate(contour.vertices, factor_x,
-                                              factor_y, multipoint_cls,
-                                              point_cls, segment_cls)
+                                     point_cls: Type[Point],
+                                     polygon_cls: Type[Polygon]) -> Polygon:
+        return polygon_cls(
+                self.scale_contour_non_degenerate(polygon.border, factor_x,
+                                                  factor_y, contour_cls,
+                                                  point_cls),
+                [self.scale_contour_non_degenerate(hole, factor_x, factor_y,
+                                                   contour_cls, point_cls)
+                 for hole in polygon.holes])
 
     def scale_vertices_degenerate(self,
                                   vertices: Iterable[Point],
