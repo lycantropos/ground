@@ -91,7 +91,7 @@ class Context:
                            self.translate_point(segment.end, step_x, step_y,
                                                 point_cls))
 
-    __slots__ = '_translate_point'
+    __slots__ = '_translate_point',
 
     def __init__(self, translate_point: PointTranslator) -> None:
         self._translate_point = translate_point

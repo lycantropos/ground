@@ -261,7 +261,7 @@ class Context:
         return segment_cls(point_cls(factor_x, min_y * factor_y),
                            point_cls(factor_x, max_y * factor_y))
 
-    __slots__ = '_scale_point'
+    __slots__ = '_scale_point',
 
     def __init__(self, scale_point: PointScaler) -> None:
         self._scale_point = scale_point
