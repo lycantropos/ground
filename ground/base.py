@@ -740,6 +740,46 @@ class Context:
         """
         return self._centroidal.region_centroid(contour, self.point_cls)
 
+    def scale_contour(self,
+                      contour: _hints.Contour,
+                      factor_x: _hints.Scalar,
+                      factor_y: _hints.Scalar
+                      ) -> _Union[_hints.Contour, _hints.Multipoint,
+                                  _hints.Segment]:
+        """
+        Returns contour scaled by given factor.
+
+        Time complexity:
+            ``O(len(contour.vertices))``
+        Memory complexity:
+            ``O(len(contour.vertices))``
+
+        >>> context = get_context()
+        >>> Contour = context.contour_cls
+        >>> Multipoint = context.multipoint_cls
+        >>> Point = context.point_cls
+        >>> Segment = context.segment_cls
+        >>> (context.scale_contour(Contour([Point(0, 0), Point(1, 0),
+        ...                                 Point(0, 1)]), 0, 0)
+        ...  == Multipoint([Point(0, 0)]))
+        True
+        >>> (context.scale_contour(Contour([Point(0, 0), Point(1, 0),
+        ...                                 Point(0, 1)]), 1, 0)
+        ...  == Segment(Point(0, 0), Point(1, 0)))
+        True
+        >>> (context.scale_contour(Contour([Point(0, 0), Point(1, 0),
+        ...                                 Point(0, 1)]), 0, 1)
+        ...  == Segment(Point(0, 0), Point(0, 1)))
+        True
+        >>> (context.scale_contour(Contour([Point(0, 0), Point(1, 0),
+        ...                                 Point(0, 1)]), 1, 1)
+        ...  == Contour([Point(0, 0), Point(1, 0), Point(0, 1)]))
+        True
+        """
+        return self._scaling.scale_contour(
+                contour, factor_x, factor_y, self.contour_cls,
+                self.multipoint_cls, self.point_cls, self.segment_cls)
+
     def scale_multipoint(self,
                          multipoint: _hints.Multipoint,
                          factor_x: _hints.Scalar,

@@ -1,10 +1,12 @@
 import sys
 from collections import OrderedDict
 from typing import (Callable,
+                    Iterable,
                     Type,
                     Union)
 
-from ground.core.hints import (Empty,
+from ground.core.hints import (Contour,
+                               Empty,
                                Mix,
                                Multipoint,
                                Multisegment,
@@ -99,6 +101,94 @@ class Context:
                                             point_cls),
                            self.scale_point(segment.end, factor_x, factor_y,
                                             point_cls))
+
+    def scale_contour(self,
+                      contour: Contour,
+                      factor_x: Scalar,
+                      factor_y: Scalar,
+                      contour_cls: Type[Contour],
+                      multipoint_cls: Type[Multipoint],
+                      point_cls: Type[Point],
+                      segment_cls: Type[Segment]
+                      ) -> Union[Contour, Multipoint, Segment]:
+        return (self.scale_contour_non_degenerate(contour, factor_x, factor_y,
+                                                  contour_cls, point_cls)
+                if factor_x and factor_y
+                else self.scale_contour_degenerate(contour, factor_x, factor_y,
+                                                   multipoint_cls, point_cls,
+                                                   segment_cls))
+
+    def scale_contour_non_degenerate(self,
+                                     contour: Contour,
+                                     factor_x: Scalar,
+                                     factor_y: Scalar,
+                                     contour_cls: Type[Contour],
+                                     point_cls: Type[Point]) -> Contour:
+        return contour_cls([self.scale_point(vertex, factor_x, factor_y,
+                                             point_cls)
+                            for vertex in contour.vertices])
+
+    def scale_contour_degenerate(self,
+                                 contour: Contour,
+                                 factor_x: Scalar,
+                                 factor_y: Scalar,
+                                 multipoint_cls: Type[Multipoint],
+                                 point_cls: Type[Point],
+                                 segment_cls: Type[Segment]
+                                 ) -> Union[Segment, Multipoint]:
+        return self.scale_vertices_degenerate(contour.vertices, factor_x,
+                                              factor_y, multipoint_cls,
+                                              point_cls, segment_cls)
+
+    def scale_vertices_degenerate(self,
+                                  vertices: Iterable[Point],
+                                  factor_x: Scalar,
+                                  factor_y: Scalar,
+                                  multipoint_cls: Type[Multipoint],
+                                  point_cls: Type[Point],
+                                  segment_cls: Type[Segment]
+                                  ) -> Union[Segment, Multipoint]:
+        return (self.scale_vertices_projecting_on_ox(vertices, factor_x,
+                                                     factor_y, point_cls,
+                                                     segment_cls)
+                if factor_x
+                else (self.scale_vertices_projecting_on_oy(vertices, factor_x,
+                                                           factor_y, point_cls,
+                                                           segment_cls)
+                      if factor_y
+                      else multipoint_cls([point_cls(factor_x, factor_y)])))
+
+    @staticmethod
+    def scale_vertices_projecting_on_ox(vertices: Iterable[Point],
+                                        factor_x: Scalar,
+                                        factor_y: Scalar,
+                                        point_cls: Type[Point],
+                                        segment_cls: Type[Segment]) -> Segment:
+        vertices = iter(vertices)
+        min_x = max_x = next(vertices).x
+        for vertex in vertices:
+            if min_x > vertex.x:
+                min_x = vertex.x
+            elif max_x < vertex.x:
+                max_x = vertex.x
+        return segment_cls(point_cls(min_x * factor_x, factor_y),
+                           point_cls(max_x * factor_x, factor_y))
+
+    @staticmethod
+    def scale_vertices_projecting_on_oy(vertices: Iterable[Point],
+                                        factor_x: Scalar,
+                                        factor_y: Scalar,
+                                        point_cls: Type[Point],
+                                        segment_cls: Type[Segment]) -> Segment:
+        vertices = iter(vertices)
+        min_y = max_y = next(vertices).y
+        for vertex in vertices:
+            if min_y > vertex.y:
+                min_y = vertex.y
+            elif max_y < vertex.y:
+                max_y = vertex.y
+        return segment_cls(point_cls(factor_x, min_y * factor_y),
+                           point_cls(factor_x, max_y * factor_y))
 
     __slots__ = '_scale_point'
 
