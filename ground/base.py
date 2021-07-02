@@ -1334,6 +1334,32 @@ class Context:
                 multisegment, step_x, step_y, self.multisegment_cls,
                 self.point_cls, self.segment_cls)
 
+    def translate_point(self,
+                        point: _hints.Point,
+                        step_x: _hints.Scalar,
+                        step_y: _hints.Scalar) -> _hints.Point:
+        """
+        Returns point translated by given step.
+
+        Time complexity:
+            ``O(1)``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Point = context.point_cls
+        >>> context.translate_point(Point(0, 0), 0, 0) == Point(0, 0)
+        True
+        >>> context.translate_point(Point(0, 0), 1, 0) == Point(1, 0)
+        True
+        >>> context.translate_point(Point(0, 0), 0, 1) == Point(0, 1)
+        True
+        >>> context.translate_point(Point(0, 0), 1, 1) == Point(1, 1)
+        True
+        """
+        return self._translation.translate_point(point, step_x, step_y,
+                                                 self.point_cls)
+
     def translate_polygon(self,
                           polygon: _hints.Polygon,
                           step_x: _hints.Scalar,
@@ -1377,32 +1403,6 @@ class Context:
         return self._translation.translate_polygon(
                 polygon, step_x, step_y, self.contour_cls, self.polygon_cls,
                 self.point_cls)
-
-    def translate_point(self,
-                        point: _hints.Point,
-                        step_x: _hints.Scalar,
-                        step_y: _hints.Scalar) -> _hints.Point:
-        """
-        Returns point translated by given step.
-
-        Time complexity:
-            ``O(1)``
-        Memory complexity:
-            ``O(1)``
-
-        >>> context = get_context()
-        >>> Point = context.point_cls
-        >>> context.translate_point(Point(0, 0), 0, 0) == Point(0, 0)
-        True
-        >>> context.translate_point(Point(0, 0), 1, 0) == Point(1, 0)
-        True
-        >>> context.translate_point(Point(0, 0), 0, 1) == Point(0, 1)
-        True
-        >>> context.translate_point(Point(0, 0), 1, 1) == Point(1, 1)
-        True
-        """
-        return self._translation.translate_point(point, step_x, step_y,
-                                                 self.point_cls)
 
     def translate_segment(self,
                           segment: _hints.Segment,
