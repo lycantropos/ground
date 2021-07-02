@@ -1336,7 +1336,7 @@ class Context:
         """
         return self._translation.translate_multipolygon(
                 multipolygon, step_x, step_y, self.contour_cls,
-                self.multipolygon_cls, self.polygon_cls, self.point_cls)
+                self.multipolygon_cls, self.point_cls, self.polygon_cls)
 
     def translate_multisegment(self,
                                multisegment: _hints.Multisegment,
@@ -1450,8 +1450,8 @@ class Context:
         True
         """
         return self._translation.translate_polygon(
-                polygon, step_x, step_y, self.contour_cls, self.polygon_cls,
-                self.point_cls)
+                polygon, step_x, step_y, self.contour_cls, self.point_cls,
+                self.polygon_cls)
 
     def translate_segment(self,
                           segment: _hints.Segment,

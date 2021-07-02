@@ -47,11 +47,11 @@ class Context:
                                step_y: Scalar,
                                contour_cls: Type[Contour],
                                multipolygon_cls: Type[Multipolygon],
-                               polygon_cls: Type[Polygon],
-                               point_cls: Type[Point]) -> Multipolygon:
+                               point_cls: Type[Point],
+                               polygon_cls: Type[Polygon]) -> Multipolygon:
         return multipolygon_cls(
                 [self.translate_polygon(polygon, step_x, step_y, contour_cls,
-                                        polygon_cls, point_cls)
+                                        point_cls, polygon_cls)
                  for polygon in multipolygon.polygons])
 
     def translate_multisegment(self,
@@ -71,8 +71,8 @@ class Context:
                           step_x: Scalar,
                           step_y: Scalar,
                           contour_cls: Type[Contour],
-                          polygon_cls: Type[Polygon],
-                          point_cls: Type[Point]) -> Polygon:
+                          point_cls: Type[Point],
+                          polygon_cls: Type[Polygon]) -> Polygon:
         return polygon_cls(self.translate_contour(polygon.border, step_x,
                                                   step_y, contour_cls,
                                                   point_cls),

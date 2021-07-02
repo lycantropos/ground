@@ -66,7 +66,7 @@ class Context:
                                  multipoint_cls: Type[Multipoint],
                                  point_cls: Type[Point],
                                  segment_cls: Type[Segment]
-                                 ) -> Union[Segment, Multipoint]:
+                                 ) -> Union[Multipoint, Segment]:
         return self.scale_vertices_degenerate(contour.vertices, factor_x,
                                               factor_y, multipoint_cls,
                                               point_cls, segment_cls)
