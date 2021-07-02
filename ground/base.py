@@ -742,10 +742,10 @@ class Context:
 
     def scale_multipoint(self,
                          multipoint: _hints.Multipoint,
-                         step_x: _hints.Scalar,
-                         step_y: _hints.Scalar) -> _hints.Multipoint:
+                         factor_x: _hints.Scalar,
+                         factor_y: _hints.Scalar) -> _hints.Multipoint:
         """
-        Returns multipoint scaled by given step.
+        Returns multipoint scaled by given factor.
 
         Time complexity:
             ``O(len(multipoint.points))``
@@ -772,7 +772,7 @@ class Context:
         ...  == Multipoint([Point(0, 0), Point(1, 1)]))
         True
         """
-        return self._scaling.scale_multipoint(multipoint, step_x, step_y,
+        return self._scaling.scale_multipoint(multipoint, factor_x, factor_y,
                                               self.multipoint_cls,
                                               self.point_cls)
 
