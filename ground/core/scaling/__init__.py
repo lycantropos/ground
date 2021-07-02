@@ -1,5 +1,6 @@
 import sys
 from collections import OrderedDict
+from itertools import chain
 from typing import (Callable,
                     Iterable,
                     Type,
@@ -9,6 +10,7 @@ from ground.core.hints import (Contour,
                                Empty,
                                Mix,
                                Multipoint,
+                               Multipolygon,
                                Multisegment,
                                Point,
                                Polygon,
@@ -22,10 +24,6 @@ from . import (exact,
                robust)
 
 PointScaler = Callable[[Point, Scalar, Scalar, Type[Point]], Point]
-
-unique_ever_seen = (dict.fromkeys
-                    if sys.version_info >= (3, 6)
-                    else OrderedDict.fromkeys)
 
 
 class Context:
@@ -88,6 +86,33 @@ class Context:
                  if factor_x or factor_y
                  else [point_cls(factor_x, factor_y)]))
 
+    def scale_multipolygon(self,
+                           multipolygon: Multipolygon,
+                           factor_x: Scalar,
+                           factor_y: Scalar,
+                           contour_cls: Type[Contour],
+                           multipoint_cls: Type[Multipoint],
+                           multipolygon_cls: Type[Multipolygon],
+                           multisegment_cls: Type[Multisegment],
+                           point_cls: Type[Point],
+                           polygon_cls: Type[Polygon],
+                           segment_cls: Type[Segment]
+                           ) -> Union[Multipoint, Multipolygon, Multisegment]:
+        return (
+            multipolygon_cls(
+                    [self.scale_polygon_non_degenerate(polygon, factor_x,
+                                                       factor_y, contour_cls,
+                                                       point_cls, polygon_cls)
+                     for polygon in multipolygon.polygons])
+            if factor_x and factor_y
+            else
+            (multisegment_cls([self.scale_polygon_degenerate(
+                    polygon, factor_x, factor_y, multipoint_cls, point_cls,
+                    segment_cls)
+                for polygon in multipolygon.polygons])
+             if factor_x or factor_y
+             else multipoint_cls([point_cls(factor_x, factor_y)])))
+
     def scale_multisegment(self,
                            multisegment: Multisegment,
                            factor_x: Scalar,
@@ -128,9 +153,21 @@ class Context:
                                                   contour_cls, point_cls,
                                                   polygon_cls)
                 if factor_x and factor_y
-                else self.scale_contour_degenerate(polygon.border, factor_x,
-                                                   factor_y, multipoint_cls,
-                                                   point_cls, segment_cls))
+                else self.scale_polygon_degenerate(polygon, factor_x, factor_y,
+                                                   multipoint_cls, point_cls,
+                                                   segment_cls))
+
+    def scale_polygon_degenerate(self,
+                                 polygon: Polygon,
+                                 factor_x: Scalar,
+                                 factor_y: Scalar,
+                                 multipoint_cls: Type[Multipoint],
+                                 point_cls: Type[Point],
+                                 segment_cls: Type[Segment]
+                                 ) -> Union[Multipoint, Segment]:
+        return self.scale_contour_degenerate(polygon.border, factor_x,
+                                             factor_y, multipoint_cls,
+                                             point_cls, segment_cls)
 
     def scale_polygon_non_degenerate(self,
                                      polygon: Polygon,
@@ -241,3 +278,9 @@ def is_segment_horizontal(segment: Segment) -> bool:
 
 def is_segment_vertical(segment: Segment) -> bool:
     return segment.start.x == segment.end.x
+
+
+flatten = chain.from_iterable
+unique_ever_seen = (dict.fromkeys
+                    if sys.version_info >= (3, 6)
+                    else OrderedDict.fromkeys)
