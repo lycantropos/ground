@@ -13,11 +13,12 @@ from . import strategies
 
 
 @given(strategies.contexts_with_multisegments_and_scalars_pairs)
-def test_basic(context_with_multisegment_and_steps
+def test_basic(context_with_multisegment_and_factors
                : Tuple[Context, Multisegment, Scalar, Scalar]) -> None:
-    context, multisegment, step_x, step_y = context_with_multisegment_and_steps
+    (context, multisegment, factor_x,
+     factor_y) = context_with_multisegment_and_factors
 
-    result = context.scale_multisegment(multisegment, step_x, step_y)
+    result = context.scale_multisegment(multisegment, factor_x, factor_y)
 
     assert isinstance(result, (context.multipoint_cls,
                                context.multisegment_cls, context.mix_cls,
@@ -25,15 +26,16 @@ def test_basic(context_with_multisegment_and_steps
 
 
 @given(strategies.contexts_with_multisegments_and_scalars_pairs)
-def test_reversals(context_with_multisegment_and_steps
+def test_reversals(context_with_multisegment_and_factors
                    : Tuple[Context, Multisegment, Scalar, Scalar]) -> None:
-    context, multisegment, step_x, step_y = context_with_multisegment_and_steps
+    (context, multisegment, factor_x,
+     factor_y) = context_with_multisegment_and_factors
 
-    result = context.scale_multisegment(multisegment, step_x, step_y)
+    result = context.scale_multisegment(multisegment, factor_x, factor_y)
 
     assert reverse_geometry(result) == context.scale_multisegment(
-            reverse_multisegment(multisegment), step_x, step_y)
+            reverse_multisegment(multisegment), factor_x, factor_y)
     assert (reverse_geometry_coordinates(result)
             == context.scale_multisegment(
-                    reverse_multisegment_coordinates(multisegment), step_y,
-                    step_x))
+                    reverse_multisegment_coordinates(multisegment), factor_y,
+                    factor_x))
