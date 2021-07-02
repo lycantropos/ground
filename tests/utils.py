@@ -26,6 +26,8 @@ from ground.core import geometries
 from ground.core.primitive import to_sign
 from ground.hints import (Box,
                           Contour,
+                          Empty,
+                          Mix,
                           Multipoint,
                           Multipolygon,
                           Multisegment,
@@ -162,6 +164,26 @@ def reverse_contour(contour: Contour) -> Contour:
 def reverse_contours_coordinates(contours: Sequence[Contour]
                                  ) -> Sequence[Contour]:
     return [reverse_contour_coordinates(contour) for contour in contours]
+
+
+@reverse_geometry.register(geometries.Empty)
+@reverse_geometry_coordinates.register(geometries.Empty)
+def reverse_empty(empty: Empty) -> Empty:
+    return empty
+
+
+@reverse_geometry.register(geometries.Mix)
+def reverse_mix(mix: Mix) -> Mix:
+    return type(mix)(reverse_geometry(mix.discrete),
+                     reverse_geometry(mix.linear),
+                     reverse_geometry(mix.shaped))
+
+
+@reverse_geometry_coordinates.register(geometries.Mix)
+def reverse_mix_coordinates(mix: Mix) -> Mix:
+    return type(mix)(reverse_geometry_coordinates(mix.discrete),
+                     reverse_geometry_coordinates(mix.linear),
+                     reverse_geometry_coordinates(mix.shaped))
 
 
 @reverse_geometry.register(geometries.Multipoint)
