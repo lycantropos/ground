@@ -776,6 +776,56 @@ class Context:
                                               self.multipoint_cls,
                                               self.point_cls)
 
+    def scale_multisegment(self,
+                           multisegment: _hints.Multisegment,
+                           factor_x: _hints.Scalar,
+                           factor_y: _hints.Scalar
+                           ) -> _Union[_hints.Mix, _hints.Multipoint,
+                                       _hints.Multisegment]:
+        """
+        Returns multisegment scaled by given factor.
+
+        Time complexity:
+            ``O(len(multisegment.segments))``
+        Memory complexity:
+            ``O(len(multisegment.segments))``
+
+        >>> context = get_context()
+        >>> EMPTY = context.empty
+        >>> Mix = context.mix_cls
+        >>> Multipoint = context.multipoint_cls
+        >>> Multisegment = context.multisegment_cls
+        >>> Point = context.point_cls
+        >>> Segment = context.segment_cls
+        >>> (context.scale_multisegment(
+        ...      Multisegment([Segment(Point(0, 0), Point(1, 0)),
+        ...                    Segment(Point(0, 0), Point(0, 1))]), 0, 0)
+        ...  == Multipoint([Point(0, 0)]))
+        True
+        >>> (context.scale_multisegment(
+        ...      Multisegment([Segment(Point(0, 0), Point(1, 0)),
+        ...                    Segment(Point(0, 0), Point(0, 1))]), 1, 0)
+        ...  == Mix(Multipoint([Point(0, 0)]),
+        ...         Segment(Point(0, 0), Point(1, 0)), EMPTY))
+        True
+        >>> (context.scale_multisegment(
+        ...      Multisegment([Segment(Point(0, 0), Point(1, 0)),
+        ...                    Segment(Point(0, 0), Point(0, 1))]), 0, 1)
+        ...  == Mix(Multipoint([Point(0, 0)]),
+        ...         Segment(Point(0, 0), Point(0, 1)), EMPTY))
+        True
+        >>> (context.scale_multisegment(
+        ...      Multisegment([Segment(Point(0, 0), Point(1, 0)),
+        ...                    Segment(Point(0, 0), Point(0, 1))]), 1, 1)
+        ...  == Multisegment([Segment(Point(0, 0), Point(1, 0)),
+        ...                   Segment(Point(0, 0), Point(0, 1))]))
+        True
+        """
+        return self._scaling.scale_multisegment(
+                multisegment, factor_x, factor_y, self.empty, self.mix_cls,
+                self.multipoint_cls, self.multisegment_cls, self.point_cls,
+                self.segment_cls)
+
     def scale_point(self,
                     point: _hints.Point,
                     factor_x: _hints.Scalar,

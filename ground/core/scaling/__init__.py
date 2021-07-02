@@ -4,10 +4,16 @@ from typing import (Callable,
                     Type,
                     Union)
 
-from ground.core.hints import (Multipoint,
+from ground.core.hints import (Empty,
+                               Mix,
+                               Multipoint,
+                               Multisegment,
                                Point,
                                Scalar,
                                Segment)
+from ground.core.packing import (pack_mix,
+                                 pack_points,
+                                 pack_segments)
 from . import (exact,
                plain,
                robust)
@@ -40,6 +46,31 @@ class Context:
                                        for point in multipoint.points))
                  if factor_x or factor_y
                  else [point_cls(factor_x, factor_y)]))
+
+    def scale_multisegment(self,
+                           multisegment: Multisegment,
+                           factor_x: Scalar,
+                           factor_y: Scalar,
+                           empty: Empty,
+                           mix_cls: Type[Mix],
+                           multipoint_cls: Type[Multipoint],
+                           multisegment_cls: Type[Multisegment],
+                           point_cls: Type[Point],
+                           segment_cls: Type[Segment]) -> Multisegment:
+        scaled_points, scaled_segments = [], []
+        for segment in multisegment.segments:
+            if ((factor_x or not is_segment_horizontal(segment)) and factor_y
+                    or factor_x and not is_segment_vertical(segment)):
+                scaled_segments.append(self.scale_segment_non_degenerate(
+                        segment, factor_x, factor_y, point_cls, segment_cls))
+            else:
+                scaled_points.append(self.scale_point(segment.start, factor_x,
+                                                      factor_y, point_cls))
+        return pack_mix(pack_points(list(unique_ever_seen(scaled_points)),
+                                    empty, multipoint_cls),
+                        pack_segments(scaled_segments, empty,
+                                      multisegment_cls),
+                        empty, empty, mix_cls)
 
     def scale_segment(self,
                       segment: Segment,
