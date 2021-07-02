@@ -19,7 +19,8 @@ def test_basic(context_with_polygon_and_factors
 
     result = context.scale_polygon(polygon, factor_x, factor_y)
 
-    assert isinstance(result, context.polygon_cls)
+    assert isinstance(result, (context.multipoint_cls, context.polygon_cls,
+                               context.segment_cls))
 
 
 @given(strategies.contexts_with_polygons_and_scalars_pairs)
