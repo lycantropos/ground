@@ -56,7 +56,8 @@ class Context:
                            multipoint_cls: Type[Multipoint],
                            multisegment_cls: Type[Multisegment],
                            point_cls: Type[Point],
-                           segment_cls: Type[Segment]) -> Multisegment:
+                           segment_cls: Type[Segment]
+                           ) -> Union[Mix, Multipoint, Multisegment, Segment]:
         scaled_points, scaled_segments = [], []
         for segment in multisegment.segments:
             if ((factor_x or not is_segment_horizontal(segment)) and factor_y
