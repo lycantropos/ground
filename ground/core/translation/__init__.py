@@ -1,6 +1,8 @@
 from typing import (Callable,
                     Type)
 
+from reprit.base import generate_repr
+
 from ground.core.hints import (Contour,
                                Multipoint,
                                Multipolygon,
@@ -95,6 +97,9 @@ class Context:
 
     def __init__(self, translate_point: PointTranslator) -> None:
         self._translate_point = translate_point
+
+    __repr__ = generate_repr(__init__,
+                             with_module_name=True)
 
 
 exact_context = Context(exact.translate_point)
