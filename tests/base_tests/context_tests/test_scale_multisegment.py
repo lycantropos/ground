@@ -20,7 +20,8 @@ def test_basic(context_with_multisegment_and_steps
     result = context.scale_multisegment(multisegment, step_x, step_y)
 
     assert isinstance(result, (context.multipoint_cls,
-                               context.multisegment_cls, context.mix_cls))
+                               context.multisegment_cls, context.mix_cls,
+                               context.segment_cls))
 
 
 @given(strategies.contexts_with_multisegments_and_scalars_pairs)
