@@ -5,6 +5,7 @@ from typing import (Callable,
 from reprit.base import generate_repr
 
 from ground.core.hints import (Multipoint,
+                               Multisegment,
                                Point,
                                Scalar,
                                Segment)
@@ -43,6 +44,19 @@ class Context:
                                                                sine, point_cls)
                                for point in multipoint.points])
 
+    def rotate_multisegment_around_origin(self,
+                                          multisegment: Multisegment,
+                                          cosine: Scalar,
+                                          sine: Scalar,
+                                          multisegment_cls: Type[Multisegment],
+                                          point_cls: Type[Point],
+                                          segment_cls: Type[Segment]
+                                          ) -> Multisegment:
+        return multisegment_cls(
+                [self.rotate_segment_around_origin(segment, cosine, sine,
+                                                   point_cls, segment_cls)
+                 for segment in multisegment.segments])
+
     def rotate_segment_around_origin(self,
                                      segment: Segment,
                                      cosine: Scalar,
@@ -69,6 +83,21 @@ class Context:
                                                            step_x, step_y,
                                                            point_cls)
                                for point in multipoint.points])
+
+    def rotate_translate_multisegment(self,
+                                      multisegment: Multisegment,
+                                      cosine: Scalar,
+                                      sine: Scalar,
+                                      step_x: Scalar,
+                                      step_y: Scalar,
+                                      multisegment_cls: Type[Multisegment],
+                                      point_cls: Type[Point],
+                                      segment_cls: Type[Segment]
+                                      ) -> Multisegment:
+        return multisegment_cls(
+                [self.rotate_translate_segment(segment, cosine, sine, step_x,
+                                               step_y, point_cls, segment_cls)
+                 for segment in multisegment.segments])
 
     def rotate_translate_segment(self,
                                  segment: Segment,

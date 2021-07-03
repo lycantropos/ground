@@ -799,6 +799,77 @@ class Context:
         return self._rotation.rotate_multipoint_around_origin(
                 multipoint, cosine, sine, self.multipoint_cls, self.point_cls)
 
+    def rotate_multisegment(self,
+                            multisegment: _hints.Multisegment,
+                            cosine: _hints.Scalar,
+                            sine: _hints.Scalar,
+                            center: _hints.Point) -> _hints.Multisegment:
+        """
+        Returns multisegment rotated by given angle around given center.
+
+        Time complexity:
+            ``O(1)``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Multisegment = context.multisegment_cls
+        >>> Point = context.point_cls
+        >>> Segment = context.segment_cls
+        >>> (context.rotate_multisegment(
+        ...      Multisegment([Segment(Point(0, 0), Point(1, 0)),
+        ...                    Segment(Point(0, 0), Point(0, 1))]), 1, 0,
+        ...      Point(0, 1))
+        ...  == Multisegment([Segment(Point(0, 0), Point(1, 0)),
+        ...                   Segment(Point(0, 0), Point(0, 1))]))
+        True
+        >>> (context.rotate_multisegment(
+        ...      Multisegment([Segment(Point(0, 0), Point(1, 0)),
+        ...                    Segment(Point(0, 0), Point(0, 1))]), 0, 1,
+        ...      Point(0, 1))
+        ...  == Multisegment([Segment(Point(1, 1), Point(1,2)),
+        ...                   Segment(Point(1, 1), Point(0, 1))]))
+        True
+        """
+        return self._rotation.rotate_translate_multisegment(
+                multisegment, cosine, sine,
+                *self._rotation.point_to_step(center, cosine, sine),
+                self.multisegment_cls, self.point_cls, self.segment_cls)
+
+    def rotate_multisegment_around_origin(self,
+                                          multisegment: _hints.Multisegment,
+                                          cosine: _hints.Scalar,
+                                          sine: _hints.Scalar
+                                          ) -> _hints.Multisegment:
+        """
+        Returns multisegment rotated by given angle around origin.
+
+        Time complexity:
+            ``O(len(multisegment.segments))``
+        Memory complexity:
+            ``O(len(multisegment.segments))``
+
+        >>> context = get_context()
+        >>> Multisegment = context.multisegment_cls
+        >>> Point = context.point_cls
+        >>> Segment = context.segment_cls
+        >>> (context.rotate_multisegment_around_origin(
+        ...      Multisegment([Segment(Point(0, 0), Point(1, 0)),
+        ...                    Segment(Point(0, 0), Point(0, 1))]), 1, 0)
+        ...  == Multisegment([Segment(Point(0, 0), Point(1, 0)),
+        ...                   Segment(Point(0, 0), Point(0, 1))]))
+        True
+        >>> (context.rotate_multisegment_around_origin(
+        ...      Multisegment([Segment(Point(0, 0), Point(1, 0)),
+        ...                    Segment(Point(0, 0), Point(0, 1))]), 0, 1)
+        ...  == Multisegment([Segment(Point(0, 0), Point(0, 1)),
+        ...                   Segment(Point(0, 0), Point(-1, 0))]))
+        True
+        """
+        return self._rotation.rotate_multisegment_around_origin(
+                multisegment, cosine, sine, self.multisegment_cls,
+                self.point_cls, self.segment_cls)
+
     def rotate_point(self,
                      point: _hints.Point,
                      cosine: _hints.Scalar,
