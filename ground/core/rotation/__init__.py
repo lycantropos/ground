@@ -4,7 +4,8 @@ from typing import (Callable,
 
 from reprit.base import generate_repr
 
-from ground.core.hints import (Multipoint,
+from ground.core.hints import (Contour,
+                               Multipoint,
                                Multisegment,
                                Point,
                                Scalar,
@@ -33,13 +34,22 @@ class Context:
     def rotate_translate_point(self) -> PointTranslatingRotator:
         return self._rotate_translate_point
 
+    def rotate_contour_around_origin(self,
+                                     contour: Contour,
+                                     cosine: Scalar,
+                                     sine: Scalar,
+                                     contour_cls: Type[Contour],
+                                     point_cls: Type[Point]) -> Contour:
+        return contour_cls([self.rotate_point_around_origin(point, cosine,
+                                                            sine, point_cls)
+                            for point in contour.vertices])
+
     def rotate_multipoint_around_origin(self,
                                         multipoint: Multipoint,
                                         cosine: Scalar,
                                         sine: Scalar,
                                         multipoint_cls: Type[Multipoint],
-                                        point_cls: Type[Point]
-                                        ) -> Multipoint:
+                                        point_cls: Type[Point]) -> Multipoint:
         return multipoint_cls([self.rotate_point_around_origin(point, cosine,
                                                                sine, point_cls)
                                for point in multipoint.points])
@@ -70,6 +80,19 @@ class Context:
                                                            cosine, sine,
                                                            point_cls))
 
+    def rotate_translate_contour(self,
+                                 contour: Contour,
+                                 cosine: Scalar,
+                                 sine: Scalar,
+                                 step_x: Scalar,
+                                 step_y: Scalar,
+                                 contour_cls: Type[Contour],
+                                 point_cls: Type[Point]) -> Contour:
+        return contour_cls([self.rotate_translate_point(point, cosine, sine,
+                                                        step_x, step_y,
+                                                        point_cls)
+                            for point in contour.vertices])
+
     def rotate_translate_multipoint(self,
                                     multipoint: Multipoint,
                                     cosine: Scalar,
@@ -77,8 +100,7 @@ class Context:
                                     step_x: Scalar,
                                     step_y: Scalar,
                                     multipoint_cls: Type[Multipoint],
-                                    point_cls: Type[Point]
-                                    ) -> Multipoint:
+                                    point_cls: Type[Point]) -> Multipoint:
         return multipoint_cls([self.rotate_translate_point(point, cosine, sine,
                                                            step_x, step_y,
                                                            point_cls)

@@ -741,6 +741,65 @@ class Context:
         """
         return self._centroidal.region_centroid(contour, self.point_cls)
 
+    def rotate_contour(self,
+                       contour: _hints.Contour,
+                       cosine: _hints.Scalar,
+                       sine: _hints.Scalar,
+                       center: _hints.Point) -> _hints.Contour:
+        """
+        Returns contour rotated by given angle around given center.
+
+        Time complexity:
+            ``O(len(contour.vertices))``
+        Memory complexity:
+            ``O(len(contour.vertices))``
+
+        >>> context = get_context()
+        >>> Contour = context.contour_cls
+        >>> Point = context.point_cls
+        >>> (context.rotate_contour(
+        ...      Contour([Point(0, 0), Point(1, 0), Point(0, 1)]), 1, 0,
+        ...      Point(0, 1))
+        ...  == Contour([Point(0, 0), Point(1, 0), Point(0, 1)]))
+        True
+        >>> (context.rotate_contour(
+        ...      Contour([Point(0, 0), Point(1, 0), Point(0, 1)]), 0, 1,
+        ...      Point(0, 1))
+        ...  == Contour([Point(1, 1), Point(1, 2), Point(0, 1)]))
+        True
+        """
+        return self._rotation.rotate_translate_contour(
+                contour, cosine, sine,
+                *self._rotation.point_to_step(center, cosine, sine),
+                self.contour_cls, self.point_cls)
+
+    def rotate_contour_around_origin(self,
+                                     contour: _hints.Contour,
+                                     cosine: _hints.Scalar,
+                                     sine: _hints.Scalar) -> _hints.Contour:
+        """
+        Returns contour rotated by given angle around origin.
+
+        Time complexity:
+            ``O(len(contour.vertices))``
+        Memory complexity:
+            ``O(len(contour.vertices))``
+
+        >>> context = get_context()
+        >>> Contour = context.contour_cls
+        >>> Point = context.point_cls
+        >>> (context.rotate_contour_around_origin(
+        ...      Contour([Point(0, 0), Point(1, 0), Point(0, 1)]), 1, 0)
+        ...  == Contour([Point(0, 0), Point(1, 0), Point(0, 1)]))
+        True
+        >>> (context.rotate_contour_around_origin(
+        ...      Contour([Point(0, 0), Point(1, 0), Point(0, 1)]), 0, 1)
+        ...  == Contour([Point(0, 0), Point(0, 1), Point(-1, 0)]))
+        True
+        """
+        return self._rotation.rotate_contour_around_origin(
+                contour, cosine, sine, self.contour_cls, self.point_cls)
+
     def rotate_multipoint(self,
                           multipoint: _hints.Multipoint,
                           cosine: _hints.Scalar,
