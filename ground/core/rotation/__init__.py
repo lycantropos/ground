@@ -4,7 +4,8 @@ from typing import (Callable,
 
 from reprit.base import generate_repr
 
-from ground.core.hints import (Point,
+from ground.core.hints import (Multipoint,
+                               Point,
                                Scalar,
                                Segment)
 from . import (exact,
@@ -31,6 +32,17 @@ class Context:
     def rotate_translate_point(self) -> PointTranslatingRotator:
         return self._rotate_translate_point
 
+    def rotate_multipoint_around_origin(self,
+                                        multipoint: Multipoint,
+                                        cosine: Scalar,
+                                        sine: Scalar,
+                                        multipoint_cls: Type[Multipoint],
+                                        point_cls: Type[Point]
+                                        ) -> Multipoint:
+        return multipoint_cls([self.rotate_point_around_origin(point, cosine,
+                                                               sine, point_cls)
+                               for point in multipoint.points])
+
     def rotate_segment_around_origin(self,
                                      segment: Segment,
                                      cosine: Scalar,
@@ -43,6 +55,20 @@ class Context:
                            self.rotate_point_around_origin(segment.end,
                                                            cosine, sine,
                                                            point_cls))
+
+    def rotate_translate_multipoint(self,
+                                    multipoint: Multipoint,
+                                    cosine: Scalar,
+                                    sine: Scalar,
+                                    step_x: Scalar,
+                                    step_y: Scalar,
+                                    multipoint_cls: Type[Multipoint],
+                                    point_cls: Type[Point]
+                                    ) -> Multipoint:
+        return multipoint_cls([self.rotate_translate_point(point, cosine, sine,
+                                                           step_x, step_y,
+                                                           point_cls)
+                               for point in multipoint.points])
 
     def rotate_translate_segment(self,
                                  segment: Segment,

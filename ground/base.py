@@ -741,6 +741,64 @@ class Context:
         """
         return self._centroidal.region_centroid(contour, self.point_cls)
 
+    def rotate_multipoint(self,
+                          multipoint: _hints.Multipoint,
+                          cosine: _hints.Scalar,
+                          sine: _hints.Scalar,
+                          center: _hints.Point) -> _hints.Multipoint:
+        """
+        Returns multipoint rotated by given angle around given center.
+
+        Time complexity:
+            ``O(len(multipoint.points))``
+        Memory complexity:
+            ``O(len(multipoint.points))``
+
+        >>> context = get_context()
+        >>> Multipoint = context.multipoint_cls
+        >>> Point = context.point_cls
+        >>> (context.rotate_multipoint(Multipoint([Point(0, 0), Point(1, 0)]),
+        ...                            1, 0, Point(0, 1))
+        ...  == Multipoint([Point(0, 0), Point(1, 0)]))
+        True
+        >>> (context.rotate_multipoint(Multipoint([Point(0, 0), Point(1, 0)]),
+        ...                            0, 1, Point(0, 1))
+        ...  == Multipoint([Point(1, 1), Point(1, 2)]))
+        True
+        """
+        return self._rotation.rotate_translate_multipoint(
+                multipoint, cosine, sine,
+                *self._rotation.point_to_step(center, cosine, sine),
+                self.multipoint_cls, self.point_cls)
+
+    def rotate_multipoint_around_origin(self,
+                                        multipoint: _hints.Multipoint,
+                                        cosine: _hints.Scalar,
+                                        sine: _hints.Scalar
+                                        ) -> _hints.Multipoint:
+        """
+        Returns multipoint rotated by given angle around origin.
+
+        Time complexity:
+            ``O(len(multipoint.points))``
+        Memory complexity:
+            ``O(len(multipoint.points))``
+
+        >>> context = get_context()
+        >>> Multipoint = context.multipoint_cls
+        >>> Point = context.point_cls
+        >>> (context.rotate_multipoint_around_origin(
+        ...      Multipoint([Point(0, 0), Point(1, 0)]), 1, 0)
+        ...  == Multipoint([Point(0, 0), Point(1, 0)]))
+        True
+        >>> (context.rotate_multipoint_around_origin(
+        ...      Multipoint([Point(0, 0), Point(1, 0)]), 0, 1)
+        ...  == Multipoint([Point(0, 0), Point(0, 1)]))
+        True
+        """
+        return self._rotation.rotate_multipoint_around_origin(
+                multipoint, cosine, sine, self.multipoint_cls, self.point_cls)
+
     def rotate_point(self,
                      point: _hints.Point,
                      cosine: _hints.Scalar,
