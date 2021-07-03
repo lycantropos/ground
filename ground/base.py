@@ -790,6 +790,63 @@ class Context:
         return self._rotation.rotate_point_around_origin(point, cosine, sine,
                                                          self.point_cls)
 
+    def rotate_segment(self,
+                       segment: _hints.Segment,
+                       cosine: _hints.Scalar,
+                       sine: _hints.Scalar,
+                       center: _hints.Point) -> _hints.Segment:
+        """
+        Returns segment rotated by given angle around given center.
+
+        Time complexity:
+            ``O(1)``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Point = context.point_cls
+        >>> Segment = context.segment_cls
+        >>> (context.rotate_segment(Segment(Point(0, 0), Point(1, 0)), 1, 0,
+        ...                         Point(0, 1))
+        ...  == Segment(Point(0, 0), Point(1, 0)))
+        True
+        >>> (context.rotate_segment(Segment(Point(0, 0), Point(1, 0)), 0, 1,
+        ...                         Point(0, 1))
+        ...  == Segment(Point(1, 1), Point(1, 2)))
+        True
+        """
+        return self._rotation.rotate_translate_segment(
+                segment, cosine, sine,
+                *self._rotation.point_to_step(center, cosine, sine),
+                self.point_cls, self.segment_cls)
+
+    def rotate_segment_around_origin(self,
+                                     segment: _hints.Segment,
+                                     cosine: _hints.Scalar,
+                                     sine: _hints.Scalar) -> _hints.Point:
+        """
+        Returns segment rotated by given angle around origin.
+
+        Time complexity:
+            ``O(1)``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Point = context.point_cls
+        >>> Segment = context.segment_cls
+        >>> (context.rotate_segment_around_origin(
+        ...      Segment(Point(0, 0), Point(1, 0)), 1, 0)
+        ...  == Segment(Point(0, 0), Point(1, 0)))
+        True
+        >>> (context.rotate_segment_around_origin(
+        ...      Segment(Point(0, 0), Point(1, 0)), 0, 1)
+        ...  == Segment(Point(0, 0), Point(0, 1)))
+        True
+        """
+        return self._rotation.rotate_segment_around_origin(
+                segment, cosine, sine, self.point_cls, self.segment_cls)
+
     def scale_contour(self,
                       contour: _hints.Contour,
                       factor_x: _hints.Scalar,

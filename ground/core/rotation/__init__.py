@@ -1,12 +1,12 @@
 from typing import (Callable,
-                    Optional,
                     Tuple,
                     Type)
 
 from reprit.base import generate_repr
 
 from ground.core.hints import (Point,
-                               Scalar)
+                               Scalar,
+                               Segment)
 from . import (exact,
                plain,
                robust)
@@ -30,6 +30,34 @@ class Context:
     @property
     def rotate_translate_point(self) -> PointTranslatingRotator:
         return self._rotate_translate_point
+
+    def rotate_segment_around_origin(self,
+                                     segment: Segment,
+                                     cosine: Scalar,
+                                     sine: Scalar,
+                                     point_cls: Type[Point],
+                                     segment_cls: Type[Segment]) -> Segment:
+        return segment_cls(self.rotate_point_around_origin(segment.start,
+                                                           cosine, sine,
+                                                           point_cls),
+                           self.rotate_point_around_origin(segment.end,
+                                                           cosine, sine,
+                                                           point_cls))
+
+    def rotate_translate_segment(self,
+                                 segment: Segment,
+                                 cosine: Scalar,
+                                 sine: Scalar,
+                                 step_x: Scalar,
+                                 step_y: Scalar,
+                                 point_cls: Type[Point],
+                                 segment_cls: Type[Segment]) -> Segment:
+        return segment_cls(self.rotate_translate_point(segment.start, cosine,
+                                                       sine, step_x, step_y,
+                                                       point_cls),
+                           self.rotate_translate_point(segment.end, cosine,
+                                                       sine, step_x, step_y,
+                                                       point_cls))
 
     __slots__ = ('_point_to_step', '_rotate_point_around_origin',
                  '_rotate_translate_point')
