@@ -8,6 +8,7 @@ from ground.core.hints import (Contour,
                                Multipoint,
                                Multisegment,
                                Point,
+                               Polygon,
                                Scalar,
                                Segment)
 from . import (exact,
@@ -67,6 +68,20 @@ class Context:
                                                    point_cls, segment_cls)
                  for segment in multisegment.segments])
 
+    def rotate_polygon_around_origin(self,
+                                     polygon: Polygon,
+                                     cosine: Scalar,
+                                     sine: Scalar,
+                                     contour_cls: Type[Contour],
+                                     point_cls: Type[Point],
+                                     polygon_cls: Type[Polygon]) -> Polygon:
+        return polygon_cls(
+                self.rotate_contour_around_origin(polygon.border, cosine, sine,
+                                                  contour_cls, point_cls),
+                [self.rotate_contour_around_origin(hole, cosine, sine,
+                                                   contour_cls, point_cls)
+                 for hole in polygon.holes])
+
     def rotate_segment_around_origin(self,
                                      segment: Segment,
                                      cosine: Scalar,
@@ -120,6 +135,23 @@ class Context:
                 [self.rotate_translate_segment(segment, cosine, sine, step_x,
                                                step_y, point_cls, segment_cls)
                  for segment in multisegment.segments])
+
+    def rotate_translate_polygon(self,
+                                 polygon: Polygon,
+                                 cosine: Scalar,
+                                 sine: Scalar,
+                                 step_x: Scalar,
+                                 step_y: Scalar,
+                                 contour_cls: Type[Contour],
+                                 point_cls: Type[Point],
+                                 polygon_cls: Type[Polygon]) -> Polygon:
+        return polygon_cls(
+                self.rotate_translate_contour(polygon.border, cosine, sine,
+                                              step_x, step_y, contour_cls,
+                                              point_cls),
+                [self.rotate_translate_contour(hole, cosine, sine, step_x,
+                                               step_y, contour_cls, point_cls)
+                 for hole in polygon.holes])
 
     def rotate_translate_segment(self,
                                  segment: Segment,
