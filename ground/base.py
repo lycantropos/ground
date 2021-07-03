@@ -858,6 +858,89 @@ class Context:
         return self._rotation.rotate_multipoint_around_origin(
                 multipoint, cosine, sine, self.multipoint_cls, self.point_cls)
 
+    def rotate_multipolygon(self,
+                            multipolygon: _hints.Multipolygon,
+                            cosine: _hints.Scalar,
+                            sine: _hints.Scalar,
+                            center: _hints.Point) -> _hints.Multipolygon:
+        """
+        Returns multipolygon rotated by given angle around given center.
+
+        Time complexity:
+            ``O(vertices_count)``
+        Memory complexity:
+            ``O(vertices_count)``
+
+        where ``vertices_count = sum(len(polygon.border.vertices)\
+ + sum(len(hole.vertices) for hole in polygon.holes)\
+ for polygon in multipolygon.polygons)``.
+
+        >>> context = get_context()
+        >>> Contour = context.contour_cls
+        >>> Multipolygon = context.multipolygon_cls
+        >>> Point = context.point_cls
+        >>> Polygon = context.polygon_cls
+        >>> (context.rotate_multipolygon(
+        ...      Multipolygon([Polygon(Contour([Point(0, 0), Point(1, 0),
+        ...                                     Point(0, 1)]), [])]),
+        ...      1, 0, Point(0, 1))
+        ...  == Multipolygon([Polygon(Contour([Point(0, 0), Point(1, 0),
+        ...                                    Point(0, 1)]), [])]))
+        True
+        >>> (context.rotate_multipolygon(
+        ...      Multipolygon([Polygon(Contour([Point(0, 0), Point(1, 0),
+        ...                                     Point(0, 1)]), [])]),
+        ...      0, 1, Point(0, 1))
+        ...  == Multipolygon([Polygon(Contour([Point(1, 1), Point(1, 2),
+        ...                                    Point(0, 1)]), [])]))
+        True
+        """
+        return self._rotation.rotate_translate_multipolygon(
+                multipolygon, cosine, sine,
+                *self._rotation.point_to_step(center, cosine, sine),
+                self.contour_cls, self.multipolygon_cls, self.point_cls,
+                self.polygon_cls)
+
+    def rotate_multipolygon_around_origin(self,
+                                          multipolygon: _hints.Multipolygon,
+                                          cosine: _hints.Scalar,
+                                          sine: _hints.Scalar) -> _hints.Multipolygon:
+        """
+        Returns multipolygon rotated by given angle around origin.
+
+        Time complexity:
+            ``O(vertices_count)``
+        Memory complexity:
+            ``O(vertices_count)``
+
+        where ``vertices_count = sum(len(polygon.border.vertices)\
+ + sum(len(hole.vertices) for hole in polygon.holes)\
+ for polygon in multipolygon.polygons)``.
+
+        >>> context = get_context()
+        >>> Contour = context.contour_cls
+        >>> Multipolygon = context.multipolygon_cls
+        >>> Point = context.point_cls
+        >>> Polygon = context.polygon_cls
+        >>> (context.rotate_multipolygon_around_origin(
+        ...      Multipolygon([Polygon(Contour([Point(0, 0), Point(1, 0),
+        ...                                     Point(0, 1)]), [])]),
+        ...      1, 0)
+        ...  == Multipolygon([Polygon(Contour([Point(0, 0), Point(1, 0),
+        ...                                    Point(0, 1)]), [])]))
+        True
+        >>> (context.rotate_multipolygon_around_origin(
+        ...      Multipolygon([Polygon(Contour([Point(0, 0), Point(1, 0),
+        ...                                     Point(0, 1)]), [])]),
+        ...      0, 1)
+        ...  == Multipolygon([Polygon(Contour([Point(0, 0), Point(0, 1),
+        ...                                    Point(-1, 0)]), [])]))
+        True
+        """
+        return self._rotation.rotate_multipolygon_around_origin(
+                multipolygon, cosine, sine, self.contour_cls,
+                self.multipolygon_cls, self.point_cls, self.polygon_cls)
+
     def rotate_multisegment(self,
                             multisegment: _hints.Multisegment,
                             cosine: _hints.Scalar,

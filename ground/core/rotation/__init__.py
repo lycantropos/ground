@@ -6,6 +6,7 @@ from reprit.base import generate_repr
 
 from ground.core.hints import (Contour,
                                Multipoint,
+                               Multipolygon,
                                Multisegment,
                                Point,
                                Polygon,
@@ -54,6 +55,21 @@ class Context:
         return multipoint_cls([self.rotate_point_around_origin(point, cosine,
                                                                sine, point_cls)
                                for point in multipoint.points])
+
+    def rotate_multipolygon_around_origin(self,
+                                          multipolygon: Multipolygon,
+                                          cosine: Scalar,
+                                          sine: Scalar,
+                                          contour_cls: Type[Contour],
+                                          multipolygon_cls: Type[Multipolygon],
+                                          point_cls: Type[Point],
+                                          polygon_cls: Type[Polygon]
+                                          ) -> Multipolygon:
+        return multipolygon_cls(
+                [self.rotate_polygon_around_origin(polygon, cosine, sine,
+                                                   contour_cls, point_cls,
+                                                   polygon_cls)
+                 for polygon in multipolygon.polygons])
 
     def rotate_multisegment_around_origin(self,
                                           multisegment: Multisegment,
@@ -120,6 +136,23 @@ class Context:
                                                            step_x, step_y,
                                                            point_cls)
                                for point in multipoint.points])
+
+    def rotate_translate_multipolygon(self,
+                                      multipolygon: Multipolygon,
+                                      cosine: Scalar,
+                                      sine: Scalar,
+                                      step_x: Scalar,
+                                      step_y: Scalar,
+                                      contour_cls: Type[Contour],
+                                      multipolygon_cls: Type[Multipolygon],
+                                      point_cls: Type[Point],
+                                      polygon_cls: Type[Polygon]
+                                      ) -> Multipolygon:
+        return multipolygon_cls(
+                [self.rotate_translate_polygon(polygon, cosine, sine, step_x,
+                                               step_y, contour_cls, point_cls,
+                                               polygon_cls)
+                 for polygon in multipolygon.polygons])
 
     def rotate_translate_multisegment(self,
                                       multisegment: Multisegment,
