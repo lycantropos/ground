@@ -5,6 +5,7 @@ from typing import (Callable as _Callable,
                     Type as _Type,
                     Union as _Union)
 
+from reprit import serializers as _serializers
 from reprit.base import generate_repr as _generate_repr
 from symba.base import sqrt as _sqrt
 
@@ -100,7 +101,8 @@ class Context:
                         _scaling.robust_context, _segment.exact_context,
                         _translation.robust_context, _vector.robust_context)))
 
-    __repr__ = _generate_repr(__init__)
+    __repr__ = _generate_repr(__init__,
+                              argument_serializer=_serializers.complex_)
 
     @property
     def angle_kind(self) -> _QuaternaryPointFunction[Kind]:
