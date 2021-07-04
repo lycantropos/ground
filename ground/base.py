@@ -15,6 +15,7 @@ from .core import (angular as _angular,
                    centroidal as _centroidal,
                    circular as _circular,
                    discrete as _discrete,
+                   enums as _enums,
                    geometries as _geometries,
                    measured as _measured,
                    metric as _metric,
@@ -23,23 +24,18 @@ from .core import (angular as _angular,
                    segment as _segment,
                    translation as _translation,
                    vector as _vector)
-from .core.enums import (Base as _Base,
-                         Kind,
-                         Location,
-                         Orientation,
-                         Relation)
 from .core.hints import QuaternaryPointFunction as _QuaternaryPointFunction
 
 _QuaternaryFunction = _QuaternaryPointFunction[_hints.Scalar]
 
-Location.__module__ = __name__
-Kind.__module__ = __name__
-Orientation.__module__ = __name__
-Relation.__module__ = __name__
+Location = _enums.Location
+Kind = _enums.Kind
+Orientation = _enums.Orientation
+Relation = _enums.Relation
 
 
 @_enum.unique
-class Mode(_Base):
+class Mode(_enums.Base):
     """Represents possible context modes."""
     EXACT = 0
     PLAIN = 1
