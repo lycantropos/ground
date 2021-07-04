@@ -13,17 +13,17 @@ from .core.hints import (Box,
                          Segment,
                          Shaped)
 
-Box = Box
-Contour = Contour
-Empty = Empty
-Linear = Linear
-Maybe = Maybe
-Mix = Mix
-Multipoint = Multipoint
-Multipolygon = Multipolygon
-Multisegment = Multisegment
-Point = Point
-Polygon = Polygon
-Scalar = Scalar
-Segment = Segment
-Shaped = Shaped
+Box.__module__ = __name__
+Contour.__module__ = __name__
+Empty.__module__ = __name__
+Linear.__module__ = __name__
+Maybe.__module__ = __name__
+Mix.__module__ = __name__
+Multipoint.__module__ = __name__
+Multipolygon.__module__ = __name__
+Multisegment.__module__ = __name__
+Point.__module__ = __name__
+Polygon.__module__ = __name__
+Scalar.__module__ = __name__
+Segment.__module__ = __name__
+Shaped.__module__ = __name__
