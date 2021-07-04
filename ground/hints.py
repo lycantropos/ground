@@ -17,7 +17,6 @@ Shaped = hints.Shaped
 Box.__module__ = __name__
 Contour.__module__ = __name__
 Empty.__module__ = __name__
-Maybe.__module__ = __name__
 Mix.__module__ = __name__
 Multipoint.__module__ = __name__
 Multipolygon.__module__ = __name__
