@@ -626,6 +626,7 @@ class Context:
             ``O(points_count * log(points_count))``
         Memory complexity:
             ``O(points_count)``
+
         where ``points_count = len(points)``.
 
         >>> context = get_context()
