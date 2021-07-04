@@ -1,9 +1,16 @@
 from enum import (IntEnum,
                   unique)
 
+from reprit import serializers
+
+
+class Base(IntEnum):
+    def __repr__(self) -> str:
+        return serializers.complex_(type(self)) + '.' + self.name
+
 
 @unique
-class Kind(IntEnum):
+class Kind(Base):
     """
     Represents kinds of angles
     based on their degrees value in range ``[0, 180]``.
@@ -17,7 +24,7 @@ class Kind(IntEnum):
 
 
 @unique
-class Location(IntEnum):
+class Location(Base):
     """
     Represents kinds of locations in which point can be relative to geometry.
     """
@@ -30,7 +37,7 @@ class Location(IntEnum):
 
 
 @unique
-class Orientation(IntEnum):
+class Orientation(Base):
     """
     Represents kinds of angle orientations.
     """
@@ -43,7 +50,7 @@ class Orientation(IntEnum):
 
 
 @unique
-class Relation(IntEnum):
+class Relation(Base):
     """
     Represents kinds of relations in which geometries can be.
     Order of members assumes that conditions for previous ones do not hold.

@@ -31,10 +31,14 @@ Location = _enums.Location
 Kind = _enums.Kind
 Orientation = _enums.Orientation
 Relation = _enums.Relation
+Location.__module__ = __name__
+Kind.__module__ = __name__
+Orientation.__module__ = __name__
+Relation.__module__ = __name__
 
 
 @_enum.unique
-class Mode(_enum.IntEnum):
+class Mode(_enums.Base):
     """Represents possible context modes."""
     EXACT = 0
     PLAIN = 1
