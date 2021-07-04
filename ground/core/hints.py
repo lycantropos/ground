@@ -24,7 +24,7 @@ class Point(Protocol[Scalar]):
     defined by pair of real numbers (called *point's coordinates*).
 
     Points considered to be sorted lexicographically,
-    with abscissa being compared first.
+    with abscissas being compared first.
     """
     __slots__ = ()
 
