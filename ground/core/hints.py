@@ -24,7 +24,7 @@ class Point(Protocol[Scalar]):
     defined by pair of real numbers (called *point's coordinates*).
 
     Points considered to be sorted lexicographically,
-    with ``x`` coordinate being compared first.
+    with abscissa being compared first.
     """
     __slots__ = ()
 
@@ -35,12 +35,12 @@ class Point(Protocol[Scalar]):
     @property
     @abstractmethod
     def x(self) -> Scalar:
-        """First coordinate of the point."""
+        """Abscissa of the point."""
 
     @property
     @abstractmethod
     def y(self) -> Scalar:
-        """Second coordinate of the point."""
+        """Ordinate of the point."""
 
     @abstractmethod
     def __eq__(self, other: 'Point') -> bool:
@@ -91,22 +91,22 @@ class Box(Protocol[Scalar]):
     @property
     @abstractmethod
     def max_x(self) -> Scalar:
-        """Returns maximum ``x``-coordinate of the box."""
+        """Maximum ``x``-coordinate of the box."""
 
     @property
     @abstractmethod
     def max_y(self) -> Scalar:
-        """Returns maximum ``y``-coordinate of the box."""
+        """Maximum ``y``-coordinate of the box."""
 
     @property
     @abstractmethod
     def min_x(self) -> Scalar:
-        """Returns minimum ``x``-coordinate of the box."""
+        """Minimum ``x``-coordinate of the box."""
 
     @property
     @abstractmethod
     def min_y(self) -> Scalar:
-        """Returns minimum ``y``-coordinate of the box."""
+        """Minimum ``y``-coordinate of the box."""
 
     @abstractmethod
     def __eq__(self, other: 'Box') -> bool:
@@ -146,7 +146,7 @@ class Multipoint(Protocol[Scalar]):
     @property
     @abstractmethod
     def points(self) -> Sequence[Point]:
-        """Returns points of the multipoint."""
+        """Points of the multipoint."""
 
     @abstractmethod
     def __eq__(self, other: 'Multipoint') -> bool:
@@ -169,12 +169,12 @@ class Segment(Protocol[Scalar]):
     @property
     @abstractmethod
     def start(self) -> Point:
-        """Returns start endpoint of the segment."""
+        """Start endpoint of the segment."""
 
     @property
     @abstractmethod
     def end(self) -> Point:
-        """Returns start endpoint of the segment."""
+        """End endpoint of the segment."""
 
     @abstractmethod
     def __eq__(self, other: 'Segment') -> bool:
@@ -196,7 +196,7 @@ class Multisegment(Protocol[Scalar]):
     @property
     @abstractmethod
     def segments(self) -> Sequence[Segment]:
-        """Returns segments of the multisegment."""
+        """Segments of the multisegment."""
 
     @abstractmethod
     def __eq__(self, other: 'Multisegment') -> bool:
@@ -218,7 +218,7 @@ class Contour(Protocol[Scalar]):
     @property
     @abstractmethod
     def vertices(self) -> Sequence[Point]:
-        """Returns coordinates of the contour."""
+        """Vertices of the contour."""
 
     @abstractmethod
     def __eq__(self, other: 'Contour') -> bool:
@@ -241,12 +241,12 @@ class Polygon(Protocol[Scalar]):
     @property
     @abstractmethod
     def border(self) -> Contour:
-        """Returns border of the polygon."""
+        """Border of the polygon."""
 
     @property
     @abstractmethod
     def holes(self) -> Sequence[Contour]:
-        """Returns holes of the polygon."""
+        """Holes of the polygon."""
 
     @abstractmethod
     def __eq__(self, other: 'Polygon') -> bool:
@@ -268,7 +268,7 @@ class Multipolygon(Protocol[Scalar]):
     @property
     @abstractmethod
     def polygons(self) -> Sequence[Polygon]:
-        """Returns polygons of the multipolygon."""
+        """Polygons of the multipolygon."""
 
     @abstractmethod
     def __eq__(self, other: 'Multipolygon') -> bool:
@@ -301,14 +301,14 @@ class Mix(Protocol[Scalar]):
     @property
     @abstractmethod
     def discrete(self) -> Maybe[Multipoint]:
-        """Returns discrete component of the mix."""
+        """Discrete component of the mix."""
 
     @property
     @abstractmethod
     def linear(self) -> Maybe[Linear]:
-        """Returns linear component of the mix."""
+        """Linear component of the mix."""
 
     @property
     @abstractmethod
     def shaped(self) -> Maybe[Shaped]:
-        """Returns shaped component of the mix."""
+        """Shaped component of the mix."""
