@@ -432,6 +432,32 @@ class Context:
         return self._centroidal.contour_centroid(contour, self.point_cls,
                                                  self.sqrt)
 
+    def contour_length(self, contour: _hints.Contour) -> _hints.Scalar:
+        """
+        Returns Euclidean length of a contour.
+
+        Time complexity:
+            ``O(len(contour.vertices))``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Contour = context.contour_cls
+        >>> Point = context.point_cls
+        >>> Segment = context.segment_cls
+        >>> context.contour_length(Contour([Point(0, 0), Point(3, 0),
+        ...                                 Point(0, 4)])) == 12
+        True
+        >>> context.contour_length(Contour([Point(0, 0), Point(1, 0),
+        ...                                 Point(1, 1), Point(0, 1)])) == 4
+        True
+        """
+        points_squared_distance, sqrt = self.points_squared_distance, self.sqrt
+        vertices = contour.vertices
+        return sum(sqrt(points_squared_distance(vertices[index - 1],
+                                                vertices[index]))
+                   for index in range(len(vertices)))
+
     def contour_segments(self, contour: _hints.Contour
                          ) -> _Sequence[_hints.Segment]:
         """
