@@ -8,25 +8,24 @@ from .exact import region as exact_region
 from .plain import region as plain_region
 from .robust import region as robust_region
 
-SignedRegionMeasure = Callable[[Contour[Scalar]], Scalar]
+RegionSignedMeasure = Callable[[Contour[Scalar]], Scalar]
 
 
 class Context:
-    __slots__ = '_signed_region_measure',
+    @property
+    def region_signed_area(self) -> RegionSignedMeasure:
+        return self._region_signed_area
+
+    __slots__ = '_region_signed_area',
 
     def __init__(self,
-                 *,
-                 signed_region_measure: SignedRegionMeasure) -> None:
-        self._signed_region_measure = signed_region_measure
+                 region_signed_area: RegionSignedMeasure) -> None:
+        self._region_signed_area = region_signed_area
 
     __repr__ = generate_repr(__init__,
                              with_module_name=True)
 
-    @property
-    def signed_region_measure(self) -> SignedRegionMeasure:
-        return self._signed_region_measure
 
-
-exact_context = Context(signed_region_measure=exact_region.signed_area)
-plain_context = Context(signed_region_measure=plain_region.signed_area)
-robust_context = Context(signed_region_measure=robust_region.signed_area)
+exact_context = Context(exact_region.signed_area)
+plain_context = Context(plain_region.signed_area)
+robust_context = Context(robust_region.signed_area)

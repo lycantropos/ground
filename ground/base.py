@@ -331,7 +331,7 @@ class Context:
         return self._polygon_cls
 
     @property
-    def region_signed_area(self) -> _measured.SignedRegionMeasure:
+    def region_signed_area(self) -> _measured.RegionSignedMeasure:
         """
         Returns signed area of the region given its contour.
 
@@ -352,7 +352,7 @@ class Context:
         ...  == -1)
         True
         """
-        return self._measured.signed_region_measure
+        return self._measured.region_signed_area
 
     @property
     def segment_cls(self) -> _Type[_hints.Segment]:
