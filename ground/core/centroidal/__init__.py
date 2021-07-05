@@ -9,8 +9,8 @@ from ground.core.hints import (Contour,
                                Multisegment,
                                Point,
                                Polygon,
-                               Scalar,
-                               Segment)
+                               Segment,
+                               SquareRooter)
 from .exact import (contour as exact_contour,
                     multipoint as exact_multipoint,
                     multipolygon as exact_multipolygon,
@@ -33,12 +33,11 @@ from .robust import (contour as robust_contour,
                      region as robust_region,
                      segment as robust_segment)
 
-ContourCentroid = Callable[[Contour, Type[Point], Callable[[Scalar], Scalar]],
-                           Point]
+ContourCentroid = Callable[[Contour, Type[Point], SquareRooter], Point]
 MultipointCentroid = Callable[[Multipoint, Type[Point]], Point]
 MultipolygonCentroid = Callable[[Multipolygon, Type[Point]], Point]
-MultisegmentCentroid = Callable[[Multisegment, Type[Point],
-                                 Callable[[Scalar], Scalar]], Point]
+MultisegmentCentroid = Callable[[Multisegment, Type[Point], SquareRooter],
+                                Point]
 PolygonCentroid = Callable[[Polygon, Type[Point]], Point]
 RegionCentroid = Callable[[Contour, Type[Point]], Point]
 SegmentCentroid = Callable[[Segment, Type[Point]], Point]

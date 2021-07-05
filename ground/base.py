@@ -24,7 +24,8 @@ from .core import (angular as _angular,
                    segment as _segment,
                    translation as _translation,
                    vector as _vector)
-from .core.hints import QuaternaryPointFunction as _QuaternaryPointFunction
+from .core.hints import (QuaternaryPointFunction as _QuaternaryPointFunction,
+                         SquareRooter as _SquareRooter)
 
 _QuaternaryFunction = _QuaternaryPointFunction[_hints.Scalar]
 
@@ -67,8 +68,7 @@ class Context:
                  polygon_cls: _Type[_hints.Polygon] = _geometries.Polygon,
                  segment_cls: _Type[_hints.Segment] = _geometries.Segment,
                  mode: Mode = Mode.EXACT,
-                 sqrt: _Callable[[_hints.Scalar], _hints.Scalar] = _sqrt
-                 ) -> None:
+                 sqrt: _SquareRooter = _sqrt) -> None:
         self._box_cls = box_cls
         self._contour_cls = contour_cls
         self._empty, self._empty_cls = empty_cls(), empty_cls
@@ -360,7 +360,7 @@ class Context:
         return self._segment_cls
 
     @property
-    def sqrt(self) -> _Callable[[_hints.Scalar], _hints.Scalar]:
+    def sqrt(self) -> _SquareRooter:
         """Returns function for computing square root."""
         return self._sqrt
 

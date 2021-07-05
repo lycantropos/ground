@@ -15,6 +15,7 @@ except ImportError:
                                    runtime_checkable)
 
 Scalar = TypeVar('Scalar', Expression, Real)
+SquareRooter = Callable[[Scalar], Scalar]
 
 
 @runtime_checkable
