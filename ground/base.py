@@ -103,7 +103,8 @@ class Context:
                         _translation.robust_context, _vector.robust_context)))
 
     __repr__ = _generate_repr(__init__,
-                              argument_serializer=_serializers.complex_)
+                              argument_serializer=_serializers.complex_,
+                              skip_defaults=True)
 
     @property
     def angle_kind(self) -> _QuaternaryPointFunction[Kind]:
