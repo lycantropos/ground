@@ -1564,6 +1564,28 @@ class Context:
         return self._segment.containment_checker(segment.start, segment.end,
                                                  point, self.angle_orientation)
 
+    def segment_length(self, segment: _hints.Segment) -> _hints.Scalar:
+        """
+        Returns Euclidean length of a segment.
+
+        Time complexity:
+            ``O(1)``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Point = context.point_cls
+        >>> Segment = context.segment_cls
+        >>> context.segment_length(Segment(Point(0, 0), Point(1, 0))) == 1
+        True
+        >>> context.segment_length(Segment(Point(0, 0), Point(0, 1))) == 1
+        True
+        >>> context.segment_length(Segment(Point(0, 0), Point(3, 4))) == 5
+        True
+        """
+        return self.sqrt(self.points_squared_distance(segment.start,
+                                                      segment.end))
+
     def segment_point_squared_distance(self,
                                        segment: _hints.Segment,
                                        point: _hints.Point) -> _hints.Scalar:
