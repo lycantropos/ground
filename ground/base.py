@@ -1,6 +1,7 @@
 import enum as _enum
 from contextvars import ContextVar as _ContextVar
-from typing import (Sequence as _Sequence,
+from typing import (Optional as _Optional,
+                    Sequence as _Sequence,
                     Type as _Type,
                     Union as _Union)
 
@@ -797,6 +798,64 @@ class Context:
         True
         """
         return self._centroidal.region_centroid(contour, self.point_cls)
+
+    def replace(self,
+                *,
+                box_cls: _Optional[_Type[_hints.Box]] = None,
+                contour_cls: _Optional[_Type[_hints.Contour]] = None,
+                empty_cls: _Optional[_Type[_hints.Empty]] = None,
+                mix_cls: _Optional[_Type[_hints.Mix]] = None,
+                multipoint_cls: _Optional[_Type[_hints.Multipoint]] = None,
+                multipolygon_cls: _Optional[_Type[_hints.Multipolygon]] = None,
+                multisegment_cls: _Optional[_Type[_hints.Multisegment]] = None,
+                point_cls: _Optional[_Type[_hints.Point]] = None,
+                polygon_cls: _Optional[_Type[_hints.Polygon]] = None,
+                segment_cls: _Optional[_Type[_hints.Segment]] = None,
+                mode: _Optional[Mode] = None,
+                sqrt: _Optional[_SquareRooter] = None) -> 'Context':
+        """
+        Constructs context from the original one replacing given parameters.
+
+        Time complexity:
+            ``O(1)``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> robust_context = context.replace(mode=Mode.ROBUST)
+        >>> isinstance(robust_context, Context)
+        True
+        >>> robust_context.mode is Mode.ROBUST
+        True
+        """
+        return Context(box_cls=self.box_cls if box_cls is None else box_cls,
+                       contour_cls=(self.contour_cls
+                                    if contour_cls is None
+                                    else contour_cls),
+                       empty_cls=(self.empty_cls
+                                  if empty_cls is None
+                                  else empty_cls),
+                       mix_cls=self.mix_cls if mix_cls is None else mix_cls,
+                       multipoint_cls=(self.multipoint_cls
+                                       if multipoint_cls is None
+                                       else multipoint_cls),
+                       multipolygon_cls=(self.multipolygon_cls
+                                         if multipolygon_cls is None
+                                         else multipolygon_cls),
+                       multisegment_cls=(self.multisegment_cls
+                                         if multisegment_cls is None
+                                         else multisegment_cls),
+                       point_cls=(self.point_cls
+                                  if point_cls is None
+                                  else point_cls),
+                       polygon_cls=(self.polygon_cls
+                                    if polygon_cls is None
+                                    else polygon_cls),
+                       segment_cls=(self.segment_cls
+                                    if segment_cls is None
+                                    else segment_cls),
+                       mode=self.mode if mode is None else mode,
+                       sqrt=self.sqrt if sqrt is None else sqrt)
 
     def rotate_contour(self,
                        contour: _hints.Contour,
