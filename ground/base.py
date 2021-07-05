@@ -612,6 +612,33 @@ class Context:
         return self._centroidal.multisegment_centroid(
                 multisegment, self.point_cls, self.sqrt)
 
+    def multisegment_length(self, multisegment: _hints.Multisegment
+                            ) -> _hints.Scalar:
+        """
+        Returns Euclidean length of a multisegment.
+
+        Time complexity:
+            ``O(len(multisegment.segments))``
+        Memory complexity:
+            ``O(1)``
+
+        >>> context = get_context()
+        >>> Multisegment = context.multisegment_cls
+        >>> Point = context.point_cls
+        >>> Segment = context.segment_cls
+        >>> context.multisegment_length(
+        ...     Multisegment([Segment(Point(0, 0), Point(1, 0)),
+        ...                   Segment(Point(0, 0), Point(0, 1))])) == 2
+        True
+        >>> context.multisegment_length(
+        ...     Multisegment([Segment(Point(0, 0), Point(1, 0)),
+        ...                   Segment(Point(0, 0), Point(3, 4))])) == 6
+        True
+        """
+        points_squared_distance, sqrt = self.points_squared_distance, self.sqrt
+        return sum(sqrt(points_squared_distance(segment.start, segment.end))
+                   for segment in multisegment.segments)
+
     def points_convex_hull(self,
                            points: _Sequence[_hints.Point]
                            ) -> _Sequence[_hints.Point]:
