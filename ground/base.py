@@ -1,7 +1,6 @@
 import enum as _enum
 from contextvars import ContextVar as _ContextVar
-from typing import (Callable as _Callable,
-                    Sequence as _Sequence,
+from typing import (Sequence as _Sequence,
                     Type as _Type,
                     Union as _Union)
 
