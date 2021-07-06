@@ -290,15 +290,15 @@ class Context:
         >>> context = get_context()
         >>> Point = context.point_cls
         >>> (context.locate_point_in_point_point_point_circle(
-        ...      Point(0, 0), Point(2, 0), Point(0, 2), Point(1, 1))
+        ...      Point(1, 1), Point(0, 0), Point(2, 0), Point(0, 2))
         ...  is Location.INTERIOR)
         True
         >>> (context.locate_point_in_point_point_point_circle(
-        ...      Point(0, 0), Point(2, 0), Point(0, 2), Point(2, 2))
+        ...      Point(2, 2), Point(0, 0), Point(2, 0), Point(0, 2))
         ...  is Location.BOUNDARY)
         True
         >>> (context.locate_point_in_point_point_point_circle(
-        ...      Point(0, 0), Point(2, 0), Point(0, 2), Point(3, 3))
+        ...      Point(3, 3), Point(0, 0), Point(2, 0), Point(0, 2))
         ...  is Location.EXTERIOR)
         True
         """

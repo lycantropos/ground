@@ -24,6 +24,6 @@ class Context:
         return self._point_point_point_test
 
 
-exact_context = Context(point_point_point_test=exact_point_point_point.test)
-plain_context = Context(point_point_point_test=plain_point_point_point.test)
-robust_context = Context(point_point_point_test=robust_point_point_point.test)
+exact_context = Context(exact_point_point_point.test)
+plain_context = Context(plain_point_point_point.test)
+robust_context = Context(robust_point_point_point.test)
