@@ -16,10 +16,10 @@ from . import strategies
 def test_basic(context_with_points_quadruplet: Tuple[Context, PointsQuadruplet]
                ) -> None:
     context, points_quadruplet = context_with_points_quadruplet
-    first_point, second_point, third_point, fourth_point = points_quadruplet
+    point, first_point, second_point, third_point = points_quadruplet
 
     result = context.locate_point_in_point_point_point_circle(
-            first_point, second_point, third_point, fourth_point)
+            point, first_point, second_point, third_point)
 
     assert isinstance(result, Location)
 
@@ -32,7 +32,7 @@ def test_degenerate_cases(context_with_points_triplet
 
     assert all(
             context.locate_point_in_point_point_point_circle(
-                    first_point, second_point, third_point, point)
+                    point, first_point, second_point, third_point)
             is Location.BOUNDARY
             for point in points_triplet)
 
@@ -42,12 +42,10 @@ def test_permutations(context_with_points_quadruplet: Tuple[Context,
                                                             PointsQuadruplet],
                       index: int) -> None:
     context, points_quadruplet = context_with_points_quadruplet
-    first_point, second_point, third_point, fourth_point = points_quadruplet
+    point, first_point, second_point, third_point = points_quadruplet
 
-    result = context.locate_point_in_point_point_point_circle(first_point,
-                                                              second_point,
-                                                              third_point,
-                                                              fourth_point)
+    result = context.locate_point_in_point_point_point_circle(
+            point, first_point, second_point, third_point)
 
     assert (context.locate_point_in_point_point_point_circle(
             *permute(points_quadruplet, index))
