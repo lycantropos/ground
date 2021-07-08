@@ -1020,7 +1020,8 @@ class Context:
     def rotate_multipolygon_around_origin(self,
                                           multipolygon: _hints.Multipolygon,
                                           cosine: _hints.Scalar,
-                                          sine: _hints.Scalar) -> _hints.Multipolygon:
+                                          sine: _hints.Scalar
+                                          ) -> _hints.Multipolygon:
         """
         Returns multipolygon rotated by given angle around origin.
 
@@ -1280,7 +1281,7 @@ class Context:
     def rotate_segment_around_origin(self,
                                      segment: _hints.Segment,
                                      cosine: _hints.Scalar,
-                                     sine: _hints.Scalar) -> _hints.Point:
+                                     sine: _hints.Scalar) -> _hints.Segment:
         """
         Returns segment rotated by given angle around origin.
 
