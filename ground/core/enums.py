@@ -1,12 +1,10 @@
 from enum import (IntEnum,
                   unique)
 
-from reprit import serializers
-
 
 class Base(IntEnum):
     def __repr__(self) -> str:
-        return serializers.complex_(type(self)) + '.' + self.name
+        return type(self).__qualname__ + '.' + self.name
 
 
 @unique
