@@ -48,9 +48,10 @@ class Context:
     __slots__ = ('_angular', '_box_cls', '_centroidal', '_circular',
                  '_contour_cls', '_empty', '_empty_cls', '_measured',
                  '_metric', '_mix_cls', '_mode', '_multipoint_cls',
-                 '_multipolygon_cls', '_multisegment_cls', '_point_cls',
-                 '_polygon_cls', '_rotation', '_scaling', '_segment',
-                 '_segment_cls', '_sqrt', '_translation', '_vector')
+                 '_multipolygon_cls', '_multisegment_cls', '_origin',
+                 '_point_cls', '_polygon_cls', '_rotation', '_scaling',
+                 '_segment', '_segment_cls', '_sqrt', '_translation',
+                 '_vector')
 
     def __init__(self,
                  *,
@@ -76,6 +77,7 @@ class Context:
         self._multipoint_cls = multipoint_cls
         self._multipolygon_cls = multipolygon_cls
         self._multisegment_cls = multisegment_cls
+        self._origin = point_cls(0, 0)
         self._point_cls = point_cls
         self._polygon_cls = polygon_cls
         self._segment_cls = segment_cls
@@ -270,6 +272,11 @@ class Context:
     def multisegment_cls(self) -> _Type[_hints.Multisegment]:
         """Returns type for multisegments."""
         return self._multisegment_cls
+
+    @property
+    def origin(self) -> _hints.Point:
+        """Returns origin."""
+        return self._origin
 
     @property
     def point_cls(self) -> _Type[_hints.Point]:
