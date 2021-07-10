@@ -1,3 +1,4 @@
+from reprit import serializers
 from reprit.base import generate_repr
 
 from ground.core.enums import Location
@@ -17,6 +18,7 @@ class Context:
         self._point_point_point_test = point_point_point_test
 
     __repr__ = generate_repr(__init__,
+                             argument_serializer=serializers.complex_,
                              with_module_name=True)
 
     @property

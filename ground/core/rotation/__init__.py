@@ -2,6 +2,7 @@ from typing import (Callable,
                     Tuple,
                     Type)
 
+from reprit import serializers
 from reprit.base import generate_repr
 
 from ground.core.hints import (Contour,
@@ -213,6 +214,7 @@ class Context:
         self._rotate_translate_point = rotate_translate_point
 
     __repr__ = generate_repr(__init__,
+                             argument_serializer=serializers.complex_,
                              with_module_name=True)
 
 

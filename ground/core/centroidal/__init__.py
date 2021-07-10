@@ -1,6 +1,7 @@
 from typing import (Callable,
                     Type)
 
+from reprit import serializers
 from reprit.base import generate_repr
 
 from ground.core.hints import (Contour,
@@ -65,6 +66,7 @@ class Context:
         self._segment_centroid = segment_centroid
 
     __repr__ = generate_repr(__init__,
+                             argument_serializer=serializers.complex_,
                              with_module_name=True)
 
     @property

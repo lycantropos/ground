@@ -1,3 +1,4 @@
+from reprit import serializers
 from reprit.base import generate_repr
 
 from ground.core.hints import (QuaternaryPointFunction,
@@ -21,6 +22,7 @@ class Context:
         self._cross_product, self._dot_product = cross_product, dot_product
 
     __repr__ = generate_repr(__init__,
+                             argument_serializer=serializers.complex_,
                              with_module_name=True)
 
     @property

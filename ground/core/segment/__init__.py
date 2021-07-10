@@ -1,6 +1,7 @@
 from typing import (Callable,
                     Type)
 
+from reprit import serializers
 from reprit.base import generate_repr
 
 from ground.core.enums import (Orientation,
@@ -142,6 +143,7 @@ class Context:
         self._intersector = intersector
 
     __repr__ = generate_repr(__init__,
+                             argument_serializer=serializers.complex_,
                              with_module_name=True)
 
 
