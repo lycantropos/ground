@@ -18,5 +18,5 @@ def to_squared_points_distance(first_x: Scalar,
                                first_y: Scalar,
                                second_x: Scalar,
                                second_y: Scalar) -> Expansion:
-    return (square(Expansion(first_x, -second_x))
-            + square(Expansion(first_y, -second_y)))
+    return (square(Expansion(first_x) - Expansion(second_x))
+            + square(Expansion(first_y) - Expansion(second_y)))
