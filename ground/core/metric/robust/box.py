@@ -54,9 +54,9 @@ def segment_squared_distance(box: Box,
 def _linear_interval_distance(min_coordinate: Scalar,
                               max_coordinate: Scalar,
                               coordinate: Scalar) -> Expansion:
-    return (Expansion(min_coordinate, -coordinate)
+    return (Expansion(min_coordinate) - Expansion(coordinate)
             if coordinate < min_coordinate
-            else (Expansion(coordinate, -max_coordinate)
+            else (Expansion(coordinate) - Expansion(max_coordinate)
                   if coordinate > max_coordinate
                   else Expansion()))
 
