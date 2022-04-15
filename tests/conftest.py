@@ -7,8 +7,10 @@ from hypothesis import settings
 
 is_pypy = platform.python_implementation() == 'PyPy'
 on_ci = bool(os.getenv('CI', False))
-max_examples = (-(-settings.default.max_examples // 5)
-                if is_pypy and on_ci
+max_examples = ((-(-settings.default.max_examples // 25)
+                 if is_pypy
+                 else -(-settings.default.max_examples // 5))
+                if on_ci
                 else settings.default.max_examples)
 settings.register_profile('default',
                           deadline=(timedelta(hours=1) / max_examples
