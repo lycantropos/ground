@@ -44,10 +44,6 @@ class Point(Protocol[Scalar]):
         """Ordinate of the point."""
 
     @abstractmethod
-    def __eq__(self, other: 'Point') -> bool:
-        """Checks if the point is equal to the other."""
-
-    @abstractmethod
     def __ge__(self, other: 'Point') -> bool:
         """Checks if the point is greater than or equal to the other."""
 
@@ -109,10 +105,6 @@ class Box(Protocol[Scalar]):
     def min_y(self) -> Scalar:
         """Minimum ``y``-coordinate of the box."""
 
-    @abstractmethod
-    def __eq__(self, other: 'Box') -> bool:
-        """Checks if the box is equal to the other."""
-
 
 @runtime_checkable
 class Empty(Protocol):
@@ -122,10 +114,6 @@ class Empty(Protocol):
     @abstractmethod
     def __new__(cls) -> 'Empty':
         """Constructs empty geometry."""
-
-    @abstractmethod
-    def __eq__(self, other: 'Empty') -> bool:
-        """Checks if the empty geometry is equal to the other."""
 
 
 _T = TypeVar('_T')
@@ -148,10 +136,6 @@ class Multipoint(Protocol[Scalar]):
     @abstractmethod
     def points(self) -> Sequence[Point]:
         """Points of the multipoint."""
-
-    @abstractmethod
-    def __eq__(self, other: 'Multipoint') -> bool:
-        """Checks if the multipoint is equal to the other."""
 
 
 @runtime_checkable
@@ -177,10 +161,6 @@ class Segment(Protocol[Scalar]):
     def end(self) -> Point:
         """End endpoint of the segment."""
 
-    @abstractmethod
-    def __eq__(self, other: 'Segment') -> bool:
-        """Checks if the segment is equal to the other."""
-
 
 @runtime_checkable
 class Multisegment(Protocol[Scalar]):
@@ -199,10 +179,6 @@ class Multisegment(Protocol[Scalar]):
     def segments(self) -> Sequence[Segment]:
         """Segments of the multisegment."""
 
-    @abstractmethod
-    def __eq__(self, other: 'Multisegment') -> bool:
-        """Checks if the multisegment is equal to the other."""
-
 
 @runtime_checkable
 class Contour(Protocol[Scalar]):
@@ -220,10 +196,6 @@ class Contour(Protocol[Scalar]):
     @abstractmethod
     def vertices(self) -> Sequence[Point]:
         """Vertices of the contour."""
-
-    @abstractmethod
-    def __eq__(self, other: 'Contour') -> bool:
-        """Checks if the contour is equal to the other."""
 
 
 @runtime_checkable
@@ -249,10 +221,6 @@ class Polygon(Protocol[Scalar]):
     def holes(self) -> Sequence[Contour]:
         """Holes of the polygon."""
 
-    @abstractmethod
-    def __eq__(self, other: 'Polygon') -> bool:
-        """Checks if the polygon is equal to the other."""
-
 
 @runtime_checkable
 class Multipolygon(Protocol[Scalar]):
@@ -270,10 +238,6 @@ class Multipolygon(Protocol[Scalar]):
     @abstractmethod
     def polygons(self) -> Sequence[Polygon]:
         """Polygons of the multipolygon."""
-
-    @abstractmethod
-    def __eq__(self, other: 'Multipolygon') -> bool:
-        """Checks if the multipolygon is equal to the other."""
 
 
 Linear = Union[Segment, Multisegment, Contour]
@@ -294,10 +258,6 @@ class Mix(Protocol[Scalar]):
                 linear: Maybe[Linear],
                 shaped: Maybe[Shaped]) -> 'Mix':
         """Constructs mix given its components."""
-
-    @abstractmethod
-    def __eq__(self, other: 'Mix') -> bool:
-        """Checks if the mix is equal to the other."""
 
     @property
     @abstractmethod
