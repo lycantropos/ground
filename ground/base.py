@@ -25,9 +25,11 @@ from .core import (angular as _angular,
                    translation as _translation,
                    vector as _vector)
 from .core.hints import (QuaternaryPointFunction as _QuaternaryPointFunction,
-                         SquareRooter as _SquareRooter)
+                         SquareRooter as _SquareRooter,
+                         TernaryPointFunction as _TernaryPointFunction)
 
 _QuaternaryFunction = _QuaternaryPointFunction[_hints.Scalar]
+_TernaryFunction = _TernaryPointFunction[_hints.Scalar]
 
 Location = _enums.Location
 Kind = _enums.Kind
@@ -109,7 +111,7 @@ class Context:
                               skip_defaults=True)
 
     @property
-    def angle_kind(self) -> _QuaternaryPointFunction[Kind]:
+    def angle_kind(self) -> _TernaryPointFunction[Kind]:
         """
         Returns function for computing angle kind.
 
@@ -133,7 +135,7 @@ class Context:
         return self._angular.kind
 
     @property
-    def angle_orientation(self) -> _QuaternaryPointFunction[Orientation]:
+    def angle_orientation(self) -> _TernaryPointFunction[Orientation]:
         """
         Returns function for computing angle orientation.
 

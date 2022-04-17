@@ -3,7 +3,7 @@ from reprit.base import generate_repr
 
 from ground.core.enums import (Kind,
                                Orientation)
-from ground.core.hints import (QuaternaryPointFunction)
+from ground.core.hints import TernaryPointFunction
 from .exact import (kind as exact_kind,
                     orientation as exact_orientation)
 from .plain import (kind as plain_kind,
@@ -16,8 +16,8 @@ class Context:
     __slots__ = '_kind', '_orientation'
 
     def __init__(self,
-                 kind: QuaternaryPointFunction[Kind],
-                 orientation: QuaternaryPointFunction[Orientation]) -> None:
+                 kind: TernaryPointFunction[Kind],
+                 orientation: TernaryPointFunction[Orientation]) -> None:
         self._kind, self._orientation = kind, orientation
 
     __repr__ = generate_repr(__init__,
@@ -25,11 +25,11 @@ class Context:
                              with_module_name=True)
 
     @property
-    def kind(self) -> QuaternaryPointFunction[Kind]:
+    def kind(self) -> TernaryPointFunction[Kind]:
         return self._kind
 
     @property
-    def orientation(self) -> QuaternaryPointFunction[Orientation]:
+    def orientation(self) -> TernaryPointFunction[Orientation]:
         return self._orientation
 
 
