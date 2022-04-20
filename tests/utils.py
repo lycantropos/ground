@@ -92,6 +92,10 @@ def identity(value: _T1) -> _T1:
     return value
 
 
+def implication(antecedent: bool, consequent: bool) -> bool:
+    return not antecedent or consequent
+
+
 def lift(value: _T1) -> List[_T1]:
     return [value]
 
