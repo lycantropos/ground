@@ -57,12 +57,15 @@ class Relation(Base):
     DISJOINT = 0
     #: intersection is a strict subset of each of the geometries,
     #: has dimension less than at least of one of the geometries
-    #: and only boundaries intersect, but do not cross
+    #: and if we traverse boundary of each of the geometries in any direction
+    #: then boundary of the other geometry won't be on one of sides
+    #: at each point of boundaries intersection
     TOUCH = 1
     #: intersection is a strict subset of each of the geometries,
-    #: has dimension less than at least of one of the geometries,
-    #: one of the geometries lies in interior & exterior of the other geometry
-    #: or boundaries cross
+    #: has dimension less than at least of one of the geometries
+    #: and if we traverse boundary of each of the geometries in any direction
+    #: then boundary of the other geometry will be on both sides
+    #: at some point of boundaries intersection
     CROSS = 2
     #: intersection is a strict subset of each of the geometries
     #: and has the same dimension as geometries
