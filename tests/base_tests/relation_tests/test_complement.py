@@ -1,7 +1,7 @@
 from hypothesis import given
 
 from ground.base import Relation
-from tests.utils import implication
+from tests.utils import equivalence
 from . import strategies
 
 SYMMETRICAL_RELATIONS = (Relation.CROSS, Relation.DISJOINT, Relation.EQUAL,
@@ -19,4 +19,4 @@ def test_basic(relation: Relation) -> None:
 def test_value(relation: Relation) -> None:
     result = relation.complement
 
-    assert implication(result is relation, result in SYMMETRICAL_RELATIONS)
+    assert equivalence(result is relation, result in SYMMETRICAL_RELATIONS)
