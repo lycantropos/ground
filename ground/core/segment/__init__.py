@@ -82,7 +82,7 @@ class Context:
         if (test_start_orientation
                 is not Orientation.COLLINEAR
                 is not test_end_orientation):
-            if (test_start_orientation > 0) is (test_end_orientation > 0):
+            if test_start_orientation is test_end_orientation:
                 return Relation.DISJOINT
             else:
                 goal_start_orientation = orienteer(test_start, test_end,
@@ -93,14 +93,13 @@ class Context:
                         is not Orientation.COLLINEAR
                         is not goal_end_orientation):
                     return (Relation.DISJOINT
-                            if ((goal_start_orientation > 0)
-                                is (goal_end_orientation > 0))
+                            if goal_start_orientation is goal_end_orientation
                             else Relation.CROSS)
                 elif goal_start_orientation is not Orientation.COLLINEAR:
                     return (Relation.TOUCH
                             if test_start < goal_end < test_end
                             else Relation.DISJOINT)
-                elif goal_end_orientation is not Orientation.COLLINEAR:
+                else:
                     return (Relation.TOUCH
                             if test_start < goal_start < test_end
                             else Relation.DISJOINT)
