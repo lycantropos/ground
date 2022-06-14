@@ -47,12 +47,12 @@ def to_digits_count(number: float,
 
 rational_coordinates_strategies_factories = {Fraction: strategies.fractions,
                                              int: strategies.integers}
-coordinates_strategies_factories = {
-    **rational_coordinates_strategies_factories,
-    float: to_floats}
-coordinates_strategies = strategies.sampled_from(
-        [factory(MIN_COORDINATE, MAX_COORDINATE)
-         for factory in coordinates_strategies_factories.values()])
+real_coordinates_strategies_factories = {float: to_floats}
 rational_coordinates_strategies = strategies.sampled_from(
         [factory(MIN_COORDINATE, MAX_COORDINATE)
-         for factory in rational_coordinates_strategies_factories.values()])
+         for factory in rational_coordinates_strategies_factories.values()]
+)
+real_coordinates_strategies = strategies.sampled_from(
+        [factory(MIN_COORDINATE, MAX_COORDINATE)
+         for factory in real_coordinates_strategies_factories.values()]
+)

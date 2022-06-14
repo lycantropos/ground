@@ -6,8 +6,10 @@ from hypothesis import strategies
 
 from ground.base import (Context,
                          Mode)
-from tests.strategies.coordinates import (coordinates_strategies,
-                                          rational_coordinates_strategies)
+from tests.strategies.contexts import (
+    contexts_with_coordinates_strategies,
+    rational_contexts_with_coordinates_strategies,
+)
 from tests.strategies.geometries import (to_boxes,
                                          to_contours,
                                          to_contours_sequences,
@@ -35,10 +37,6 @@ contexts = strategies.builds(Context,
                              mode=strategies.sampled_from(list(Mode)))
 contexts_with_empty_lists = strategies.tuples(contexts,
                                               strategies.builds(list))
-contexts_with_rational_coordinates_strategies = strategies.tuples(
-        contexts, rational_coordinates_strategies)
-contexts_with_coordinates_strategies = strategies.tuples(
-        contexts, coordinates_strategies)
 to_contexts_with = partial(cleave_in_tuples,
                            compose(strategies.just, itemgetter(0)))
 boxes_factory = pack(to_boxes)
@@ -65,154 +63,242 @@ contexts_with_boxes_and_points = (contexts_with_coordinates_strategies
                                   .flatmap(to_contexts_with(boxes_factory,
                                                             points_factory)))
 contexts_with_rational_boxes_and_segments = (
-    contexts_with_rational_coordinates_strategies.flatmap(to_contexts_with(
-            boxes_factory, segments_factory)))
+    rational_contexts_with_coordinates_strategies.flatmap(to_contexts_with(
+            boxes_factory, segments_factory
+    ))
+)
 contexts_with_boxes_and_segments = (
     contexts_with_coordinates_strategies.flatmap(to_contexts_with(
-            boxes_factory, segments_factory)))
+            boxes_factory, segments_factory
+    ))
+)
 contexts_with_points = (contexts_with_coordinates_strategies
                         .flatmap(to_contexts_with(points_factory)))
 contexts_with_rational_contours_and_scalars_pairs = (
-    contexts_with_rational_coordinates_strategies.flatmap(
-            to_contexts_with(contours_factory, itemgetter(1), itemgetter(1))))
+    rational_contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(contours_factory, itemgetter(1), itemgetter(1))
+    )
+)
 contexts_with_contours_and_scalars_pairs = (
     contexts_with_coordinates_strategies.flatmap(
-            to_contexts_with(contours_factory, itemgetter(1), itemgetter(1))))
+            to_contexts_with(contours_factory, itemgetter(1), itemgetter(1))
+    )
+)
 contexts_with_rational_multipoints_and_scalars_pairs = (
-    contexts_with_rational_coordinates_strategies.flatmap(
+    rational_contexts_with_coordinates_strategies.flatmap(
             to_contexts_with(multipoints_factory, itemgetter(1),
-                             itemgetter(1))))
+                             itemgetter(1))
+    )
+)
 contexts_with_multipoints_and_scalars_pairs = (
     contexts_with_coordinates_strategies.flatmap(
             to_contexts_with(multipoints_factory, itemgetter(1),
-                             itemgetter(1))))
+                             itemgetter(1))
+    )
+)
 contexts_with_rational_multipolygons_and_scalars_pairs = (
-    contexts_with_rational_coordinates_strategies.flatmap(
+    rational_contexts_with_coordinates_strategies.flatmap(
             to_contexts_with(multipolygons_factory, itemgetter(1),
-                             itemgetter(1))))
+                             itemgetter(1))
+    )
+)
 contexts_with_multipolygons_and_scalars_pairs = (
     contexts_with_coordinates_strategies.flatmap(
             to_contexts_with(multipolygons_factory, itemgetter(1),
-                             itemgetter(1))))
+                             itemgetter(1))
+    )
+)
 contexts_with_rational_multisegments_and_scalars_pairs = (
-    contexts_with_rational_coordinates_strategies.flatmap(
+    rational_contexts_with_coordinates_strategies.flatmap(
             to_contexts_with(multisegments_factory, itemgetter(1),
-                             itemgetter(1))))
+                             itemgetter(1))
+    )
+)
 contexts_with_multisegments_and_scalars_pairs = (
     contexts_with_coordinates_strategies.flatmap(
             to_contexts_with(multisegments_factory, itemgetter(1),
-                             itemgetter(1))))
+                             itemgetter(1))
+    )
+)
 contexts_with_rational_polygons_and_scalars_pairs = (
-    contexts_with_rational_coordinates_strategies.flatmap(
-            to_contexts_with(polygons_factory, itemgetter(1), itemgetter(1))))
+    rational_contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(polygons_factory, itemgetter(1), itemgetter(1))
+    )
+)
 contexts_with_polygons_and_scalars_pairs = (
     contexts_with_coordinates_strategies.flatmap(
-            to_contexts_with(polygons_factory, itemgetter(1), itemgetter(1))))
+            to_contexts_with(polygons_factory, itemgetter(1), itemgetter(1))
+    )
+)
 contexts_with_rational_points_and_scalars_pairs = (
-    contexts_with_rational_coordinates_strategies.flatmap(
-            to_contexts_with(points_factory, itemgetter(1), itemgetter(1))))
+    rational_contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(points_factory, itemgetter(1), itemgetter(1))
+    )
+)
 contexts_with_points_and_scalars_pairs = (
     contexts_with_coordinates_strategies.flatmap(
-            to_contexts_with(points_factory, itemgetter(1), itemgetter(1))))
+            to_contexts_with(points_factory, itemgetter(1), itemgetter(1))
+    )
+)
 contexts_with_rational_segments_and_scalars_pairs = (
-    contexts_with_rational_coordinates_strategies.flatmap(
-            to_contexts_with(segments_factory, itemgetter(1), itemgetter(1))))
+    rational_contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(segments_factory, itemgetter(1), itemgetter(1))
+    )
+)
 contexts_with_segments_and_scalars_pairs = (
     contexts_with_coordinates_strategies.flatmap(
-            to_contexts_with(segments_factory, itemgetter(1), itemgetter(1))))
+            to_contexts_with(segments_factory, itemgetter(1), itemgetter(1))
+    )
+)
 contexts_with_points_pairs = (
-    contexts_with_coordinates_strategies.flatmap(to_contexts_with(compose(
-            to_pairs, points_factory))))
+    contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(compose(to_pairs, points_factory))
+    )
+)
 contexts_with_rational_points_pairs = (
-    contexts_with_rational_coordinates_strategies.flatmap(
-            to_contexts_with(compose(to_pairs, points_factory))))
+    rational_contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(compose(to_pairs, points_factory))
+    )
+)
 contexts_with_points_lists = (
-    contexts_with_coordinates_strategies.flatmap(to_contexts_with(
-            compose(partial(strategies.lists,
-                            max_size=MAX_SEQUENCE_SIZE),
-                    points_factory))))
+    contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(compose(partial(strategies.lists,
+                                             max_size=MAX_SEQUENCE_SIZE),
+                                     points_factory))
+    )
+)
 contexts_with_non_empty_points_lists = (
-    contexts_with_coordinates_strategies.flatmap(to_contexts_with(
-            compose(partial(strategies.lists,
-                            min_size=1,
-                            max_size=MAX_SEQUENCE_SIZE),
-                    points_factory))))
+    contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(compose(partial(strategies.lists,
+                                             min_size=1,
+                                             max_size=MAX_SEQUENCE_SIZE),
+                                     points_factory))
+    )
+)
 contexts_with_points_triplets = (
-    contexts_with_coordinates_strategies.flatmap(to_contexts_with(
-            compose(to_triplets, points_factory))))
+    contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(compose(to_triplets, points_factory))
+    )
+)
 contexts_with_points_quadruplets = (
-    contexts_with_coordinates_strategies.flatmap(to_contexts_with(
-            compose(to_quadruplets, points_factory))))
+    contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(compose(to_quadruplets, points_factory))
+    )
+)
 contexts_with_rational_segments_pairs = (
-    contexts_with_rational_coordinates_strategies.flatmap(to_contexts_with(
-            compose(to_pairs, segments_factory))))
+    rational_contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(compose(to_pairs, segments_factory))
+    )
+)
 contexts_with_segments_pairs = (
-    contexts_with_coordinates_strategies.flatmap(to_contexts_with(
-            compose(to_pairs, segments_factory))))
+    contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(compose(to_pairs, segments_factory))
+    )
+)
 contexts_with_rational_segments = (
-    contexts_with_rational_coordinates_strategies.flatmap(to_contexts_with(
-            segments_factory)))
+    rational_contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(segments_factory)
+    )
+)
 contexts_with_segments = (
-    contexts_with_coordinates_strategies.flatmap(to_contexts_with(
-            segments_factory)))
+    contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(segments_factory)
+    )
+)
 contexts_with_rational_segments_and_points = (
-    contexts_with_rational_coordinates_strategies.flatmap(to_contexts_with(
-            segments_factory, points_factory)))
+    rational_contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(segments_factory, points_factory)
+    )
+)
 contexts_with_segments_and_points = (
-    contexts_with_coordinates_strategies.flatmap(to_contexts_with(
-            segments_factory, points_factory)))
+    contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(segments_factory, points_factory)
+    )
+)
 contexts_with_rational_crossing_or_touching_segments_pairs = (
-        contexts_with_rational_coordinates_strategies.flatmap(
-                to_contexts_with(crossing_segments_pairs_factory))
+        rational_contexts_with_coordinates_strategies.flatmap(
+                to_contexts_with(crossing_segments_pairs_factory)
+        )
         |
-        contexts_with_coordinates_strategies.flatmap(to_contexts_with(
-                touching_segments_pairs_factory)))
+        contexts_with_coordinates_strategies.flatmap(
+                to_contexts_with(touching_segments_pairs_factory)
+        )
+)
 contexts_with_crossing_or_touching_segments_pairs = (
-        contexts_with_coordinates_strategies.flatmap(to_contexts_with(
-                crossing_segments_pairs_factory))
+        contexts_with_coordinates_strategies.flatmap(
+                to_contexts_with(crossing_segments_pairs_factory)
+        )
         |
-        contexts_with_coordinates_strategies.flatmap(to_contexts_with(
-                touching_segments_pairs_factory)))
+        contexts_with_coordinates_strategies.flatmap(
+                to_contexts_with(touching_segments_pairs_factory)
+        )
+)
 contexts_with_multipoints = (
-    contexts_with_coordinates_strategies.flatmap(to_contexts_with(
-            multipoints_factory)))
+    contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(multipoints_factory)
+    )
+)
 contexts_with_rational_multipoints = (
-    contexts_with_rational_coordinates_strategies.flatmap(to_contexts_with(
-            multipoints_factory)))
+    rational_contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(multipoints_factory)
+    )
+)
 contexts_with_contours = contexts_with_coordinates_strategies.flatmap(
-        to_contexts_with(contours_factory))
+        to_contexts_with(contours_factory)
+)
 contexts_with_rational_contours = (
-    contexts_with_rational_coordinates_strategies.flatmap(to_contexts_with(
-            contours_factory)))
+    rational_contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(contours_factory)
+    )
+)
 contexts_with_vertices = contexts_with_coordinates_strategies.flatmap(
-        to_contexts_with(vertices_sequences_factories))
+        to_contexts_with(vertices_sequences_factories)
+)
 contexts_with_rational_vertices = (
-    contexts_with_rational_coordinates_strategies.flatmap(to_contexts_with(
-            vertices_sequences_factories)))
+    rational_contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(vertices_sequences_factories)
+    )
+)
 contexts_with_contours_sequences = (
-    (contexts_with_coordinates_strategies
-     .flatmap(to_contexts_with(pack(to_contours_sequences)))))
+    contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(pack(to_contours_sequences))
+    )
+)
 contexts_with_rational_polygons = (
-    contexts_with_rational_coordinates_strategies.flatmap(to_contexts_with(
-            polygons_factory)))
+    rational_contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(polygons_factory)
+    )
+)
 contexts_with_polygons = (
-    contexts_with_coordinates_strategies.flatmap(to_contexts_with(
-            polygons_factory)))
+    contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(polygons_factory)
+    )
+)
 contexts_with_polygons_sequences = (
-    contexts_with_coordinates_strategies.flatmap(to_contexts_with(
-            polygons_sequences_factory)))
+    contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(polygons_sequences_factory)
+    )
+)
 contexts_with_rational_multipolygons = (
-    contexts_with_rational_coordinates_strategies.flatmap(to_contexts_with(
-            multipolygons_factory)))
+    rational_contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(multipolygons_factory)
+    )
+)
 contexts_with_multipolygons = (
-    contexts_with_coordinates_strategies.flatmap(to_contexts_with(
-            multipolygons_factory)))
+    contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(multipolygons_factory)
+    )
+)
 contexts_with_segments_sequences = (
-    contexts_with_coordinates_strategies.flatmap(to_contexts_with(
-            segments_sequences_factory)))
-contexts_with_multisegments = (
-    contexts_with_coordinates_strategies.flatmap(to_contexts_with(
-            multisegments_factory)))
+    contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(segments_sequences_factory)
+    )
+)
+contexts_with_multisegments = contexts_with_coordinates_strategies.flatmap(
+        to_contexts_with(multisegments_factory)
+)
 contexts_with_rational_multisegments = (
-    contexts_with_rational_coordinates_strategies.flatmap(to_contexts_with(
-            multisegments_factory)))
+    rational_contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(multisegments_factory)
+    )
+)
