@@ -25,7 +25,7 @@ def test_basic(context_with_segments_pair
     assert result in LINEAR_RELATIONS
 
 
-@given(strategies.contexts_with_rational_segments)
+@given(strategies.contexts_with_rational_segments_pairs)
 def test_reversals(context_with_segments_pair
                    : Tuple[Context, Tuple[Segment, Segment]]) -> None:
     context, (first, second) = context_with_segments_pair
@@ -39,7 +39,7 @@ def test_reversals(context_with_segments_pair
             reverse_segment_coordinates(second))
 
 
-@given(strategies.contexts_with_rational_segments)
+@given(strategies.contexts_with_rational_segments_pairs)
 def test_commutativity(context_with_segments_pair
                        : Tuple[Context, Tuple[Segment, Segment]]) -> None:
     context, (first, second) = context_with_segments_pair
