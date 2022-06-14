@@ -52,7 +52,6 @@ segments_factory = pack(to_segments)
 segments_sequences_factory = pack(to_segments_sequences)
 touching_segments_pairs_factory = pack(to_touching_segments_pairs)
 vertices_sequences_factories = pack(to_vertices_sequences)
-
 contexts_with_boxes = (contexts_with_coordinates_strategies
                        .flatmap(to_contexts_with(boxes_factory)))
 contexts_with_boxes_pairs = contexts_with_coordinates_strategies.flatmap(
@@ -63,14 +62,14 @@ contexts_with_boxes_and_points = (contexts_with_coordinates_strategies
                                   .flatmap(to_contexts_with(boxes_factory,
                                                             points_factory)))
 contexts_with_rational_boxes_and_segments = (
-    rational_contexts_with_coordinates_strategies.flatmap(to_contexts_with(
-            boxes_factory, segments_factory
-    ))
+    rational_contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(boxes_factory, segments_factory)
+    )
 )
 contexts_with_boxes_and_segments = (
-    contexts_with_coordinates_strategies.flatmap(to_contexts_with(
-            boxes_factory, segments_factory
-    ))
+    contexts_with_coordinates_strategies.flatmap(
+            to_contexts_with(boxes_factory, segments_factory)
+    )
 )
 contexts_with_points = (contexts_with_coordinates_strategies
                         .flatmap(to_contexts_with(points_factory)))
