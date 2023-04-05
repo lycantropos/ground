@@ -1,5 +1,5 @@
 cfractions>=2.2.0,<3.0
 reprit>=0.8.0,<1.0
 shewchuk>=6.5.0,<7.0
-symba>=1.2.1,<2.0
+symba>=2.1.0,<3.0
 typing-extensions>=4.1.1,<5.0; python_version<'3.8'
