@@ -36,4 +36,5 @@ def test_reversals(context_with_contour: Tuple[Context, Contour]) -> None:
 
     assert result == context.contour_length(reverse_contour(contour))
     assert result == context.contour_length(
-            reverse_contour_coordinates(contour))
+            reverse_contour_coordinates(contour)
+    )

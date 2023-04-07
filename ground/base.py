@@ -86,9 +86,9 @@ class Context:
         self._segment_cls = segment_cls
         self._mode = mode
         self._sqrt = (
-            lambda value: sqrt(value
-                               if isinstance(value, _Rational)
-                               else float(value))
+            (lambda value: sqrt(value
+                                if isinstance(value, _Rational)
+                                else float(value)))
             if mode is Mode.ROBUST
             else sqrt
         )
