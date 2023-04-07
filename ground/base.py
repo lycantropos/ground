@@ -1321,12 +1321,12 @@ class Context:
         return self._rotation.rotate_segment_around_origin(
                 segment, cosine, sine, self.point_cls, self.segment_cls)
 
-    def scale_contour(self,
-                      contour: _hints.Contour,
-                      factor_x: _hints.Scalar,
-                      factor_y: _hints.Scalar
-                      ) -> _Union[_hints.Contour, _hints.Multipoint,
-                                  _hints.Segment]:
+    def scale_contour(
+            self,
+            contour: _hints.Contour,
+            factor_x: _hints.Scalar,
+            factor_y: _hints.Scalar
+    ) -> _Union[_hints.Contour, _hints.Multipoint, _hints.Segment]:
         """
         Returns contour scaled by given factor.
 
@@ -1397,12 +1397,12 @@ class Context:
                                               self.multipoint_cls,
                                               self.point_cls)
 
-    def scale_multipolygon(self,
-                           multipolygon: _hints.Multipolygon,
-                           factor_x: _hints.Scalar,
-                           factor_y: _hints.Scalar
-                           ) -> _Union[_hints.Multipoint, _hints.Multipolygon,
-                                       _hints.Multisegment]:
+    def scale_multipolygon(
+            self,
+            multipolygon: _hints.Multipolygon,
+            factor_x: _hints.Scalar,
+            factor_y: _hints.Scalar
+    ) -> _Union[_hints.Multipoint, _hints.Multipolygon, _hints.Multisegment]:
         """
         Returns multipolygon scaled by given factor.
 
@@ -1463,12 +1463,12 @@ class Context:
                 self.multisegment_cls, self.point_cls, self.polygon_cls,
                 self.segment_cls)
 
-    def scale_multisegment(self,
-                           multisegment: _hints.Multisegment,
-                           factor_x: _hints.Scalar,
-                           factor_y: _hints.Scalar
-                           ) -> _Union[_hints.Mix, _hints.Multipoint,
-                                       _hints.Multisegment]:
+    def scale_multisegment(
+            self,
+            multisegment: _hints.Multisegment,
+            factor_x: _hints.Scalar,
+            factor_y: _hints.Scalar
+    ) -> _Union[_hints.Mix, _hints.Multipoint, _hints.Multisegment]:
         """
         Returns multisegment scaled by given factor.
 
@@ -1539,12 +1539,12 @@ class Context:
         return self._scaling.scale_point(point, factor_x, factor_y,
                                          self.point_cls)
 
-    def scale_polygon(self,
-                      polygon: _hints.Polygon,
-                      factor_x: _hints.Scalar,
-                      factor_y: _hints.Scalar
-                      ) -> _Union[_hints.Multipoint, _hints.Polygon,
-                                  _hints.Segment]:
+    def scale_polygon(
+            self,
+            polygon: _hints.Polygon,
+            factor_x: _hints.Scalar,
+            factor_y: _hints.Scalar
+    ) -> _Union[_hints.Multipoint, _hints.Polygon, _hints.Segment]:
         """
         Returns polygon scaled by given factor.
 
