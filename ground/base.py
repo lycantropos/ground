@@ -85,13 +85,7 @@ class Context:
         self._polygon_cls = polygon_cls
         self._segment_cls = segment_cls
         self._mode = mode
-        self._sqrt = (
-            (lambda value: sqrt(value
-                                if isinstance(value, _Rational)
-                                else float(value)))
-            if mode is Mode.ROBUST
-            else sqrt
-        )
+        self._sqrt = sqrt
         (self._angular, self._centroidal, self._circular, self._measured,
          self._metric, self._rotation, self._scaling, self._segment,
          self._translation, self._vector) = (
