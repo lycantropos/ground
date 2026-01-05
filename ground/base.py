@@ -1048,10 +1048,13 @@ class Context(Generic[_ScalarT]):
 
         >>> context = get_context()
         >>> from fractions import Fraction
-        >>> fraction_context = context.replace(coordinate_factory=Fraction)
-        >>> isinstance(robust_context, Context)
+        >>> fraction_context = context.replace(
+        ...     coordinate_checker=Fraction.__instancecheck__,
+        ...     coordinate_factory=Fraction,
+        ... )
+        >>> isinstance(fraction_context, Context)
         True
-        >>> robust_context.mode is Mode.ROBUST
+        >>> fraction_context.coordinate_factory is Fraction
         True
         """
         return Context(
