@@ -1,6 +1,6 @@
 [project]
 name = "ground"
-description = "Parser generator."
+description = "Basis of computational geometry."
 authors = [{ name = "Azat Ibrakov", email = "azatibrakov@gmail.com" }]
 readme = "README.md"
 license = { file = "LICENSE" }
