@@ -41,7 +41,7 @@ from tests.utils import (
 indices = st.integers(0, sys.maxsize)
 contexts = st.builds(
     Context,
-    coordinate_cls=st.just(Rational),
+    coordinate_checker=st.just(Rational.__instancecheck__),
     coordinate_factory=st.just(Fraction),
     sqrt=st.just(sqrt),
 )
