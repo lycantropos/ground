@@ -1,5 +1,4 @@
-from enum import (IntEnum,
-                  unique)
+from enum import IntEnum, unique
 
 
 class Base(IntEnum):
@@ -13,6 +12,7 @@ class Kind(Base):
     Represents kinds of angles
     based on their degrees value in range ``[0, 180]``.
     """
+
     #: ``(90, 180]`` degrees
     OBTUSE = -1
     #: ``90`` degrees
@@ -26,6 +26,7 @@ class Location(Base):
     """
     Represents kinds of locations in which point can be relative to geometry.
     """
+
     #: point lies in the exterior of the geometry
     EXTERIOR = 0
     #: point lies on the boundary of the geometry
@@ -39,6 +40,7 @@ class Orientation(Base):
     """
     Represents kinds of angle orientations.
     """
+
     #: in the same direction as a clock's hands
     CLOCKWISE = -1
     #: to the top and then to the bottom or vice versa
@@ -53,6 +55,7 @@ class Relation(Base):
     Represents kinds of relations in which geometries can be.
     Order of members assumes that conditions for previous ones do not hold.
     """
+
     #: intersection is empty
     DISJOINT = 0
     #: intersection is a strict subset of each of the geometries,
@@ -97,15 +100,14 @@ class Relation(Base):
     def complement(self) -> 'Relation':
         if self is Relation.COVER:
             return Relation.WITHIN
-        elif self is Relation.ENCLOSES:
+        if self is Relation.ENCLOSES:
             return Relation.ENCLOSED
-        elif self is Relation.COMPOSITE:
+        if self is Relation.COMPOSITE:
             return Relation.COMPONENT
-        elif self is Relation.COMPONENT:
+        if self is Relation.COMPONENT:
             return Relation.COMPOSITE
-        elif self is Relation.ENCLOSED:
+        if self is Relation.ENCLOSED:
             return Relation.ENCLOSES
-        elif self is Relation.WITHIN:
+        if self is Relation.WITHIN:
             return Relation.COVER
-        else:
-            return self
+        return self

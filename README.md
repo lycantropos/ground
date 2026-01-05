@@ -1,29 +1,19 @@
-ground
-======
+# ground
 
-[![](https://github.com/lycantropos/ground/workflows/CI/badge.svg)](https://github.com/lycantropos/ground/actions/workflows/ci.yml "Github Actions")
-[![](https://readthedocs.org/projects/ground/badge/?version=latest)](https://ground.readthedocs.io/en/latest "Documentation")
-[![](https://codecov.io/gh/lycantropos/ground/branch/master/graph/badge.svg)](https://codecov.io/gh/lycantropos/ground "Codecov")
-[![](https://img.shields.io/github/license/lycantropos/ground.svg)](https://github.com/lycantropos/ground/blob/master/LICENSE "License")
-[![](https://badge.fury.io/py/ground.svg)](https://badge.fury.io/py/ground "PyPI")
+[![Github Actions](https://github.com/lycantropos/ground/workflows/CI/badge.svg)](https://github.com/lycantropos/ground/actions/workflows/ci.yml "Github Actions")
+[![Codecov](https://codecov.io/gh/lycantropos/ground/branch/master/graph/badge.svg)](https://codecov.io/gh/lycantropos/ground "Codecov")
+[![License](https://img.shields.io/github/license/lycantropos/ground.svg)](https://github.com/lycantropos/ground/blob/master/LICENSE "License")
+[![PyPI](https://badge.fury.io/py/ground.svg)](https://badge.fury.io/py/ground "PyPI")
 
-Summary
--------
+In what follows `python` is an alias for `python3.10` or `pypy3.10`
+or any later version (`python3.11`, `pypy3.11` and so on).
 
-`ground` is a pure Python library that provides protocols
-for planar computational geometry models & operations
-to unify interaction between different libraries
-and allow customization.
+## Installation
 
----
-
-In what follows `python` is an alias for `python3.7` or `pypy3.7`
-or any later version (`python3.8`, `pypy3.8` and so on).
-
-Installation
-------------
+### Prerequisites
 
 Install the latest `pip` & `setuptools` packages versions
+
 ```bash
 python -m pip install --upgrade pip setuptools
 ```
@@ -31,6 +21,7 @@ python -m pip install --upgrade pip setuptools
 ### User
 
 Download and install the latest stable version from `PyPI` repository
+
 ```bash
 python -m pip install --upgrade ground
 ```
@@ -38,23 +29,20 @@ python -m pip install --upgrade ground
 ### Developer
 
 Download the latest version from `GitHub` repository
+
 ```bash
 git clone https://github.com/lycantropos/ground.git
 cd ground
 ```
 
-Install dependencies
-```bash
-python -m pip install -r requirements.txt
-```
-
 Install
+
 ```bash
-python setup.py install
+python -m pip install -e '.'
 ```
 
-Usage
------
+## Usage
+
 ```python
 >>> from ground.base import get_context
 >>> context = get_context()
@@ -94,97 +82,108 @@ True
 
 ```
 
-Development
------------
+## Development
 
 ### Bumping version
 
-#### Preparation
+#### Prerequisites
 
-Install
-[bump2version](https://github.com/c4urself/bump2version#installation).
+Install [bump-my-version](https://github.com/callowayproject/bump-my-version#installation).
 
-#### Pre-release
+#### Release
 
 Choose which version number category to bump following [semver
 specification](http://semver.org/).
 
 Test bumping version
+
 ```bash
-bump2version --dry-run --verbose $CATEGORY
+bump-my-version bump --dry-run --verbose $CATEGORY
 ```
 
 where `$CATEGORY` is the target version number category name, possible
 values are `patch`/`minor`/`major`.
 
 Bump version
+
 ```bash
-bump2version --verbose $CATEGORY
-```
-
-This will set version to `major.minor.patch-alpha`. 
-
-#### Release
-
-Test bumping version
-```bash
-bump2version --dry-run --verbose release
-```
-
-Bump version
-```bash
-bump2version --verbose release
+bump-my-version bump --verbose $CATEGORY
 ```
 
 This will set version to `major.minor.patch`.
 
 ### Running tests
 
-Install dependencies
+#### Plain
+
+Install with dependencies
+
 ```bash
-python -m pip install -r requirements-tests.txt
+python -m pip install -e '.[tests]'
 ```
 
-Plain
+Run
+
 ```bash
 pytest
 ```
 
-Inside `Docker` container:
+#### `Docker` container
+
+Run
+
 - with `CPython`
+
   ```bash
   docker-compose --file docker-compose.cpython.yml up
   ```
+
 - with `PyPy`
+
   ```bash
   docker-compose --file docker-compose.pypy.yml up
   ```
 
-`Bash` script:
+#### `Bash` script
+
+Run
+
 - with `CPython`
+
   ```bash
   ./run-tests.sh
   ```
+
   or
+
   ```bash
   ./run-tests.sh cpython
   ```
 
 - with `PyPy`
+
   ```bash
   ./run-tests.sh pypy
   ```
 
-`PowerShell` script:
+#### `PowerShell` script
+
+Run
+
 - with `CPython`
+
   ```powershell
   .\run-tests.ps1
   ```
+
   or
+
   ```powershell
   .\run-tests.ps1 cpython
   ```
+
 - with `PyPy`
+
   ```powershell
   .\run-tests.ps1 pypy
   ```

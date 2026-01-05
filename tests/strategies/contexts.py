@@ -1,22 +1,22 @@
-from hypothesis import strategies
+from fractions import Fraction
+from numbers import Rational
 
-from ground.base import (Context,
-                         Mode)
-from .coordinates import (rational_coordinates_strategies,
-                          real_coordinates_strategies)
+from hypothesis import strategies as st
+from symba.base import sqrt
 
-rational_contexts = strategies.builds(Context,
-                                      mode=strategies.sampled_from(list(Mode)))
-real_contexts = strategies.builds(Context,
-                                  mode=strategies.sampled_from([Mode.EXACT,
-                                                                Mode.ROBUST]))
-rational_contexts_with_coordinates_strategies = strategies.tuples(
-        rational_contexts, rational_coordinates_strategies
+from ground.base import Context
+
+from .coordinates import rational_coordinates_strategies
+
+rational_contexts = st.builds(
+    Context,
+    coordinate_cls=st.just(Rational),
+    coordinate_factory=st.just(Fraction),
+    sqrt=st.just(sqrt),
 )
-real_contexts_with_coordinates_strategies = strategies.tuples(
-        real_contexts, real_coordinates_strategies
+rational_contexts_with_coordinates_strategies = st.tuples(
+    rational_contexts, rational_coordinates_strategies
 )
 contexts_with_coordinates_strategies = (
-        rational_contexts_with_coordinates_strategies
-        | real_contexts_with_coordinates_strategies
+    rational_contexts_with_coordinates_strategies
 )

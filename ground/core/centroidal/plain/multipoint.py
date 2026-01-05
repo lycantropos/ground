@@ -1,20 +1,14 @@
-from typing import (Callable,
-                    Type)
-
-from cfractions import Fraction
-
-from ground.core.hints import (Multipoint,
-                               Point)
+from ground.core.hints import Multipoint, Point, ScalarFactory, ScalarT
 
 
-def centroid(multipoint: Multipoint,
-             point_cls: Type[Point],
-             inverse: Callable[[int], Fraction] = Fraction(1).__truediv__
-             ) -> Point:
-    result_x = result_y = 0
+def centroid(
+    multipoint: Multipoint[ScalarT],
+    coordinate_factory: ScalarFactory[ScalarT],
+    point_cls: type[Point[ScalarT]],
+) -> Point[ScalarT]:
+    result_x = result_y = coordinate_factory(0)
     for point in multipoint.points:
         result_x += point.x
         result_y += point.y
-    inverted_points_count = inverse(len(multipoint.points))
-    return point_cls(result_x * inverted_points_count,
-                     result_y * inverted_points_count)
+    divisor = coordinate_factory(len(multipoint.points))
+    return point_cls(result_x / divisor, result_y / divisor)

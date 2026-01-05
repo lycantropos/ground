@@ -1,45 +1,52 @@
-from typing import Tuple
-
 from hypothesis import given
 
 from ground.base import Context
 from ground.hints import Segment
-from tests.utils import (is_coordinate,
-                         reverse_segment,
-                         reverse_segment_coordinates)
+from tests.hints import ScalarT
+from tests.utils import reverse_segment, reverse_segment_coordinates
+
 from . import strategies
 
 
 @given(strategies.contexts_with_segments_pairs)
-def test_basic(context_with_segments_pair
-               : Tuple[Context, Tuple[Segment, Segment]]) -> None:
+def test_basic(
+    context_with_segments_pair: tuple[
+        Context[ScalarT], tuple[Segment[ScalarT], Segment[ScalarT]]
+    ],
+) -> None:
     context, (first, second) = context_with_segments_pair
 
     result = context.segments_squared_distance(first, second)
 
-    assert is_coordinate(result)
+    assert isinstance(result, context.coordinate_cls)
 
 
 @given(strategies.contexts_with_segments_pairs)
-def test_reversals(context_with_segments_pair
-                   : Tuple[Context, Tuple[Segment, Segment]]) -> None:
+def test_reversals(
+    context_with_segments_pair: tuple[
+        Context[ScalarT], tuple[Segment[ScalarT], Segment[ScalarT]]
+    ],
+) -> None:
     context, (first, second) = context_with_segments_pair
 
     result = context.segments_squared_distance(first, second)
 
-    assert (result
-            == context.segments_squared_distance(reverse_segment(first),
-                                                 second)
-            == context.segments_squared_distance(first,
-                                                 reverse_segment(second)))
+    assert (
+        result
+        == context.segments_squared_distance(reverse_segment(first), second)
+        == context.segments_squared_distance(first, reverse_segment(second))
+    )
     assert result == context.segments_squared_distance(
-            reverse_segment_coordinates(first),
-            reverse_segment_coordinates(second))
+        reverse_segment_coordinates(first), reverse_segment_coordinates(second)
+    )
 
 
 @given(strategies.contexts_with_segments_pairs)
-def test_commutativity(context_with_segments_pair
-                       : Tuple[Context, Tuple[Segment, Segment]]) -> None:
+def test_commutativity(
+    context_with_segments_pair: tuple[
+        Context[ScalarT], tuple[Segment[ScalarT], Segment[ScalarT]]
+    ],
+) -> None:
     context, (first, second) = context_with_segments_pair
 
     result = context.segments_squared_distance(first, second)
@@ -48,8 +55,9 @@ def test_commutativity(context_with_segments_pair
 
 
 @given(strategies.contexts_with_segments)
-def test_self(context_with_segment: Tuple[Context, Segment]
-              ) -> None:
+def test_self(
+    context_with_segment: tuple[Context[ScalarT], Segment[ScalarT]],
+) -> None:
     context, segment = context_with_segment
 
-    assert context.segments_squared_distance(segment, segment) == 0
+    assert context.segments_squared_distance(segment, segment) == context.zero

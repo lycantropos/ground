@@ -1,25 +1,33 @@
+from __future__ import annotations
+
 from abc import abstractmethod
-from numbers import Real
-from typing import (Callable,
-                    Sequence,
-                    TypeVar,
-                    Union)
+from collections.abc import Callable, Sequence
+from typing import Any, Protocol, TypeAlias, TypeVar, runtime_checkable
 
-from symba.base import Expression
+from typing_extensions import Self
 
-try:
-    from typing import (Protocol,
-                        runtime_checkable)
-except ImportError:
-    from typing_extensions import (Protocol,
-                                   runtime_checkable)
 
-Scalar = TypeVar('Scalar', Expression, Real)
-SquareRooter = Callable[[Scalar], Scalar]
+class _Scalar(Protocol):
+    def __add__(self, other: Self, /) -> Self: ...
+    def __ge__(self, other: Self, /) -> bool: ...
+    def __gt__(self, other: Self, /) -> bool: ...
+    def __le__(self, other: Self, /) -> bool: ...
+    def __lt__(self, other: Self, /) -> bool: ...
+    def __mul__(self, other: Self, /) -> Self: ...
+    def __neg__(self, /) -> Self: ...
+    def __rmul__(self, other: Any, /) -> Any: ...
+    def __sub__(self, other: Self, /) -> Self: ...
+    def __truediv__(self, other: Self, /) -> Self: ...
+
+
+ScalarT = TypeVar('ScalarT', bound=_Scalar)
+ScalarFactory: TypeAlias = Callable[[int], ScalarT]
+SquareRooter: TypeAlias = Callable[[Any], ScalarT]
+ScalarT_co = TypeVar('ScalarT_co', bound=Any, covariant=True)
 
 
 @runtime_checkable
-class Point(Protocol[Scalar]):
+class Point(Protocol[ScalarT_co]):
     """
     **Point** is a minimal element of the plane
     defined by pair of real numbers (called *point's coordinates*).
@@ -27,28 +35,29 @@ class Point(Protocol[Scalar]):
     Points considered to be sorted lexicographically,
     with abscissas being compared first.
     """
+
     __slots__ = ()
 
     @abstractmethod
-    def __new__(cls, x: Scalar, y: Scalar) -> 'Point':
+    def __new__(cls, x: ScalarT_co, y: ScalarT_co) -> Self:
         """Constructs point given its coordinates."""
 
     @property
     @abstractmethod
-    def x(self) -> Scalar:
+    def x(self) -> ScalarT_co:
         """Abscissa of the point."""
 
     @property
     @abstractmethod
-    def y(self) -> Scalar:
+    def y(self) -> ScalarT_co:
         """Ordinate of the point."""
 
     @abstractmethod
-    def __ge__(self, other: 'Point') -> bool:
+    def __ge__(self, other: Self) -> bool:
         """Checks if the point is greater than or equal to the other."""
 
     @abstractmethod
-    def __gt__(self, other: 'Point') -> bool:
+    def __gt__(self, other: Self) -> bool:
         """Checks if the point is greater than the other."""
 
     @abstractmethod
@@ -56,220 +65,246 @@ class Point(Protocol[Scalar]):
         """Returns hash value of the point."""
 
     @abstractmethod
-    def __le__(self, other: 'Point') -> bool:
+    def __le__(self, other: Self) -> bool:
         """Checks if the point is less than or equal to the other."""
 
     @abstractmethod
-    def __lt__(self, other: 'Point') -> bool:
+    def __lt__(self, other: Self) -> bool:
         """Checks if the point is less than the other."""
 
 
 Range = TypeVar('Range')
-QuaternaryPointFunction = Callable[[Point, Point, Point, Point], Range]
-TernaryPointFunction = Callable[[Point, Point, Point], Range]
+QuaternaryPointFunction: TypeAlias = Callable[
+    [
+        Point[ScalarT_co],
+        Point[ScalarT_co],
+        Point[ScalarT_co],
+        Point[ScalarT_co],
+    ],
+    Range,
+]
+TernaryPointFunction: TypeAlias = Callable[
+    [Point[ScalarT_co], Point[ScalarT_co], Point[ScalarT_co]], Range
+]
 
 
 @runtime_checkable
-class Box(Protocol[Scalar]):
+class Box(Protocol[ScalarT_co]):
     """
     **Box** is a limited closed region
     defined by axis-aligned rectangular contour.
     """
+
     __slots__ = ()
 
     @abstractmethod
-    def __new__(cls,
-                min_x: Scalar,
-                max_x: Scalar,
-                min_y: Scalar,
-                max_y: Scalar) -> 'Box':
+    def __new__(
+        cls,
+        min_x: ScalarT_co,
+        max_x: ScalarT_co,
+        min_y: ScalarT_co,
+        max_y: ScalarT_co,
+    ) -> Self:
         """Constructs box given its coordinates limits."""
 
     @property
     @abstractmethod
-    def max_x(self) -> Scalar:
+    def max_x(self) -> ScalarT_co:
         """Maximum ``x``-coordinate of the box."""
 
     @property
     @abstractmethod
-    def max_y(self) -> Scalar:
+    def max_y(self) -> ScalarT_co:
         """Maximum ``y``-coordinate of the box."""
 
     @property
     @abstractmethod
-    def min_x(self) -> Scalar:
+    def min_x(self) -> ScalarT_co:
         """Minimum ``x``-coordinate of the box."""
 
     @property
     @abstractmethod
-    def min_y(self) -> Scalar:
+    def min_y(self) -> ScalarT_co:
         """Minimum ``y``-coordinate of the box."""
 
 
 @runtime_checkable
-class Empty(Protocol):
+class Empty(Protocol[ScalarT_co]):
     """Represents an empty set of points."""
+
     __slots__ = ()
 
     @abstractmethod
-    def __new__(cls) -> 'Empty':
+    def __new__(cls) -> Self:
         """Constructs empty geometry."""
 
 
 _T = TypeVar('_T')
-Maybe = Union[Empty, _T]
 
 
 @runtime_checkable
-class Multipoint(Protocol[Scalar]):
+class Multipoint(Protocol[ScalarT_co]):
     """
     **Multipoint** is a discrete geometry
     that represents non-empty set of unique points.
     """
+
     __slots__ = ()
 
     @abstractmethod
-    def __new__(cls, points: Sequence[Point]) -> 'Multipoint':
+    def __new__(cls, points: Sequence[Point[ScalarT_co]]) -> Self:
         """Constructs multipoint given its points."""
 
     @property
     @abstractmethod
-    def points(self) -> Sequence[Point]:
+    def points(self) -> Sequence[Point[ScalarT_co]]:
         """Points of the multipoint."""
 
 
 @runtime_checkable
-class Segment(Protocol[Scalar]):
+class Segment(Protocol[ScalarT_co]):
     """
     **Segment** (or **line segment**) is a linear geometry that represents
     a limited continuous part of the line containing more than one point
     defined by a pair of unequal points (called *segment's endpoints*).
     """
+
     __slots__ = ()
 
     @abstractmethod
-    def __new__(cls, start: Point, end: Point) -> 'Segment':
+    def __new__(cls, start: Point[ScalarT_co], end: Point[ScalarT_co]) -> Self:
         """Constructs segment given its endpoints."""
 
     @property
     @abstractmethod
-    def start(self) -> Point:
+    def start(self) -> Point[ScalarT_co]:
         """Start endpoint of the segment."""
 
     @property
     @abstractmethod
-    def end(self) -> Point:
+    def end(self) -> Point[ScalarT_co]:
         """End endpoint of the segment."""
 
 
 @runtime_checkable
-class Multisegment(Protocol[Scalar]):
+class Multisegment(Protocol[ScalarT_co]):
     """
     **Multisegment** is a linear geometry that represents set of two or more
     non-crossing and non-overlapping segments.
     """
+
     __slots__ = ()
 
     @abstractmethod
-    def __new__(cls, segments: Sequence[Segment]) -> 'Multisegment':
+    def __new__(cls, segments: Sequence[Segment[ScalarT_co]]) -> Self:
         """Constructs multisegment given its segments."""
 
     @property
     @abstractmethod
-    def segments(self) -> Sequence[Segment]:
+    def segments(self) -> Sequence[Segment[ScalarT_co]]:
         """Segments of the multisegment."""
 
 
 @runtime_checkable
-class Contour(Protocol[Scalar]):
+class Contour(Protocol[ScalarT_co]):
     """
     **Contour** is a linear geometry that represents closed simple polyline
     defined by a sequence of points (called *contour's vertices*).
     """
+
     __slots__ = ()
 
     @abstractmethod
-    def __new__(cls, vertices: Sequence[Point]) -> 'Contour':
+    def __new__(cls, vertices: Sequence[Point[ScalarT_co]]) -> Self:
         """Constructs contour given its vertices."""
 
     @property
     @abstractmethod
-    def vertices(self) -> Sequence[Point]:
+    def vertices(self) -> Sequence[Point[ScalarT_co]]:
         """Vertices of the contour."""
 
 
 @runtime_checkable
-class Polygon(Protocol[Scalar]):
+class Polygon(Protocol[ScalarT_co]):
     """
     **Polygon** is a shaped geometry that represents limited closed region
     defined by the pair of outer contour (called *polygon's border*)
     and possibly empty sequence of inner contours (called *polygon's holes*).
     """
+
     __slots__ = ()
 
     @abstractmethod
-    def __new__(cls, border: Contour, holes: Sequence[Contour]) -> 'Polygon':
+    def __new__(
+        cls, border: Contour[ScalarT_co], holes: Sequence[Contour[ScalarT_co]]
+    ) -> Self:
         """Constructs polygon given its border and holes."""
 
     @property
     @abstractmethod
-    def border(self) -> Contour:
+    def border(self) -> Contour[ScalarT_co]:
         """Border of the polygon."""
 
     @property
     @abstractmethod
-    def holes(self) -> Sequence[Contour]:
+    def holes(self) -> Sequence[Contour[ScalarT_co]]:
         """Holes of the polygon."""
 
 
 @runtime_checkable
-class Multipolygon(Protocol[Scalar]):
+class Multipolygon(Protocol[ScalarT_co]):
     """
     **Multipolygon** is a shaped geometry that represents set of two or more
     non-overlapping polygons intersecting only in discrete set of points.
     """
+
     __slots__ = ()
 
     @abstractmethod
-    def __new__(cls, polygons: Sequence[Polygon]) -> 'Multipolygon':
+    def __new__(cls, polygons: Sequence[Polygon[ScalarT_co]]) -> Self:
         """Constructs multipolygon given its polygons."""
 
     @property
     @abstractmethod
-    def polygons(self) -> Sequence[Polygon]:
+    def polygons(self) -> Sequence[Polygon[ScalarT_co]]:
         """Polygons of the multipolygon."""
 
 
-Linear = Union[Segment, Multisegment, Contour]
-Shaped = Union[Polygon, Multipolygon]
+Linear: TypeAlias = (
+    Segment[ScalarT_co] | Multisegment[ScalarT_co] | Contour[ScalarT_co]
+)
+Shaped: TypeAlias = Polygon[ScalarT_co] | Multipolygon[ScalarT_co]
 
 
 @runtime_checkable
-class Mix(Protocol[Scalar]):
+class Mix(Protocol[ScalarT_co]):
     """
     **Mix** is a set of two or more non-empty geometries
     with different dimensions.
     """
+
     __slots__ = ()
 
     @abstractmethod
-    def __new__(cls,
-                discrete: Maybe[Multipoint],
-                linear: Maybe[Linear],
-                shaped: Maybe[Shaped]) -> 'Mix':
+    def __new__(
+        cls,
+        discrete: Empty[ScalarT_co] | Multipoint[ScalarT_co],
+        linear: Empty[ScalarT_co] | Linear[ScalarT_co],
+        shaped: Empty[ScalarT_co] | Shaped[ScalarT_co],
+    ) -> Self:
         """Constructs mix given its components."""
 
     @property
     @abstractmethod
-    def discrete(self) -> Maybe[Multipoint]:
+    def discrete(self) -> Empty[ScalarT_co] | Multipoint[ScalarT_co]:
         """Discrete component of the mix."""
 
     @property
     @abstractmethod
-    def linear(self) -> Maybe[Linear]:
+    def linear(self) -> Empty[ScalarT_co] | Linear[ScalarT_co]:
         """Linear component of the mix."""
 
     @property
     @abstractmethod
-    def shaped(self) -> Maybe[Shaped]:
+    def shaped(self) -> Empty[ScalarT_co] | Shaped[ScalarT_co]:
         """Shaped component of the mix."""

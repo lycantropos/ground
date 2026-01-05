@@ -1,27 +1,25 @@
-from typing import (Sequence,
-                    Tuple,
-                    Type)
+from collections.abc import Sequence
 
-from cfractions import Fraction
-
-from ground.core.hints import (Contour,
-                               Point,
-                               Scalar)
+from ground.core.hints import Contour, Point, ScalarFactory, ScalarT
 
 
-def centroid(contour: Contour,
-             point_cls: Type[Point],
-             third: Fraction = Fraction(1, 3)) -> Point:
+def centroid(
+    contour: Contour[ScalarT],
+    coordinate_factory: ScalarFactory[ScalarT],
+    point_cls: type[Point[ScalarT]],
+) -> Point[ScalarT]:
     x_numerator, y_numerator, double_area = centroid_components(
-            contour.vertices)
-    inverted_divisor = third / double_area
-    return point_cls(x_numerator * inverted_divisor,
-                     y_numerator * inverted_divisor)
+        contour.vertices, coordinate_factory
+    )
+    divisor = coordinate_factory(3) * double_area
+    return point_cls(x_numerator / divisor, y_numerator / divisor)
 
 
-def centroid_components(vertices: Sequence[Point]
-                        ) -> Tuple[Scalar, Scalar, Scalar]:
-    double_area = x_numerator = y_numerator = 0
+def centroid_components(
+    vertices: Sequence[Point[ScalarT]],
+    coordinate_factory: ScalarFactory[ScalarT],
+) -> tuple[ScalarT, ScalarT, ScalarT]:
+    double_area = x_numerator = y_numerator = coordinate_factory(0)
     prev_vertex = vertices[-1]
     prev_x, prev_y = prev_vertex.x, prev_vertex.y
     for vertex in vertices:

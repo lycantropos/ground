@@ -1,13 +1,13 @@
-from typing import Type
-
-from cfractions import Fraction
-
-from ground.core.hints import (Point,
-                               Segment)
+from ground.core.hints import Point, ScalarFactory, ScalarT, Segment
 
 
-def centroid(segment: Segment, point_cls: Type[Point],
-             *,
-             _half: Fraction = Fraction(1, 2)) -> Point:
-    return point_cls(_half * (segment.start.x + segment.end.x),
-                     _half * (segment.start.y + segment.end.y))
+def centroid(
+    segment: Segment[ScalarT],
+    coordinate_factory: ScalarFactory[ScalarT],
+    point_cls: type[Point[ScalarT]],
+) -> Point[ScalarT]:
+    divisor = coordinate_factory(2)
+    return point_cls(
+        (segment.start.x + segment.end.x) / divisor,
+        (segment.start.y + segment.end.y) / divisor,
+    )

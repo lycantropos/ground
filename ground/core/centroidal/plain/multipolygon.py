@@ -1,36 +1,43 @@
-from typing import (Sequence,
-                    Tuple,
-                    Type)
+from collections.abc import Sequence
 
-from cfractions import Fraction
+from ground.core.hints import (
+    Multipolygon,
+    Point,
+    Polygon,
+    ScalarFactory,
+    ScalarT,
+)
 
-from ground.core.hints import (Multipolygon,
-                               Point,
-                               Polygon,
-                               Scalar)
 from .polygon import centroid_components as polygon_centroid_components
 
 
-def centroid(multipolygon: Multipolygon,
-             point_cls: Type[Point],
-             third: Fraction = Fraction(1, 3)) -> Point:
+def centroid(
+    multipolygon: Multipolygon[ScalarT],
+    coordinate_factory: ScalarFactory[ScalarT],
+    point_cls: type[Point[ScalarT]],
+) -> Point[ScalarT]:
     x_numerator, y_numerator, double_area = centroid_components(
-            multipolygon.polygons)
-    inverted_denominator = third / double_area
-    return point_cls(x_numerator * inverted_denominator,
-                     y_numerator * inverted_denominator)
+        multipolygon.polygons, coordinate_factory
+    )
+    divisor = coordinate_factory(3) * double_area
+    return point_cls(x_numerator / divisor, y_numerator / divisor)
 
 
-def centroid_components(polygons: Sequence[Polygon]
-                        ) -> Tuple[Scalar, Scalar, Scalar]:
+def centroid_components(
+    polygons: Sequence[Polygon[ScalarT]],
+    coordinate_factory: ScalarFactory[ScalarT],
+) -> tuple[ScalarT, ScalarT, ScalarT]:
     iterator = iter(polygons)
     polygon = next(iterator)
     x_numerator, y_numerator, double_area = polygon_centroid_components(
-            polygon.border, polygon.holes)
+        polygon.border, polygon.holes, coordinate_factory
+    )
     for polygon in iterator:
-        (polygon_x_numerator, polygon_y_numerator,
-         polygon_double_area) = polygon_centroid_components(polygon.border,
-                                                            polygon.holes)
+        (polygon_x_numerator, polygon_y_numerator, polygon_double_area) = (
+            polygon_centroid_components(
+                polygon.border, polygon.holes, coordinate_factory
+            )
+        )
         x_numerator += polygon_x_numerator
         y_numerator += polygon_y_numerator
         double_area += polygon_double_area

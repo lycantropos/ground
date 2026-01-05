@@ -10,10 +10,8 @@ services:
     image: lycantropos/ground-pypy:9.0.0
     volumes:
       - ./ground:/opt/ground/ground
-      - ./pytest.ini:/opt/ground/pytest.ini
+      - ./pyproject.toml:/opt/ground/pyproject.toml
       - ./README.md:/opt/ground/README.md
-      - ./requirements-tests.txt:/opt/ground/requirements-tests.txt
-      - ./requirements.txt:/opt/ground/requirements.txt
       - ./setup.py:/opt/ground/setup.py
       - ./tests:/opt/ground/tests
     entrypoint: pytest

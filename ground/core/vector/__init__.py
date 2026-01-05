@@ -1,42 +1,40 @@
+from typing import Any, Generic
+
 from reprit import serializers
 from reprit.base import generate_repr
 
-from ground.core.hints import (QuaternaryPointFunction,
-                               Scalar)
-from .exact import (cross as exact_cross,
-                    dot as exact_dot)
-from .plain import (cross as plain_cross,
-                    dot as plain_dot)
-from .robust import (cross as robust_cross,
-                     dot as robust_dot)
+from ground.core.hints import QuaternaryPointFunction, ScalarT
 
-QuaternaryFunction = QuaternaryPointFunction[Scalar]
+from .plain import cross as plain_cross, dot as plain_dot
 
 
-class Context:
+class Context(Generic[ScalarT]):
     __slots__ = '_cross_product', '_dot_product'
 
-    def __init__(self,
-                 cross_product: QuaternaryFunction,
-                 dot_product: QuaternaryFunction) -> None:
+    def __init__(
+        self,
+        cross_product: QuaternaryPointFunction[ScalarT, ScalarT],
+        dot_product: QuaternaryPointFunction[ScalarT, ScalarT],
+    ) -> None:
         self._cross_product, self._dot_product = cross_product, dot_product
 
-    __repr__ = generate_repr(__init__,
-                             argument_serializer=serializers.complex_,
-                             with_module_name=True)
+    def __repr__(self) -> str:
+        return _context_repr(self)
 
     @property
-    def cross_product(self) -> QuaternaryFunction:
+    def cross_product(self) -> QuaternaryPointFunction[ScalarT, ScalarT]:
         return self._cross_product
 
     @property
-    def dot_product(self) -> QuaternaryFunction:
+    def dot_product(self) -> QuaternaryPointFunction[ScalarT, ScalarT]:
         return self._dot_product
 
 
-exact_context = Context(cross_product=exact_cross.multiply,
-                        dot_product=exact_dot.multiply)
-plain_context = Context(cross_product=plain_cross.multiply,
-                        dot_product=plain_dot.multiply)
-robust_context = Context(cross_product=robust_cross.multiply,
-                         dot_product=robust_dot.multiply)
+_context_repr = generate_repr(
+    Context.__init__,
+    argument_serializer=serializers.complex_,
+    with_module_name=True,
+)
+plain_context: Context[Any] = Context(
+    cross_product=plain_cross.multiply, dot_product=plain_dot.multiply
+)

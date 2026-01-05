@@ -2,10 +2,16 @@ from hypothesis import given
 
 from ground.base import Relation
 from tests.utils import equivalence
+
 from . import strategies
 
-SYMMETRICAL_RELATIONS = (Relation.CROSS, Relation.DISJOINT, Relation.EQUAL,
-                         Relation.OVERLAP, Relation.TOUCH)
+SYMMETRICAL_RELATIONS = (
+    Relation.CROSS,
+    Relation.DISJOINT,
+    Relation.EQUAL,
+    Relation.OVERLAP,
+    Relation.TOUCH,
+)
 
 
 @given(strategies.relations)

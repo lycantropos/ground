@@ -1,109 +1,151 @@
-from typing import (Callable,
-                    Type)
+from collections.abc import Callable
+from typing import Any, Generic, TypeAlias
 
 from reprit import serializers
 from reprit.base import generate_repr
 
-from ground.core.hints import (Contour,
-                               Multipoint,
-                               Multipolygon,
-                               Multisegment,
-                               Point,
-                               Polygon,
-                               Scalar,
-                               Segment)
-from . import (exact,
-               plain,
-               robust)
+from ground.core.hints import (
+    Contour,
+    Multipoint,
+    Multipolygon,
+    Multisegment,
+    Point,
+    Polygon,
+    ScalarT,
+    Segment,
+)
 
-PointTranslator = Callable[[Point, Scalar, Scalar, Type[Point]], Point]
+from . import plain
+
+PointTranslator: TypeAlias = Callable[
+    [Point[ScalarT], ScalarT, ScalarT, type[Point[ScalarT]]], Point[ScalarT]
+]
 
 
-class Context:
+class Context(Generic[ScalarT]):
     @property
-    def translate_point(self) -> PointTranslator:
+    def translate_point(self) -> PointTranslator[ScalarT]:
         return self._translate_point
 
-    def translate_contour(self,
-                          contour: Contour,
-                          step_x: Scalar,
-                          step_y: Scalar,
-                          contour_cls: Type[Contour],
-                          point_cls: Type[Point]) -> Contour:
-        return contour_cls([self.translate_point(vertex, step_x, step_y,
-                                                 point_cls)
-                            for vertex in contour.vertices])
+    def translate_contour(
+        self,
+        contour: Contour[ScalarT],
+        step_x: ScalarT,
+        step_y: ScalarT,
+        contour_cls: type[Contour[ScalarT]],
+        point_cls: type[Point[ScalarT]],
+    ) -> Contour[ScalarT]:
+        return contour_cls(
+            [
+                self.translate_point(vertex, step_x, step_y, point_cls)
+                for vertex in contour.vertices
+            ]
+        )
 
-    def translate_multipoint(self,
-                             multipoint: Multipoint,
-                             step_x: Scalar,
-                             step_y: Scalar,
-                             multipoint_cls: Type[Multipoint],
-                             point_cls: Type[Point]) -> Multipoint:
-        return multipoint_cls([self.translate_point(point, step_x, step_y,
-                                                    point_cls)
-                               for point in multipoint.points])
+    def translate_multipoint(
+        self,
+        multipoint: Multipoint[ScalarT],
+        step_x: ScalarT,
+        step_y: ScalarT,
+        multipoint_cls: type[Multipoint[ScalarT]],
+        point_cls: type[Point[ScalarT]],
+    ) -> Multipoint[ScalarT]:
+        return multipoint_cls(
+            [
+                self.translate_point(point, step_x, step_y, point_cls)
+                for point in multipoint.points
+            ]
+        )
 
-    def translate_multipolygon(self,
-                               multipolygon: Multipolygon,
-                               step_x: Scalar,
-                               step_y: Scalar,
-                               contour_cls: Type[Contour],
-                               multipolygon_cls: Type[Multipolygon],
-                               point_cls: Type[Point],
-                               polygon_cls: Type[Polygon]) -> Multipolygon:
+    def translate_multipolygon(
+        self,
+        multipolygon: Multipolygon[ScalarT],
+        step_x: ScalarT,
+        step_y: ScalarT,
+        contour_cls: type[Contour[ScalarT]],
+        multipolygon_cls: type[Multipolygon[ScalarT]],
+        point_cls: type[Point[ScalarT]],
+        polygon_cls: type[Polygon[ScalarT]],
+    ) -> Multipolygon[ScalarT]:
         return multipolygon_cls(
-                [self.translate_polygon(polygon, step_x, step_y, contour_cls,
-                                        point_cls, polygon_cls)
-                 for polygon in multipolygon.polygons])
+            [
+                self.translate_polygon(
+                    polygon,
+                    step_x,
+                    step_y,
+                    contour_cls,
+                    point_cls,
+                    polygon_cls,
+                )
+                for polygon in multipolygon.polygons
+            ]
+        )
 
-    def translate_multisegment(self,
-                               multisegment: Multisegment,
-                               step_x: Scalar,
-                               step_y: Scalar,
-                               multisegment_cls: Type[Multisegment],
-                               point_cls: Type[Point],
-                               segment_cls: Type[Segment]) -> Multisegment:
-        return multisegment_cls([self.translate_segment(segment, step_x,
-                                                        step_y, point_cls,
-                                                        segment_cls)
-                                 for segment in multisegment.segments])
+    def translate_multisegment(
+        self,
+        multisegment: Multisegment[ScalarT],
+        step_x: ScalarT,
+        step_y: ScalarT,
+        multisegment_cls: type[Multisegment[ScalarT]],
+        point_cls: type[Point[ScalarT]],
+        segment_cls: type[Segment[ScalarT]],
+    ) -> Multisegment[ScalarT]:
+        return multisegment_cls(
+            [
+                self.translate_segment(
+                    segment, step_x, step_y, point_cls, segment_cls
+                )
+                for segment in multisegment.segments
+            ]
+        )
 
-    def translate_polygon(self,
-                          polygon: Polygon,
-                          step_x: Scalar,
-                          step_y: Scalar,
-                          contour_cls: Type[Contour],
-                          point_cls: Type[Point],
-                          polygon_cls: Type[Polygon]) -> Polygon:
-        return polygon_cls(self.translate_contour(polygon.border, step_x,
-                                                  step_y, contour_cls,
-                                                  point_cls),
-                           [self.translate_contour(hole, step_x, step_y,
-                                                   contour_cls, point_cls)
-                            for hole in polygon.holes])
+    def translate_polygon(
+        self,
+        polygon: Polygon[ScalarT],
+        step_x: ScalarT,
+        step_y: ScalarT,
+        contour_cls: type[Contour[ScalarT]],
+        point_cls: type[Point[ScalarT]],
+        polygon_cls: type[Polygon[ScalarT]],
+    ) -> Polygon[ScalarT]:
+        return polygon_cls(
+            self.translate_contour(
+                polygon.border, step_x, step_y, contour_cls, point_cls
+            ),
+            [
+                self.translate_contour(
+                    hole, step_x, step_y, contour_cls, point_cls
+                )
+                for hole in polygon.holes
+            ],
+        )
 
-    def translate_segment(self,
-                          segment: Segment,
-                          step_x: Scalar,
-                          step_y: Scalar,
-                          point_cls: Type[Point],
-                          segment_cls: Type[Segment]) -> Segment:
-        return segment_cls(self.translate_point(segment.start, step_x, step_y,
-                                                point_cls),
-                           self.translate_point(segment.end, step_x, step_y,
-                                                point_cls))
+    def translate_segment(
+        self,
+        segment: Segment[ScalarT],
+        step_x: ScalarT,
+        step_y: ScalarT,
+        point_cls: type[Point[ScalarT]],
+        segment_cls: type[Segment[ScalarT]],
+    ) -> Segment[ScalarT]:
+        return segment_cls(
+            self.translate_point(segment.start, step_x, step_y, point_cls),
+            self.translate_point(segment.end, step_x, step_y, point_cls),
+        )
 
-    __slots__ = '_translate_point',
+    __slots__ = ('_translate_point',)
 
-    def __init__(self, translate_point: PointTranslator) -> None:
+    def __init__(self, translate_point: PointTranslator[ScalarT]) -> None:
         self._translate_point = translate_point
 
-    __repr__ = generate_repr(__init__,
-                             argument_serializer=serializers.complex_,
-                             with_module_name=True)
+    def __repr__(self) -> str:
+        return _context_repr(self)
 
 
-exact_context = Context(exact.translate_point)
-plain_context = Context(plain.translate_point)
-robust_context = Context(robust.translate_point)
+_context_repr = generate_repr(
+    Context.__init__,
+    argument_serializer=serializers.complex_,
+    with_module_name=True,
+)
+
+plain_context: Context[Any] = Context(plain.translate_point)

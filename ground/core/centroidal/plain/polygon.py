@@ -1,34 +1,34 @@
-from typing import (Sequence,
-                    Tuple,
-                    Type)
+from collections.abc import Sequence
 
-from cfractions import Fraction
+from ground.core.hints import Contour, Point, Polygon, ScalarFactory, ScalarT
 
-from ground.core.hints import (Contour,
-                               Point,
-                               Polygon,
-                               Scalar)
 from .region import centroid_components as region_centroid_components
 
 
-def centroid(polygon: Polygon,
-             point_cls: Type[Point],
-             third: Fraction = Fraction(1, 3)) -> Point:
-    x_numerator, y_numerator, double_area = centroid_components(polygon.border,
-                                                                polygon.holes)
-    inverted_denominator = third / double_area
-    return point_cls(x_numerator * inverted_denominator,
-                     y_numerator * inverted_denominator)
+def centroid(
+    polygon: Polygon[ScalarT],
+    coordinate_factory: ScalarFactory[ScalarT],
+    point_cls: type[Point[ScalarT]],
+) -> Point[ScalarT]:
+    x_numerator, y_numerator, double_area = centroid_components(
+        polygon.border, polygon.holes, coordinate_factory
+    )
+    divisor = coordinate_factory(3) * double_area
+    return point_cls(x_numerator / divisor, y_numerator / divisor)
 
 
-def centroid_components(border: Contour,
-                        holes: Sequence[Contour]
-                        ) -> Tuple[Scalar, Scalar, Scalar]:
+def centroid_components(
+    border: Contour[ScalarT],
+    holes: Sequence[Contour[ScalarT]],
+    coordinate_factory: ScalarFactory[ScalarT],
+) -> tuple[ScalarT, ScalarT, ScalarT]:
     x_numerator, y_numerator, double_area = region_centroid_components(
-            border.vertices)
+        border.vertices, coordinate_factory
+    )
     for hole in holes:
-        (hole_x_numerator, hole_y_numerator,
-         hole_double_area) = region_centroid_components(hole.vertices)
+        (hole_x_numerator, hole_y_numerator, hole_double_area) = (
+            region_centroid_components(hole.vertices, coordinate_factory)
+        )
         x_numerator += hole_x_numerator
         y_numerator += hole_y_numerator
         double_area += hole_double_area

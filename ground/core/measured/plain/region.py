@@ -1,15 +1,12 @@
-from cfractions import Fraction
-
-from ground.core.hints import (Contour,
-                               Scalar)
+from ground.core.hints import Contour, ScalarFactory, ScalarT
 
 
-def signed_area(contour: Contour[Scalar],
-                *,
-                _half: Fraction = Fraction(1, 2)) -> Scalar:
+def signed_area(
+    contour: Contour[ScalarT], coordinate_factory: ScalarFactory[ScalarT]
+) -> ScalarT:
     vertices = contour.vertices
-    result, vertex = 0, vertices[-1]
+    result, vertex = coordinate_factory(0), vertices[-1]
     for next_vertex in vertices:
         result += vertex.x * next_vertex.y - next_vertex.x * vertex.y
         vertex = next_vertex
-    return _half * result
+    return result / coordinate_factory(2)

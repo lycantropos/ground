@@ -1,33 +1,38 @@
-from typing import Callable
+from collections.abc import Callable
+from typing import Any, Generic
 
 from reprit import serializers
 from reprit.base import generate_repr
 
-from ground.core.hints import (Contour,
-                               Scalar)
-from .exact import region as exact_region
+from ground.core.hints import Contour, ScalarFactory, ScalarT
+
 from .plain import region as plain_region
-from .robust import region as robust_region
 
-RegionSignedMeasure = Callable[[Contour[Scalar]], Scalar]
+RegionSignedMeasure = Callable[
+    [Contour[ScalarT], ScalarFactory[ScalarT]], ScalarT
+]
 
 
-class Context:
+class Context(Generic[ScalarT]):
     @property
-    def region_signed_area(self) -> RegionSignedMeasure:
+    def region_signed_area(self) -> RegionSignedMeasure[ScalarT]:
         return self._region_signed_area
 
-    __slots__ = '_region_signed_area',
+    __slots__ = ('_region_signed_area',)
 
-    def __init__(self,
-                 region_signed_area: RegionSignedMeasure) -> None:
+    def __init__(
+        self, region_signed_area: RegionSignedMeasure[ScalarT]
+    ) -> None:
         self._region_signed_area = region_signed_area
 
-    __repr__ = generate_repr(__init__,
-                             argument_serializer=serializers.complex_,
-                             with_module_name=True)
+    def __repr__(self) -> str:
+        return _context_repr(self)
 
 
-exact_context = Context(exact_region.signed_area)
-plain_context = Context(plain_region.signed_area)
-robust_context = Context(robust_region.signed_area)
+_context_repr = generate_repr(
+    Context.__init__,
+    argument_serializer=serializers.complex_,
+    with_module_name=True,
+)
+
+plain_context: Context[Any] = Context(plain_region.signed_area)
