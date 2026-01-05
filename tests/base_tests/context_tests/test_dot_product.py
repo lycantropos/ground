@@ -26,7 +26,7 @@ def test_basic(
         first_start, first_end, second_start, second_end
     )
 
-    assert isinstance(result, context.coordinate_cls)
+    assert context.coordinate_checker(result)
 
 
 @given(strategies.contexts_with_points_pairs)

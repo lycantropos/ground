@@ -17,7 +17,7 @@ def test_basic(
 
     result = context.box_point_squared_distance(box, point)
 
-    assert isinstance(result, context.coordinate_cls)
+    assert context.coordinate_checker(result)
 
 
 @given(strategies.contexts_with_boxes)

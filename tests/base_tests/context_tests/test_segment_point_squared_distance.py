@@ -22,7 +22,7 @@ def test_basic(
 
     result = context.segment_point_squared_distance(segment, point)
 
-    assert isinstance(result, context.coordinate_cls)
+    assert context.coordinate_checker(result)
 
 
 @given(strategies.contexts_with_rational_segments_and_points)

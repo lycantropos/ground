@@ -10,7 +10,7 @@ from .coordinates import rational_coordinates_strategies
 
 rational_contexts = st.builds(
     Context,
-    coordinate_cls=st.just(Rational),
+    coordinate_checker=st.just(Rational.__instancecheck__),
     coordinate_factory=st.just(Fraction),
     sqrt=st.just(sqrt),
 )

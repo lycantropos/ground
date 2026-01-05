@@ -18,7 +18,7 @@ def test_basic(
 
     result = context.box_segment_squared_distance(box, segment)
 
-    assert isinstance(result, context.coordinate_cls)
+    assert context.coordinate_checker(result)
 
 
 @given(strategies.contexts_with_rational_boxes_and_segments)

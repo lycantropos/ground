@@ -20,7 +20,7 @@ def test_basic(
 
     result = context.region_signed_area(contour)
 
-    assert isinstance(result, context.coordinate_cls)
+    assert context.coordinate_checker(result)
 
 
 @given(strategies.contexts_with_rational_contours)

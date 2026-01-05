@@ -18,7 +18,7 @@ def test_basic(
 
     result = context.segments_squared_distance(first, second)
 
-    assert isinstance(result, context.coordinate_cls)
+    assert context.coordinate_checker(result)
 
 
 @given(strategies.contexts_with_segments_pairs)
