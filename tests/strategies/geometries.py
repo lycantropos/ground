@@ -292,8 +292,8 @@ def to_crossing_segments_pairs_endpoints(
         start: Point[ScalarT], end: Point[ScalarT], scale: int
     ) -> Point[ScalarT]:
         return context.point_cls(
-            end.x + scale * (end.x - start.x),
-            end.y + scale * (end.y - start.y),
+            end.x + context.coordinate_factory(scale) * (end.x - start.x),
+            end.y + context.coordinate_factory(scale) * (end.y - start.y),
         )
 
     scales = strategies.integers(1, 100)
