@@ -2,6 +2,7 @@
 
 [![Github Actions](https://github.com/lycantropos/ground/workflows/CI/badge.svg)](https://github.com/lycantropos/ground/actions/workflows/ci.yml "Github Actions")
 [![Codecov](https://codecov.io/gh/lycantropos/ground/branch/master/graph/badge.svg)](https://codecov.io/gh/lycantropos/ground "Codecov")
+[![Documentation](https://readthedocs.org/projects/ground/badge/?version=latest)](https://ground.readthedocs.io/en/latest "Documentation")
 [![License](https://img.shields.io/github/license/lycantropos/ground.svg)](https://github.com/lycantropos/ground/blob/master/LICENSE "License")
 [![PyPI](https://badge.fury.io/py/ground.svg)](https://badge.fury.io/py/ground "PyPI")
 
