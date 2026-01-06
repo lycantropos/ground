@@ -3,7 +3,6 @@ from .core import hints as _hints
 Box = _hints.Box
 Contour = _hints.Contour
 Empty = _hints.Empty
-Linear = _hints.Linear[_hints.ScalarT]
 Mix = _hints.Mix
 Multipoint = _hints.Multipoint
 Multipolygon = _hints.Multipolygon
@@ -11,14 +10,17 @@ Multisegment = _hints.Multisegment
 Point = _hints.Point
 Polygon = _hints.Polygon
 Segment = _hints.Segment
+
+assert Box.__module__ == __name__
+assert Contour.__module__ == __name__
+assert Empty.__module__ == __name__
+assert Mix.__module__ == __name__
+assert Multipoint.__module__ == __name__
+assert Multipolygon.__module__ == __name__
+assert Multisegment.__module__ == __name__
+assert Point.__module__ == __name__
+assert Polygon.__module__ == __name__
+assert Segment.__module__ == __name__
+
+Linear = _hints.Linear[_hints.ScalarT]
 Shaped = _hints.Shaped[_hints.ScalarT]
-Box.__module__ = __name__
-Contour.__module__ = __name__
-Empty.__module__ = __name__
-Mix.__module__ = __name__
-Multipoint.__module__ = __name__
-Multipolygon.__module__ = __name__
-Multisegment.__module__ = __name__
-Point.__module__ = __name__
-Polygon.__module__ = __name__
-Segment.__module__ = __name__

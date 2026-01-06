@@ -2,9 +2,13 @@ from __future__ import annotations
 
 from abc import abstractmethod
 from collections.abc import Callable, Sequence
-from typing import Any, Protocol, TypeAlias, TypeVar, runtime_checkable
+from typing import Any, Final, Protocol, TypeAlias, TypeVar, runtime_checkable
 
 from typing_extensions import Self
+
+import ground
+
+MODULE_NAME: Final[str] = f'{ground.__name__}.hints'
 
 
 class _Scalar(Protocol):
@@ -35,12 +39,6 @@ class Point(Protocol[ScalarT_co]):
     with abscissas being compared first.
     """
 
-    __slots__ = ()
-
-    @abstractmethod
-    def __new__(cls, x: ScalarT_co, y: ScalarT_co) -> Self:
-        """Constructs point given its coordinates."""
-
     @property
     @abstractmethod
     def x(self) -> ScalarT_co:
@@ -50,6 +48,13 @@ class Point(Protocol[ScalarT_co]):
     @abstractmethod
     def y(self) -> ScalarT_co:
         """Ordinate of the point."""
+
+    __module__: str = MODULE_NAME
+    __slots__ = ()
+
+    @abstractmethod
+    def __new__(cls, x: ScalarT_co, y: ScalarT_co) -> Self:
+        """Constructs point given its coordinates."""
 
     @abstractmethod
     def __ge__(self, other: Self) -> bool:
@@ -94,18 +99,6 @@ class Box(Protocol[ScalarT_co]):
     defined by axis-aligned rectangular contour.
     """
 
-    __slots__ = ()
-
-    @abstractmethod
-    def __new__(
-        cls,
-        min_x: ScalarT_co,
-        max_x: ScalarT_co,
-        min_y: ScalarT_co,
-        max_y: ScalarT_co,
-    ) -> Self:
-        """Constructs box given its coordinates limits."""
-
     @property
     @abstractmethod
     def max_x(self) -> ScalarT_co:
@@ -126,11 +119,25 @@ class Box(Protocol[ScalarT_co]):
     def min_y(self) -> ScalarT_co:
         """Minimum ``y``-coordinate of the box."""
 
+    __module__: str = MODULE_NAME
+    __slots__ = ()
+
+    @abstractmethod
+    def __new__(
+        cls,
+        min_x: ScalarT_co,
+        max_x: ScalarT_co,
+        min_y: ScalarT_co,
+        max_y: ScalarT_co,
+    ) -> Self:
+        """Constructs box given its coordinates limits."""
+
 
 @runtime_checkable
 class Empty(Protocol[ScalarT_co]):
     """Represents an empty set of points."""
 
+    __module__: str = MODULE_NAME
     __slots__ = ()
 
     @abstractmethod
@@ -148,16 +155,17 @@ class Multipoint(Protocol[ScalarT_co]):
     that represents non-empty set of unique points.
     """
 
+    @property
+    @abstractmethod
+    def points(self) -> Sequence[Point[ScalarT_co]]:
+        """Points of the multipoint."""
+
+    __module__: str = MODULE_NAME
     __slots__ = ()
 
     @abstractmethod
     def __new__(cls, points: Sequence[Point[ScalarT_co]]) -> Self:
         """Constructs multipoint given its points."""
-
-    @property
-    @abstractmethod
-    def points(self) -> Sequence[Point[ScalarT_co]]:
-        """Points of the multipoint."""
 
 
 @runtime_checkable
@@ -167,12 +175,6 @@ class Segment(Protocol[ScalarT_co]):
     a limited continuous part of the line containing more than one point
     defined by a pair of unequal points (called *segment's endpoints*).
     """
-
-    __slots__ = ()
-
-    @abstractmethod
-    def __new__(cls, start: Point[ScalarT_co], end: Point[ScalarT_co]) -> Self:
-        """Constructs segment given its endpoints."""
 
     @property
     @abstractmethod
@@ -184,6 +186,13 @@ class Segment(Protocol[ScalarT_co]):
     def end(self) -> Point[ScalarT_co]:
         """End endpoint of the segment."""
 
+    __module__: str = MODULE_NAME
+    __slots__ = ()
+
+    @abstractmethod
+    def __new__(cls, start: Point[ScalarT_co], end: Point[ScalarT_co]) -> Self:
+        """Constructs segment given its endpoints."""
+
 
 @runtime_checkable
 class Multisegment(Protocol[ScalarT_co]):
@@ -192,16 +201,17 @@ class Multisegment(Protocol[ScalarT_co]):
     non-crossing and non-overlapping segments.
     """
 
+    @property
+    @abstractmethod
+    def segments(self) -> Sequence[Segment[ScalarT_co]]:
+        """Segments of the multisegment."""
+
+    __module__: str = MODULE_NAME
     __slots__ = ()
 
     @abstractmethod
     def __new__(cls, segments: Sequence[Segment[ScalarT_co]]) -> Self:
         """Constructs multisegment given its segments."""
-
-    @property
-    @abstractmethod
-    def segments(self) -> Sequence[Segment[ScalarT_co]]:
-        """Segments of the multisegment."""
 
 
 @runtime_checkable
@@ -211,16 +221,17 @@ class Contour(Protocol[ScalarT_co]):
     defined by a sequence of points (called *contour's vertices*).
     """
 
+    @property
+    @abstractmethod
+    def vertices(self) -> Sequence[Point[ScalarT_co]]:
+        """Vertices of the contour."""
+
+    __module__: str = MODULE_NAME
     __slots__ = ()
 
     @abstractmethod
     def __new__(cls, vertices: Sequence[Point[ScalarT_co]]) -> Self:
         """Constructs contour given its vertices."""
-
-    @property
-    @abstractmethod
-    def vertices(self) -> Sequence[Point[ScalarT_co]]:
-        """Vertices of the contour."""
 
 
 @runtime_checkable
@@ -230,14 +241,6 @@ class Polygon(Protocol[ScalarT_co]):
     defined by the pair of outer contour (called *polygon's border*)
     and possibly empty sequence of inner contours (called *polygon's holes*).
     """
-
-    __slots__ = ()
-
-    @abstractmethod
-    def __new__(
-        cls, border: Contour[ScalarT_co], holes: Sequence[Contour[ScalarT_co]]
-    ) -> Self:
-        """Constructs polygon given its border and holes."""
 
     @property
     @abstractmethod
@@ -249,6 +252,15 @@ class Polygon(Protocol[ScalarT_co]):
     def holes(self) -> Sequence[Contour[ScalarT_co]]:
         """Holes of the polygon."""
 
+    __module__: str = MODULE_NAME
+    __slots__ = ()
+
+    @abstractmethod
+    def __new__(
+        cls, border: Contour[ScalarT_co], holes: Sequence[Contour[ScalarT_co]]
+    ) -> Self:
+        """Constructs polygon given its border and holes."""
+
 
 @runtime_checkable
 class Multipolygon(Protocol[ScalarT_co]):
@@ -257,16 +269,17 @@ class Multipolygon(Protocol[ScalarT_co]):
     non-overlapping polygons intersecting only in discrete set of points.
     """
 
+    @property
+    @abstractmethod
+    def polygons(self) -> Sequence[Polygon[ScalarT_co]]:
+        """Polygons of the multipolygon."""
+
+    __module__: str = MODULE_NAME
     __slots__ = ()
 
     @abstractmethod
     def __new__(cls, polygons: Sequence[Polygon[ScalarT_co]]) -> Self:
         """Constructs multipolygon given its polygons."""
-
-    @property
-    @abstractmethod
-    def polygons(self) -> Sequence[Polygon[ScalarT_co]]:
-        """Polygons of the multipolygon."""
 
 
 Linear: TypeAlias = (
@@ -282,17 +295,6 @@ class Mix(Protocol[ScalarT_co]):
     with different dimensions.
     """
 
-    __slots__ = ()
-
-    @abstractmethod
-    def __new__(
-        cls,
-        discrete: Empty[ScalarT_co] | Multipoint[ScalarT_co],
-        linear: Empty[ScalarT_co] | Linear[ScalarT_co],
-        shaped: Empty[ScalarT_co] | Shaped[ScalarT_co],
-    ) -> Self:
-        """Constructs mix given its components."""
-
     @property
     @abstractmethod
     def discrete(self) -> Empty[ScalarT_co] | Multipoint[ScalarT_co]:
@@ -307,3 +309,15 @@ class Mix(Protocol[ScalarT_co]):
     @abstractmethod
     def shaped(self) -> Empty[ScalarT_co] | Shaped[ScalarT_co]:
         """Shaped component of the mix."""
+
+    __module__: str = MODULE_NAME
+    __slots__ = ()
+
+    @abstractmethod
+    def __new__(
+        cls,
+        discrete: Empty[ScalarT_co] | Multipoint[ScalarT_co],
+        linear: Empty[ScalarT_co] | Linear[ScalarT_co],
+        shaped: Empty[ScalarT_co] | Shaped[ScalarT_co],
+    ) -> Self:
+        """Constructs mix given its components."""
