@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-import math
+import math as _math
 from collections.abc import Callable, Sequence as _Sequence
 from contextvars import ContextVar as _ContextVar
-from typing import Any, Generic, final
+from typing import Any as _Any, Generic as _Generic, final as _final
 
 from reprit import serializers as _serializers
 from reprit.base import generate_repr as _generate_repr
-from typing_extensions import TypeIs
+from typing_extensions import TypeIs as _TypeIs
 
 from .core import (
     angular as _angular,
@@ -53,8 +53,8 @@ Orientation = _enums.Orientation
 Relation = _enums.Relation
 
 
-@final
-class Context(Generic[_ScalarT]):
+@_final
+class Context(_Generic[_ScalarT]):
     """Represents common language for computational geometry."""
 
     __slots__ = (
@@ -91,7 +91,7 @@ class Context(Generic[_ScalarT]):
         *,
         box_cls: type[Box[_ScalarT]] = _geometries.Box,
         contour_cls: type[Contour[_ScalarT]] = _geometries.Contour,
-        coordinate_checker: Callable[[Any], TypeIs[_ScalarT]],
+        coordinate_checker: Callable[[_Any], _TypeIs[_ScalarT]],
         coordinate_factory: Callable[[int], _ScalarT],
         empty_cls: type[Empty[_ScalarT]] = _geometries.Empty,
         mix_cls: type[Mix[_ScalarT]] = _geometries.Mix,
@@ -228,7 +228,7 @@ class Context(Generic[_ScalarT]):
         return self._contour_cls
 
     @property
-    def coordinate_checker(self) -> Callable[[Any], TypeIs[_ScalarT]]:
+    def coordinate_checker(self) -> Callable[[_Any], _TypeIs[_ScalarT]]:
         """Returns checker of coordinates."""
         return self._coordinate_checker
 
@@ -1026,7 +1026,7 @@ class Context(Generic[_ScalarT]):
         *,
         box_cls: type[Box[_ScalarT]] | None = None,
         contour_cls: type[Contour[_ScalarT]] | None = None,
-        coordinate_checker: Callable[[Any], TypeIs[_ScalarT]] | None = None,
+        coordinate_checker: Callable[[_Any], _TypeIs[_ScalarT]] | None = None,
         coordinate_factory: _ScalarFactory[_ScalarT] | None = None,
         empty_cls: type[Empty[_ScalarT]] | None = None,
         mix_cls: type[Mix[_ScalarT]] | None = None,
@@ -2874,7 +2874,7 @@ class Context(Generic[_ScalarT]):
     _vector_context: _vector.Context[_ScalarT]
     _box_cls: type[Box[_ScalarT]]
     _contour_cls: type[Contour[_ScalarT]]
-    _coordinate_checker: Callable[[Any], TypeIs[_ScalarT]]
+    _coordinate_checker: Callable[[_Any], _TypeIs[_ScalarT]]
     _empty: Empty[_ScalarT]
     _empty_cls: type[Empty[_ScalarT]]
     _mix_cls: type[Mix[_ScalarT]]
@@ -2920,19 +2920,19 @@ _context_repr = _generate_repr(
 )
 
 
-def _is_float(value: Any, /) -> TypeIs[float]:
+def _is_float(value: _Any, /) -> _TypeIs[float]:
     return isinstance(value, float)
 
 
-_context: _ContextVar[Context[Any]] = _ContextVar(
+_context: _ContextVar[Context[_Any]] = _ContextVar(
     'context',
     default=Context(  # noqa: B039
-        coordinate_checker=_is_float, coordinate_factory=float, sqrt=math.sqrt
+        coordinate_checker=_is_float, coordinate_factory=float, sqrt=_math.sqrt
     ),
 )
 
 
-def get_context() -> Context[Any]:
+def get_context() -> Context[_Any]:
     """Returns current context."""
     return _context.get()
 
