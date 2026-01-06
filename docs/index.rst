@@ -13,13 +13,11 @@ base module
 ===========
 
 .. automodule:: ground.base
-    :imported-members:
     :members:
 
 hints module
 ============
 
 .. automodule:: ground.hints
-    :imported-members:
     :members:
     :special-members:
