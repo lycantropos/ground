@@ -9,6 +9,7 @@ def centroid(
     coordinate_factory: ScalarFactory[ScalarT],
     point_cls: type[Point[ScalarT]],
     sqrt: Callable[[ScalarT], ScalarT],
+    /,
 ) -> Point[ScalarT]:
     vertices = contour.vertices
     accumulated_x = accumulated_y = accumulated_length = coordinate_factory(0)

@@ -6,6 +6,7 @@ def multiply(
     first_end: Point[ScalarT],
     second_start: Point[ScalarT],
     second_end: Point[ScalarT],
+    /,
 ) -> ScalarT:
     return (first_end.x - first_start.x) * (second_end.y - second_start.y) - (
         first_end.y - first_start.y

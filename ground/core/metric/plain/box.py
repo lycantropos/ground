@@ -18,6 +18,7 @@ def point_squared_distance(
     box: Box[ScalarT],
     point: Point[ScalarT],
     coordinate_factory: ScalarFactory[ScalarT],
+    /,
 ) -> ScalarT:
     return square(
         _linear_interval_distance(
@@ -37,6 +38,7 @@ def segment_squared_distance(
     segments_collision_detector: QuaternaryPointFunction[ScalarT, bool],
     coordinate_factory: ScalarFactory[ScalarT],
     point_cls: type[Point[ScalarT]],
+    /,
 ) -> ScalarT:
     segment_start, segment_end = segment.start, segment.end
     min_x, min_y, max_x, max_y = box.min_x, box.min_y, box.max_x, box.max_y
@@ -106,6 +108,7 @@ def _linear_interval_distance(
     max_coordinate: ScalarT,
     coordinate: ScalarT,
     coordinate_factory: ScalarFactory[ScalarT],
+    /,
 ) -> ScalarT:
     return (
         min_coordinate - coordinate
@@ -129,6 +132,7 @@ def _non_degenerate_segment_squared_distance(
     segments_relater: QuaternaryPointFunction[ScalarT, bool],
     coordinate_factory: ScalarFactory[ScalarT],
     point_cls: type[Point[ScalarT]],
+    /,
 ) -> ScalarT:
     bottom_left, bottom_right = (
         point_cls(min_x, min_y),

@@ -68,6 +68,34 @@ SegmentCentroid: TypeAlias = Callable[
 
 
 class Context(Generic[ScalarT]):
+    @property
+    def contour_centroid(self, /) -> ContourCentroid[ScalarT]:
+        return self._contour_centroid
+
+    @property
+    def multipoint_centroid(self, /) -> MultipointCentroid[ScalarT]:
+        return self._multipoint_centroid
+
+    @property
+    def multipolygon_centroid(self, /) -> MultipolygonCentroid[ScalarT]:
+        return self._multipolygon_centroid
+
+    @property
+    def multisegment_centroid(self, /) -> MultisegmentCentroid[ScalarT]:
+        return self._multisegment_centroid
+
+    @property
+    def polygon_centroid(self, /) -> PolygonCentroid[ScalarT]:
+        return self._polygon_centroid
+
+    @property
+    def region_centroid(self, /) -> RegionCentroid[ScalarT]:
+        return self._region_centroid
+
+    @property
+    def segment_centroid(self, /) -> SegmentCentroid[ScalarT]:
+        return self._segment_centroid
+
     _contour_centroid: ContourCentroid[ScalarT]
     _multipoint_centroid: MultipointCentroid[ScalarT]
     _multipolygon_centroid: MultipolygonCentroid[ScalarT]
@@ -88,6 +116,7 @@ class Context(Generic[ScalarT]):
 
     def __init__(
         self,
+        /,
         *,
         contour_centroid: ContourCentroid[ScalarT],
         multipoint_centroid: MultipointCentroid[ScalarT],
@@ -105,36 +134,8 @@ class Context(Generic[ScalarT]):
         self._region_centroid = region_centroid
         self._segment_centroid = segment_centroid
 
-    def __repr__(self) -> str:
+    def __repr__(self, /) -> str:
         return _context_repr(self)
-
-    @property
-    def contour_centroid(self) -> ContourCentroid[ScalarT]:
-        return self._contour_centroid
-
-    @property
-    def multipoint_centroid(self) -> MultipointCentroid[ScalarT]:
-        return self._multipoint_centroid
-
-    @property
-    def multipolygon_centroid(self) -> MultipolygonCentroid[ScalarT]:
-        return self._multipolygon_centroid
-
-    @property
-    def multisegment_centroid(self) -> MultisegmentCentroid[ScalarT]:
-        return self._multisegment_centroid
-
-    @property
-    def polygon_centroid(self) -> PolygonCentroid[ScalarT]:
-        return self._polygon_centroid
-
-    @property
-    def region_centroid(self) -> RegionCentroid[ScalarT]:
-        return self._region_centroid
-
-    @property
-    def segment_centroid(self) -> SegmentCentroid[ScalarT]:
-        return self._segment_centroid
 
 
 _context_repr = generate_repr(

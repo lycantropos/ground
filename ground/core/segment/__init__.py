@@ -59,6 +59,7 @@ class Context(Generic[ScalarT]):
         second_start: Point[ScalarT],
         second_end: Point[ScalarT],
         orienteer: TernaryPointFunction[ScalarT, Orientation],
+        /,
     ) -> bool:
         second_start_orientation = orienteer(
             first_start, first_end, second_start
@@ -105,6 +106,7 @@ class Context(Generic[ScalarT]):
         end: Point[ScalarT],
         point: Point[ScalarT],
         orienteer: TernaryPointFunction[ScalarT, Orientation],
+        /,
     ) -> bool:
         return point in (start, end) or (
             _bounding_box_contains_point(start, end, point)
@@ -118,6 +120,7 @@ class Context(Generic[ScalarT]):
         goal_start: Point[ScalarT],
         goal_end: Point[ScalarT],
         orienteer: TernaryPointFunction[ScalarT, Orientation],
+        /,
     ) -> Relation:
         if test_start > test_end:
             test_start, test_end = test_end, test_start
@@ -198,15 +201,15 @@ class Context(Generic[ScalarT]):
         return Relation.DISJOINT
 
     @property
-    def intersector(self) -> Intersector[ScalarT]:
+    def intersector(self, /) -> Intersector[ScalarT]:
         return self._intersector
 
     __slots__ = ('_intersector',)
 
-    def __init__(self, intersector: Intersector[ScalarT]) -> None:
+    def __init__(self, intersector: Intersector[ScalarT], /) -> None:
         self._intersector = intersector
 
-    def __repr__(self) -> str:
+    def __repr__(self, /) -> str:
         return _context_repr(self)
 
 
@@ -220,7 +223,7 @@ plain_context: Context[Any] = Context(plain.intersect)
 
 
 def _bounding_box_contains_point(
-    start: Point[ScalarT], end: Point[ScalarT], point: Point[ScalarT]
+    start: Point[ScalarT], end: Point[ScalarT], point: Point[ScalarT], /
 ) -> bool:
     start_x, start_y, end_x, end_y = start.x, start.y, end.x, end.y
     min_x, max_x = (start_x, end_x) if start_x < end_x else (end_x, start_x)

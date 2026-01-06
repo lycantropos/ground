@@ -2,7 +2,7 @@ from ground.core.hints import Contour, ScalarFactory, ScalarT
 
 
 def signed_area(
-    contour: Contour[ScalarT], coordinate_factory: ScalarFactory[ScalarT]
+    contour: Contour[ScalarT], coordinate_factory: ScalarFactory[ScalarT], /
 ) -> ScalarT:
     vertices = contour.vertices
     result, vertex = coordinate_factory(0), vertices[-1]

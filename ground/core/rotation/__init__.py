@@ -31,15 +31,17 @@ PointToStep: TypeAlias = Callable[
 
 class Context(Generic[ScalarT]):
     @property
-    def point_to_step(self) -> PointToStep[ScalarT]:
+    def point_to_step(self, /) -> PointToStep[ScalarT]:
         return self._point_to_step
 
     @property
-    def rotate_point_around_origin(self) -> PointRotatorAroundOrigin[ScalarT]:
+    def rotate_point_around_origin(
+        self, /
+    ) -> PointRotatorAroundOrigin[ScalarT]:
         return self._rotate_point_around_origin
 
     @property
-    def rotate_translate_point(self) -> PointTranslatingRotator[ScalarT]:
+    def rotate_translate_point(self, /) -> PointTranslatingRotator[ScalarT]:
         return self._rotate_translate_point
 
     def rotate_contour_around_origin(
@@ -49,6 +51,7 @@ class Context(Generic[ScalarT]):
         sine: ScalarT,
         contour_cls: type[Contour[ScalarT]],
         point_cls: type[Point[ScalarT]],
+        /,
     ) -> Contour[ScalarT]:
         return contour_cls(
             [
@@ -64,6 +67,7 @@ class Context(Generic[ScalarT]):
         sine: ScalarT,
         multipoint_cls: type[Multipoint[ScalarT]],
         point_cls: type[Point[ScalarT]],
+        /,
     ) -> Multipoint[ScalarT]:
         return multipoint_cls(
             [
@@ -81,6 +85,7 @@ class Context(Generic[ScalarT]):
         multipolygon_cls: type[Multipolygon[ScalarT]],
         point_cls: type[Point[ScalarT]],
         polygon_cls: type[Polygon[ScalarT]],
+        /,
     ) -> Multipolygon[ScalarT]:
         return multipolygon_cls(
             [
@@ -99,6 +104,7 @@ class Context(Generic[ScalarT]):
         multisegment_cls: type[Multisegment[ScalarT]],
         point_cls: type[Point[ScalarT]],
         segment_cls: type[Segment[ScalarT]],
+        /,
     ) -> Multisegment[ScalarT]:
         return multisegment_cls(
             [
@@ -117,6 +123,7 @@ class Context(Generic[ScalarT]):
         contour_cls: type[Contour[ScalarT]],
         point_cls: type[Point[ScalarT]],
         polygon_cls: type[Polygon[ScalarT]],
+        /,
     ) -> Polygon[ScalarT]:
         return polygon_cls(
             self.rotate_contour_around_origin(
@@ -137,6 +144,7 @@ class Context(Generic[ScalarT]):
         sine: ScalarT,
         point_cls: type[Point[ScalarT]],
         segment_cls: type[Segment[ScalarT]],
+        /,
     ) -> Segment[ScalarT]:
         return segment_cls(
             self.rotate_point_around_origin(
@@ -156,6 +164,7 @@ class Context(Generic[ScalarT]):
         step_y: ScalarT,
         contour_cls: type[Contour[ScalarT]],
         point_cls: type[Point[ScalarT]],
+        /,
     ) -> Contour[ScalarT]:
         return contour_cls(
             [
@@ -175,6 +184,7 @@ class Context(Generic[ScalarT]):
         step_y: ScalarT,
         multipoint_cls: type[Multipoint[ScalarT]],
         point_cls: type[Point[ScalarT]],
+        /,
     ) -> Multipoint[ScalarT]:
         return multipoint_cls(
             [
@@ -196,6 +206,7 @@ class Context(Generic[ScalarT]):
         multipolygon_cls: type[Multipolygon[ScalarT]],
         point_cls: type[Point[ScalarT]],
         polygon_cls: type[Polygon[ScalarT]],
+        /,
     ) -> Multipolygon[ScalarT]:
         return multipolygon_cls(
             [
@@ -223,6 +234,7 @@ class Context(Generic[ScalarT]):
         multisegment_cls: type[Multisegment[ScalarT]],
         point_cls: type[Point[ScalarT]],
         segment_cls: type[Segment[ScalarT]],
+        /,
     ) -> Multisegment[ScalarT]:
         return multisegment_cls(
             [
@@ -249,6 +261,7 @@ class Context(Generic[ScalarT]):
         contour_cls: type[Contour[ScalarT]],
         point_cls: type[Point[ScalarT]],
         polygon_cls: type[Polygon[ScalarT]],
+        /,
     ) -> Polygon[ScalarT]:
         return polygon_cls(
             self.rotate_translate_contour(
@@ -277,6 +290,7 @@ class Context(Generic[ScalarT]):
         step_y: ScalarT,
         point_cls: type[Point[ScalarT]],
         segment_cls: type[Segment[ScalarT]],
+        /,
     ) -> Segment[ScalarT]:
         return segment_cls(
             self.rotate_translate_point(
@@ -295,6 +309,8 @@ class Context(Generic[ScalarT]):
 
     def __init__(
         self,
+        /,
+        *,
         point_to_step: PointToStep[ScalarT],
         rotate_point_around_origin: PointRotatorAroundOrigin[ScalarT],
         rotate_translate_point: PointTranslatingRotator[ScalarT],
@@ -303,7 +319,7 @@ class Context(Generic[ScalarT]):
         self._rotate_point_around_origin = rotate_point_around_origin
         self._rotate_translate_point = rotate_translate_point
 
-    def __repr__(self) -> str:
+    def __repr__(self, /) -> str:
         return _context_repr(self)
 
 

@@ -6,6 +6,7 @@ def rotate_point_around_origin(
     cosine: ScalarT,
     sine: ScalarT,
     point_cls: type[Point[ScalarT]],
+    /,
 ) -> Point[ScalarT]:
     return point_cls(
         cosine * point.x - sine * point.y, sine * point.x + cosine * point.y
@@ -19,6 +20,7 @@ def rotate_translate_point(
     step_x: ScalarT,
     step_y: ScalarT,
     point_cls: type[Point[ScalarT]],
+    /,
 ) -> Point[ScalarT]:
     return point_cls(
         cosine * point.x - sine * point.y + step_x,
@@ -27,7 +29,7 @@ def rotate_translate_point(
 
 
 def point_to_step(
-    point: Point[ScalarT], cosine: ScalarT, sine: ScalarT
+    point: Point[ScalarT], cosine: ScalarT, sine: ScalarT, /
 ) -> tuple[ScalarT, ScalarT]:
     return (
         point.x - (cosine * point.x - sine * point.y),

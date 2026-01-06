@@ -7,6 +7,7 @@ def centroid(
     contour: Contour[ScalarT],
     coordinate_factory: ScalarFactory[ScalarT],
     point_cls: type[Point[ScalarT]],
+    /,
 ) -> Point[ScalarT]:
     x_numerator, y_numerator, double_area = centroid_components(
         contour.vertices, coordinate_factory

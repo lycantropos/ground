@@ -13,6 +13,7 @@ def centroid(
     coordinate_factory: ScalarFactory[ScalarT],
     point_cls: type[Point[ScalarT]],
     sqrt: SquareRooter[ScalarT],
+    /,
 ) -> Point[ScalarT]:
     accumulated_x = accumulated_y = accumulated_length = coordinate_factory(0)
     for segment in multisegment.segments:

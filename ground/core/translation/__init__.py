@@ -24,7 +24,7 @@ PointTranslator: TypeAlias = Callable[
 
 class Context(Generic[ScalarT]):
     @property
-    def translate_point(self) -> PointTranslator[ScalarT]:
+    def translate_point(self, /) -> PointTranslator[ScalarT]:
         return self._translate_point
 
     def translate_contour(
@@ -34,6 +34,7 @@ class Context(Generic[ScalarT]):
         step_y: ScalarT,
         contour_cls: type[Contour[ScalarT]],
         point_cls: type[Point[ScalarT]],
+        /,
     ) -> Contour[ScalarT]:
         return contour_cls(
             [
@@ -49,6 +50,7 @@ class Context(Generic[ScalarT]):
         step_y: ScalarT,
         multipoint_cls: type[Multipoint[ScalarT]],
         point_cls: type[Point[ScalarT]],
+        /,
     ) -> Multipoint[ScalarT]:
         return multipoint_cls(
             [
@@ -66,6 +68,7 @@ class Context(Generic[ScalarT]):
         multipolygon_cls: type[Multipolygon[ScalarT]],
         point_cls: type[Point[ScalarT]],
         polygon_cls: type[Polygon[ScalarT]],
+        /,
     ) -> Multipolygon[ScalarT]:
         return multipolygon_cls(
             [
@@ -89,6 +92,7 @@ class Context(Generic[ScalarT]):
         multisegment_cls: type[Multisegment[ScalarT]],
         point_cls: type[Point[ScalarT]],
         segment_cls: type[Segment[ScalarT]],
+        /,
     ) -> Multisegment[ScalarT]:
         return multisegment_cls(
             [
@@ -107,6 +111,7 @@ class Context(Generic[ScalarT]):
         contour_cls: type[Contour[ScalarT]],
         point_cls: type[Point[ScalarT]],
         polygon_cls: type[Polygon[ScalarT]],
+        /,
     ) -> Polygon[ScalarT]:
         return polygon_cls(
             self.translate_contour(
@@ -127,6 +132,7 @@ class Context(Generic[ScalarT]):
         step_y: ScalarT,
         point_cls: type[Point[ScalarT]],
         segment_cls: type[Segment[ScalarT]],
+        /,
     ) -> Segment[ScalarT]:
         return segment_cls(
             self.translate_point(segment.start, step_x, step_y, point_cls),
@@ -135,10 +141,10 @@ class Context(Generic[ScalarT]):
 
     __slots__ = ('_translate_point',)
 
-    def __init__(self, translate_point: PointTranslator[ScalarT]) -> None:
+    def __init__(self, translate_point: PointTranslator[ScalarT], /) -> None:
         self._translate_point = translate_point
 
-    def __repr__(self) -> str:
+    def __repr__(self, /) -> str:
         return _context_repr(self)
 
 

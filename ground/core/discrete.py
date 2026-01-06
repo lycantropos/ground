@@ -9,6 +9,7 @@ from .hints import Point, ScalarT, TernaryPointFunction
 def to_convex_hull(
     points: Sequence[Point[ScalarT]],
     orienteer: TernaryPointFunction[ScalarT, Orientation],
+    /,
 ) -> list[Point[ScalarT]]:
     points = _to_unique_just_seen(sorted(points))
     lower, upper = (
@@ -21,13 +22,14 @@ def to_convex_hull(
 _T = TypeVar('_T')
 
 
-def _to_unique_just_seen(iterable: Iterable[_T]) -> list[_T]:
+def _to_unique_just_seen(iterable: Iterable[_T], /) -> list[_T]:
     return [key for key, _ in groupby(iterable)]
 
 
 def _to_sub_hull(
     points: Iterable[Point[ScalarT]],
     orienteer: TernaryPointFunction[ScalarT, Orientation],
+    /,
 ) -> list[Point[ScalarT]]:
     result: list[Point[ScalarT]] = []
     for point in points:

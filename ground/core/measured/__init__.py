@@ -15,7 +15,7 @@ RegionSignedMeasure = Callable[
 
 class Context(Generic[ScalarT]):
     @property
-    def region_signed_area(self) -> RegionSignedMeasure[ScalarT]:
+    def region_signed_area(self, /) -> RegionSignedMeasure[ScalarT]:
         return self._region_signed_area
 
     __slots__ = ('_region_signed_area',)
@@ -25,7 +25,7 @@ class Context(Generic[ScalarT]):
     ) -> None:
         self._region_signed_area = region_signed_area
 
-    def __repr__(self) -> str:
+    def __repr__(self, /) -> str:
         return _context_repr(self)
 
 

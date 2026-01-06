@@ -14,6 +14,8 @@ def intersect(
     second_end: Point[ScalarT],
     point_cls: type[Point[ScalarT]],
     containment_checker: TernaryPointFunction[ScalarT, bool],
+    /,
+    *,
     cross_product: QuaternaryPointFunction[ScalarT, ScalarT] = cross.multiply,
 ) -> Point[ScalarT]:
     if containment_checker(first_start, first_end, second_start):

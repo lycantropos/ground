@@ -5,6 +5,7 @@ def centroid(
     multipoint: Multipoint[ScalarT],
     coordinate_factory: ScalarFactory[ScalarT],
     point_cls: type[Point[ScalarT]],
+    /,
 ) -> Point[ScalarT]:
     result_x = result_y = coordinate_factory(0)
     for point in multipoint.points:

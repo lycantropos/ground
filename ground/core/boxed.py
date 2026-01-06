@@ -4,13 +4,13 @@ from .hints import Box, Contour, Point, Polygon, ScalarT, Segment
 
 
 def from_contour(
-    contour: Contour[ScalarT], box_cls: type[Box[ScalarT]]
+    contour: Contour[ScalarT], box_cls: type[Box[ScalarT]], /
 ) -> Box[ScalarT]:
     return from_points(contour.vertices, box_cls)
 
 
 def from_contours(
-    contours: Iterable[Contour[ScalarT]], box_cls: type[Box[ScalarT]]
+    contours: Iterable[Contour[ScalarT]], box_cls: type[Box[ScalarT]], /
 ) -> Box[ScalarT]:
     iterator = iter(contours)
     contour = next(iterator)
@@ -31,31 +31,31 @@ def from_contours(
 
 
 def from_points(
-    points: Iterable[Point[ScalarT]], box_cls: type[Box[ScalarT]]
+    points: Iterable[Point[ScalarT]], box_cls: type[Box[ScalarT]], /
 ) -> Box[ScalarT]:
     return box_cls(*_from_points(points))
 
 
 def from_polygon(
-    polygon: Polygon[ScalarT], box_cls: type[Box[ScalarT]]
+    polygon: Polygon[ScalarT], box_cls: type[Box[ScalarT]], /
 ) -> Box[ScalarT]:
     return from_points(polygon.border.vertices, box_cls)
 
 
 def from_polygons(
-    polygons: Iterable[Polygon[ScalarT]], box_cls: type[Box[ScalarT]]
+    polygons: Iterable[Polygon[ScalarT]], box_cls: type[Box[ScalarT]], /
 ) -> Box[ScalarT]:
     return from_contours((polygon.border for polygon in polygons), box_cls)
 
 
 def from_segment(
-    segment: Segment[ScalarT], box_cls: type[Box[ScalarT]]
+    segment: Segment[ScalarT], box_cls: type[Box[ScalarT]], /
 ) -> Box[ScalarT]:
     return box_cls(*_from_segment(segment))
 
 
 def from_segments(
-    segments: Iterable[Segment[ScalarT]], box_cls: type[Box[ScalarT]]
+    segments: Iterable[Segment[ScalarT]], box_cls: type[Box[ScalarT]], /
 ) -> Box[ScalarT]:
     iterator = iter(segments)
     segment = next(iterator)
@@ -76,7 +76,7 @@ def from_segments(
 
 
 def _from_points(
-    points: Iterable[Point[ScalarT]],
+    points: Iterable[Point[ScalarT]], /
 ) -> tuple[ScalarT, ScalarT, ScalarT, ScalarT]:
     iterator = iter(points)
     point = next(iterator)
@@ -95,7 +95,7 @@ def _from_points(
 
 
 def _from_segment(
-    segment: Segment[ScalarT],
+    segment: Segment[ScalarT], /
 ) -> tuple[ScalarT, ScalarT, ScalarT, ScalarT]:
     start, end = segment.start, segment.end
     max_x, min_x = (end.x, start.x) if start.x < end.x else (start.x, end.x)

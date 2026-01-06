@@ -61,6 +61,28 @@ SegmentSegmentMetric: TypeAlias = Callable[
 
 
 class Context(Generic[ScalarT]):
+    @property
+    def box_point_squared_metric(self, /) -> BoxPointMetric[ScalarT]:
+        return self._box_point_squared_metric
+
+    @property
+    def box_segment_squared_metric(self, /) -> BoxSegmentMetric[ScalarT]:
+        return self._box_segment_squared_metric
+
+    @property
+    def point_point_squared_metric(self, /) -> PointPointMetric[ScalarT]:
+        return self._point_point_squared_metric
+
+    @property
+    def segment_point_squared_metric(self, /) -> SegmentPointMetric[ScalarT]:
+        return self._segment_point_squared_metric
+
+    @property
+    def segment_segment_squared_metric(
+        self, /
+    ) -> SegmentSegmentMetric[ScalarT]:
+        return self._segment_segment_squared_metric
+
     _box_point_squared_metric: BoxPointMetric[ScalarT]
     _box_segment_squared_metric: BoxSegmentMetric[ScalarT]
     _point_point_squared_metric: PointPointMetric[ScalarT]
@@ -77,6 +99,7 @@ class Context(Generic[ScalarT]):
 
     def __init__(
         self,
+        /,
         *,
         box_point_squared_metric: BoxPointMetric[ScalarT],
         box_segment_squared_metric: BoxSegmentMetric[ScalarT],
@@ -90,28 +113,8 @@ class Context(Generic[ScalarT]):
         self._segment_point_squared_metric = segment_point_squared_metric
         self._segment_segment_squared_metric = segment_segment_squared_metric
 
-    def __repr__(self) -> str:
+    def __repr__(self, /) -> str:
         return _context_repr(self)
-
-    @property
-    def box_point_squared_metric(self) -> BoxPointMetric[ScalarT]:
-        return self._box_point_squared_metric
-
-    @property
-    def box_segment_squared_metric(self) -> BoxSegmentMetric[ScalarT]:
-        return self._box_segment_squared_metric
-
-    @property
-    def point_point_squared_metric(self) -> PointPointMetric[ScalarT]:
-        return self._point_point_squared_metric
-
-    @property
-    def segment_point_squared_metric(self) -> SegmentPointMetric[ScalarT]:
-        return self._segment_point_squared_metric
-
-    @property
-    def segment_segment_squared_metric(self) -> SegmentSegmentMetric[ScalarT]:
-        return self._segment_segment_squared_metric
 
 
 _context_repr = generate_repr(

@@ -15,6 +15,7 @@ def centroid(
     multipolygon: Multipolygon[ScalarT],
     coordinate_factory: ScalarFactory[ScalarT],
     point_cls: type[Point[ScalarT]],
+    /,
 ) -> Point[ScalarT]:
     x_numerator, y_numerator, double_area = centroid_components(
         multipolygon.polygons, coordinate_factory

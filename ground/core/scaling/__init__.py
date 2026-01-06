@@ -31,7 +31,7 @@ PointScaler: TypeAlias = Callable[
 
 
 def ensure_segment(
-    value: Any, segment_cls: type[Segment[ScalarT]]
+    value: Any, segment_cls: type[Segment[ScalarT]], /
 ) -> Segment[ScalarT]:
     assert isinstance(value, segment_cls), (value, segment_cls)
     return value
@@ -39,7 +39,7 @@ def ensure_segment(
 
 class Context(Generic[ScalarT]):
     @property
-    def scale_point(self) -> PointScaler[ScalarT]:
+    def scale_point(self, /) -> PointScaler[ScalarT]:
         return self._scale_point
 
     def scale_contour(
@@ -51,6 +51,7 @@ class Context(Generic[ScalarT]):
         multipoint_cls: type[Multipoint[ScalarT]],
         point_cls: type[Point[ScalarT]],
         segment_cls: type[Segment[ScalarT]],
+        /,
     ) -> Contour[ScalarT] | Multipoint[ScalarT] | Segment[ScalarT]:
         return (
             self.scale_contour_non_degenerate(
@@ -74,6 +75,7 @@ class Context(Generic[ScalarT]):
         factor_y: ScalarT,
         contour_cls: type[Contour[ScalarT]],
         point_cls: type[Point[ScalarT]],
+        /,
     ) -> Contour[ScalarT]:
         return contour_cls(
             [
@@ -90,6 +92,7 @@ class Context(Generic[ScalarT]):
         multipoint_cls: type[Multipoint[ScalarT]],
         point_cls: type[Point[ScalarT]],
         segment_cls: type[Segment[ScalarT]],
+        /,
     ) -> Multipoint[ScalarT] | Segment[ScalarT]:
         return self.scale_vertices_degenerate(
             contour.vertices,
@@ -107,6 +110,7 @@ class Context(Generic[ScalarT]):
         factor_y: ScalarT,
         multipoint_cls: type[Multipoint[ScalarT]],
         point_cls: type[Point[ScalarT]],
+        /,
     ) -> Multipoint[ScalarT]:
         return multipoint_cls(
             [
@@ -138,6 +142,7 @@ class Context(Generic[ScalarT]):
         point_cls: type[Point[ScalarT]],
         polygon_cls: type[Polygon[ScalarT]],
         segment_cls: type[Segment[ScalarT]],
+        /,
     ) -> Multipoint[ScalarT] | Multipolygon[ScalarT] | Multisegment[ScalarT]:
         return (
             multipolygon_cls(
@@ -187,6 +192,7 @@ class Context(Generic[ScalarT]):
         multisegment_cls: type[Multisegment[ScalarT]],
         point_cls: type[Point[ScalarT]],
         segment_cls: type[Segment[ScalarT]],
+        /,
     ) -> (
         Empty[ScalarT]
         | Linear[ScalarT]
@@ -230,6 +236,7 @@ class Context(Generic[ScalarT]):
         point_cls: type[Point[ScalarT]],
         polygon_cls: type[Polygon[ScalarT]],
         segment_cls: type[Segment[ScalarT]],
+        /,
     ) -> Multipoint[ScalarT] | Polygon[ScalarT] | Segment[ScalarT]:
         return (
             self.scale_polygon_non_degenerate(
@@ -259,6 +266,7 @@ class Context(Generic[ScalarT]):
         multipoint_cls: type[Multipoint[ScalarT]],
         point_cls: type[Point[ScalarT]],
         segment_cls: type[Segment[ScalarT]],
+        /,
     ) -> Multipoint[ScalarT] | Segment[ScalarT]:
         return self.scale_contour_degenerate(
             polygon.border,
@@ -277,6 +285,7 @@ class Context(Generic[ScalarT]):
         contour_cls: type[Contour[ScalarT]],
         point_cls: type[Point[ScalarT]],
         polygon_cls: type[Polygon[ScalarT]],
+        /,
     ) -> Polygon[ScalarT]:
         return polygon_cls(
             self.scale_contour_non_degenerate(
@@ -298,6 +307,7 @@ class Context(Generic[ScalarT]):
         multipoint_cls: type[Multipoint[ScalarT]],
         point_cls: type[Point[ScalarT]],
         segment_cls: type[Segment[ScalarT]],
+        /,
     ) -> Multipoint[ScalarT] | Segment[ScalarT]:
         return (
             self.scale_segment_non_degenerate(
@@ -323,6 +333,7 @@ class Context(Generic[ScalarT]):
         factor_y: ScalarT,
         point_cls: type[Point[ScalarT]],
         segment_cls: type[Segment[ScalarT]],
+        /,
     ) -> Segment[ScalarT]:
         return segment_cls(
             self.scale_point(segment.start, factor_x, factor_y, point_cls),
@@ -337,6 +348,7 @@ class Context(Generic[ScalarT]):
         multipoint_cls: type[Multipoint[ScalarT]],
         point_cls: type[Point[ScalarT]],
         segment_cls: type[Segment[ScalarT]],
+        /,
     ) -> Segment[ScalarT] | Multipoint[ScalarT]:
         return (
             self.scale_vertices_projecting_on_ox(
@@ -359,6 +371,7 @@ class Context(Generic[ScalarT]):
         factor_y: ScalarT,
         point_cls: type[Point[ScalarT]],
         segment_cls: type[Segment[ScalarT]],
+        /,
     ) -> Segment[ScalarT]:
         vertices = iter(vertices)
         min_x = max_x = next(vertices).x
@@ -379,6 +392,7 @@ class Context(Generic[ScalarT]):
         factor_y: ScalarT,
         point_cls: type[Point[ScalarT]],
         segment_cls: type[Segment[ScalarT]],
+        /,
     ) -> Segment[ScalarT]:
         vertices = iter(vertices)
         min_y = max_y = next(vertices).y
@@ -394,10 +408,10 @@ class Context(Generic[ScalarT]):
 
     __slots__ = ('_scale_point',)
 
-    def __init__(self, scale_point: PointScaler[ScalarT]) -> None:
+    def __init__(self, scale_point: PointScaler[ScalarT], /) -> None:
         self._scale_point = scale_point
 
-    def __repr__(self) -> str:
+    def __repr__(self, /) -> str:
         return _context_repr(self)
 
 
@@ -410,13 +424,13 @@ _context_repr = generate_repr(
 plain_context: Context[Any] = Context(plain.scale_point)
 
 
-def is_segment_horizontal(segment: Segment[ScalarT]) -> bool:
+def is_segment_horizontal(segment: Segment[ScalarT], /) -> bool:
     result = segment.start.y == segment.end.y
     assert isinstance(result, bool), result
     return result
 
 
-def is_segment_vertical(segment: Segment[ScalarT]) -> bool:
+def is_segment_vertical(segment: Segment[ScalarT], /) -> bool:
     result = segment.start.x == segment.end.x
     assert isinstance(result, bool), result
     return result

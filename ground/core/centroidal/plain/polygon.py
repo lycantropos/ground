@@ -9,6 +9,7 @@ def centroid(
     polygon: Polygon[ScalarT],
     coordinate_factory: ScalarFactory[ScalarT],
     point_cls: type[Point[ScalarT]],
+    /,
 ) -> Point[ScalarT]:
     x_numerator, y_numerator, double_area = centroid_components(
         polygon.border, polygon.holes, coordinate_factory
@@ -21,6 +22,7 @@ def centroid_components(
     border: Contour[ScalarT],
     holes: Sequence[Contour[ScalarT]],
     coordinate_factory: ScalarFactory[ScalarT],
+    /,
 ) -> tuple[ScalarT, ScalarT, ScalarT]:
     x_numerator, y_numerator, double_area = region_centroid_components(
         border.vertices, coordinate_factory

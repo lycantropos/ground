@@ -19,6 +19,7 @@ def pack_mix(
     shaped: Empty[ScalarT] | Shaped[ScalarT],
     empty: Empty[ScalarT],
     mix_cls: type[Mix[ScalarT]],
+    /,
 ) -> (
     Empty[ScalarT]
     | Linear[ScalarT]
@@ -48,6 +49,7 @@ def pack_points(
     points: Sequence[Point[ScalarT]],
     empty: Empty[ScalarT],
     multipoint_cls: type[Multipoint[ScalarT]],
+    /,
 ) -> Empty[ScalarT] | Multipoint[ScalarT]:
     return multipoint_cls(points) if points else empty
 
@@ -56,6 +58,7 @@ def pack_segments(
     segments: Sequence[Segment[ScalarT]],
     empty: Empty[ScalarT],
     multisegment_cls: type[Multisegment[ScalarT]],
+    /,
 ) -> Empty[ScalarT] | Multisegment[ScalarT] | Segment[ScalarT]:
     return (
         (multisegment_cls(segments) if len(segments) > 1 else segments[0])

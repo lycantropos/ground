@@ -81,14 +81,15 @@ def test_endpoints_permutations(
         first_start, first_end, second_start, second_end
     )
 
-    result_sign = to_sign(result)
+    result_sign = to_sign(result, context.zero)
     first_endpoints = first_start, first_end
     second_endpoints = second_start, second_end
     assert to_sign(
         context.dot_product(
             *permute(first_endpoints, first_index),
             *permute(second_endpoints, second_index),
-        )
+        ),
+        context.zero,
     ) == (
         result_sign
         if equivalence(

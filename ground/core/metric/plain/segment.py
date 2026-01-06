@@ -15,6 +15,7 @@ def point_squared_distance(
     point: Point[ScalarT],
     dot_producer: QuaternaryPointFunction[ScalarT, ScalarT],
     coordinate_factory: ScalarFactory[ScalarT],
+    /,
 ) -> ScalarT:
     end_factor = max(
         coordinate_factory(0),
@@ -40,6 +41,7 @@ def segment_squared_distance(
     dot_producer: QuaternaryPointFunction[ScalarT, ScalarT],
     segments_collision_detector: QuaternaryPointFunction[ScalarT, bool],
     coordinate_factory: ScalarFactory[ScalarT],
+    /,
 ) -> ScalarT:
     return (
         coordinate_factory(0)

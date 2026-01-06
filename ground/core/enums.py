@@ -2,7 +2,7 @@ from enum import IntEnum, unique
 
 
 class Base(IntEnum):
-    def __repr__(self) -> str:
+    def __repr__(self, /) -> str:
         return type(self).__qualname__ + '.' + self.name
 
 
@@ -97,7 +97,7 @@ class Relation(Base):
     WITHIN = 10
 
     @property
-    def complement(self) -> 'Relation':
+    def complement(self, /) -> 'Relation':
         if self is Relation.COVER:
             return Relation.WITHIN
         if self is Relation.ENCLOSES:
