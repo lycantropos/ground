@@ -57,8 +57,9 @@ python -m pip install -e '.'
 >>> context.angle_kind(origin, x_unit, y_unit) is Kind.RIGHT
 True
 >>> from ground.base import Orientation
->>> (context.angle_orientation(origin, x_unit, y_unit)
-...  is Orientation.COUNTERCLOCKWISE)
+>>> context.angle_orientation(
+...   origin, x_unit, y_unit
+... ) is Orientation.COUNTERCLOCKWISE
 True
 >>> context.cross_product(origin, x_unit, origin, y_unit) == 1
 True
@@ -66,19 +67,24 @@ True
 True
 >>> context.multipoint_centroid(Multipoint([origin])) == origin
 True
->>> (context.points_convex_hull([origin, x_unit, y_unit])
-...  == [origin, x_unit, y_unit])
+>>> context.points_convex_hull([origin, x_unit, y_unit]) == [
+...   origin,
+...   x_unit,
+...   y_unit,
+... ]
 True
 >>> context.segment_contains_point(Segment(origin, x_unit), y_unit)
 False
 >>> context.segment_contains_point(Segment(origin, x_unit), origin)
 True
->>> context.segments_intersection(Segment(origin, x_unit),
-...                               Segment(origin, y_unit)) == origin
+>>> context.segments_intersection(
+...     Segment(origin, x_unit), Segment(origin, y_unit)
+... ) == origin
 True
 >>> from ground.base import Relation
->>> context.segments_relation(Segment(origin, x_unit),
-...                           Segment(origin, y_unit)) is Relation.TOUCH
+>>> context.segments_relation(
+...     Segment(origin, x_unit), Segment(origin, y_unit)
+... ) is Relation.TOUCH
 True
 
 ```
