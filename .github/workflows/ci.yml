@@ -194,9 +194,8 @@ jobs:
       - name: 'Download distributions'
         uses: actions/download-artifact@v6
         with:
-          merge-multiple: true
+          name: dist
           path: dist
-          pattern: dist-*
       - name: 'Upload to Test PyPI'
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
