@@ -151,6 +151,9 @@ jobs:
             python_architecture: 'x86'
           },
         ]
+        exclude:
+          - python_version: '3.10'
+            platform: { os: 'macos-latest', python_architecture: 'x64' }
         include:
           - python_version: 'pypy-3.10'
             platform: { os: 'macos-latest', python_architecture: 'x64' }
