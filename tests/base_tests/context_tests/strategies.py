@@ -1,7 +1,6 @@
 import sys
 from fractions import Fraction
 from functools import partial
-from numbers import Rational
 from operator import itemgetter
 
 from hypothesis import strategies as st
@@ -40,10 +39,7 @@ from tests.utils import (
 
 indices = st.integers(0, sys.maxsize)
 contexts = st.builds(
-    Context,
-    coordinate_checker=st.just(Rational.__instancecheck__),
-    coordinate_factory=st.just(Fraction),
-    sqrt=st.just(sqrt),
+    Context, coordinate_factory=st.just(Fraction), sqrt=st.just(sqrt)
 )
 contexts_with_empty_lists = st.tuples(contexts, st.builds(list))
 to_contexts_with = partial(cleave_in_tuples, compose(st.just, itemgetter(0)))
