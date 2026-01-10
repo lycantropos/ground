@@ -3,7 +3,7 @@ from typing import TypeAlias
 
 from hypothesis.strategies import SearchStrategy
 
-from ground.core.hints import ScalarT as ScalarT
+from ground._core.hints import ScalarT as ScalarT
 from ground.hints import Point
 
 Strategy = SearchStrategy

@@ -6,8 +6,8 @@ from typing import Any, TypeAlias, TypeVar, overload
 
 from hypothesis import strategies
 
+from ground._core import geometries, primitive
 from ground.base import Context, Location, Orientation, Relation
-from ground.core import geometries, primitive
 from ground.hints import (
     Box,
     Contour,

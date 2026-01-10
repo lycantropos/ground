@@ -9,7 +9,7 @@ from reprit import serializers as _serializers
 from reprit.base import generate_repr as _generate_repr
 from typing_extensions import Self, TypeIs as _TypeIs
 
-from .core import (
+from ._core import (
     angular as _angular,
     boxed as _boxed,
     centroidal as _centroidal,
@@ -25,7 +25,7 @@ from .core import (
     translation as _translation,
     vector as _vector,
 )
-from .core.hints import (
+from ._core.hints import (
     QuaternaryPointFunction as _QuaternaryPointFunction,
     ScalarFactory as _ScalarFactory,
     ScalarT as _ScalarT,

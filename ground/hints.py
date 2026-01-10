@@ -1,4 +1,4 @@
-from .core import hints as _hints
+from ._core import hints as _hints
 
 Box = _hints.Box
 Contour = _hints.Contour
