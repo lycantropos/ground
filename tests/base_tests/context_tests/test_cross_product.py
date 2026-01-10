@@ -2,7 +2,13 @@ from hypothesis import given
 
 from ground.base import Context
 from tests.hints import PointsPair, PointsQuadruplet, ScalarT
-from tests.utils import equivalence, is_even_permutation, permute, to_sign
+from tests.utils import (
+    equivalence,
+    is_even_permutation,
+    permute,
+    to_coordinate_checker,
+    to_sign,
+)
 
 from . import strategies
 
@@ -20,7 +26,7 @@ def test_basic(
         first_start, first_end, second_start, second_end
     )
 
-    assert context.coordinate_checker(result)
+    assert to_coordinate_checker(context)(result)
 
 
 @given(strategies.contexts_with_points_pairs)

@@ -3,6 +3,7 @@ from hypothesis import given
 from ground.base import Context
 from ground.hints import Box, Point
 from tests.hints import ScalarT
+from tests.utils import to_coordinate_checker
 
 from . import strategies
 
@@ -17,7 +18,7 @@ def test_basic(
 
     result = context.box_point_squared_distance(box, point)
 
-    assert context.coordinate_checker(result)
+    assert to_coordinate_checker(context)(result)
 
 
 @given(strategies.contexts_with_boxes)

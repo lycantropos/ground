@@ -3,7 +3,7 @@ from hypothesis import given
 from ground.base import Context
 from ground.hints import Box, Segment
 from tests.hints import ScalarT
-from tests.utils import reverse_segment
+from tests.utils import reverse_segment, to_coordinate_checker
 
 from . import strategies
 
@@ -18,7 +18,7 @@ def test_basic(
 
     result = context.box_segment_squared_distance(box, segment)
 
-    assert context.coordinate_checker(result)
+    assert to_coordinate_checker(context)(result)
 
 
 @given(strategies.contexts_with_rational_boxes_and_segments)

@@ -1,10 +1,14 @@
 import math
 from collections.abc import Callable, Iterable, Sequence
+from fractions import Fraction
 from functools import partial, singledispatch
 from operator import getitem, is_, itemgetter
+from types import UnionType
 from typing import Any, TypeAlias, TypeVar, overload
 
 from hypothesis import strategies
+from symba.base import Expression
+from typing_extensions import TypeIs
 
 from ground._core import geometries, primitive
 from ground.base import Context, Location, Orientation, Relation
@@ -39,6 +43,21 @@ SYMMETRIC_LINEAR_RELATIONS = (
 LINEAR_RELATIONS = ASYMMETRIC_LINEAR_RELATIONS + SYMMETRIC_LINEAR_RELATIONS
 
 to_sign = primitive.to_sign
+
+
+def to_coordinate_checker(
+    context: Context[ScalarT], /
+) -> Callable[[Any], TypeIs[ScalarT]]:
+    coordinate_cls: type[Any] | UnionType
+    if context.coordinate_factory is Fraction:
+        coordinate_cls = Fraction | Expression
+    else:
+        raise TypeError(context)
+
+    def is_coordinate_value(value: Any, /) -> TypeIs[ScalarT]:
+        return isinstance(value, coordinate_cls)
+
+    return is_coordinate_value
 
 
 def apply(function: Callable[..., _T2], args: Iterable[_T1]) -> _T2:

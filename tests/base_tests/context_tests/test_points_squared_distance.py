@@ -3,6 +3,7 @@ from hypothesis import given
 from ground.base import Context
 from ground.hints import Point
 from tests.hints import PointsPair, ScalarT
+from tests.utils import to_coordinate_checker
 
 from . import strategies
 
@@ -16,7 +17,7 @@ def test_basic(
 
     result = context.points_squared_distance(first_point, second_point)
 
-    assert context.coordinate_checker(result)
+    assert to_coordinate_checker(context)(result)
 
 
 @given(strategies.contexts_with_rational_points_pairs)

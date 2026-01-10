@@ -6,6 +6,7 @@ from tests.utils import (
     equivalence,
     is_even_permutation,
     permute,
+    to_coordinate_checker,
     to_perpendicular_point,
     to_sign,
 )
@@ -26,7 +27,7 @@ def test_basic(
         first_start, first_end, second_start, second_end
     )
 
-    assert context.coordinate_checker(result)
+    assert to_coordinate_checker(context)(result)
 
 
 @given(strategies.contexts_with_points_pairs)

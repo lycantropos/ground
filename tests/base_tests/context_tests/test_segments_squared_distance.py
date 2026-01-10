@@ -3,7 +3,11 @@ from hypothesis import given
 from ground.base import Context
 from ground.hints import Segment
 from tests.hints import ScalarT
-from tests.utils import reverse_segment, reverse_segment_coordinates
+from tests.utils import (
+    reverse_segment,
+    reverse_segment_coordinates,
+    to_coordinate_checker,
+)
 
 from . import strategies
 
@@ -18,7 +22,7 @@ def test_basic(
 
     result = context.segments_squared_distance(first, second)
 
-    assert context.coordinate_checker(result)
+    assert to_coordinate_checker(context)(result)
 
 
 @given(strategies.contexts_with_segments_pairs)

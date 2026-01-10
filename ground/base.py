@@ -7,7 +7,7 @@ from typing import Any as _Any, Generic as _Generic, final as _final
 
 from reprit import serializers as _serializers
 from reprit.base import generate_repr as _generate_repr
-from typing_extensions import Self, TypeIs as _TypeIs
+from typing_extensions import Self
 
 from ._core import (
     angular as _angular,
@@ -65,11 +65,6 @@ class Context(_Generic[_ScalarT]):
     def contour_cls(self, /) -> type[Contour[_ScalarT]]:
         """Returns type of contours."""
         return self._contour_cls
-
-    @property
-    def coordinate_checker(self, /) -> Callable[[_Any], _TypeIs[_ScalarT]]:
-        """Returns checker of coordinates."""
-        return self._coordinate_checker
 
     @property
     def coordinate_factory(self, /) -> Callable[[int], _ScalarT]:
@@ -966,7 +961,6 @@ class Context(_Generic[_ScalarT]):
         *,
         box_cls: type[Box[_ScalarT]] | None = None,
         contour_cls: type[Contour[_ScalarT]] | None = None,
-        coordinate_checker: Callable[[_Any], _TypeIs[_ScalarT]] | None = None,
         coordinate_factory: _ScalarFactory[_ScalarT] | None = None,
         empty_cls: type[Empty[_ScalarT]] | None = None,
         mix_cls: type[Mix[_ScalarT]] | None = None,
@@ -988,10 +982,7 @@ class Context(_Generic[_ScalarT]):
 
         >>> context = get_context()
         >>> from fractions import Fraction
-        >>> fraction_context = context.replace(
-        ...     coordinate_checker=Fraction.__instancecheck__,
-        ...     coordinate_factory=Fraction,
-        ... )
+        >>> fraction_context = context.replace(coordinate_factory=Fraction)
         >>> isinstance(fraction_context, Context)
         True
         >>> fraction_context.coordinate_factory is Fraction
@@ -1001,11 +992,6 @@ class Context(_Generic[_ScalarT]):
             box_cls=self._box_cls if box_cls is None else box_cls,
             contour_cls=(
                 self._contour_cls if contour_cls is None else contour_cls
-            ),
-            coordinate_checker=(
-                self._coordinate_checker
-                if coordinate_checker is None
-                else coordinate_checker
             ),
             coordinate_factory=(
                 self._coordinate_factory
@@ -2832,7 +2818,6 @@ class Context(_Generic[_ScalarT]):
     _centroidal_context: _centroidal.Context[_ScalarT]
     _circular_context: _circular.Context[_ScalarT]
     _contour_cls: type[Contour[_ScalarT]]
-    _coordinate_checker: Callable[[_Any], _TypeIs[_ScalarT]]
     _coordinate_factory: _ScalarFactory[_ScalarT]
     _empty: Empty[_ScalarT]
     _empty_cls: type[Empty[_ScalarT]]
@@ -2887,7 +2872,6 @@ class Context(_Generic[_ScalarT]):
         '_centroidal_context',
         '_circular_context',
         '_contour_cls',
-        '_coordinate_checker',
         '_coordinate_factory',
         '_empty',
         '_empty_cls',
@@ -2916,7 +2900,6 @@ class Context(_Generic[_ScalarT]):
         *,
         box_cls: type[Box[_ScalarT]] = _geometries.Box,
         contour_cls: type[Contour[_ScalarT]] = _geometries.Contour,
-        coordinate_checker: Callable[[_Any], _TypeIs[_ScalarT]],
         coordinate_factory: Callable[[int], _ScalarT],
         empty_cls: type[Empty[_ScalarT]] = _geometries.Empty,
         mix_cls: type[Mix[_ScalarT]] = _geometries.Mix,
@@ -2937,7 +2920,6 @@ class Context(_Generic[_ScalarT]):
         (
             self._box_cls,
             self._contour_cls,
-            self._coordinate_checker,
             self._coordinate_factory,
             self._empty,
             self._empty_cls,
@@ -2954,7 +2936,6 @@ class Context(_Generic[_ScalarT]):
         ) = (
             box_cls,
             contour_cls,
-            coordinate_checker,
             coordinate_factory,
             empty_cls(),
             empty_cls,
@@ -3003,17 +2984,9 @@ _context_repr = _generate_repr(
     argument_serializer=_serializers.complex_,
     skip_defaults=True,
 )
-
-
-def _is_float(value: _Any, /) -> _TypeIs[float]:
-    return isinstance(value, float)
-
-
 _context: _ContextVar[Context[_Any]] = _ContextVar(
     'context',
-    default=Context(  # noqa: B039
-        coordinate_checker=_is_float, coordinate_factory=float, sqrt=_math.sqrt
-    ),
+    default=Context(coordinate_factory=float, sqrt=_math.sqrt),  # noqa: B039
 )
 
 

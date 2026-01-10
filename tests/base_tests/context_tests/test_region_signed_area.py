@@ -7,6 +7,7 @@ from tests.utils import (
     reverse_contour,
     reverse_contour_coordinates,
     rotate_contour,
+    to_coordinate_checker,
 )
 
 from . import strategies
@@ -20,7 +21,7 @@ def test_basic(
 
     result = context.region_signed_area(contour)
 
-    assert context.coordinate_checker(result)
+    assert to_coordinate_checker(context)(result)
 
 
 @given(strategies.contexts_with_rational_contours)
