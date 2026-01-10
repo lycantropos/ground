@@ -50,40 +50,41 @@ python -m pip install -e '.'
 >>> Multipoint = context.multipoint_cls
 >>> Point = context.point_cls
 >>> Segment = context.segment_cls
->>> origin = Point(0, 0)
 >>> x_unit = Point(1, 0)
 >>> y_unit = Point(0, 1)
 >>> from ground.base import Kind
->>> context.angle_kind(origin, x_unit, y_unit) is Kind.RIGHT
+>>> context.angle_kind(context.origin, x_unit, y_unit) is Kind.RIGHT
 True
 >>> from ground.base import Orientation
 >>> context.angle_orientation(
-...   origin, x_unit, y_unit
+...   context.origin, x_unit, y_unit
 ... ) is Orientation.COUNTERCLOCKWISE
 True
->>> context.cross_product(origin, x_unit, origin, y_unit) == 1
+>>> context.cross_product(context.origin, x_unit, context.origin, y_unit) == 1
 True
->>> context.dot_product(origin, x_unit, origin, y_unit) == 0
+>>> context.dot_product(context.origin, x_unit, context.origin, y_unit) == 0
 True
->>> context.multipoint_centroid(Multipoint([origin])) == origin
+>>> context.multipoint_centroid(Multipoint([context.origin])) == context.origin
 True
->>> context.points_convex_hull([origin, x_unit, y_unit]) == [
-...   origin,
+>>> context.points_convex_hull([context.origin, x_unit, y_unit]) == [
+...   context.origin,
 ...   x_unit,
 ...   y_unit,
 ... ]
 True
->>> context.segment_contains_point(Segment(origin, x_unit), y_unit)
+>>> context.segment_contains_point(Segment(context.origin, x_unit), y_unit)
 False
->>> context.segment_contains_point(Segment(origin, x_unit), origin)
+>>> context.segment_contains_point(
+...     Segment(context.origin, x_unit), context.origin
+... )
 True
 >>> context.segments_intersection(
-...     Segment(origin, x_unit), Segment(origin, y_unit)
-... ) == origin
+...     Segment(context.origin, x_unit), Segment(context.origin, y_unit)
+... ) == context.origin
 True
 >>> from ground.base import Relation
 >>> context.segments_relation(
-...     Segment(origin, x_unit), Segment(origin, y_unit)
+...     Segment(context.origin, x_unit), Segment(context.origin, y_unit)
 ... ) is Relation.TOUCH
 True
 
