@@ -221,6 +221,7 @@ class Context(_Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
+        >>> from ground.enums import Kind
         >>> context = get_context()
         >>> Point = context.point_cls
         >>> (
@@ -258,6 +259,7 @@ class Context(_Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
+        >>> from ground.enums import Orientation
         >>> context = get_context()
         >>> Point = context.point_cls
         >>> (
@@ -563,6 +565,7 @@ class Context(_Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
+        >>> from ground.enums import Location
         >>> context = get_context()
         >>> Point = context.point_cls
         >>> (
@@ -2315,6 +2318,7 @@ class Context(_Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
+        >>> from ground.enums import Relation
         >>> context = get_context()
         >>> Point = context.point_cls
         >>> Segment = context.segment_cls
