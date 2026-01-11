@@ -1,6 +1,6 @@
 from hypothesis import given
 
-from ground.base import Context, get_context, set_context
+from ground.context import Context, get_context, set_context
 from tests.hints import ScalarT
 
 from . import strategies

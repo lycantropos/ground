@@ -1,6 +1,6 @@
 from hypothesis import given
 
-from ground.base import Context
+from ground.context import Context
 from ground.hints import Box, Segment
 from tests.hints import ScalarT
 from tests.utils import reverse_segment, to_coordinate_checker

@@ -1,6 +1,7 @@
 from hypothesis import given
 
-from ground.base import Context, Kind
+from ground.context import Context
+from ground.enums import Kind
 from tests.hints import PointsPair, PointsTriplet, ScalarT
 
 from . import strategies

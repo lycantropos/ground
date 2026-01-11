@@ -2,7 +2,7 @@ from collections import abc
 
 from hypothesis import given
 
-from ground.base import Context
+from ground.context import Context
 from ground.hints import Contour
 from tests.hints import ScalarT
 from tests.utils import is_segment, rotate_contour, rotate_sequence

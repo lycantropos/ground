@@ -2,7 +2,8 @@ from itertools import product
 
 from hypothesis import given
 
-from ground.base import Context, Orientation
+from ground.context import Context
+from ground.enums import Orientation
 from tests.hints import PointsPair, PointsTriplet, ScalarT
 from tests.utils import is_even_permutation, permute
 

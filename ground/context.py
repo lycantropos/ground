@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 import math as _math
-from collections.abc import Callable, Sequence as _Sequence
+from collections.abc import Callable as _Callable, Sequence as _Sequence
 from contextvars import ContextVar as _ContextVar
 from typing import Any as _Any, Generic as _Generic, final as _final
 
 from reprit import serializers as _serializers
 from reprit.base import generate_repr as _generate_repr
-from typing_extensions import Self
+from typing_extensions import Self as _Self
 
 from ._core import (
     angular as _angular,
@@ -15,7 +15,6 @@ from ._core import (
     centroidal as _centroidal,
     circular as _circular,
     discrete as _discrete,
-    enums as _enums,
     geometries as _geometries,
     measured as _measured,
     metric as _metric,
@@ -25,6 +24,12 @@ from ._core import (
     translation as _translation,
     vector as _vector,
 )
+from ._core.enums import (
+    Kind as _Kind,
+    Location as _Location,
+    Orientation as _Orientation,
+    Relation as _Relation,
+)
 from ._core.hints import (
     QuaternaryPointFunction as _QuaternaryPointFunction,
     ScalarFactory as _ScalarFactory,
@@ -32,24 +37,19 @@ from ._core.hints import (
     SquareRooter as _SquareRooter,
 )
 from .hints import (
-    Box,
-    Contour,
-    Empty,
-    Linear,
-    Mix,
-    Multipoint,
-    Multipolygon,
-    Multisegment,
-    Point,
-    Polygon,
-    Segment,
-    Shaped,
+    Box as _Box,
+    Contour as _Contour,
+    Empty as _Empty,
+    Linear as _Linear,
+    Mix as _Mix,
+    Multipoint as _Multipoint,
+    Multipolygon as _Multipolygon,
+    Multisegment as _Multisegment,
+    Point as _Point,
+    Polygon as _Polygon,
+    Segment as _Segment,
+    Shaped as _Shaped,
 )
-
-Location = _enums.Location
-Kind = _enums.Kind
-Orientation = _enums.Orientation
-Relation = _enums.Relation
 
 
 @_final
@@ -57,17 +57,17 @@ class Context(_Generic[_ScalarT]):
     """Represents common language for computational geometry."""
 
     @property
-    def box_cls(self, /) -> type[Box[_ScalarT]]:
+    def box_cls(self, /) -> type[_Box[_ScalarT]]:
         """Returns type of boxes."""
         return self._box_cls
 
     @property
-    def contour_cls(self, /) -> type[Contour[_ScalarT]]:
+    def contour_cls(self, /) -> type[_Contour[_ScalarT]]:
         """Returns type of contours."""
         return self._contour_cls
 
     @property
-    def coordinate_factory(self, /) -> Callable[[int], _ScalarT]:
+    def coordinate_factory(self, /) -> _Callable[[int], _ScalarT]:
         """Returns coordinate factory."""
         return self._coordinate_factory
 
@@ -126,42 +126,42 @@ class Context(_Generic[_ScalarT]):
         return self._vector_context.dot_product
 
     @property
-    def empty(self, /) -> Empty[_ScalarT]:
+    def empty(self, /) -> _Empty[_ScalarT]:
         """Returns an empty geometry."""
         return self._empty
 
     @property
-    def empty_cls(self, /) -> type[Empty[_ScalarT]]:
+    def empty_cls(self, /) -> type[_Empty[_ScalarT]]:
         """Returns type of empty geometries."""
         return self._empty_cls
 
     @property
-    def mix_cls(self, /) -> type[Mix[_ScalarT]]:
+    def mix_cls(self, /) -> type[_Mix[_ScalarT]]:
         """Returns type of mixes."""
         return self._mix_cls
 
     @property
-    def multipoint_cls(self, /) -> type[Multipoint[_ScalarT]]:
+    def multipoint_cls(self, /) -> type[_Multipoint[_ScalarT]]:
         """Returns type of multipoints."""
         return self._multipoint_cls
 
     @property
-    def multipolygon_cls(self, /) -> type[Multipolygon[_ScalarT]]:
+    def multipolygon_cls(self, /) -> type[_Multipolygon[_ScalarT]]:
         """Returns type of multipolygons."""
         return self._multipolygon_cls
 
     @property
-    def multisegment_cls(self, /) -> type[Multisegment[_ScalarT]]:
+    def multisegment_cls(self, /) -> type[_Multisegment[_ScalarT]]:
         """Returns type of multisegments."""
         return self._multisegment_cls
 
     @property
-    def origin(self, /) -> Point[_ScalarT]:
+    def origin(self, /) -> _Point[_ScalarT]:
         """Returns origin."""
         return self._origin
 
     @property
-    def point_cls(self, /) -> type[Point[_ScalarT]]:
+    def point_cls(self, /) -> type[_Point[_ScalarT]]:
         """Returns type of points."""
         return self._point_cls
 
@@ -187,12 +187,12 @@ class Context(_Generic[_ScalarT]):
         return self._metric_context.point_point_squared_metric
 
     @property
-    def polygon_cls(self, /) -> type[Polygon[_ScalarT]]:
+    def polygon_cls(self, /) -> type[_Polygon[_ScalarT]]:
         """Returns type of polygons."""
         return self._polygon_cls
 
     @property
-    def segment_cls(self, /) -> type[Segment[_ScalarT]]:
+    def segment_cls(self, /) -> type[_Segment[_ScalarT]]:
         """Returns type of segments."""
         return self._segment_cls
 
@@ -208,11 +208,11 @@ class Context(_Generic[_ScalarT]):
 
     def angle_kind(
         self,
-        vertex: Point[_ScalarT],
-        first_ray_point: Point[_ScalarT],
-        second_ray_point: Point[_ScalarT],
+        vertex: _Point[_ScalarT],
+        first_ray_point: _Point[_ScalarT],
+        second_ray_point: _Point[_ScalarT],
         /,
-    ) -> Kind:
+    ) -> _Kind:
         """
         Returns function for computing angle kind.
 
@@ -245,11 +245,11 @@ class Context(_Generic[_ScalarT]):
 
     def angle_orientation(
         self,
-        vertex: Point[_ScalarT],
-        first_ray_point: Point[_ScalarT],
-        second_ray_point: Point[_ScalarT],
+        vertex: _Point[_ScalarT],
+        first_ray_point: _Point[_ScalarT],
+        second_ray_point: _Point[_ScalarT],
         /,
-    ) -> Orientation:
+    ) -> _Orientation:
         """
         Returns function for computing angle orientation.
 
@@ -287,7 +287,7 @@ class Context(_Generic[_ScalarT]):
         )
 
     def box_point_squared_distance(
-        self, box: Box[_ScalarT], point: Point[_ScalarT], /
+        self, box: _Box[_ScalarT], point: _Point[_ScalarT], /
     ) -> _ScalarT:
         """
         Returns squared Euclidean distance between box and a point.
@@ -317,7 +317,7 @@ class Context(_Generic[_ScalarT]):
         )
 
     def box_segment_squared_distance(
-        self, box: Box[_ScalarT], segment: Segment[_ScalarT], /
+        self, box: _Box[_ScalarT], segment: _Segment[_ScalarT], /
     ) -> _ScalarT:
         """
         Returns squared Euclidean distance between box and a segment.
@@ -353,7 +353,7 @@ class Context(_Generic[_ScalarT]):
             self._point_cls,
         )
 
-    def contour_box(self, contour: Contour[_ScalarT], /) -> Box[_ScalarT]:
+    def contour_box(self, contour: _Contour[_ScalarT], /) -> _Box[_ScalarT]:
         """
         Constructs box from contour.
 
@@ -383,8 +383,8 @@ class Context(_Generic[_ScalarT]):
         return _boxed.from_contour(contour, self._box_cls)
 
     def contour_centroid(
-        self, contour: Contour[_ScalarT], /
-    ) -> Point[_ScalarT]:
+        self, contour: _Contour[_ScalarT], /
+    ) -> _Point[_ScalarT]:
         """
         Constructs centroid of a contour.
 
@@ -409,7 +409,7 @@ class Context(_Generic[_ScalarT]):
             contour, self._coordinate_factory, self._point_cls, self._sqrt
         )
 
-    def contour_length(self, contour: Contour[_ScalarT], /) -> _ScalarT:
+    def contour_length(self, contour: _Contour[_ScalarT], /) -> _ScalarT:
         """
         Returns Euclidean length of a contour.
 
@@ -449,8 +449,8 @@ class Context(_Generic[_ScalarT]):
         )
 
     def contour_segments(
-        self, contour: Contour[_ScalarT], /
-    ) -> _Sequence[Segment[_ScalarT]]:
+        self, contour: _Contour[_ScalarT], /
+    ) -> _Sequence[_Segment[_ScalarT]]:
         """
         Constructs segments of a contour.
 
@@ -485,8 +485,8 @@ class Context(_Generic[_ScalarT]):
         ]
 
     def contours_box(
-        self, contours: _Sequence[Contour[_ScalarT]], /
-    ) -> Box[_ScalarT]:
+        self, contours: _Sequence[_Contour[_ScalarT]], /
+    ) -> _Box[_ScalarT]:
         """
         Constructs box from contours.
 
@@ -511,7 +511,7 @@ class Context(_Generic[_ScalarT]):
         """
         return _boxed.from_contours(contours, self._box_cls)
 
-    def is_region_convex(self, contour: Contour[_ScalarT], /) -> bool:
+    def is_region_convex(self, contour: _Contour[_ScalarT], /) -> bool:
         """
         Checks if region (given its contour) is convex.
 
@@ -549,12 +549,12 @@ class Context(_Generic[_ScalarT]):
 
     def locate_point_in_point_point_point_circle(
         self,
-        point: Point[_ScalarT],
-        first: Point[_ScalarT],
-        second: Point[_ScalarT],
-        third: Point[_ScalarT],
+        point: _Point[_ScalarT],
+        first: _Point[_ScalarT],
+        second: _Point[_ScalarT],
+        third: _Point[_ScalarT],
         /,
-    ) -> Location:
+    ) -> _Location:
         """
         Returns location of point in point-point-point circle.
 
@@ -592,8 +592,8 @@ class Context(_Generic[_ScalarT]):
         )
 
     def merged_box(
-        self, first_box: Box[_ScalarT], second_box: Box[_ScalarT], /
-    ) -> Box[_ScalarT]:
+        self, first_box: _Box[_ScalarT], second_box: _Box[_ScalarT], /
+    ) -> _Box[_ScalarT]:
         """
         Merges two boxes.
 
@@ -618,8 +618,8 @@ class Context(_Generic[_ScalarT]):
         )
 
     def multipoint_centroid(
-        self, multipoint: Multipoint[_ScalarT], /
-    ) -> Point[_ScalarT]:
+        self, multipoint: _Multipoint[_ScalarT], /
+    ) -> _Point[_ScalarT]:
         """
         Constructs centroid of a multipoint.
 
@@ -643,8 +643,8 @@ class Context(_Generic[_ScalarT]):
         )
 
     def multipolygon_centroid(
-        self, multipolygon: Multipolygon[_ScalarT], /
-    ) -> Point[_ScalarT]:
+        self, multipolygon: _Multipolygon[_ScalarT], /
+    ) -> _Point[_ScalarT]:
         """
         Constructs centroid of a multipolygon.
 
@@ -677,8 +677,8 @@ class Context(_Generic[_ScalarT]):
         )
 
     def multisegment_centroid(
-        self, multisegment: Multisegment[_ScalarT], /
-    ) -> Point[_ScalarT]:
+        self, multisegment: _Multisegment[_ScalarT], /
+    ) -> _Point[_ScalarT]:
         """
         Constructs centroid of a multisegment.
 
@@ -712,7 +712,7 @@ class Context(_Generic[_ScalarT]):
         )
 
     def multisegment_length(
-        self, multisegment: Multisegment[_ScalarT], /
+        self, multisegment: _Multisegment[_ScalarT], /
     ) -> _ScalarT:
         """
         Returns Euclidean length of a multisegment.
@@ -758,8 +758,8 @@ class Context(_Generic[_ScalarT]):
         )
 
     def points_convex_hull(
-        self, points: _Sequence[Point[_ScalarT]], /
-    ) -> _Sequence[Point[_ScalarT]]:
+        self, points: _Sequence[_Point[_ScalarT]], /
+    ) -> _Sequence[_Point[_ScalarT]]:
         """
         Constructs convex hull of points.
 
@@ -783,8 +783,8 @@ class Context(_Generic[_ScalarT]):
         return _discrete.to_convex_hull(points, self.angle_orientation)
 
     def points_box(
-        self, points: _Sequence[Point[_ScalarT]], /
-    ) -> Box[_ScalarT]:
+        self, points: _Sequence[_Point[_ScalarT]], /
+    ) -> _Box[_ScalarT]:
         """
         Constructs box from points.
 
@@ -805,7 +805,7 @@ class Context(_Generic[_ScalarT]):
         """
         return _boxed.from_points(points, self._box_cls)
 
-    def polygon_box(self, polygon: Polygon[_ScalarT], /) -> Box[_ScalarT]:
+    def polygon_box(self, polygon: _Polygon[_ScalarT], /) -> _Box[_ScalarT]:
         """
         Constructs box from polygon.
 
@@ -836,8 +836,8 @@ class Context(_Generic[_ScalarT]):
         return _boxed.from_polygon(polygon, self._box_cls)
 
     def polygon_centroid(
-        self, polygon: Polygon[_ScalarT], /
-    ) -> Point[_ScalarT]:
+        self, polygon: _Polygon[_ScalarT], /
+    ) -> _Point[_ScalarT]:
         """
         Constructs centroid of a polygon.
 
@@ -865,8 +865,8 @@ class Context(_Generic[_ScalarT]):
         )
 
     def polygons_box(
-        self, polygons: _Sequence[Polygon[_ScalarT]], /
-    ) -> Box[_ScalarT]:
+        self, polygons: _Sequence[_Polygon[_ScalarT]], /
+    ) -> _Box[_ScalarT]:
         """
         Constructs box from polygons.
 
@@ -893,8 +893,8 @@ class Context(_Generic[_ScalarT]):
         return _boxed.from_polygons(polygons, self._box_cls)
 
     def region_centroid(
-        self, contour: Contour[_ScalarT], /
-    ) -> Point[_ScalarT]:
+        self, contour: _Contour[_ScalarT], /
+    ) -> _Point[_ScalarT]:
         """
         Constructs centroid of a region given its contour.
 
@@ -920,7 +920,7 @@ class Context(_Generic[_ScalarT]):
             contour, self._coordinate_factory, self._point_cls
         )
 
-    def region_signed_area(self, contour: Contour[_ScalarT], /) -> _ScalarT:
+    def region_signed_area(self, contour: _Contour[_ScalarT], /) -> _ScalarT:
         """
         Returns signed area of the region given its contour.
 
@@ -959,17 +959,17 @@ class Context(_Generic[_ScalarT]):
         self,
         /,
         *,
-        box_cls: type[Box[_ScalarT]] | None = None,
-        contour_cls: type[Contour[_ScalarT]] | None = None,
+        box_cls: type[_Box[_ScalarT]] | None = None,
+        contour_cls: type[_Contour[_ScalarT]] | None = None,
         coordinate_factory: _ScalarFactory[_ScalarT] | None = None,
-        empty_cls: type[Empty[_ScalarT]] | None = None,
-        mix_cls: type[Mix[_ScalarT]] | None = None,
-        multipoint_cls: type[Multipoint[_ScalarT]] | None = None,
-        multipolygon_cls: type[Multipolygon[_ScalarT]] | None = None,
-        multisegment_cls: type[Multisegment[_ScalarT]] | None = None,
-        point_cls: type[Point[_ScalarT]] | None = None,
-        polygon_cls: type[Polygon[_ScalarT]] | None = None,
-        segment_cls: type[Segment[_ScalarT]] | None = None,
+        empty_cls: type[_Empty[_ScalarT]] | None = None,
+        mix_cls: type[_Mix[_ScalarT]] | None = None,
+        multipoint_cls: type[_Multipoint[_ScalarT]] | None = None,
+        multipolygon_cls: type[_Multipolygon[_ScalarT]] | None = None,
+        multisegment_cls: type[_Multisegment[_ScalarT]] | None = None,
+        point_cls: type[_Point[_ScalarT]] | None = None,
+        polygon_cls: type[_Polygon[_ScalarT]] | None = None,
+        segment_cls: type[_Segment[_ScalarT]] | None = None,
         sqrt: _SquareRooter[_ScalarT] | None = None,
     ) -> Context[_ScalarT]:
         """
@@ -1027,12 +1027,12 @@ class Context(_Generic[_ScalarT]):
 
     def rotate_contour(
         self,
-        contour: Contour[_ScalarT],
+        contour: _Contour[_ScalarT],
         cosine: _ScalarT,
         sine: _ScalarT,
-        center: Point[_ScalarT],
+        center: _Point[_ScalarT],
         /,
-    ) -> Contour[_ScalarT]:
+    ) -> _Contour[_ScalarT]:
         """
         Returns contour rotated by given angle around given center.
 
@@ -1075,8 +1075,8 @@ class Context(_Generic[_ScalarT]):
         )
 
     def rotate_contour_around_origin(
-        self, contour: Contour[_ScalarT], cosine: _ScalarT, sine: _ScalarT, /
-    ) -> Contour[_ScalarT]:
+        self, contour: _Contour[_ScalarT], cosine: _ScalarT, sine: _ScalarT, /
+    ) -> _Contour[_ScalarT]:
         """
         Returns contour rotated by given angle around origin.
 
@@ -1109,12 +1109,12 @@ class Context(_Generic[_ScalarT]):
 
     def rotate_multipoint(
         self,
-        multipoint: Multipoint[_ScalarT],
+        multipoint: _Multipoint[_ScalarT],
         cosine: _ScalarT,
         sine: _ScalarT,
-        center: Point[_ScalarT],
+        center: _Point[_ScalarT],
         /,
-    ) -> Multipoint[_ScalarT]:
+    ) -> _Multipoint[_ScalarT]:
         """
         Returns multipoint rotated by given angle around given center.
 
@@ -1152,11 +1152,11 @@ class Context(_Generic[_ScalarT]):
 
     def rotate_multipoint_around_origin(
         self,
-        multipoint: Multipoint[_ScalarT],
+        multipoint: _Multipoint[_ScalarT],
         cosine: _ScalarT,
         sine: _ScalarT,
         /,
-    ) -> Multipoint[_ScalarT]:
+    ) -> _Multipoint[_ScalarT]:
         """
         Returns multipoint rotated by given angle around origin.
 
@@ -1189,12 +1189,12 @@ class Context(_Generic[_ScalarT]):
 
     def rotate_multipolygon(
         self,
-        multipolygon: Multipolygon[_ScalarT],
+        multipolygon: _Multipolygon[_ScalarT],
         cosine: _ScalarT,
         sine: _ScalarT,
-        center: Point[_ScalarT],
+        center: _Point[_ScalarT],
         /,
-    ) -> Multipolygon[_ScalarT]:
+    ) -> _Multipolygon[_ScalarT]:
         """
         Returns multipolygon rotated by given angle around given center.
 
@@ -1240,11 +1240,11 @@ class Context(_Generic[_ScalarT]):
 
     def rotate_multipolygon_around_origin(
         self,
-        multipolygon: Multipolygon[_ScalarT],
+        multipolygon: _Multipolygon[_ScalarT],
         cosine: _ScalarT,
         sine: _ScalarT,
         /,
-    ) -> Multipolygon[_ScalarT]:
+    ) -> _Multipolygon[_ScalarT]:
         """
         Returns multipolygon rotated by given angle around origin.
 
@@ -1289,12 +1289,12 @@ class Context(_Generic[_ScalarT]):
 
     def rotate_multisegment(
         self,
-        multisegment: Multisegment[_ScalarT],
+        multisegment: _Multisegment[_ScalarT],
         cosine: _ScalarT,
         sine: _ScalarT,
-        center: Point[_ScalarT],
+        center: _Point[_ScalarT],
         /,
-    ) -> Multisegment[_ScalarT]:
+    ) -> _Multisegment[_ScalarT]:
         """
         Returns multisegment rotated by given angle around given center.
 
@@ -1360,11 +1360,11 @@ class Context(_Generic[_ScalarT]):
 
     def rotate_multisegment_around_origin(
         self,
-        multisegment: Multisegment[_ScalarT],
+        multisegment: _Multisegment[_ScalarT],
         cosine: _ScalarT,
         sine: _ScalarT,
         /,
-    ) -> Multisegment[_ScalarT]:
+    ) -> _Multisegment[_ScalarT]:
         """
         Returns multisegment rotated by given angle around origin.
 
@@ -1427,12 +1427,12 @@ class Context(_Generic[_ScalarT]):
 
     def rotate_point(
         self,
-        point: Point[_ScalarT],
+        point: _Point[_ScalarT],
         cosine: _ScalarT,
         sine: _ScalarT,
-        center: Point[_ScalarT],
+        center: _Point[_ScalarT],
         /,
-    ) -> Point[_ScalarT]:
+    ) -> _Point[_ScalarT]:
         """
         Returns point rotated by given angle around given center.
 
@@ -1457,8 +1457,8 @@ class Context(_Generic[_ScalarT]):
         )
 
     def rotate_point_around_origin(
-        self, point: Point[_ScalarT], cosine: _ScalarT, sine: _ScalarT, /
-    ) -> Point[_ScalarT]:
+        self, point: _Point[_ScalarT], cosine: _ScalarT, sine: _ScalarT, /
+    ) -> _Point[_ScalarT]:
         """
         Returns point rotated by given angle around origin.
 
@@ -1486,12 +1486,12 @@ class Context(_Generic[_ScalarT]):
 
     def rotate_polygon(
         self,
-        polygon: Polygon[_ScalarT],
+        polygon: _Polygon[_ScalarT],
         cosine: _ScalarT,
         sine: _ScalarT,
-        center: Point[_ScalarT],
+        center: _Point[_ScalarT],
         /,
-    ) -> Polygon[_ScalarT]:
+    ) -> _Polygon[_ScalarT]:
         """
         Returns polygon rotated by given angle around given center.
 
@@ -1529,8 +1529,8 @@ class Context(_Generic[_ScalarT]):
         )
 
     def rotate_polygon_around_origin(
-        self, polygon: Polygon[_ScalarT], cosine: _ScalarT, sine: _ScalarT, /
-    ) -> Polygon[_ScalarT]:
+        self, polygon: _Polygon[_ScalarT], cosine: _ScalarT, sine: _ScalarT, /
+    ) -> _Polygon[_ScalarT]:
         """
         Returns polygon rotated by given angle around origin.
 
@@ -1568,12 +1568,12 @@ class Context(_Generic[_ScalarT]):
 
     def rotate_segment(
         self,
-        segment: Segment[_ScalarT],
+        segment: _Segment[_ScalarT],
         cosine: _ScalarT,
         sine: _ScalarT,
-        center: Point[_ScalarT],
+        center: _Point[_ScalarT],
         /,
-    ) -> Segment[_ScalarT]:
+    ) -> _Segment[_ScalarT]:
         """
         Returns segment rotated by given angle around given center.
 
@@ -1610,8 +1610,8 @@ class Context(_Generic[_ScalarT]):
         )
 
     def rotate_segment_around_origin(
-        self, segment: Segment[_ScalarT], cosine: _ScalarT, sine: _ScalarT, /
-    ) -> Segment[_ScalarT]:
+        self, segment: _Segment[_ScalarT], cosine: _ScalarT, sine: _ScalarT, /
+    ) -> _Segment[_ScalarT]:
         """
         Returns segment rotated by given angle around origin.
 
@@ -1644,11 +1644,11 @@ class Context(_Generic[_ScalarT]):
 
     def scale_contour(
         self,
-        contour: Contour[_ScalarT],
+        contour: _Contour[_ScalarT],
         factor_x: _ScalarT,
         factor_y: _ScalarT,
         /,
-    ) -> Contour[_ScalarT] | Multipoint[_ScalarT] | Segment[_ScalarT]:
+    ) -> _Contour[_ScalarT] | _Multipoint[_ScalarT] | _Segment[_ScalarT]:
         """
         Returns contour scaled by given factor.
 
@@ -1703,11 +1703,11 @@ class Context(_Generic[_ScalarT]):
 
     def scale_multipoint(
         self,
-        multipoint: Multipoint[_ScalarT],
+        multipoint: _Multipoint[_ScalarT],
         factor_x: _ScalarT,
         factor_y: _ScalarT,
         /,
-    ) -> Multipoint[_ScalarT]:
+    ) -> _Multipoint[_ScalarT]:
         """
         Returns multipoint scaled by given factor.
 
@@ -1758,12 +1758,14 @@ class Context(_Generic[_ScalarT]):
 
     def scale_multipolygon(
         self,
-        multipolygon: Multipolygon[_ScalarT],
+        multipolygon: _Multipolygon[_ScalarT],
         factor_x: _ScalarT,
         factor_y: _ScalarT,
         /,
     ) -> (
-        Multipoint[_ScalarT] | Multipolygon[_ScalarT] | Multisegment[_ScalarT]
+        _Multipoint[_ScalarT]
+        | _Multipolygon[_ScalarT]
+        | _Multisegment[_ScalarT]
     ):
         """
         Returns multipolygon scaled by given factor.
@@ -1834,16 +1836,16 @@ class Context(_Generic[_ScalarT]):
 
     def scale_multisegment(
         self,
-        multisegment: Multisegment[_ScalarT],
+        multisegment: _Multisegment[_ScalarT],
         factor_x: _ScalarT,
         factor_y: _ScalarT,
         /,
     ) -> (
-        Empty[_ScalarT]
-        | Linear[_ScalarT]
-        | Mix[_ScalarT]
-        | Multipoint[_ScalarT]
-        | Shaped[_ScalarT]
+        _Empty[_ScalarT]
+        | _Linear[_ScalarT]
+        | _Mix[_ScalarT]
+        | _Multipoint[_ScalarT]
+        | _Shaped[_ScalarT]
     ):
         """
         Returns multisegment scaled by given factor.
@@ -1943,8 +1945,12 @@ class Context(_Generic[_ScalarT]):
         )
 
     def scale_point(
-        self, point: Point[_ScalarT], factor_x: _ScalarT, factor_y: _ScalarT, /
-    ) -> Point[_ScalarT]:
+        self,
+        point: _Point[_ScalarT],
+        factor_x: _ScalarT,
+        factor_y: _ScalarT,
+        /,
+    ) -> _Point[_ScalarT]:
         """
         Returns point scaled by given factor.
 
@@ -1970,11 +1976,11 @@ class Context(_Generic[_ScalarT]):
 
     def scale_polygon(
         self,
-        polygon: Polygon[_ScalarT],
+        polygon: _Polygon[_ScalarT],
         factor_x: _ScalarT,
         factor_y: _ScalarT,
         /,
-    ) -> Multipoint[_ScalarT] | Polygon[_ScalarT] | Segment[_ScalarT]:
+    ) -> _Multipoint[_ScalarT] | _Polygon[_ScalarT] | _Segment[_ScalarT]:
         """
         Returns polygon scaled by given factor.
 
@@ -2026,11 +2032,11 @@ class Context(_Generic[_ScalarT]):
 
     def scale_segment(
         self,
-        segment: Segment[_ScalarT],
+        segment: _Segment[_ScalarT],
         factor_x: _ScalarT,
         factor_y: _ScalarT,
         /,
-    ) -> Multipoint[_ScalarT] | Segment[_ScalarT]:
+    ) -> _Multipoint[_ScalarT] | _Segment[_ScalarT]:
         """
         Returns segment scaled by given factor.
 
@@ -2073,7 +2079,7 @@ class Context(_Generic[_ScalarT]):
             self._segment_cls,
         )
 
-    def segment_box(self, segment: Segment[_ScalarT], /) -> Box[_ScalarT]:
+    def segment_box(self, segment: _Segment[_ScalarT], /) -> _Box[_ScalarT]:
         """
         Constructs box from segment.
 
@@ -2097,8 +2103,8 @@ class Context(_Generic[_ScalarT]):
         return _boxed.from_segment(segment, self._box_cls)
 
     def segment_centroid(
-        self, segment: Segment[_ScalarT], /
-    ) -> Point[_ScalarT]:
+        self, segment: _Segment[_ScalarT], /
+    ) -> _Point[_ScalarT]:
         """
         Constructs centroid of a segment.
 
@@ -2120,7 +2126,7 @@ class Context(_Generic[_ScalarT]):
         )
 
     def segment_contains_point(
-        self, segment: Segment[_ScalarT], point: Point[_ScalarT], /
+        self, segment: _Segment[_ScalarT], point: _Point[_ScalarT], /
     ) -> bool:
         """
         Checks if a segment contains given point.
@@ -2162,7 +2168,7 @@ class Context(_Generic[_ScalarT]):
             segment.start, segment.end, point, self.angle_orientation
         )
 
-    def segment_length(self, segment: Segment[_ScalarT], /) -> _ScalarT:
+    def segment_length(self, segment: _Segment[_ScalarT], /) -> _ScalarT:
         """
         Returns Euclidean length of a segment.
 
@@ -2186,7 +2192,7 @@ class Context(_Generic[_ScalarT]):
         )
 
     def segment_point_squared_distance(
-        self, segment: Segment[_ScalarT], point: Point[_ScalarT], /
+        self, segment: _Segment[_ScalarT], point: _Point[_ScalarT], /
     ) -> _ScalarT:
         """
         Returns squared Euclidean distance between segment and a point.
@@ -2221,8 +2227,8 @@ class Context(_Generic[_ScalarT]):
         )
 
     def segments_box(
-        self, segments: _Sequence[Segment[_ScalarT]], /
-    ) -> Box[_ScalarT]:
+        self, segments: _Sequence[_Segment[_ScalarT]], /
+    ) -> _Box[_ScalarT]:
         """
         Constructs box from segments.
 
@@ -2251,8 +2257,8 @@ class Context(_Generic[_ScalarT]):
         return _boxed.from_segments(segments, self._box_cls)
 
     def segments_intersection(
-        self, first: Segment[_ScalarT], second: Segment[_ScalarT], /
-    ) -> Point[_ScalarT]:
+        self, first: _Segment[_ScalarT], second: _Segment[_ScalarT], /
+    ) -> _Point[_ScalarT]:
         """
         Returns intersection point of two segments.
 
@@ -2299,8 +2305,8 @@ class Context(_Generic[_ScalarT]):
         )
 
     def segments_relation(
-        self, test: Segment[_ScalarT], goal: Segment[_ScalarT], /
-    ) -> Relation:
+        self, test: _Segment[_ScalarT], goal: _Segment[_ScalarT], /
+    ) -> _Relation:
         """
         Returns relation between two segments.
 
@@ -2374,7 +2380,7 @@ class Context(_Generic[_ScalarT]):
         )
 
     def segments_squared_distance(
-        self, first: Segment[_ScalarT], second: Segment[_ScalarT], /
+        self, first: _Segment[_ScalarT], second: _Segment[_ScalarT], /
     ) -> _ScalarT:
         """
         Returns squared Euclidean distance between two segments.
@@ -2414,8 +2420,12 @@ class Context(_Generic[_ScalarT]):
         )
 
     def translate_contour(
-        self, contour: Contour[_ScalarT], step_x: _ScalarT, step_y: _ScalarT, /
-    ) -> Contour[_ScalarT]:
+        self,
+        contour: _Contour[_ScalarT],
+        step_x: _ScalarT,
+        step_y: _ScalarT,
+        /,
+    ) -> _Contour[_ScalarT]:
         """
         Returns contour translated by given step.
 
@@ -2463,11 +2473,11 @@ class Context(_Generic[_ScalarT]):
 
     def translate_multipoint(
         self,
-        multipoint: Multipoint[_ScalarT],
+        multipoint: _Multipoint[_ScalarT],
         step_x: _ScalarT,
         step_y: _ScalarT,
         /,
-    ) -> Multipoint[_ScalarT]:
+    ) -> _Multipoint[_ScalarT]:
         """
         Returns multipoint translated by given step.
 
@@ -2514,11 +2524,11 @@ class Context(_Generic[_ScalarT]):
 
     def translate_multipolygon(
         self,
-        multipolygon: Multipolygon[_ScalarT],
+        multipolygon: _Multipolygon[_ScalarT],
         step_x: _ScalarT,
         step_y: _ScalarT,
         /,
-    ) -> Multipolygon[_ScalarT]:
+    ) -> _Multipolygon[_ScalarT]:
         """
         Returns multipolygon translated by given step.
 
@@ -2589,11 +2599,11 @@ class Context(_Generic[_ScalarT]):
 
     def translate_multisegment(
         self,
-        multisegment: Multisegment[_ScalarT],
+        multisegment: _Multisegment[_ScalarT],
         step_x: _ScalarT,
         step_y: _ScalarT,
         /,
-    ) -> Multisegment[_ScalarT]:
+    ) -> _Multisegment[_ScalarT]:
         """
         Returns multisegment translated by given step.
 
@@ -2693,8 +2703,8 @@ class Context(_Generic[_ScalarT]):
         )
 
     def translate_point(
-        self, point: Point[_ScalarT], step_x: _ScalarT, step_y: _ScalarT, /
-    ) -> Point[_ScalarT]:
+        self, point: _Point[_ScalarT], step_x: _ScalarT, step_y: _ScalarT, /
+    ) -> _Point[_ScalarT]:
         """
         Returns point translated by given step.
 
@@ -2719,8 +2729,12 @@ class Context(_Generic[_ScalarT]):
         )
 
     def translate_polygon(
-        self, polygon: Polygon[_ScalarT], step_x: _ScalarT, step_y: _ScalarT, /
-    ) -> Polygon[_ScalarT]:
+        self,
+        polygon: _Polygon[_ScalarT],
+        step_x: _ScalarT,
+        step_y: _ScalarT,
+        /,
+    ) -> _Polygon[_ScalarT]:
         """
         Returns polygon translated by given step.
 
@@ -2767,8 +2781,12 @@ class Context(_Generic[_ScalarT]):
         )
 
     def translate_segment(
-        self, segment: Segment[_ScalarT], step_x: _ScalarT, step_y: _ScalarT, /
-    ) -> Segment[_ScalarT]:
+        self,
+        segment: _Segment[_ScalarT],
+        step_x: _ScalarT,
+        step_y: _ScalarT,
+        /,
+    ) -> _Segment[_ScalarT]:
         """
         Returns segment translated by given step.
 
@@ -2814,25 +2832,25 @@ class Context(_Generic[_ScalarT]):
         )
 
     _angular_context: _angular.Context[_ScalarT]
-    _box_cls: type[Box[_ScalarT]]
+    _box_cls: type[_Box[_ScalarT]]
     _centroidal_context: _centroidal.Context[_ScalarT]
     _circular_context: _circular.Context[_ScalarT]
-    _contour_cls: type[Contour[_ScalarT]]
+    _contour_cls: type[_Contour[_ScalarT]]
     _coordinate_factory: _ScalarFactory[_ScalarT]
-    _empty: Empty[_ScalarT]
-    _empty_cls: type[Empty[_ScalarT]]
+    _empty: _Empty[_ScalarT]
+    _empty_cls: type[_Empty[_ScalarT]]
     _measured_context: _measured.Context[_ScalarT]
     _metric_context: _metric.Context[_ScalarT]
-    _mix_cls: type[Mix[_ScalarT]]
-    _multipoint_cls: type[Multipoint[_ScalarT]]
-    _multipolygon_cls: type[Multipolygon[_ScalarT]]
-    _multisegment_cls: type[Multisegment[_ScalarT]]
-    _origin: Point[_ScalarT]
-    _point_cls: type[Point[_ScalarT]]
-    _polygon_cls: type[Polygon[_ScalarT]]
+    _mix_cls: type[_Mix[_ScalarT]]
+    _multipoint_cls: type[_Multipoint[_ScalarT]]
+    _multipolygon_cls: type[_Multipolygon[_ScalarT]]
+    _multisegment_cls: type[_Multisegment[_ScalarT]]
+    _origin: _Point[_ScalarT]
+    _point_cls: type[_Point[_ScalarT]]
+    _polygon_cls: type[_Polygon[_ScalarT]]
     _rotation_context: _rotation.Context[_ScalarT]
     _scaling_context: _scaling.Context[_ScalarT]
-    _segment_cls: type[Segment[_ScalarT]]
+    _segment_cls: type[_Segment[_ScalarT]]
     _segment_context: _segment.Context[_ScalarT]
     _sqrt: _SquareRooter[_ScalarT]
     _translation_context: _translation.Context[_ScalarT]
@@ -2841,9 +2859,9 @@ class Context(_Generic[_ScalarT]):
 
     def _segment_contains_point(
         self,
-        start: Point[_ScalarT],
-        end: Point[_ScalarT],
-        point: Point[_ScalarT],
+        start: _Point[_ScalarT],
+        end: _Point[_ScalarT],
+        point: _Point[_ScalarT],
         /,
     ) -> bool:
         return self._segment_context.containment_checker(
@@ -2852,10 +2870,10 @@ class Context(_Generic[_ScalarT]):
 
     def _segments_intersect(
         self,
-        first_start: Point[_ScalarT],
-        first_end: Point[_ScalarT],
-        second_start: Point[_ScalarT],
-        second_end: Point[_ScalarT],
+        first_start: _Point[_ScalarT],
+        first_end: _Point[_ScalarT],
+        second_start: _Point[_ScalarT],
+        second_end: _Point[_ScalarT],
         /,
     ) -> bool:
         return self._segment_context.collision_detector(
@@ -2898,23 +2916,23 @@ class Context(_Generic[_ScalarT]):
         cls,
         /,
         *,
-        box_cls: type[Box[_ScalarT]] = _geometries.Box,
-        contour_cls: type[Contour[_ScalarT]] = _geometries.Contour,
-        coordinate_factory: Callable[[int], _ScalarT],
-        empty_cls: type[Empty[_ScalarT]] = _geometries.Empty,
-        mix_cls: type[Mix[_ScalarT]] = _geometries.Mix,
-        multipoint_cls: type[Multipoint[_ScalarT]] = _geometries.Multipoint,
+        box_cls: type[_Box[_ScalarT]] = _geometries.Box,
+        contour_cls: type[_Contour[_ScalarT]] = _geometries.Contour,
+        coordinate_factory: _Callable[[int], _ScalarT],
+        empty_cls: type[_Empty[_ScalarT]] = _geometries.Empty,
+        mix_cls: type[_Mix[_ScalarT]] = _geometries.Mix,
+        multipoint_cls: type[_Multipoint[_ScalarT]] = _geometries.Multipoint,
         multipolygon_cls: type[
-            Multipolygon[_ScalarT]
+            _Multipolygon[_ScalarT]
         ] = _geometries.Multipolygon,
         multisegment_cls: type[
-            Multisegment[_ScalarT]
+            _Multisegment[_ScalarT]
         ] = _geometries.Multisegment,
-        point_cls: type[Point[_ScalarT]] = _geometries.Point,
-        polygon_cls: type[Polygon[_ScalarT]] = _geometries.Polygon,
-        segment_cls: type[Segment[_ScalarT]] = _geometries.Segment,
+        point_cls: type[_Point[_ScalarT]] = _geometries.Point,
+        polygon_cls: type[_Polygon[_ScalarT]] = _geometries.Polygon,
+        segment_cls: type[_Segment[_ScalarT]] = _geometries.Segment,
         sqrt: _SquareRooter[_ScalarT],
-    ) -> Self:
+    ) -> _Self:
         zero = coordinate_factory(0)
         self = super().__new__(cls)
         (

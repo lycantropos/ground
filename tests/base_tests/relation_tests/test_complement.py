@@ -1,6 +1,6 @@
 from hypothesis import given
 
-from ground.base import Relation
+from ground.enums import Relation
 from tests.utils import equivalence
 
 from . import strategies

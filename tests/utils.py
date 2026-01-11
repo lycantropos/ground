@@ -11,7 +11,8 @@ from symba.base import Expression
 from typing_extensions import TypeIs
 
 from ground._core import geometries, primitive
-from ground.base import Context, Location, Orientation, Relation
+from ground.context import Context
+from ground.enums import Location, Orientation, Relation
 from ground.hints import (
     Box,
     Contour,

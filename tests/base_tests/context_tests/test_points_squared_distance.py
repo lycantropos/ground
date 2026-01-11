@@ -1,6 +1,6 @@
 from hypothesis import given
 
-from ground.base import Context
+from ground.context import Context
 from ground.hints import Point
 from tests.hints import PointsPair, ScalarT
 from tests.utils import to_coordinate_checker

@@ -1,6 +1,7 @@
 from hypothesis import given
 
-from ground.base import Context, Relation
+from ground.context import Context
+from ground.enums import Relation
 from ground.hints import Segment
 from tests.hints import ScalarT
 from tests.utils import (

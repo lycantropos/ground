@@ -4,7 +4,8 @@ from typing import TypeVar
 
 from hypothesis import strategies
 
-from ground.base import Context, Orientation
+from ground.context import Context
+from ground.enums import Orientation
 from ground.hints import (
     Box,
     Contour,

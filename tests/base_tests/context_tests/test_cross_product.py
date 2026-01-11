@@ -1,6 +1,6 @@
 from hypothesis import given
 
-from ground.base import Context
+from ground.context import Context
 from tests.hints import PointsPair, PointsQuadruplet, ScalarT
 from tests.utils import (
     equivalence,

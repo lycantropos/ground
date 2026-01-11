@@ -1,7 +1,7 @@
 from hypothesis import given
 from symba.base import Expression
 
-from ground.base import Context
+from ground.context import Context
 from ground.hints import Contour
 from tests.hints import ScalarT
 from tests.utils import reverse_contour, reverse_contour_coordinates

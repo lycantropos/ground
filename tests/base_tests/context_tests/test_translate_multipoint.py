@@ -1,6 +1,6 @@
 from hypothesis import given
 
-from ground.base import Context
+from ground.context import Context
 from ground.hints import Multipoint
 from tests.hints import ScalarT
 from tests.utils import reverse_multipoint, reverse_multipoint_coordinates

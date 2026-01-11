@@ -3,7 +3,7 @@ from fractions import Fraction
 from hypothesis import strategies as st
 from symba.base import sqrt
 
-from ground.base import Context
+from ground.context import Context
 
 from .coordinates import rational_coordinates_strategies
 

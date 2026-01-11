@@ -6,7 +6,7 @@ from operator import itemgetter
 from hypothesis import strategies as st
 from symba.base import sqrt
 
-from ground.base import Context
+from ground.context import Context
 from tests.strategies.contexts import (
     contexts_with_coordinates_strategies,
     rational_contexts_with_coordinates_strategies,

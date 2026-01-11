@@ -1,6 +1,7 @@
 from hypothesis import given
 
-from ground.base import Context, Location
+from ground.context import Context
+from ground.enums import Location
 from tests.hints import PointsQuadruplet, PointsTriplet, ScalarT
 from tests.utils import is_even_permutation, permute, to_opposite_location
 

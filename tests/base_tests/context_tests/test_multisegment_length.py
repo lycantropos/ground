@@ -1,7 +1,7 @@
 from hypothesis import given
 from symba.base import Expression
 
-from ground.base import Context
+from ground.context import Context
 from ground.hints import Multisegment
 from tests.hints import ScalarT
 from tests.utils import reverse_multisegment, reverse_multisegment_coordinates
