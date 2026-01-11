@@ -6,7 +6,6 @@ from ground.context import Context
 from ground.hints import Segment
 from tests.hints import ScalarT
 from tests.utils import (
-    is_box,
     permute,
     reverse_box_coordinates,
     reverse_segments_coordinates,
@@ -24,7 +23,7 @@ def test_basic(
 
     result = context.segments_box(segments)
 
-    assert is_box(result)
+    assert isinstance(result, context.box_cls)
 
 
 @given(strategies.contexts_with_segments_sequences)

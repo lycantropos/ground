@@ -126,14 +126,8 @@ def are_multipoints_equivalent(
     return frozenset(left.points) == frozenset(right.points)
 
 
-is_box = Box.__instancecheck__
-
-
 def is_even_permutation(index: int, size: int) -> bool:
     return ((index % math.factorial(size) - 1) % 4) > 1
-
-
-is_segment = Segment.__instancecheck__
 
 
 def nth_permutation(index: int, size: int) -> Permutation:

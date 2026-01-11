@@ -3,7 +3,6 @@ from hypothesis import given
 from ground.context import Context
 from ground.hints import Box
 from tests.hints import ScalarT
-from tests.utils import is_box
 
 from . import strategies
 
@@ -18,7 +17,7 @@ def test_basic(
 
     result = context.merged_box(first_box, second_box)
 
-    assert is_box(result)
+    assert isinstance(result, context.box_cls)
 
 
 @given(strategies.contexts_with_boxes_triplets)
