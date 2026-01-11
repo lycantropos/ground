@@ -2998,7 +2998,7 @@ class Context(_Generic[_ScalarT]):
 
 
 _context_repr = _generate_repr(
-    Context.__init__,
+    Context.__new__,
     argument_serializer=_serializers.complex_,
     skip_defaults=True,
 )
