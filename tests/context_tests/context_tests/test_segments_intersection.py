@@ -4,7 +4,6 @@ from ground.context import Context
 from ground.hints import Segment
 from tests.hints import ScalarT
 from tests.utils import (
-    is_point,
     reverse_point_coordinates,
     reverse_segment,
     reverse_segment_coordinates,
@@ -23,7 +22,7 @@ def test_basic(
 
     result = context.segments_intersection(first, second)
 
-    assert is_point(result)
+    assert isinstance(result, context.point_cls)
 
 
 @given(strategies.contexts_with_rational_crossing_or_touching_segments_pairs)

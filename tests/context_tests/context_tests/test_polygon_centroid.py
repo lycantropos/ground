@@ -4,7 +4,6 @@ from ground.context import Context
 from ground.hints import Polygon
 from tests.hints import ScalarT
 from tests.utils import (
-    is_point,
     reverse_point_coordinates,
     reverse_polygon_border,
     reverse_polygon_coordinates,
@@ -24,7 +23,7 @@ def test_basic(
 
     result = context.polygon_centroid(polygon)
 
-    assert is_point(result)
+    assert isinstance(result, context.point_cls)
 
 
 @given(strategies.contexts_with_rational_polygons)

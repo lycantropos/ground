@@ -3,7 +3,7 @@ from hypothesis import given
 from ground.context import Context
 from ground.hints import Multipoint
 from tests.hints import ScalarT
-from tests.utils import is_point, permute_multipoint, reverse_multipoint
+from tests.utils import permute_multipoint, reverse_multipoint
 
 from . import strategies
 
@@ -16,7 +16,7 @@ def test_basic(
 
     result = context.multipoint_centroid(multipoint)
 
-    assert is_point(result)
+    assert isinstance(result, context.point_cls)
 
 
 @given(strategies.contexts_with_rational_multipoints)

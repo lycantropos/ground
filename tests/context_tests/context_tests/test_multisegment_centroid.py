@@ -4,7 +4,6 @@ from ground.context import Context
 from ground.hints import Multisegment
 from tests.hints import ScalarT
 from tests.utils import (
-    is_point,
     reverse_multisegment,
     reverse_multisegment_coordinates,
     reverse_point_coordinates,
@@ -22,7 +21,7 @@ def test_basic(
 
     result = context.multisegment_centroid(multisegment)
 
-    assert is_point(result)
+    assert isinstance(result, context.point_cls)
 
 
 @given(strategies.contexts_with_rational_multisegments)

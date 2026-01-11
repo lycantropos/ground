@@ -133,7 +133,6 @@ def is_even_permutation(index: int, size: int) -> bool:
     return ((index % math.factorial(size) - 1) % 4) > 1
 
 
-is_point = Point.__instancecheck__
 is_segment = Segment.__instancecheck__
 
 

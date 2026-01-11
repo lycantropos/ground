@@ -4,7 +4,6 @@ from ground.context import Context
 from ground.hints import Multipolygon
 from tests.hints import ScalarT
 from tests.utils import (
-    is_point,
     reverse_multipolygon,
     reverse_multipolygon_coordinates,
     reverse_point_coordinates,
@@ -22,7 +21,7 @@ def test_basic(
 
     result = context.multipolygon_centroid(polygons)
 
-    assert is_point(result)
+    assert isinstance(result, context.point_cls)
 
 
 @given(strategies.contexts_with_rational_multipolygons)

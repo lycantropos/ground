@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from abc import abstractmethod
 from collections.abc import Callable, Sequence
-from typing import Any, Final, Protocol, TypeAlias, TypeVar, runtime_checkable
+from typing import Any, Final, Protocol, TypeAlias, TypeVar
 
 from typing_extensions import Self
 
@@ -11,7 +11,10 @@ import ground
 MODULE_NAME: Final[str] = f'{ground.__name__}.hints'
 
 
-class _Scalar(Protocol):
+class Scalar(Protocol):
+    __module__: str = MODULE_NAME
+    __slots__ = ()
+
     def __add__(self, other: Self, /) -> Self: ...
     def __ge__(self, other: Self, /) -> bool: ...
     def __gt__(self, other: Self, /) -> bool: ...
@@ -23,13 +26,12 @@ class _Scalar(Protocol):
     def __truediv__(self, other: Self, /) -> Self: ...
 
 
-ScalarT = TypeVar('ScalarT', bound=_Scalar)
+ScalarT = TypeVar('ScalarT', bound=Scalar)
 ScalarFactory: TypeAlias = Callable[[int], ScalarT]
 SquareRooter: TypeAlias = Callable[[Any], ScalarT]
 ScalarT_co = TypeVar('ScalarT_co', bound=Any, covariant=True)
 
 
-@runtime_checkable
 class Point(Protocol[ScalarT_co]):
     """
     **Point** is a minimal element of the plane
@@ -92,7 +94,6 @@ TernaryPointFunction: TypeAlias = Callable[
 ]
 
 
-@runtime_checkable
 class Box(Protocol[ScalarT_co]):
     """
     **Box** is a limited closed region
@@ -134,7 +135,6 @@ class Box(Protocol[ScalarT_co]):
         """Constructs box given its coordinates limits."""
 
 
-@runtime_checkable
 class Empty(Protocol[ScalarT_co]):
     """Represents an empty set of points."""
 
@@ -149,7 +149,6 @@ class Empty(Protocol[ScalarT_co]):
 _T = TypeVar('_T')
 
 
-@runtime_checkable
 class Multipoint(Protocol[ScalarT_co]):
     """
     **Multipoint** is a discrete geometry
@@ -169,7 +168,6 @@ class Multipoint(Protocol[ScalarT_co]):
         """Constructs multipoint given its points."""
 
 
-@runtime_checkable
 class Segment(Protocol[ScalarT_co]):
     """
     **Segment** (or **line segment**) is a linear geometry that represents
@@ -197,7 +195,6 @@ class Segment(Protocol[ScalarT_co]):
         """Constructs segment given its endpoints."""
 
 
-@runtime_checkable
 class Multisegment(Protocol[ScalarT_co]):
     """
     **Multisegment** is a linear geometry that represents set of two or more
@@ -217,7 +214,6 @@ class Multisegment(Protocol[ScalarT_co]):
         """Constructs multisegment given its segments."""
 
 
-@runtime_checkable
 class Contour(Protocol[ScalarT_co]):
     """
     **Contour** is a linear geometry that represents closed simple polyline
@@ -237,7 +233,6 @@ class Contour(Protocol[ScalarT_co]):
         """Constructs contour given its vertices."""
 
 
-@runtime_checkable
 class Polygon(Protocol[ScalarT_co]):
     """
     **Polygon** is a shaped geometry that represents limited closed region
@@ -268,7 +263,6 @@ class Polygon(Protocol[ScalarT_co]):
         """Constructs polygon given its border and holes."""
 
 
-@runtime_checkable
 class Multipolygon(Protocol[ScalarT_co]):
     """
     **Multipolygon** is a shaped geometry that represents set of two or more
@@ -294,7 +288,6 @@ Linear: TypeAlias = (
 Shaped: TypeAlias = Polygon[ScalarT_co] | Multipolygon[ScalarT_co]
 
 
-@runtime_checkable
 class Mix(Protocol[ScalarT_co]):
     """
     **Mix** is a set of two or more non-empty geometries

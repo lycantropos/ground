@@ -9,6 +9,7 @@ Multipolygon = _hints.Multipolygon
 Multisegment = _hints.Multisegment
 Point = _hints.Point
 Polygon = _hints.Polygon
+Scalar = _hints.Scalar
 Segment = _hints.Segment
 
 assert Box.__module__ == __name__
@@ -20,6 +21,7 @@ assert Multipolygon.__module__ == __name__
 assert Multisegment.__module__ == __name__
 assert Point.__module__ == __name__
 assert Polygon.__module__ == __name__
+assert Scalar.__module__ == __name__
 assert Segment.__module__ == __name__
 
 Linear = _hints.Linear[_hints.ScalarT]

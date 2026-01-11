@@ -6,12 +6,7 @@ from hypothesis import given
 from ground.context import Context
 from ground.hints import Point
 from tests.hints import ScalarT
-from tests.utils import (
-    equivalence,
-    is_point,
-    permute,
-    to_contour_vertices_orientation,
-)
+from tests.utils import equivalence, permute, to_contour_vertices_orientation
 
 from . import strategies
 
@@ -25,7 +20,11 @@ def test_basic(
     result = context.points_convex_hull(points)
 
     assert isinstance(result, abc.Sequence)
-    assert all(map(is_point, result))
+    assert [
+        element
+        for element in result
+        if not isinstance(element, context.point_cls)
+    ] == []
 
 
 @given(strategies.contexts_with_points_lists, strategies.indices)

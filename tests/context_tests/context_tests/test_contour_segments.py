@@ -5,7 +5,7 @@ from hypothesis import given
 from ground.context import Context
 from ground.hints import Contour
 from tests.hints import ScalarT
-from tests.utils import is_segment, rotate_contour, rotate_sequence
+from tests.utils import rotate_contour, rotate_sequence
 
 from . import strategies
 
@@ -20,7 +20,11 @@ def test_basic(
 
     assert isinstance(result, abc.Sequence)
     assert len(result) == len(contour.vertices)
-    assert all(is_segment(element) for element in result)
+    assert [
+        element
+        for element in result
+        if not isinstance(element, context.segment_cls)
+    ] == []
 
 
 @given(strategies.contexts_with_rational_contours, strategies.indices)
