@@ -2993,6 +2993,26 @@ class Context(_Generic[_ScalarT]):
         )
         return self
 
+    def __eq__(self, other: _Any, /) -> _Any:
+        return (
+            (
+                self._box_cls is other._box_cls
+                and self._contour_cls is other._contour_cls
+                and self._coordinate_factory is other._coordinate_factory
+                and self._empty_cls is other._empty_cls
+                and self._mix_cls is other._mix_cls
+                and self._multipoint_cls is other._multipoint_cls
+                and self._multipolygon_cls is other._multipolygon_cls
+                and self._multisegment_cls is other._multisegment_cls
+                and self._point_cls is other._point_cls
+                and self._polygon_cls is other._polygon_cls
+                and self._segment_cls is other._segment_cls
+                and self._sqrt is other._sqrt
+            )
+            if isinstance(other, Context)
+            else NotImplemented
+        )
+
     def __repr__(self, /) -> str:
         return _context_repr(self)
 
