@@ -44,7 +44,7 @@ python -m pip install -e '.'
 
 ## Usage
 
-```python-repl
+```python
 >>> from ground.context import get_context
 >>> context = get_context()
 >>> Multipoint = context.multipoint_cls
