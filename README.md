@@ -44,52 +44,47 @@ python -m pip install -e '.'
 
 ## Usage
 
-```python
->> > from ground.context import get_context
->> > context = get_context()
->> > Multipoint = context.multipoint_cls
->> > Point = context.point_cls
->> > Segment = context.segment_cls
->> > x_unit = Point(1, 0)
->> > y_unit = Point(0, 1)
->> > from ground.context import Kind
->> > context.angle_kind(context.origin, x_unit, y_unit) is Kind.RIGHT
+```python-repl
+>>> from ground.context import get_context
+>>> context = get_context()
+>>> Multipoint = context.multipoint_cls
+>>> Point = context.point_cls
+>>> Segment = context.segment_cls
+>>> x_unit = Point(1, 0)
+>>> y_unit = Point(0, 1)
+>>> from ground.enums import Kind
+>>> context.angle_kind(context.origin, x_unit, y_unit) is Kind.RIGHT
 True
->> > from ground.context import Orientation
->> > context.angle_orientation(
-  ...
-context.origin, x_unit, y_unit
+>>> from ground.enums import Orientation
+>>> context.angle_orientation(
+...     context.origin, x_unit, y_unit
 ... ) is Orientation.COUNTERCLOCKWISE
 True
->> > context.cross_product(context.origin, x_unit, context.origin, y_unit) == 1
+>>> context.cross_product(context.origin, x_unit, context.origin, y_unit) == 1
 True
->> > context.dot_product(context.origin, x_unit, context.origin, y_unit) == 0
+>>> context.dot_product(context.origin, x_unit, context.origin, y_unit) == 0
 True
->> > context.multipoint_centroid(
-  Multipoint([context.origin])) == context.origin
+>>> context.multipoint_centroid(Multipoint([context.origin])) == context.origin
 True
->> > context.points_convex_hull([context.origin, x_unit, y_unit]) == [
-  ...   context.origin,
-  ...   x_unit,
-  ...   y_unit,
-  ...]
+>>> context.points_convex_hull([context.origin, x_unit, y_unit]) == [
+...   context.origin,
+...   x_unit,
+...   y_unit,
+... ]
 True
->> > context.segment_contains_point(Segment(context.origin, x_unit), y_unit)
+>>> context.segment_contains_point(Segment(context.origin, x_unit), y_unit)
 False
->> > context.segment_contains_point(
-  ...
-Segment(context.origin, x_unit), context.origin
+>>> context.segment_contains_point(
+...     Segment(context.origin, x_unit), context.origin
 ... )
 True
->> > context.segments_intersection(
-  ...
-Segment(context.origin, x_unit), Segment(context.origin, y_unit)
+>>> context.segments_intersection(
+...     Segment(context.origin, x_unit), Segment(context.origin, y_unit)
 ... ) == context.origin
 True
->> > from ground.context import Relation
->> > context.segments_relation(
-  ...
-Segment(context.origin, x_unit), Segment(context.origin, y_unit)
+>>> from ground.enums import Relation
+>>> context.segments_relation(
+...     Segment(context.origin, x_unit), Segment(context.origin, y_unit)
 ... ) is Relation.TOUCH
 True
 
