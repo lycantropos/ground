@@ -472,19 +472,19 @@ class Context(_Generic[_ScalarT]):
         ...         )
         ...     )
         ...     == [
-        ...         Segment(Point(0, 2), Point(0, 0)),
         ...         Segment(Point(0, 0), Point(2, 0)),
         ...         Segment(Point(2, 0), Point(2, 2)),
         ...         Segment(Point(2, 2), Point(0, 2)),
+        ...         Segment(Point(0, 2), Point(0, 0)),
         ...     ]
         ... )
         True
         """
         segment_cls, vertices = self._segment_cls, contour.vertices
         return [
-            segment_cls(vertices[index - 1], vertices[index])
-            for index in range(len(vertices))
-        ]
+            segment_cls(vertices[index], vertices[index + 1])
+            for index in range(len(vertices) - 1)
+        ] + [segment_cls(vertices[-1], vertices[0])]
 
     def contours_box(
         self, contours: _Sequence[_Contour[_ScalarT]], /
