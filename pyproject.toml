@@ -40,7 +40,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [tool.bumpversion]
-current_version = "10.0.0"
+current_version = "11.0.0"
 parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
 serialize = ["{major}.{minor}.{patch}"]
 search = "{current_version}"
