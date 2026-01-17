@@ -7,6 +7,7 @@ from typing_extensions import Self
 
 from ground._core.hints import (
     Box,
+    HasRepr,
     Point,
     QuaternaryPointFunction,
     ScalarFactory,
@@ -61,7 +62,7 @@ SegmentSegmentMetric: TypeAlias = Callable[
 ]
 
 
-class Context(Generic[ScalarT]):
+class Context(HasRepr, Generic[ScalarT]):
     @property
     def box_point_squared_metric(self, /) -> BoxPointMetric[ScalarT]:
         return self._box_point_squared_metric
@@ -116,15 +117,13 @@ class Context(Generic[ScalarT]):
         self._segment_segment_squared_metric = segment_segment_squared_metric
         return self
 
-    def __repr__(self, /) -> str:
-        return _context_repr(self)
+    __repr__ = generate_repr(
+        __new__,
+        argument_serializer=serializers.complex_,
+        with_module_name=True,
+    )
 
 
-_context_repr = generate_repr(
-    Context.__new__,
-    argument_serializer=serializers.complex_,
-    with_module_name=True,
-)
 plain_context: Context[Any] = Context(
     box_point_squared_metric=plain_box.point_squared_distance,
     box_segment_squared_metric=plain_box.segment_squared_distance,

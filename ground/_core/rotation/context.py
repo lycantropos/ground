@@ -7,6 +7,7 @@ from typing_extensions import Self
 
 from ground._core.hints import (
     Contour,
+    HasRepr,
     Multipoint,
     Multipolygon,
     Multisegment,
@@ -30,7 +31,7 @@ PointToStep: TypeAlias = Callable[
 ]
 
 
-class Context(Generic[ScalarT]):
+class Context(HasRepr, Generic[ScalarT]):
     @property
     def point_to_step(self, /) -> PointToStep[ScalarT]:
         return self._point_to_step
@@ -326,15 +327,13 @@ class Context(Generic[ScalarT]):
         self._rotate_translate_point = rotate_translate_point
         return self
 
-    def __repr__(self, /) -> str:
-        return _context_repr(self)
+    __repr__ = generate_repr(
+        __new__,
+        argument_serializer=serializers.complex_,
+        with_module_name=True,
+    )
 
 
-_context_repr = generate_repr(
-    Context.__new__,
-    argument_serializer=serializers.complex_,
-    with_module_name=True,
-)
 plain_context: Context[Any] = Context(
     point_to_step=plain.point_to_step,
     rotate_point_around_origin=plain.rotate_point_around_origin,

@@ -11,6 +11,12 @@ import ground
 MODULE_NAME: Final[str] = f'{ground.__name__}.hints'
 
 
+class HasRepr(Protocol):
+    @abstractmethod
+    def __repr__(self, /) -> str:
+        raise NotImplementedError
+
+
 class Scalar(Protocol):
     __module__: str = MODULE_NAME
     __slots__ = ()

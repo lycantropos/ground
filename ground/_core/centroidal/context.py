@@ -7,6 +7,7 @@ from typing_extensions import Self
 
 from ground._core.hints import (
     Contour,
+    HasRepr,
     Multipoint,
     Multipolygon,
     Multisegment,
@@ -68,7 +69,7 @@ SegmentCentroid: TypeAlias = Callable[
 ]
 
 
-class Context(Generic[ScalarT]):
+class Context(HasRepr, Generic[ScalarT]):
     @property
     def contour_centroid(self, /) -> ContourCentroid[ScalarT]:
         return self._contour_centroid
@@ -137,15 +138,13 @@ class Context(Generic[ScalarT]):
         self._segment_centroid = segment_centroid
         return self
 
-    def __repr__(self, /) -> str:
-        return _context_repr(self)
+    __repr__ = generate_repr(
+        __new__,
+        argument_serializer=serializers.complex_,
+        with_module_name=True,
+    )
 
 
-_context_repr = generate_repr(
-    Context.__new__,
-    argument_serializer=serializers.complex_,
-    with_module_name=True,
-)
 plain_context: Context[Any] = Context(
     contour_centroid=plain_contour.centroid,
     multipoint_centroid=plain_multipoint.centroid,

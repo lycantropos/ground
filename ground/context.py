@@ -31,6 +31,7 @@ from ._core.enums import (
     Relation as _Relation,
 )
 from ._core.hints import (
+    HasRepr as _HasRepr,
     QuaternaryPointFunction as _QuaternaryPointFunction,
     ScalarFactory as _ScalarFactory,
     ScalarT as _ScalarT,
@@ -53,7 +54,7 @@ from .hints import (
 
 
 @_final
-class Context(_Generic[_ScalarT]):
+class Context(_HasRepr, _Generic[_ScalarT]):
     """Represents common language for computational geometry."""
 
     @property
@@ -3017,15 +3018,11 @@ class Context(_Generic[_ScalarT]):
             else NotImplemented
         )
 
-    def __repr__(self, /) -> str:
-        return _context_repr(self)
+    __repr__ = _generate_repr(
+        __new__, argument_serializer=_serializers.complex_, skip_defaults=True
+    )
 
 
-_context_repr = _generate_repr(
-    Context.__new__,
-    argument_serializer=_serializers.complex_,
-    skip_defaults=True,
-)
 _context: _ContextVar[Context[_Any]] = _ContextVar(
     'context',
     default=Context(coordinate_factory=float, sqrt=_math.sqrt),  # noqa: B039

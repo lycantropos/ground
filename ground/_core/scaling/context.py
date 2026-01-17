@@ -11,6 +11,7 @@ from typing_extensions import Self
 from ground._core.hints import (
     Contour,
     Empty,
+    HasRepr,
     Linear,
     Mix,
     Multipoint,
@@ -38,7 +39,7 @@ def ensure_segment(
     return value
 
 
-class Context(Generic[ScalarT]):
+class Context(HasRepr, Generic[ScalarT]):
     @property
     def scale_point(self, /) -> PointScaler[ScalarT]:
         return self._scale_point
@@ -416,15 +417,13 @@ class Context(Generic[ScalarT]):
         self._scale_point = scale_point
         return self
 
-    def __repr__(self, /) -> str:
-        return _context_repr(self)
+    __repr__ = generate_repr(
+        __new__,
+        argument_serializer=serializers.complex_,
+        with_module_name=True,
+    )
 
 
-_context_repr = generate_repr(
-    Context.__new__,
-    argument_serializer=serializers.complex_,
-    with_module_name=True,
-)
 plain_context: Context[Any] = Context(scale_point=plain.scale_point)
 
 
