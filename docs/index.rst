@@ -9,11 +9,18 @@ Welcome to ground's documentation!
    it should be considered as implementation detail
    that can change and should not be relied upon.
 
-base module
-===========
+context module
+==============
 
-.. automodule:: ground.base
+.. automodule:: ground.context
     :members:
+
+enums module
+============
+
+.. automodule:: ground.enums
+    :members:
+    :imported-members:
 
 hints module
 ============
