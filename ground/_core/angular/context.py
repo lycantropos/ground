@@ -6,15 +6,29 @@ from reprit.base import generate_repr
 from typing_extensions import Self
 
 from ground._core.enums import Kind, Orientation
-from ground._core.hints import HasRepr, Point, ScalarT
+from ground._core.hints import HasRepr, Point, QuaternaryPointFunction, ScalarT
 
 from .plain import kind as plain_kind, orientation as plain_orientation
 
 AngularKindEvaluator: TypeAlias = Callable[
-    [Point[ScalarT], Point[ScalarT], Point[ScalarT], ScalarT], Kind
+    [
+        Point[ScalarT],
+        Point[ScalarT],
+        Point[ScalarT],
+        QuaternaryPointFunction[ScalarT, ScalarT],
+        ScalarT,
+    ],
+    Kind,
 ]
 AngularOrientationEvaluator: TypeAlias = Callable[
-    [Point[ScalarT], Point[ScalarT], Point[ScalarT], ScalarT], Orientation
+    [
+        Point[ScalarT],
+        Point[ScalarT],
+        Point[ScalarT],
+        QuaternaryPointFunction[ScalarT, ScalarT],
+        ScalarT,
+    ],
+    Orientation,
 ]
 
 

@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-import math as _math
 from collections.abc import Callable as _Callable, Sequence as _Sequence
-from contextvars import ContextVar as _ContextVar
 from typing import Any as _Any, Generic as _Generic, final as _final
 
 from reprit import serializers as _serializers
@@ -82,7 +80,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Point = context.point_cls
         >>> context.cross_product(
         ...     Point(0, 0), Point(0, 1), Point(0, 0), Point(1, 0)
@@ -109,7 +110,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Point = context.point_cls
         >>> context.dot_product(
         ...     Point(0, 0), Point(1, 0), Point(0, 0), Point(-1, 0)
@@ -176,7 +180,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Point = context.point_cls
         >>> context.points_squared_distance(Point(0, 0), Point(0, 0)) == 0
         True
@@ -223,7 +230,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
             ``O(1)``
 
         >>> from ground.enums import Kind
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Point = context.point_cls
         >>> (
         ...     context.angle_kind(Point(0, 0), Point(1, 0), Point(-1, 0))
@@ -242,7 +252,11 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         True
         """
         return self._angular_context.kind(
-            vertex, first_ray_point, second_ray_point, self._zero
+            vertex,
+            first_ray_point,
+            second_ray_point,
+            self._vector_context.dot_product,
+            self._zero,
         )
 
     def angle_orientation(
@@ -261,7 +275,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
             ``O(1)``
 
         >>> from ground.enums import Orientation
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Point = context.point_cls
         >>> (
         ...     context.angle_orientation(
@@ -286,7 +303,11 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         True
         """
         return self._angular_context.orientation(
-            vertex, first_ray_point, second_ray_point, self._zero
+            vertex,
+            first_ray_point,
+            second_ray_point,
+            self._vector_context.cross_product,
+            self._zero,
         )
 
     def box_point_squared_distance(
@@ -300,7 +321,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Box, Point = context.box_cls, context.point_cls
         >>> context.box_point_squared_distance(
         ...     Box(0, 1, 0, 1), Point(1, 1)
@@ -330,7 +354,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Box = context.box_cls
         >>> Point = context.point_cls
         >>> Segment = context.segment_cls
@@ -367,7 +394,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
 
         where ``vertices_count = len(contour.vertices)``.
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Box, Contour, Point = (
         ...     context.box_cls,
         ...     context.contour_cls,
@@ -396,7 +426,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Contour, Point = context.contour_cls, context.point_cls
         >>> (
         ...     context.contour_centroid(
@@ -421,7 +454,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Contour = context.contour_cls
         >>> Point = context.point_cls
         >>> Segment = context.segment_cls
@@ -462,7 +498,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Contour = context.contour_cls
         >>> Point = context.point_cls
         >>> Segment = context.segment_cls
@@ -501,7 +540,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         where ``vertices_count = sum(len(contour.vertices)\
  for contour in contours)``.
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Box = context.box_cls
         >>> Contour = context.contour_cls
         >>> Point = context.point_cls
@@ -523,7 +565,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Contour = context.contour_cls
         >>> Point = context.point_cls
         >>> context.is_region_convex(
@@ -567,7 +612,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
             ``O(1)``
 
         >>> from ground.enums import Location
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Point = context.point_cls
         >>> (
         ...     context.locate_point_in_point_point_point_circle(
@@ -606,7 +654,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Box = context.box_cls
         >>> (
         ...     context.merged_box(Box(0, 1, 0, 1), Box(1, 2, 1, 2))
@@ -632,7 +683,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Multipoint = context.multipoint_cls
         >>> Point = context.point_cls
         >>> context.multipoint_centroid(
@@ -661,7 +715,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
  + sum(len(hole.vertices) for hole in polygon.holes)\
  for polygon in multipolygon.polygons)``.
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Contour = context.contour_cls
         >>> Point = context.point_cls
         >>> Polygon = context.polygon_cls
@@ -691,7 +748,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Contour = context.contour_cls
         >>> Point = context.point_cls
         >>> Segment = context.segment_cls
@@ -726,7 +786,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Multisegment = context.multisegment_cls
         >>> Point = context.point_cls
         >>> Segment = context.segment_cls
@@ -774,7 +837,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
 
         where ``points_count = len(points)``.
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Point = context.point_cls
         >>> (
         ...     context.points_convex_hull(
@@ -797,7 +863,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Box, Point = context.box_cls, context.point_cls
         >>> (
         ...     context.points_box(
@@ -820,7 +889,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
 
         where ``vertices_count = len(polygon.border.vertices)``.
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Box, Contour, Point, Polygon = (
         ...     context.box_cls,
         ...     context.contour_cls,
@@ -853,7 +925,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         where ``vertices_count = len(polygon.border.vertices)\
  + sum(len(hole.vertices) for hole in polygon.holes)``.
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Contour = context.contour_cls
         >>> Point = context.point_cls
         >>> Polygon = context.polygon_cls
@@ -882,7 +957,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         where ``vertices_count = sum(len(polygon.border.vertices)\
  for polygon in polygons)``.
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Box, Contour, Point, Polygon = (context.box_cls,
         ...                                 context.contour_cls,
         ...                                 context.point_cls,
@@ -907,7 +985,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Contour = context.contour_cls
         >>> Point = context.point_cls
         >>> (
@@ -933,7 +1014,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Contour = context.contour_cls
         >>> Point = context.point_cls
         >>> (
@@ -984,8 +1068,12 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
         >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
         >>> fraction_context = context.replace(coordinate_factory=Fraction)
         >>> isinstance(fraction_context, Context)
         True
@@ -1045,7 +1133,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(len(contour.vertices))``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Contour = context.contour_cls
         >>> Point = context.point_cls
         >>> (
@@ -1089,7 +1180,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(len(contour.vertices))``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Contour = context.contour_cls
         >>> Point = context.point_cls
         >>> (
@@ -1127,7 +1221,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(len(multipoint.points))``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Multipoint = context.multipoint_cls
         >>> Point = context.point_cls
         >>> (
@@ -1169,7 +1266,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(len(multipoint.points))``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Multipoint = context.multipoint_cls
         >>> Point = context.point_cls
         >>> (
@@ -1211,7 +1311,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
  + sum(len(hole.vertices) for hole in polygon.holes)\
  for polygon in multipolygon.polygons)``.
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Contour = context.contour_cls
         >>> Multipolygon = context.multipolygon_cls
         >>> Point = context.point_cls
@@ -1261,7 +1364,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
  + sum(len(hole.vertices) for hole in polygon.holes)\
  for polygon in multipolygon.polygons)``.
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Contour = context.contour_cls
         >>> Multipolygon = context.multipolygon_cls
         >>> Point = context.point_cls
@@ -1307,7 +1413,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Multisegment = context.multisegment_cls
         >>> Point = context.point_cls
         >>> Segment = context.segment_cls
@@ -1377,7 +1486,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(len(multisegment.segments))``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Multisegment = context.multisegment_cls
         >>> Point = context.point_cls
         >>> Segment = context.segment_cls
@@ -1445,7 +1557,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Point = context.point_cls
         >>> context.rotate_point(Point(1, 0), 1, 0, Point(0, 1)) == Point(1, 0)
         True
@@ -1471,7 +1586,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Point = context.point_cls
         >>> (
         ...     context.rotate_point_around_origin(Point(1, 0), 1, 0)
@@ -1507,7 +1625,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         where ``vertices_count = len(polygon.border.vertices)\
  + sum(len(hole.vertices) for hole in polygon.holes)``.
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Contour = context.contour_cls
         >>> Point = context.point_cls
         >>> Polygon = context.polygon_cls
@@ -1546,7 +1667,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         where ``vertices_count = len(polygon.border.vertices)\
  + sum(len(hole.vertices) for hole in polygon.holes)``.
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Contour = context.contour_cls
         >>> Point = context.point_cls
         >>> Polygon = context.polygon_cls
@@ -1586,7 +1710,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Point = context.point_cls
         >>> Segment = context.segment_cls
         >>> (
@@ -1624,7 +1751,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Point = context.point_cls
         >>> Segment = context.segment_cls
         >>> (
@@ -1661,7 +1791,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(len(contour.vertices))``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Contour = context.contour_cls
         >>> Multipoint = context.multipoint_cls
         >>> Point = context.point_cls
@@ -1720,7 +1853,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(len(multipoint.points))``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Multipoint = context.multipoint_cls
         >>> Point = context.point_cls
         >>> (
@@ -1783,7 +1919,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
  + sum(len(hole.vertices) for hole in polygon.holes)\
  for polygon in multipolygon.polygons)``.
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Contour = context.contour_cls
         >>> Multipoint = context.multipoint_cls
         >>> Multipolygon = context.multipolygon_cls
@@ -1859,7 +1998,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(len(multisegment.segments))``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> EMPTY = context.empty
         >>> Mix = context.mix_cls
         >>> Multipoint = context.multipoint_cls
@@ -1963,7 +2105,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Point = context.point_cls
         >>> context.scale_point(Point(1, 1), 0, 0) == Point(0, 0)
         True
@@ -1996,7 +2141,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         where ``vertices_count = len(polygon.border.vertices)\
  + sum(len(hole.vertices) for hole in polygon.holes)``.
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Contour = context.contour_cls
         >>> Multipoint = context.multipoint_cls
         >>> Point = context.point_cls
@@ -2049,7 +2197,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Multipoint = context.multipoint_cls
         >>> Point = context.point_cls
         >>> Segment = context.segment_cls
@@ -2092,7 +2243,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Box, Point, Segment = (
         ...     context.box_cls,
         ...     context.point_cls,
@@ -2117,7 +2271,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Point, Segment = context.point_cls, context.segment_cls
         >>> (
         ...     context.segment_centroid(Segment(Point(0, 1), Point(2, 3)))
@@ -2140,7 +2297,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Point = context.point_cls
         >>> Segment = context.segment_cls
         >>> context.segment_contains_point(
@@ -2181,7 +2341,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Point = context.point_cls
         >>> Segment = context.segment_cls
         >>> context.segment_length(Segment(Point(0, 0), Point(1, 0))) == 1
@@ -2206,7 +2369,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Point = context.point_cls
         >>> Segment = context.segment_cls
         >>> context.segment_point_squared_distance(
@@ -2241,7 +2407,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Box, Point, Segment = (
         ...     context.box_cls,
         ...     context.point_cls,
@@ -2271,7 +2440,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Point = context.point_cls
         >>> Segment = context.segment_cls
         >>> (
@@ -2320,7 +2492,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
             ``O(1)``
 
         >>> from ground.enums import Relation
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Point = context.point_cls
         >>> Segment = context.segment_cls
         >>> (
@@ -2395,7 +2570,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Point = context.point_cls
         >>> Segment = context.segment_cls
         >>> context.segments_squared_distance(
@@ -2439,7 +2617,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(len(contour.vertices))``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Contour = context.contour_cls
         >>> Point = context.point_cls
         >>> Segment = context.segment_cls
@@ -2491,7 +2672,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(len(multipoint.points))``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Multipoint = context.multipoint_cls
         >>> Point = context.point_cls
         >>> (
@@ -2546,7 +2730,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
  + sum(len(hole.vertices) for hole in polygon.holes)\
  for polygon in multipolygon.polygons)``.
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Contour = context.contour_cls
         >>> Multipolygon = context.multipolygon_cls
         >>> Point = context.point_cls
@@ -2617,7 +2804,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(len(multisegment.segments))``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Multisegment = context.multisegment_cls
         >>> Point = context.point_cls
         >>> Segment = context.segment_cls
@@ -2718,7 +2908,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Point = context.point_cls
         >>> context.translate_point(Point(0, 0), 0, 0) == Point(0, 0)
         True
@@ -2751,7 +2944,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         where ``vertices_count = len(polygon.border.vertices)\
  + sum(len(hole.vertices) for hole in polygon.holes)``.
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Contour = context.contour_cls
         >>> Point = context.point_cls
         >>> Polygon = context.polygon_cls
@@ -2800,7 +2996,10 @@ class Context(_HasRepr, _Generic[_ScalarT]):
         Memory complexity:
             ``O(1)``
 
-        >>> context = get_context()
+        >>> import math
+        >>> from fractions import Fraction
+        >>> from ground.context import Context
+        >>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
         >>> Point = context.point_cls
         >>> Segment = context.segment_cls
         >>> (
@@ -3021,22 +3220,3 @@ class Context(_HasRepr, _Generic[_ScalarT]):
     __repr__ = _generate_repr(
         __new__, argument_serializer=_serializers.complex_, skip_defaults=True
     )
-
-
-_context: _ContextVar[Context[_Any]] = _ContextVar(
-    'context',
-    default=Context(coordinate_factory=float, sqrt=_math.sqrt),  # noqa: B039
-)
-
-
-def get_context() -> Context[_Any]:
-    """Returns current context."""
-    return _context.get()
-
-
-def set_context(context: Context[_ScalarT], /) -> None:
-    """Sets current context."""
-    assert isinstance(context, Context), (
-        f'Expected {Context.__qualname__!r} instance, but got {context}.'
-    )
-    _context.set(context)

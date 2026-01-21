@@ -45,8 +45,10 @@ python -m pip install -e '.'
 ## Usage
 
 ```python
->>> from ground.context import get_context
->>> context = get_context()
+>>> import math
+>>> from fractions import Fraction
+>>> from ground.context import Context
+>>> context = Context(coordinate_factory=Fraction, sqrt=math.sqrt)
 >>> Multipoint = context.multipoint_cls
 >>> Point = context.point_cls
 >>> Segment = context.segment_cls
